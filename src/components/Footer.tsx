@@ -1,7 +1,7 @@
 import React from "react";
 import Bulma from "react-bulma-components"
 
-import "./Footer.scss";
+import "src/styles/footer.scss";
 
 type Props = {
   children?: React.ReactNode;
