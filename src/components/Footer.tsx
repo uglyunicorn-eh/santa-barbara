@@ -20,22 +20,20 @@ export const Footer = ({ children }: Props) => {
 
   return (
     <Bulma.Footer className="page-footer">
-      <Bulma.Container textAlign="justify">
-        <div className="footer-menu">
-          {items.map((item, index) => (
-            <React.Fragment key={item.url}>
-              {index ? <span> | </span> : null}
-              <a href={item.url}>
-                {item.label}
-              </a>
-            </React.Fragment>
-          ))}
-        </div>
-        <div className="footer-copy is-size-7">
-          Made with ❤ in Canada by <a href="https://uglyunicorn.ca">Ugly Unicorn</a>
-        </div>
-        {children && <div className="is-size-7">{children}</div>}
-      </Bulma.Container>
+      <div className="footer-menu">
+        {items.map((item, index) => (
+          <React.Fragment key={item.url}>
+            {index ? <span> | </span> : null}
+            <a href={item.url}>
+              {item.label}
+            </a>
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="footer-copy is-size-7">
+        Made with ❤ in Canada by <a href="https://uglyunicorn.ca">Ugly Unicorn</a>
+      </div>
+      {children && <div className="is-size-7">{children}</div>}
     </Bulma.Footer>
   );
 };
