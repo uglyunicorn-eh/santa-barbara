@@ -12,4 +12,21 @@
       text-decoration: underline;
     }
   }
+
+  .footer-menu {
+    display: inline-flex;
+    gap: 5px;
+
+    justify-content: flex-end;
+
+    a {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    span {
+      opacity: 0.5;
+    }
+  }
 }
