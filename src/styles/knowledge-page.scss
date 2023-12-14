@@ -1,0 +1,46 @@
+.knowledge-page {
+  background: #d3d4d8 url("pagebg.jpg") center bottom no-repeat;
+  background-size: 100vw;
+  color: black;
+  min-height: 100vh;
+
+  h1,
+  h2 {
+    text-shadow: 1px 2px 1px rgba(#fff, 0.1);
+  }
+
+  .knowledge-page-section {
+    padding-bottom: 30vw;
+  }
+
+  .knowledge-page-info {
+    top: 48px;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media screen and (min-width: 800px) {
+      padding-bottom: 180px;
+    }
+
+    img {
+      margin-bottom: 2em;
+    }
+
+    .button {
+      background: transparent;
+      border-color: #aaa;
+      color: #000;
+
+      &:hover {
+        border-color: #000;
+      }
+    }
+  }
+
+  .knowledge-page-content {
+    text-align: justify;
+    color: black;
+  }
+}
