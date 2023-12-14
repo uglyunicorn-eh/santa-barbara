@@ -28,8 +28,8 @@ export const Footer = ({ children }: Props) => {
       user ? { label: "Sign Out", url: "#", onClick: signOut } : null,
       { label: "Privacy Policy", url: "/privacy" },
       { label: "Terms and Conditions", url: "/terms" },
-      { label: <GitHub size={18} />, url: "https://github.com/uglyunicorn-eh/santa", target: "_blank", title: "GitHub" },
       { label: "Status", url: "https://status.uglyunicorn.ca/", target: "_blank" },
+      { label: <GitHub size={18} />, url: "https://github.com/uglyunicorn-eh/santa", target: "_blank", title: "GitHub" },
     ].filter(Boolean) as MenuItem[],
     [
       user,
