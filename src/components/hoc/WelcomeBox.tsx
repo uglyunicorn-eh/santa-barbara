@@ -19,7 +19,7 @@ export const WelcomeBox = () => {
             <Bulma.Columns.Column mobile={{ display: "hidden" }}>&nbsp;</Bulma.Columns.Column>
             <Bulma.Columns.Column size="one-third" className="has-text-right-tablet has-text-centered-mobile">
               <h1>
-                Welcome to the Anonymous Ded Morozes,<br className="is-hidden-mobile" />&nbsp;%username%!
+                Welcome to the Anonymous Ded Morozes!
               </h1>
             </Bulma.Columns.Column>
             <Bulma.Columns.Column mobile={{ display: "hidden" }} narrow>
