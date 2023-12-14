@@ -1,5 +1,5 @@
 import React from "react";
-import Bulma from "react-bulma-components";
+import { Footer as BulmaFooter } from "react-bulma-components";
 import { GitHub } from 'react-feather';
 
 import { useCurrentUser } from "src/components/hooks";
@@ -38,7 +38,7 @@ export const Footer = ({ children }: Props) => {
   );
 
   return (
-    <Bulma.Footer className="page-footer">
+    <BulmaFooter className="page-footer">
       <div className="footer-menu">
         {items.map(({ url, label, ...rest }, index) => (
           <React.Fragment key={url}>
@@ -53,6 +53,6 @@ export const Footer = ({ children }: Props) => {
         Made with ❤ in Canada by <a href="https://uglyunicorn.ca">Ugly Unicorn</a>
       </div>
       {children && <div className="is-size-7">{children}</div>}
-    </Bulma.Footer>
+    </BulmaFooter>
   );
 };

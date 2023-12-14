@@ -1,7 +1,8 @@
 ---
-import Bulma from "react-bulma-components";
-
 import Layout from "src/layouts/BaseLayout.astro";
+
+import { Container, Content, Hero } from "react-bulma-components";
+
 import { Footer } from "src/components/hoc/Footer";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 
@@ -9,10 +10,10 @@ import "src/styles/404.scss";
 ---
 
 <Layout title="Party not found">
-  <Bulma.Hero size={"fullheight"} className="party-not-found">
-    <Bulma.Hero.Body>
-      <Bulma.Container>
-        <Bulma.Content>
+  <Hero size={"fullheight"} className="party-not-found">
+    <Hero.Body>
+      <Container>
+        <Content>
           <h1>
             &mdash; Houston, we have a problem! There's no party here!<br />I
             repeat, code FOUR-OH-FOUR... FOXTROT-UNIFORM-CHARLIE-KILO...
@@ -25,13 +26,13 @@ import "src/styles/404.scss";
               Go back to the Earth
             </a>
           </p>
-        </Bulma.Content>
-      </Bulma.Container>
-    </Bulma.Hero.Body>
-    <Bulma.Hero.Footer>
+        </Content>
+      </Container>
+    </Hero.Body>
+    <Hero.Footer>
       <Footer>
         <UnsplashCredit nickname="nasa" name="NASA" />
       </Footer>
-    </Bulma.Hero.Footer>
-  </Bulma.Hero>
+    </Hero.Footer>
+  </Hero>
 </Layout>

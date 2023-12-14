@@ -1,12 +1,17 @@
-import { useCurrentUser } from "src/components/hooks/useCurrentUser";
+import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router-dom";
+
 import { WelcomeBox } from "src/components/hoc/WelcomeBox";
 
-export const AppContainer = () => {
-  const { user } = useCurrentUser();
-  console.log({ user });
+const router = createBrowserRouter([
+  { path: "*", Component: Root },
+]);
+
+export const AppContainer = () => <RouterProvider router={router} />;
+
+function Root() {
   return (
-    <>
-      <WelcomeBox />
-    </>
-  )
-};
+    <Routes>
+      <Route path="/" element={<WelcomeBox />} />
+    </Routes>
+  );
+}

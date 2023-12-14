@@ -5,5 +5,5 @@ import { AppContainer } from "src/components/hoc/AppContainer";
 ---
 
 <Layout pageClassNames={["index-page"]}>
-  <AppContainer />
+  <AppContainer client:only="react" />
 </Layout>
