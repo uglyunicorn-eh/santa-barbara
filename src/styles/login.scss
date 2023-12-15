@@ -11,10 +11,14 @@
     font-family: "Cuprum", sans-serif;
     font-size: 1.5em;
     box-shadow: 0 10px 20px rgba(#000, 0.3);
+    transition: all 0.1s ease-in-out;
   }
 
   .login-button:hover {
     background-color: rgba(233, 78, 89, 0.9) !important;
+    margin: -2px 0 0 -2px;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 0 10px 20px rgba(#000, 0.4);
   }
 
   .footer {
