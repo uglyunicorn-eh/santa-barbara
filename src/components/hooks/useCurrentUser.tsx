@@ -7,17 +7,31 @@ type User = {
 };
 
 export const useCurrentUser = () => {
+  const [user, setUser] = React.useState<User | undefined>(undefined);
+
+  const signIn = React.useCallback(
+    (user: User) => {
+      setUser(user);
+    },
+    [],
+  );
+
   const signOut = React.useCallback(
-    () => void 0,
+    () => {
+      setUser(undefined);
+    },
     [],
   );
 
   return React.useMemo(
     () => ({
-      user: undefined,
+      user,
+      signIn,
       signOut,
     }),
     [
+      user,
+      signIn,
       signOut,
     ],
   );

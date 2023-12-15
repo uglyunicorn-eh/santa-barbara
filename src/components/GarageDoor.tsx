@@ -6,6 +6,7 @@ import "src/styles/garage.scss";
 type Props = {
   locked?: boolean;
   doorElement?: React.ReactNode;
+  doorRenderer?: () => React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -18,10 +19,10 @@ const variants = {
   },
 };
 
-export const GarageDoor = ({ locked, doorElement, children }: Props) => {
+export const GarageDoor = ({ locked, doorElement, doorRenderer, children }: Props) => {
   const [shut, setShut] = React.useState(locked);
 
-  const door = React.useMemo(() => doorElement ?? <div />, [doorElement]);
+  const door = React.useMemo(() => doorRenderer ? doorRenderer() : (doorElement ?? <div />), [doorElement]);
 
   const onUpdate = React.useCallback(
     ({ top }: ResolvedValues) => {
