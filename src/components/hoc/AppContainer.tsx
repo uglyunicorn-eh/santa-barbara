@@ -19,7 +19,7 @@ export const AppContainer = () => {
 function Root() {
   return (
     <Routes>
-      <Route path="" Component={WelcomeBox} />
+      <Route path="/*" Component={WelcomeBox} />
       <Route path="p">
         <Route path="new" Component={WelcomeBox} />
         <Route path="join" Component={WelcomeBox} />

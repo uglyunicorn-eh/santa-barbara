@@ -8,6 +8,8 @@ import "src/styles/footer.scss";
 
 type Props = {
   children?: React.ReactNode;
+  noUser?: boolean;
+  noHome?: boolean;
 };
 
 type MenuItem = {
@@ -18,14 +20,25 @@ type MenuItem = {
   onClick?: () => void;
 };
 
-export const Footer = ({ children }: Props) => {
+export const Footer = ({ children, noUser, noHome }: Props) => {
   const { user, signOut } = useCurrentUser();
+
+  const onSignOutClick = React.useCallback(
+    (e: MouseEvent) => {
+      signOut();
+      e.preventDefault();
+      return false;
+    },
+    [
+      signOut,
+    ],
+  );
 
   const items = React.useMemo(
     () => [
-      { label: "Home", url: "/" },
-      user ? { label: "My Profile", url: "/me" } : null,
-      user ? { label: "Sign Out", url: "#", onClick: signOut } : null,
+      !noHome ? { label: "Home", url: "/" } : null,
+      (!noUser && user) ? { label: "My Profile", url: "/me" } : null,
+      (!noUser && user) ? { label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
       { label: "Privacy Policy", url: "/privacy" },
       { label: "Terms and Conditions", url: "/terms" },
       { label: "Status", url: "https://status.uglyunicorn.ca/", target: "_blank" },
@@ -50,7 +63,7 @@ export const Footer = ({ children }: Props) => {
         ))}
       </div>
       <div className="footer-copy is-size-7">
-        Made with ❤ in Canada by <a href="https://uglyunicorn.ca">Ugly Unicorn</a>
+        Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
       </div>
       {children && <div className="is-size-7">{children}</div>}
     </BulmaFooter>

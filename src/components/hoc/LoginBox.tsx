@@ -33,13 +33,11 @@ export const LoginBox = () => {
       <Hero.Body>
         <Container textAlign="centered">
           <Button
-            // isLink={true}
             size="medium"
             className="is-rounded is-link login-button"
             loading={busy}
-            onClick={onLoginClick}
             disabled={busy}
-            style={{ backgroundColor: '#e94e59' }}
+            onClick={onLoginClick}
           >
             Enter with your email address
           </Button>
@@ -47,7 +45,7 @@ export const LoginBox = () => {
       </Hero.Body>
 
       <Hero.Footer>
-        <Footer>
+        <Footer noUser noHome>
           <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" />
         </Footer>
       </Hero.Footer>

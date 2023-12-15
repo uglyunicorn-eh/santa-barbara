@@ -1,57 +1,51 @@
 import React from "react";
 
+const readStoredValue = (key: string) => {
+  const storedValue = localStorage.getItem(key);
+
+  if (storedValue) {
+    return JSON.parse(storedValue);
+  }
+};
+
+const writeStoredValue = (key: string, value: any) => {
+  if (value !== undefined) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+  else {
+    localStorage.removeItem(key);
+  }
+};
+
 export const useLocalStorage = function <T>(key: string) {
-  const [value, setValue] = React.useState<T | undefined>(undefined);
-
-  const readStoredValue = React.useCallback(
-    () => {
-      const storedValue = localStorage.getItem(key);
-
-      if (storedValue) {
-        setValue(JSON.parse(storedValue));
-      }
-    },
-    [key],
-  );
-
-  React.useEffect(
-    () => readStoredValue(),
-    [
-      readStoredValue,
-    ],
-  );
+  const [value, setValue] = React.useState<T | undefined>(readStoredValue(key));
 
   React.useEffect(
     () => {
-      console.log('useLocalStorage', { key, value })
       const handleStorage = (event: StorageEvent) => {
-        console.log({ event })
         if (event.key === key) {
-          readStoredValue();
+          setValue(readStoredValue(key));
         }
       };
 
-      window.addEventListener('storage', handleStorage);
+      addEventListener('storage', handleStorage);
 
       return () => window.removeEventListener('storage', handleStorage);
     },
     [
       key,
-      readStoredValue,
     ],
   )
 
   const setStoredValue = React.useCallback(
     (newValue?: T) => {
-      if (newValue !== undefined) {
-        localStorage.setItem(key, JSON.stringify(newValue));
-      }
-      else {
-        localStorage.removeItem(key);
-      }
+      writeStoredValue(key, newValue);
       setValue(newValue);
+      window.dispatchEvent(new StorageEvent('storage', { key }));
     },
-    [key],
+    [
+      key,
+    ],
   );
 
   return [value, setStoredValue] as const;

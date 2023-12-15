@@ -63,7 +63,7 @@ export const StartPage = () => {
         </Container>
       </Hero.Body>
       <Hero.Footer>
-        <Footer>
+        <Footer noHome>
           <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
         </Footer>
       </Hero.Footer>
