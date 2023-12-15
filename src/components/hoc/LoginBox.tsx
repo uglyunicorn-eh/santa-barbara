@@ -1,11 +1,33 @@
+import React from "react";
 import { Button, Container, Hero } from "react-bulma-components";
 
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
+import { useCurrentUser } from "src/components/hooks";
 
 import "src/styles/login.scss";
 
 export const LoginBox = () => {
+  const [busy, setBusy] = React.useState(false);
+  const { signIn } = useCurrentUser();
+
+  const onLoginClick = React.useCallback(
+    () => {
+      setBusy(true);
+      setTimeout(() => {
+        signIn({
+          id: "123",
+          name: "Fred",
+          email: "",
+        });
+        setBusy(false);
+      }, 1000);
+    },
+    [
+      signIn,
+    ],
+  );
+
   return (
     <Hero size={"fullheight"} className="login-container has-dark-background">
       <Hero.Body>
@@ -14,9 +36,9 @@ export const LoginBox = () => {
             // isLink={true}
             size="medium"
             className="is-rounded is-link login-button"
-            // isLoading={this.state.isBusy}
-            // onClick={onLoginClick}
-            // disabled={this.state.isBusy || !this.props.isFacebookApiReady}
+            loading={busy}
+            onClick={onLoginClick}
+            disabled={busy}
             style={{ backgroundColor: '#e94e59' }}
           >
             Enter with your email address

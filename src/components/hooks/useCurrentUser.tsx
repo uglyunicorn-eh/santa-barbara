@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useLocalStorage } from "src/components/hooks/useLocalStorage";
+
 type User = {
   id: string;
   name: string;
@@ -7,30 +9,32 @@ type User = {
 };
 
 export const useCurrentUser = () => {
-  const [user, setUser] = React.useState<User | undefined>(undefined);
+  const [userToken, setUserToken] = useLocalStorage<string>('userToken')
 
   const signIn = React.useCallback(
     (user: User) => {
-      setUser(user);
+      setUserToken(JSON.stringify(user));
     },
-    [],
+    [
+
+    ],
   );
 
   const signOut = React.useCallback(
     () => {
-      setUser(undefined);
+      setUserToken(undefined);
     },
     [],
   );
 
   return React.useMemo(
     () => ({
-      user,
+      user: JSON.parse(userToken ?? 'null') as User | null,
       signIn,
       signOut,
     }),
     [
-      user,
+      userToken,
       signIn,
       signOut,
     ],
