@@ -46,7 +46,7 @@ export const StartPage = () => {
           <Columns vCentered>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
             <Columns.Column className="has-text-right-tablet">
-              <Link to="new">
+              <Link to="/new/">
                 I wanna start playing this weird game with my soulmates... Let's rock'n'roll!
               </Link>
             </Columns.Column>
@@ -54,7 +54,7 @@ export const StartPage = () => {
               <Divider vertical={true} label="OR" />
             </Columns.Column>
             <Columns.Column>
-              <Link to="join">
+              <Link to="/join/">
                 One of my crazy friend wrote a secret code on my hand... I wanna play!
               </Link>
             </Columns.Column>
@@ -63,9 +63,9 @@ export const StartPage = () => {
 
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-              <Route path="new" Component={NewParty} />
-              <Route path="join" Component={JoinParty} />
-              <Route path="me" Component={MyProfile} />
+              <Route path="/new/" Component={NewParty} />
+              <Route path="/join/" Component={JoinParty} />
+              <Route path="/me/" Component={MyProfile} />
             </Routes>
           </AnimatePresence>
 

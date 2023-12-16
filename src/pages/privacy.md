@@ -1,7 +1,7 @@
 ---
 layout: src/layouts/KnowledgePageLayout.astro
 title: "Privacy Policy"
-image: "privacy.png"
+image: "/privacy.png"
 ---
 
 # Privacy Policy
