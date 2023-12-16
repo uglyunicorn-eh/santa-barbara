@@ -1,7 +1,7 @@
 ---
 layout: src/layouts/KnowledgePageLayout.astro
 title: "Terms and Conditions"
-image: "terms.png"
+image: "/terms.png"
 ---
 
 # Terms and Conditions
