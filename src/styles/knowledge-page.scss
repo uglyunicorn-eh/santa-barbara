@@ -40,7 +40,10 @@
   }
 
   .knowledge-page-content {
-    text-align: justify;
     color: black;
+
+    p {
+      text-align: justify;
+    }
   }
 }
