@@ -41,10 +41,10 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
   const items = React.useMemo(
     () => [
       !noHome ? { key: "home", label: "Home", url: "/" } : null,
-      (!noUser && user) ? { key: "profile", label: "My Profile", url: "/me", asLink: profileAsLink } : null,
+      (!noUser && user) ? { key: "profile", label: "My Profile", url: "/me/", asLink: profileAsLink } : null,
       (!noUser && user) ? { key: "sign-out", label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
-      { key: "privacy", label: "Privacy Policy", url: "/privacy" },
-      { key: "terms", label: "Terms and Conditions", url: "/terms" },
+      { key: "privacy", label: "Privacy Policy", url: "/privacy/" },
+      { key: "terms", label: "Terms and Conditions", url: "/terms/" },
       { key: "status", label: "Status", url: "https://status.uglyunicorn.ca/", target: "_blank" },
       { key: "github", label: <GitHub size={18} />, url: "https://github.com/uglyunicorn-eh/santa", target: "_blank", title: "GitHub" },
     ].filter(Boolean) as MenuItem[],
