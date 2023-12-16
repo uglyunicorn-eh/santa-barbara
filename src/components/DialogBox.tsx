@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 import { Button, Modal } from "react-bulma-components";
+import DocumentMeta from "react-document-meta";
 import { useNavigate } from "react-router-dom";
 
 import "src/styles/dialog.scss";
@@ -8,6 +9,7 @@ import "src/styles/dialog.scss";
 type Props = {
   title?: string;
   dismissLocation?: string;
+  action?: React.ReactNode,
   className?: string;
   children?: React.ReactNode;
 };
@@ -36,6 +38,7 @@ export const DialogBox = ({
   title,
   dismissLocation = "/",
   className,
+  action,
   children,
 }: Props) => {
   const navigate = useNavigate();
@@ -49,35 +52,38 @@ export const DialogBox = ({
   ]);
 
   return (
-    <Modal show onClose={onClose} className={className}>
-      <motion.div
-        className="modal-background-custom"
-        variants={BackgroundVariants}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        transition={{ duration: 0.15 }}
-      />
-      <motion.div
-        className="modal-card-wrapper"
-        variants={CardVariants}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        transition={{ duration: 0.15 }}
-      >
-        <Modal.Card>
-          <Modal.Card.Header>
-            {title}
-          </Modal.Card.Header>
-          <Modal.Card.Body>
-            {children}
-          </Modal.Card.Body>
-          <Modal.Card.Footer>
-            <Button onClick={onClose}>Nah, never mind</Button>
-          </Modal.Card.Footer>
-        </Modal.Card>
-      </motion.div>
-    </Modal>
+    <DocumentMeta title={title}>
+      <Modal show onClose={onClose} className={className}>
+        <motion.div
+          className="modal-background-custom"
+          variants={BackgroundVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          transition={{ duration: 0.15 }}
+        />
+        <motion.div
+          className="modal-card-wrapper"
+          variants={CardVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          transition={{ duration: 0.15 }}
+        >
+          <Modal.Card>
+            <Modal.Card.Header>
+              {title}
+            </Modal.Card.Header>
+            <Modal.Card.Body>
+              {children}
+            </Modal.Card.Body>
+            <Modal.Card.Footer>
+              <Button onClick={onClose}>Nah, never mind</Button>
+              {action}
+            </Modal.Card.Footer>
+          </Modal.Card>
+        </motion.div>
+      </Modal>
+    </DocumentMeta>
   );
 };
