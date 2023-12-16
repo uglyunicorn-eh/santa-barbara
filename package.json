@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && mv dist/404.html dist/_404.html",
     "preview": "astro preview",
     "astro": "astro",
-    "deps": "yarn upgrade --latest --registry https://registry.yarnpkg.com/"
+    "deps": "yarn upgrade --latest"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.2",
