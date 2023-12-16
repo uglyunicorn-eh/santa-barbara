@@ -20,11 +20,7 @@ function Root() {
   return (
     <Routes>
       <Route path="/*" Component={WelcomeBox} />
-      <Route path="p">
-        <Route path="new" Component={WelcomeBox} />
-        <Route path="join" Component={WelcomeBox} />
-        <Route path=":party" element={<>PARTY!!!!</>} />
-      </Route>
+      <Route path="/p/:party" element={<>PARTY!!!!</>} />
     </Routes>
   );
 }

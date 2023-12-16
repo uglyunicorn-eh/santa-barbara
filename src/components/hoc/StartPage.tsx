@@ -1,13 +1,19 @@
-import { Columns, Container, Content, Hero } from "react-bulma-components"
-import { Link, Routes } from "react-router-dom"
+import { AnimatePresence } from "framer-motion";
+import { Columns, Container, Content, Hero } from "react-bulma-components";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 
-import { Divider } from "src/components/Divider"
-import { UnsplashCredit } from "src/components/UnsplashCredit"
+import { Divider } from "src/components/Divider";
+import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
+import { JoinParty } from "src/components/hoc/JoinParty";
+import { MyProfile } from "src/components/hoc/MyProfile";
+import { NewParty } from "src/components/hoc/NewParty";
 
 import grinchImg from "src/images/grinch.png";
 
 export const StartPage = () => {
+  const location = useLocation();
+
   return (
     <Hero size={"fullheight"} className="welcome-page">
       <Hero.Header>
@@ -40,7 +46,7 @@ export const StartPage = () => {
           <Columns vCentered>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
             <Columns.Column className="has-text-right-tablet">
-              <Link to="/p/new">
+              <Link to="new">
                 I wanna start playing this weird game with my soulmates... Let's rock'n'roll!
               </Link>
             </Columns.Column>
@@ -48,22 +54,25 @@ export const StartPage = () => {
               <Divider vertical={true} label="OR" />
             </Columns.Column>
             <Columns.Column>
-              <Link to="/p/join">
+              <Link to="join">
                 One of my crazy friend wrote a secret code on my hand... I wanna play!
               </Link>
             </Columns.Column>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
           </Columns>
 
-          <Routes>
-            {/* <Route path="/p/new" element={StartPartyComponent} />
-          <Route path="/p/join" element={JoinPartyComponent} /> */}
-          </Routes>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="new" Component={NewParty} />
+              <Route path="join" Component={JoinParty} />
+              <Route path="me" Component={MyProfile} />
+            </Routes>
+          </AnimatePresence>
 
         </Container>
       </Hero.Body>
       <Hero.Footer>
-        <Footer noHome>
+        <Footer noHome profileAsLink>
           <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
         </Footer>
       </Hero.Footer>
