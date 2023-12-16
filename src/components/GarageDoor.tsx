@@ -26,7 +26,7 @@ export const GarageDoor = ({ locked, doorElement, doorRenderer, children }: Prop
 
   const onUpdate = React.useCallback(
     ({ top }: ResolvedValues) => {
-      setShut(top === 0);
+      setShut(top === '0vh');
     },
     [],
   );
