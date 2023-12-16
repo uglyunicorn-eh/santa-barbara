@@ -1,0 +1,41 @@
+.hero.login-container {
+  background-color: #170505;
+  background-image: url("/login-garage-door.jpg");
+  background-size: cover;
+  background-position: center center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+
+  .login-button {
+    background-color: rgba(233, 78, 89, 0.7);
+    font-size: 1.5em;
+    box-shadow: 0 10px 20px rgba(#000, 0.3);
+    text-shadow: 0 1px 2px rgba(#000, 0.3);
+    transition: all 0.1s ease-in-out;
+  }
+
+  .login-button:hover {
+    background-color: rgba(233, 78, 89, 0.9);
+    margin: -2px 0 0 -2px;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 0 10px 20px rgba(#000, 0.4);
+    text-shadow: 0 2px 3px rgba(#000, 0.4);
+  }
+
+  .login-button.is-loading {
+    text-shadow: none;
+    border: none;
+  }
+
+  .footer {
+    padding-bottom: 1em;
+    color: #b4b3b4;
+
+    a {
+      color: #b4b3b4;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}

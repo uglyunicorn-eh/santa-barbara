@@ -1,0 +1,5 @@
+@import "bulma-divider/dist/css/bulma-divider.min.css";
+
+.is-divider-vertical[data-content]::after {
+  background: #17181d;
+}

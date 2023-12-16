@@ -1,0 +1,25 @@
+@import "bulma/sass/utilities/_all";
+@import "bulma/sass/base/_all";
+@import "bulma/sass/layout/_all";
+@import "bulma/sass/helpers/_all";
+@import "bulma/sass/grid/columns";
+@import "bulma/sass/elements/button";
+@import "bulma/sass/elements/content";
+@import "bulma/sass/elements/container";
+@import "bulma/sass/components/modal";
+@import "bulma/sass/components/card";
+
+@import "https://fonts.googleapis.com/css?family=Cuprum&display=swap";
+
+body {
+  font-family: "Cuprum", sans-serif;
+}
+
+.index-page {
+  background-color: #111217;
+}
+
+.button {
+  font-family: "Cuprum", sans-serif;
+  font-size: 1.25rem;
+}

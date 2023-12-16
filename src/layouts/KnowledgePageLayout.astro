@@ -1,0 +1,62 @@
+---
+import BaseLayout from "src/layouts/BaseLayout.astro";
+
+import { Columns, Container, Content, Section } from "react-bulma-components";
+
+import { Footer } from "src/components/hoc/Footer";
+import { UnsplashCredit } from "src/components/UnsplashCredit";
+
+import "src/styles/knowledge-page.scss";
+import DefaultImage from "public/screw_you.png";
+
+interface Props {
+  title?: string;
+  image?: string;
+  pageClassNames?: string[];
+  frontmatter?: {
+    title: string;
+    image?: string;
+  };
+}
+
+const {
+  title,
+  image = DefaultImage.src,
+  pageClassNames,
+  frontmatter,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title ?? frontmatter?.title}
+  pageClassNames={["knowledge-page"].concat(...(pageClassNames || []))}
+>
+  <Container>
+    <Section className={"knowledge-page-section"}>
+      <Columns>
+        <Columns.Column size="one-third">
+          <div class:list={["knowledge-page-info"]}>
+            <img src={frontmatter?.image ?? image} alt={frontmatter?.title} />
+
+            <a
+              href="/"
+              class:list={["button", "is-medium", "is-fullwidth"]}
+              data-astro-prefetch
+            >
+              &#8592; Jeez, get me out of here
+            </a>
+          </div>
+        </Columns.Column>
+        <Columns.Column>
+          <Content className={"knowledge-page-content"}>
+            <slot />
+          </Content>
+        </Columns.Column>
+      </Columns>
+    </Section>
+
+    <Footer client:only>
+      <UnsplashCredit name="erin mckenna" nickname="epw615" />
+    </Footer>
+  </Container>
+</BaseLayout>

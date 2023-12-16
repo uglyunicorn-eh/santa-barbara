@@ -1,0 +1,57 @@
+.welcome-page {
+  &.hero {
+    background: #111217 url("/welcome.jpg") no-repeat center center;
+    background-size: cover;
+    color: #b4b3b4;
+
+    .hero-head .container {
+      margin-top: 30px;
+    }
+
+    h1 {
+      font-size: 40px;
+      color: white;
+      font-weight: 400;
+      line-height: 1.2em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+      @media (max-width: 769px) {
+        font-size: 32px;
+        padding: 0 1em;
+      }
+    }
+
+    .hero-body {
+      padding-bottom: 300px;
+      font-size: 1.5em;
+
+      a {
+        color: #e2e1e0;
+        display: block;
+        padding: 0.5em 1em;
+        border: 1px solid transparent;
+        border-radius: 1em;
+
+        &:hover {
+          color: white;
+          border: 1px solid white;
+          background: rgba(255, 255, 255, 0.025);
+          box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+      }
+    }
+  }
+
+  .footer {
+    padding-bottom: 1em;
+    color: #b4b3b4;
+
+    a {
+      color: #b4b3b4;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}

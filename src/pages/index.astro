@@ -1,0 +1,9 @@
+---
+import Layout from "src/layouts/BaseLayout.astro";
+
+import { AppContainer } from "src/components/hoc/AppContainer";
+---
+
+<Layout pageClassNames={["index-page"]}>
+  <AppContainer client:only="react" />
+</Layout>
