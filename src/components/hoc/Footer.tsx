@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 
 import { useCurrentUser } from "src/components/hooks";
 
-import "src/styles/footer.scss";
-
 type Props = {
   children?: React.ReactNode;
   noUser?: boolean;
