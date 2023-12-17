@@ -14,6 +14,10 @@
   }
 
   .footer-menu {
+    @include mobile {
+      visibility: hidden;
+    }
+
     display: inline-flex;
     gap: 5px;
 
