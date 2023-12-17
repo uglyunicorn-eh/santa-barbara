@@ -12,6 +12,7 @@ interface InputProps<T> {
   isStatic?: boolean;
   status?: 'focus' | 'hover';
   value?: T;
+  autofocus?: boolean;
 }
 
 type Props<TValue> = Omit<
@@ -20,14 +21,33 @@ type Props<TValue> = Omit<
 >
 
 export const Input = function <TValue>({
+  autofocus,
   disabled,
   ...rest
 }: Props<TValue>) {
+  const inputRef = React.useRef(null);
+
   const { name } = React.useContext(FormFieldContext);
   const [field,] = useField({ name });
   const { isSubmitting } = useFormikContext();
 
+  React.useEffect(
+    () => {
+      if (autofocus) {
+        setTimeout(() => {
+          if (inputRef.current) {
+            (inputRef.current as any).focus();
+            (inputRef.current as any).select();
+          }
+        }, 5);
+      }
+    },
+    [
+      autofocus,
+    ],
+  )
+
   return (
-    <Form.Input {...field} {...rest} disabled={disabled || isSubmitting} />
+    <Form.Input {...field} {...rest} disabled={disabled || isSubmitting} domRef={inputRef} />
   )
 };

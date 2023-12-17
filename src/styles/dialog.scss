@@ -86,4 +86,8 @@ body:has(.modal) {
   position: fixed;
   height: 100vh;
   overflow-y: hidden;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }

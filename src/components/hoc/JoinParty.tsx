@@ -40,12 +40,15 @@ export const JoinParty = () => {
         initialValues,
         onSubmit,
       }}
+      cardStyle={{
+        width: 600,
+      }}
     >
       <Content>
         <FormField
           name="code"
           label="Secret code"
-          children={<Input />}
+          children={<Input autofocus />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
           extra={<HaveQuestion />}
         />

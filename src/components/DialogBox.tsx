@@ -15,6 +15,7 @@ type Props<Values extends FormikValues> = {
   className?: string;
   children?: React.ReactNode;
   form?: FormikConfig<Values>;
+  cardStyle?: React.CSSProperties;
 };
 
 export const BackgroundVariants = {
@@ -83,10 +84,11 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   action,
   children,
   form,
+  cardStyle,
 }: Props<Values>) => {
   const modalCard = React.useMemo(
     () => (
-      <Modal.Card>
+      <Modal.Card style={cardStyle}>
         <Modal.Card.Header>
           {title}
           <DismissX dismissLocation={dismissLocation} />
