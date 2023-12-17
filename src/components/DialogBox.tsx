@@ -48,10 +48,12 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   const onClose = React.useCallback(
     () => {
       navigate(dismissLocation);
-    }, [
-    navigate,
-    dismissLocation,
-  ]);
+    },
+    [
+      navigate,
+      dismissLocation,
+    ],
+  );
 
   const modalCard = React.useMemo(
     () => (
@@ -97,17 +99,9 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   return (
     <DocumentMeta title={title}>
       <Modal show onClose={onClose} className={className}>
-        <motion.div
-          className="modal-background-custom"
-          variants={BackgroundVariants}
-          {...defaultMotionProps}
-        />
+        <motion.div className="modal-background-custom" variants={BackgroundVariants} {...defaultMotionProps} />
 
-        <motion.div
-          className="modal-card-wrapper"
-          variants={CardVariants}
-          {...defaultMotionProps}
-        >
+        <motion.div className="modal-card-wrapper" variants={CardVariants} {...defaultMotionProps} >
           {modalContent}
         </motion.div>
 
