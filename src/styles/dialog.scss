@@ -20,6 +20,10 @@
     top: 16px;
     right: 16px;
 
+    @include mobile {
+      visibility: hidden;
+    }
+
     &:hover {
       opacity: 1;
     }
