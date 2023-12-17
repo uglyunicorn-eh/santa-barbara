@@ -55,7 +55,7 @@ export const StartPage = () => {
             </Columns.Column>
             <Columns.Column>
               <Link to="/join/">
-                One of my crazy friend wrote a secret code on my hand... I wanna play!
+                One of my crazy friends wrote a secret code on my hand... I wanna play!
               </Link>
             </Columns.Column>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
