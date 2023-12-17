@@ -36,43 +36,44 @@
     background-color: white;
     border-radius: 10px;
 
-  .modal-card-body {
-    font-size: 1.25rem;
-  }
-
-  .modal-card-head {
-    background: transparent;
-    border-bottom: none;
-    font-size: 2rem;
-    text-shadow: 0 1px 2px white;
-
-    color: #000;
-  }
-
-  .modal-card-foot {
-    background: transparent;
-    border-top: none;
-    justify-content: flex-end;
-
-    @include mobile {
-      flex-direction: column;
-      gap: 1em;
-      align-items: stretch;
+    .modal-card-body {
+      font-size: 1.25rem;
     }
 
-    .button {
+    .modal-card-head {
+      background: transparent;
+      border-bottom: none;
+      font-size: 2rem;
+      text-shadow: 0 1px 2px white;
+
+      color: #000;
+    }
+
+    .modal-card-foot {
+      background: transparent;
+      border-top: none;
+      justify-content: flex-end;
+
       @include mobile {
-        margin: 0;
+        flex-direction: column;
+        gap: 1em;
+        align-items: stretch;
+      }
+
+      .button {
+        @include mobile {
+          margin: 0;
+        }
       }
     }
+
+    .delete {
+      visibility: hidden;
+    }
   }
 
-  .delete {
-    visibility: hidden;
+  .party-box .modal-card .modal-card-head {
+    background: transparent url("/flags.png") top right no-repeat;
+    background-size: 50%;
   }
-}
-
-.party-box .modal-card .modal-card-head {
-  background: transparent url("/flags.png") top right no-repeat;
-  background-size: 50%;
 }
