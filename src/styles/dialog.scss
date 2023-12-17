@@ -12,13 +12,13 @@
 }
 
 .modal {
-  .is-large.modal-close {
+  .modal-x {
     scale: 1.5;
     opacity: 0.7;
-
-    @include mobile {
-      visibility: hidden;
-    }
+    color: #fff;
+    position: fixed;
+    top: 16px;
+    right: 16px;
 
     &:hover {
       opacity: 1;
