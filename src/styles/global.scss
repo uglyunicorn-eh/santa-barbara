@@ -8,8 +8,12 @@
 @import "bulma/sass/elements/container";
 @import "bulma/sass/components/modal";
 @import "bulma/sass/components/card";
+@import "bulma/sass/form/_all";
 
-@import "https://fonts.googleapis.com/css?family=Cuprum&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap");
+
+@import "./forms.scss";
+@import "./dialog.scss";
 
 body {
   font-family: "Cuprum", sans-serif;

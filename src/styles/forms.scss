@@ -1,0 +1,34 @@
+.field {
+  &:not(:last-child) {
+    margin-bottom: 1em;
+  }
+
+  &.is-horizontal {
+    .label {
+      font-weight: 600;
+      font-size: 1em;
+      line-height: 48px;
+      min-width: 150px;
+      text-align: right;
+      margin-right: 16px;
+
+      @include mobile {
+        text-align: left;
+        line-height: 1em;
+      }
+    }
+
+    .field-body {
+      flex-direction: column;
+
+      input {
+        font-family: "Cuprum", sans-serif;
+        font-size: 1.2em;
+      }
+
+      .help {
+        font-size: 0.8em;
+      }
+    }
+  }
+}
