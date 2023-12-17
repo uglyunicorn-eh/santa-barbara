@@ -4,8 +4,6 @@ import { Button, Modal } from "react-bulma-components";
 import DocumentMeta from "react-document-meta";
 import { useNavigate } from "react-router-dom";
 
-import "src/styles/dialog.scss";
-
 type Props = {
   title?: string;
   dismissLocation?: string;

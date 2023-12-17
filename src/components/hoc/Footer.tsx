@@ -43,6 +43,7 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
       !noHome ? { key: "home", label: "Home", url: "/" } : null,
       (!noUser && user) ? { key: "profile", label: "My Profile", url: "/me/", asLink: profileAsLink } : null,
       (!noUser && user) ? { key: "sign-out", label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
+      { key: "hot-it-works", label: "How this works?", url: "/how-it-works/" },
       { key: "privacy", label: "Privacy Policy", url: "/privacy/" },
       { key: "terms", label: "Terms and Conditions", url: "/terms/" },
       { key: "status", label: "Status", url: "https://status.uglyunicorn.ca/", target: "_blank" },
