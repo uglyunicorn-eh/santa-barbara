@@ -81,3 +81,9 @@
   background: transparent url("/flags.png") top right no-repeat;
   background-size: 50%;
 }
+
+body:has(.modal) {
+  position: fixed;
+  height: 100vh;
+  overflow-y: hidden;
+}
