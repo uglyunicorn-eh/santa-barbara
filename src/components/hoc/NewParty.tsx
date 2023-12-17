@@ -45,12 +45,15 @@ export const NewParty = () => {
         initialValues,
         onSubmit,
       }}
+      cardStyle={{
+        width: 600,
+      }}
     >
       <Content>
         <FormField
           name="name"
           label="Party name"
-          children={<Input />}
+          children={<Input autofocus />}
         />
 
         <FormField

@@ -4,6 +4,7 @@ import React from "react";
 import { Button, Modal } from "react-bulma-components";
 import DocumentMeta from "react-document-meta";
 import { useNavigate } from "react-router-dom";
+import { X } from 'react-feather';
 
 import { Form } from "src/components/forms";
 
@@ -14,6 +15,7 @@ type Props<Values extends FormikValues> = {
   className?: string;
   children?: React.ReactNode;
   form?: FormikConfig<Values>;
+  cardStyle?: React.CSSProperties;
 };
 
 export const BackgroundVariants = {
@@ -56,18 +58,12 @@ const DismissButton = ({ dismissLocation }: { dismissLocation: string }) => {
   );
 }
 
-export const DialogBox = <Values extends FormikValues = FormikValues>({
-  title,
-  dismissLocation = "/",
-  className,
-  action,
-  children,
-  form,
-}: Props<Values>) => {
+const DismissX = ({ dismissLocation }: { dismissLocation: string }) => {
   const navigate = useNavigate();
 
   const onClose = React.useCallback(
-    () => {
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.preventDefault();
       navigate(dismissLocation);
     },
     [
@@ -76,11 +72,26 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
     ],
   );
 
+  return (
+    <a href="/" onClick={onClose} className="modal-x"><X /></a>
+  );
+}
+
+export const DialogBox = <Values extends FormikValues = FormikValues>({
+  title,
+  dismissLocation = "/",
+  className,
+  action,
+  children,
+  form,
+  cardStyle,
+}: Props<Values>) => {
   const modalCard = React.useMemo(
     () => (
-      <Modal.Card>
+      <Modal.Card style={cardStyle}>
         <Modal.Card.Header>
           {title}
+          <DismissX dismissLocation={dismissLocation} />
         </Modal.Card.Header>
         <Modal.Card.Body>
           {children}
@@ -126,7 +137,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
 
   return (
     <DocumentMeta title={title}>
-      <Modal show onClose={onClose} className={className}>
+      <Modal show className={className} showClose={false} closeOnEsc={false} closeOnBlur={false}>
         <motion.div className="modal-background-custom" variants={BackgroundVariants} {...defaultMotionProps} />
 
         <motion.div className="modal-card-wrapper" variants={CardVariants} {...defaultMotionProps} >
