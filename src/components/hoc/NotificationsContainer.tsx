@@ -4,6 +4,9 @@ import toast, { Toaster } from "react-hot-toast"
 export const NotificationsContainer = () => {
   return (
     <Toaster
+      containerStyle={{
+        inset: "20px 10px",
+      }}
       toastOptions={{
         error: {
           style: {
