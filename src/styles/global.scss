@@ -29,4 +29,9 @@ body {
 .button {
   font-family: "Cuprum", sans-serif;
   font-size: 1.25rem;
+  font-weight: 500;
+
+  &.is-primary {
+    text-shadow: 1px 1px 1px rgba(#000, 0.2);
+  }
 }
