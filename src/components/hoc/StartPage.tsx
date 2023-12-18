@@ -66,7 +66,7 @@ export const StartPage = () => {
             <Routes location={location} key={location.pathname}>
               <Route path="/new/" Component={NewParty} />
               <Route path="/join/" Component={JoinParty} />
-              <Route path="/me/" Component={MyProfile} />
+              <Route path="/profile/" Component={MyProfile} />
             </Routes>
           </AnimatePresence>
 

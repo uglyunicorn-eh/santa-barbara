@@ -38,8 +38,9 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
 
   const items = React.useMemo(
     () => [
+      { key: "test-party", label: "Test Party", url: "/p/XCERTS", asLink: profileAsLink },
       !noHome ? { key: "home", label: "Home", url: "/" } : null,
-      (!noUser && user) ? { key: "profile", label: "My Profile", url: "/me/", asLink: profileAsLink } : null,
+      (!noUser && user) ? { key: "profile", label: "My Profile", url: "/profile/", asLink: profileAsLink } : null,
       (!noUser && user) ? { key: "sign-out", label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
       { key: "hot-it-works", label: "How this works?", url: "/how-it-works/" },
       { key: "privacy", label: "Privacy Policy", url: "/privacy/" },

@@ -41,8 +41,5 @@
 
 .footer {
   padding-top: 1em;
-
-  @include mobile {
-    padding-bottom: 1em;
-  }
+  padding-bottom: 1em;
 }

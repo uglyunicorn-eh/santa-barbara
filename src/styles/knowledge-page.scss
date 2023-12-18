@@ -55,4 +55,12 @@
       font-size: 1.2em;
     }
   }
+
+  .footer {
+    padding-bottom: 6em;
+
+    @media screen and (max-width: 768px) {
+      padding-bottom: 1em;
+    }
+  }
 }
