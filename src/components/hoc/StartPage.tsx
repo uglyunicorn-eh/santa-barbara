@@ -8,6 +8,7 @@ import { Footer } from "src/components/hoc/Footer";
 import { JoinParty } from "src/components/hoc/JoinParty";
 import { MyProfile } from "src/components/hoc/MyProfile";
 import { NewParty } from "src/components/hoc/NewParty";
+import { NotificationsContainer } from "src/components/hoc/NotificationsContainer";
 
 import grinchImg from "src/images/grinch.png";
 
@@ -68,6 +69,8 @@ export const StartPage = () => {
               <Route path="/me/" Component={MyProfile} />
             </Routes>
           </AnimatePresence>
+
+          <NotificationsContainer />
 
         </Container>
       </Hero.Body>

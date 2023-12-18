@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { DialogBox } from "src/components/DialogBox";
 import { FormField, Input, Submit } from "src/components/forms";
 import { HaveQuestion } from "src/components/HaveQuestion";
+import { useNotifications } from "src/components/hoc/NotificationsContainer";
 
 type FormValues = {
   code: string;
@@ -22,10 +23,18 @@ const initialValues = {
 };
 
 export const JoinParty = () => {
+  const { error } = useNotifications();
+
   const onSubmit = React.useCallback(
     (values: FormValues) => new Promise<void>((resolve) => {
       console.log({ values });
-      setTimeout(resolve, 2000);
+      setTimeout(
+        () => {
+          resolve();
+          error("Hm... we cannot find any party for the code. Please check the code and try again...");
+        },
+        1000,
+      );
     }),
     [],
   );
