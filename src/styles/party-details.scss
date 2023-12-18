@@ -1,0 +1,16 @@
+.party-details {
+  background: #e2e6e7 url("/party-background.jpg") right top no-repeat;
+  background-size: cover;
+  color: black;
+  text-shadow: 0 2px 4px white;
+
+  .footer {
+    color: black;
+    text-shadow: 0 2px 4px white;
+
+    a {
+      color: #000;
+      text-shadow: 0 2px 4px white;
+    }
+  }
+}
