@@ -4,6 +4,10 @@
   color: black;
   min-height: 100vh;
 
+  body {
+    overflow: unset;
+  }
+
   h1,
   h2 {
     text-shadow: 1px 2px 1px rgba(#fff, 0.1);
