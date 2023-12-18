@@ -12,7 +12,11 @@ export const NotificationsContainer = () => {
             background: 'rgb(241, 70, 104)',
             maxWidth: '1000px',
           },
-        },
+          iconTheme: {
+            primary: 'white',
+            secondary: 'rgb(241, 70, 104)',
+          },
+        }
       }}
     />
   );
