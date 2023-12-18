@@ -54,7 +54,7 @@ const DismissButton = ({ dismissLocation }: { dismissLocation: string }) => {
   );
 
   return (
-    <Button onClick={onClose} disabled={isSubmitting}>Nah, never mind</Button>
+    <Button type="reset" onClick={onClose} disabled={isSubmitting}>Nah, never mind</Button>
   );
 }
 
