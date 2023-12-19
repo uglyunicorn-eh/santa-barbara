@@ -10,8 +10,6 @@
     margin-bottom: 2em;
 
     @include mobile {
-      // text-align: left;
-
       .confetti-button {
         display: none;
       }
