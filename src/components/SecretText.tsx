@@ -15,6 +15,6 @@ export const SecretText = ({ label, children }: Props) => {
   );
 
   return (
-    revealed ? <>{children}</> : <Button onClick={reveal}>{label}</Button>
+    revealed ? <>{children}</> : <Button color="primary" rounded onClick={reveal}>{label}</Button>
   );
 };

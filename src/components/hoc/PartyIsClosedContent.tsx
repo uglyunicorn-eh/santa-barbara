@@ -1,4 +1,3 @@
-import { ConfettiButton } from 'src/components/ConfettiButton';
 import type { Party, User } from 'src/types';
 
 type Props = {
@@ -22,9 +21,6 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
       </p>
       <p>
         Have fun! And Happy Holidays!
-      </p>
-      <p style={{ marginBottom: 50 }} className="confetti-button">
-        <ConfettiButton>&#x1F929; Yey! Party!</ConfettiButton>
       </p>
     </>
   );

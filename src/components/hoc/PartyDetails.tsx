@@ -24,7 +24,7 @@ export const PartyDetails = ({ party }: Props) => {
       <Hero.Body>
         <Container>
           <Columns vCentered breakpoint="desktop">
-            <Columns.Column size={1} tablet={{ display: 'hidden' }}>
+            <Columns.Column size={1} tablet={{ display: 'hidden' }} mobile={{ display: 'hidden' }}>
               &nbsp;
             </Columns.Column>
             <Columns.Column>
@@ -48,7 +48,7 @@ export const PartyDetails = ({ party }: Props) => {
                           &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
                         </p>
                         <p className="has-text-right">
-                          <SecretText label="&mdash; Yes, please!">
+                          <SecretText label="&mdash; Yes, please! &#x1F929;">
                             <Confetti />
 
                             <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
