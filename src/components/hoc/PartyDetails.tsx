@@ -1,32 +1,41 @@
 import { Columns, Container, Content, Hero } from "react-bulma-components";
 import { SyncLoader } from 'react-spinners';
 
-import type { Party } from "src/types";
 import { Confetti } from "src/components/Confetti";
 import { GnomeSays } from "src/components/GnomeSays";
 import { SecretText } from "src/components/SecretText";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
+import GuestContent from "src/components/hoc/GuestContent";
+import HostContent from "src/components/hoc/HostContent";
+import { PartyIsClosedContent } from "src/components/hoc/PartyIsClosedContent";
+import { useCurrentUser } from "src/components/hooks";
+import type { Party } from "src/types";
 
 type Props = {
   party: Party;
 }
 
 export const PartyDetails = ({ party }: Props) => {
+  const { user } = useCurrentUser();
+
   return (
     <Hero size={"fullheight"} className="party-details">
       <Hero.Body>
         <Container>
           <Columns vCentered>
+            <Columns.Column size={1}>
+              &nbsp;
+            </Columns.Column>
             <Columns.Column>
-              <Content className="has-text-justified has-text-left-touch">
-                {
+              <Content className="party-details-content">
+                {user && (
                   party.closed
-                    ? <>PARTY IS CLOSED</> // <PartyIsClosedContent {...{ party, user }} />
+                    ? <PartyIsClosedContent {...{ party, user }} />
                     : party.host
-                      ? <>YOU HOST A PARTY</> // <HostContent {...{ party, user, onFinish }} />
-                      : <>YOU ARE A GUEST</> // <GuestContent {...{ party, user, onLeave }} />
-                }
+                      ? <HostContent {...{ party, user }} />
+                      : <GuestContent {...{ party, user }} />
+                )}
               </Content>
             </Columns.Column>
             <Columns.Column size={5} textAlign="centered">

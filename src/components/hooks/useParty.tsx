@@ -13,10 +13,16 @@ export const useParty = (code: string) => {
             id: "23423423sadfa",
             code: code,
             name: 'Super duper fun party!',
-            joined: false,
-            host: false,
+            joined: true,
+            host: true,
             protected: true,
             closed: false,
+            participantCount: 2,
+            participants: ['John', 'Jane'],
+            target: {
+              id: '234234234234',
+              name: 'John',
+            },
           });
         },
         1000,
