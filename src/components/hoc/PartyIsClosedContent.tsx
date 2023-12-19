@@ -10,8 +10,8 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
   return (
     <>
       <p>
-        Hey, {user.name}! This is a new stage of the {party.name}! You are officially an Anonymous Ded Moroz!
-        Hooray! &#x1F389;
+        Hey, {user.name}! This is a new stage of the {party.name.replace(/!+$/, '')}!
+        You are officially an Anonymous Ded Moroz! Hooray! &#x1F389;
       </p>
       <p>
         {party.participantCount} awesome people are participating in this. Our very special elf finished his

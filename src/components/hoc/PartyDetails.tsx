@@ -38,7 +38,7 @@ export const PartyDetails = ({ party }: Props) => {
                 )}
               </Content>
             </Columns.Column>
-            <Columns.Column desktop={{ size: 5 }}>
+            <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
               <GnomeSays>
                 <Content>
                   {party.target
