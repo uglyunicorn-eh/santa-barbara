@@ -89,10 +89,10 @@
 .confirm-party-close {
   .modal-card {
     background: white right bottom url("/rockenroll.png") no-repeat;
-    background-size: 60%;
+    background-size: 55%;
 
     @include mobile {
-      background-size: 70%;
+      background-size: 65%;
     }
   }
 
