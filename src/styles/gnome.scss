@@ -47,6 +47,15 @@
         font-size: 1.1em;
       }
     }
+
+    button {
+      border: 1px solid rgba(#fff, 0.7);
+      box-shadow: 1px 1px 4px rgba(#000, 0.2);
+
+      &:hover {
+        border: 1px solid #fff;
+      }
+    }
   }
 
   .message-body::after {
