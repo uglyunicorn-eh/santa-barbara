@@ -4,6 +4,15 @@
   color: black;
   text-shadow: 0 2px 4px white;
 
+  .party-details-content {
+    text-align: justify;
+    font-size: 1.5em;
+
+    @include mobile {
+      text-align: left;
+    }
+  }
+
   .footer {
     color: black;
     text-shadow: 0 2px 4px white;
