@@ -9,7 +9,23 @@
     font-size: 1.5em;
 
     @include mobile {
-      text-align: left;
+      // text-align: left;
+
+      .confetti-button {
+        display: none;
+      }
+    }
+
+    @include tablet {
+      .confetti-button {
+        display: none;
+      }
+    }
+
+    @include desktop {
+      .confetti-button {
+        display: block;
+      }
     }
   }
 

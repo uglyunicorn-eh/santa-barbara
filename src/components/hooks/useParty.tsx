@@ -16,7 +16,7 @@ export const useParty = (code: string) => {
             joined: true,
             host: true,
             protected: true,
-            closed: false,
+            closed: true,
             participantCount: 2,
             participants: ['John', 'Jane'],
             target: {
