@@ -23,7 +23,7 @@ function Root() {
     <DocumentMeta title="Anonymous Ded Morozes">
       <Routes>
         <Route path="/*" Component={WelcomeBox} />
-        <Route path="/p/:party" Component={PartyContainer} />
+        <Route path="/p/:code" Component={PartyContainer} />
       </Routes>
     </DocumentMeta>
   );

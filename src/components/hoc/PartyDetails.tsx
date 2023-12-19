@@ -1,15 +1,18 @@
 import { Columns, Container, Content, Hero } from "react-bulma-components";
 import { SyncLoader } from 'react-spinners';
 
+import type { Party } from "src/types";
 import { Confetti } from "src/components/Confetti";
 import { GnomeSays } from "src/components/GnomeSays";
 import { SecretText } from "src/components/SecretText";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 
-export const PartyDetails = () => {
-  const target = true;
+type Props = {
+  party: Party;
+}
 
+export const PartyDetails = ({ party }: Props) => {
   return (
     <Hero size={"fullheight"} className="party-details">
       <Hero.Body>
@@ -17,20 +20,19 @@ export const PartyDetails = () => {
           <Columns vCentered>
             <Columns.Column>
               <Content className="has-text-justified has-text-left-touch">
-                {/* {
-                  party.isClosed
-                    ? <PartyIsClosedContent {...{ party, user }} />
-                    : party.isHost
-                      ? <HostContent {...{ party, user, onFinish }} />
-                      : <GuestContent {...{ party, user, onLeave }} />
-                } */}
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus porro exercitationem eligendi totam ratione dolores incidunt voluptatibus minus nesciunt magnam quos eius temporibus magni facere, voluptatem aliquid libero, est officia!
+                {
+                  party.closed
+                    ? <>PARTY IS CLOSED</> // <PartyIsClosedContent {...{ party, user }} />
+                    : party.host
+                      ? <>YOU HOST A PARTY</> // <HostContent {...{ party, user, onFinish }} />
+                      : <>YOU ARE A GUEST</> // <GuestContent {...{ party, user, onLeave }} />
+                }
               </Content>
             </Columns.Column>
             <Columns.Column size={5} textAlign="centered">
               <GnomeSays>
                 <Content>
-                  {target
+                  {party.target
                     ? (
                       <>
                         <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
@@ -44,10 +46,8 @@ export const PartyDetails = () => {
                               &mdash; Yes, please!
                             </p>
                             <p className="has-text-left">
-                              &mdash; This is <strong>Chuck Norris</strong>, but it's a secret...
-                            </p>
-                            <p className="has-text-left">
-                              Good luck with your ideas and happy holidays!
+                              &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
+                              Good luck with your gift ideas!
                             </p>
                           </SecretText>
                         </p>
