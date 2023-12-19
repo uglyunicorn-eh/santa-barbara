@@ -30,7 +30,7 @@ export const JoinParty = () => {
   const onSubmit = React.useCallback(
     async (values: FormValues) => {
       const { data, errors } = await joinParty(values);
-      if (errors) {
+      if (errors?.length) {
         error(errors[0]);
       }
       else {

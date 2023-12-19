@@ -11,6 +11,7 @@ import { Form } from "src/components/forms";
 type Props<Values extends FormikValues> = {
   title?: string;
   dismissLocation?: string;
+  dismissLabel?: string;
   action?: React.ReactNode,
   className?: string;
   children?: React.ReactNode;
@@ -38,7 +39,10 @@ export const CardVariants = {
   },
 }
 
-const DismissButton = ({ dismissLocation }: { dismissLocation: string }) => {
+const DismissButton = ({
+  dismissLocation,
+  label = 'Nah, never mind',
+}: { dismissLocation: string, label?: string }) => {
   const { isSubmitting } = useFormikContext();
 
   const navigate = useNavigate();
@@ -54,7 +58,7 @@ const DismissButton = ({ dismissLocation }: { dismissLocation: string }) => {
   );
 
   return (
-    <Button type="reset" onClick={onClose} disabled={isSubmitting}>Nah, never mind</Button>
+    <Button type="reset" onClick={onClose} disabled={isSubmitting}>{label}</Button>
   );
 }
 
@@ -79,6 +83,7 @@ const DismissX = ({ dismissLocation }: { dismissLocation: string }) => {
 
 export const DialogBox = <Values extends FormikValues = FormikValues>({
   title,
+  dismissLabel,
   dismissLocation = "/",
   className,
   action,
@@ -97,7 +102,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
           {children}
         </Modal.Card.Body>
         <Modal.Card.Footer>
-          <DismissButton dismissLocation={dismissLocation} />
+          <DismissButton dismissLocation={dismissLocation} label={dismissLabel} />
           {action}
         </Modal.Card.Footer>
       </Modal.Card>

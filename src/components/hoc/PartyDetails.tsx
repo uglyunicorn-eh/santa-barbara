@@ -24,7 +24,7 @@ export const PartyDetails = ({ party }: Props) => {
       <Hero.Body>
         <Container>
           <Columns vCentered breakpoint="desktop">
-            <Columns.Column size={1} tablet={{ display: 'hidden' }} mobile={{ display: 'hidden' }}>
+            <Columns.Column size={1}>
               &nbsp;
             </Columns.Column>
             <Columns.Column>
@@ -41,7 +41,7 @@ export const PartyDetails = ({ party }: Props) => {
             <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
               <GnomeSays>
                 <Content>
-                  {party.target
+                  {party.closed && party.target
                     ? (
                       <>
                         <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
