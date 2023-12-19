@@ -40,7 +40,7 @@ export const GuestContent = ({ party, user }: Props) => {
   return (
     <>
       <p>
-        Hey, {user.name}! Welcome to the {party.name}!<br />
+        Hey, {user.name}! Welcome to the {party.name.replace(/!+$/, '')}!<br />
       </p>
 
       {(participants.length > 1) && <p>Good news! {participants.join(' ')} are participating in this.</p>}
