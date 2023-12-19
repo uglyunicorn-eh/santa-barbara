@@ -23,8 +23,8 @@ export const PartyDetails = ({ party }: Props) => {
     <Hero size={"fullheight"} className="party-details">
       <Hero.Body>
         <Container>
-          <Columns vCentered>
-            <Columns.Column size={1}>
+          <Columns vCentered breakpoint="desktop">
+            <Columns.Column size={1} tablet={{ display: 'hidden' }}>
               &nbsp;
             </Columns.Column>
             <Columns.Column>
@@ -38,7 +38,7 @@ export const PartyDetails = ({ party }: Props) => {
                 )}
               </Content>
             </Columns.Column>
-            <Columns.Column size={5} textAlign="centered">
+            <Columns.Column desktop={{ size: 5 }}>
               <GnomeSays>
                 <Content>
                   {party.target

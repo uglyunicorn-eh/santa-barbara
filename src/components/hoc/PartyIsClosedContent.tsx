@@ -23,7 +23,7 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
       <p>
         Have fun! And Happy Holidays!
       </p>
-      <p style={{ marginBottom: 50 }}>
+      <p style={{ marginBottom: 50 }} className="confetti-button">
         <ConfettiButton>&#x1F929; Yey! Party!</ConfettiButton>
       </p>
     </>

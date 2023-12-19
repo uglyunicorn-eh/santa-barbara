@@ -2,9 +2,13 @@
   &.message {
     background: transparent 1em center url("/gnome.png") no-repeat !important;
     background-size: contain !important;
-    min-height: 500px;
+    min-height: 550px;
     display: inline-flex;
     align-items: center;
+
+    @include mobile {
+      min-height: 450px;
+    }
 
     &.cupignome {
       background-image: url("/cupignomik.png") !important;
@@ -24,10 +28,14 @@
 
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     display: inline-block;
-    margin-top: -35ch;
+    margin-top: -40ch;
     margin-left: 160px;
     margin-right: 20px;
     font-size: 1.2rem;
+
+    @include mobile {
+      margin-left: 110px;
+    }
 
     .content {
       padding: 1.25em;
