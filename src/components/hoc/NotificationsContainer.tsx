@@ -6,6 +6,7 @@ export const NotificationsContainer = () => {
     <Toaster
       containerStyle={{
         inset: "20px 10px",
+        fontSize: "1.25em",
       }}
       toastOptions={{
         error: {
