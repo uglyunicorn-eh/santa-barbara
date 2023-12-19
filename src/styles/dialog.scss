@@ -105,7 +105,11 @@
   }
 
   .content {
-    margin: 2em 8em 2em 3em;
+    margin: 1em 8em 2em 3em;
+
+    strong {
+      text-decoration: underline;
+    }
 
     @include mobile {
       margin: 0;
@@ -114,11 +118,6 @@
 
       ul {
         margin-right: 5em;
-      }
-
-      span {
-        padding: 4px 8px;
-        border-radius: 5px;
       }
     }
   }
