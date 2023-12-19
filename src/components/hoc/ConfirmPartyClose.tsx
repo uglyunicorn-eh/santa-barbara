@@ -45,7 +45,7 @@ export const ConfirmPartyClose = () => {
   return (
     <DialogBox
       className="party-box confirm-party-close"
-      title="Here we GO-O-O-O!!!"
+      title="Here we G-O-O-O-O!!!"
       action={<Submit>&#x1F92A; Can't wait any longer!</Submit>}
       dismissLabel="Not ready yet..."
       dismissLocation={`/p/${code}`}
@@ -67,7 +67,7 @@ export const ConfirmPartyClose = () => {
         <ul>
           <li><span>Everybody will receive a random friend's name to give a gift to.</span></li>
           <li><span>No new people can join the party after this.</span></li>
-          <li><span>This cannot be undone.</span></li>
+          <li><span><strong>This cannot be undone.</strong></span></li>
         </ul>
 
         <p>

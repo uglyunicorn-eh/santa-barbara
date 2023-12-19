@@ -105,7 +105,11 @@
   }
 
   .content {
-    margin: 2em 8em 2em 3em;
+    margin: 1em 8em 2em 3em;
+
+    strong {
+      text-decoration: underline;
+    }
 
     @include mobile {
       margin: 0;
