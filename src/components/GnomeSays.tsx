@@ -1,4 +1,4 @@
-import { Content, Message } from "react-bulma-components";
+import { Message } from "react-bulma-components";
 
 type Props = {
   variant?: "gnome" | "cupid" | "cupignome";

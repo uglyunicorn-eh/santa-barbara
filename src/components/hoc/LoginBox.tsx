@@ -45,7 +45,7 @@ export const LoginBox = () => {
       </Hero.Body>
 
       <Hero.Footer>
-        <Footer noUser noHome>
+        <Footer noUser noHome profileAsLink>
           <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" />
         </Footer>
       </Hero.Footer>

@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Content } from "react-bulma-components";
+import { Content } from "react-bulma-components";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { FormField, Input, Submit } from "src/components/forms";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useAppClient } from "src/components/hooks";
 
 type FormValues = {
   code: string;
@@ -24,19 +25,22 @@ const initialValues = {
 
 export const JoinParty = () => {
   const { error } = useNotifications();
+  const { joinParty } = useAppClient();
 
   const onSubmit = React.useCallback(
-    (values: FormValues) => new Promise<void>((resolve) => {
-      console.log({ values });
-      setTimeout(
-        () => {
-          resolve();
-          error("Hm... we cannot find any party for the code. Please check the code and try again...");
-        },
-        1000,
-      );
-    }),
-    [],
+    async (values: FormValues) => {
+      const { data, errors } = await joinParty(values);
+      if (errors) {
+        error(errors[0]);
+      }
+      else {
+        console.log({ data });
+      }
+    },
+    [
+      joinParty,
+      error,
+    ],
   );
 
   return (

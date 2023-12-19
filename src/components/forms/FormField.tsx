@@ -17,7 +17,7 @@ type FormFieldContextType = {
 export const FormFieldContext = React.createContext<FormFieldContextType>({ name: "" });
 
 export const FormField = ({ name, label, children, help, extra }: Props) => {
-  const [field, meta, helpers] = useField(name);
+  const [, meta,] = useField(name);
 
   return (
     <FormFieldContext.Provider value={{ name }}>
