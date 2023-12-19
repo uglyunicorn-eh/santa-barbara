@@ -46,12 +46,12 @@ export const GuestContent = ({ party, user }: Props) => {
       {(participants.length > 1) && <p>Good news! {participants.join(' ')} are participating in this.</p>}
 
       <p>
-        We're currently waiting for everybody else to join the party and then our special elf will do
+        We're currently waiting for everybody else to join the party, and then our special elf will do
         some complex math to decide who should give a gift to whom.
       </p>
       <p>
-        Don't worry, it shouldn't take long. Last year we had whole two days to find and buy the gifts.
-        Everything's under control, he knows what he's doing!
+        Don't worry, it shouldn't take long. Last year, we had a whole two days to find and buy the gifts.
+        Everything's under control; he knows what he's doing!
       </p>
 
       {!party.closed && (
