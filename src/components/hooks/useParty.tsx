@@ -12,10 +12,10 @@ export const useParty = (code: string) => {
           setParty({
             code: code,
             name: 'Super duper fun party!',
-            joined: false,
-            host: false,
+            joined: true,
+            host: true,
             protected: true,
-            closed: true,
+            closed: false,
             participantCount: 2,
             participants: ['John', 'Jane'],
             target: {
