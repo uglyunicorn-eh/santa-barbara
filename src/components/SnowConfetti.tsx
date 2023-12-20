@@ -1,3 +1,4 @@
+import React from 'react';
 import TheConfetti from 'react-confetti';
 
 const numPoints = 5;
@@ -21,17 +22,40 @@ function drawSnowflake(ctx: CanvasRenderingContext2D) {
   ctx.closePath()
 }
 
-export const SnowConfetti = () => (
-  <TheConfetti
-    drawShape={drawSnowflake}
-    colors={['#aee1ff', '#cbddf8', '#ede3b6', '#f4bb9a', '#aed58c']}
-    gravity={0.007}
-    wind={0.001}
-    friction={0.98}
-    opacity={0.5}
-    initialVelocityY={-20}
+const getNumberOfPieces = () => {
+  const { innerWidth: width } = window;
+  return width / 25;
+}
 
-    numberOfPieces={70}
-    style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }}
-  />
-);
+export const SnowConfetti = () => {
+  const [numberOfPieces, setNumberOfPieces] = React.useState(getNumberOfPieces());
+
+  React.useEffect(
+    () => {
+      const interval = setInterval(
+        () => {
+          setNumberOfPieces(getNumberOfPieces());
+        },
+        3000,
+      );
+
+      return () => clearInterval(interval);
+    },
+    [],
+  );
+
+  return (
+    <TheConfetti
+      drawShape={drawSnowflake}
+      colors={['#aee1ff', '#cbddf8', '#ede3b6', '#f4bb9a', '#aed58c']}
+      gravity={0.007}
+      wind={0.001}
+      friction={0.98}
+      opacity={0.5}
+      initialVelocityY={-20}
+
+      numberOfPieces={numberOfPieces}
+      style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }}
+    />
+  );
+};
