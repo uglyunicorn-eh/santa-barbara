@@ -71,7 +71,7 @@ export const ConfirmPartyClose = () => {
         </ul>
 
         <p>
-          But enough of talks, let's get the show started!
+          But enough talk,<br />let's get the show started!
         </p>
 
       </Content>

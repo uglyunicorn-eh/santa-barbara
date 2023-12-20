@@ -92,7 +92,7 @@
     background-size: 55%;
 
     @include mobile {
-      background-size: 65%;
+      background-size: 68%;
     }
   }
 
@@ -105,17 +105,36 @@
   }
 
   .content {
-    margin: 1em 8em 3em 3em;
+    margin: 1em 6em 3em 3em;
 
     strong {
       text-decoration: underline;
     }
 
     @include mobile {
-      margin: 0;
+      margin: 0 2em 0 0;
 
       text-align: left;
       text-shadow: 1px 1px 2px white;
+    }
+  }
+
+  .button {
+    background-color: rgba(#fff, 0.7);
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: #fff;
+      transition: all 0.2s;
+    }
+
+    &.is-primary {
+      background-color: rgba(#5fceb3, 0.95);
+      text-shadow: 1px 1px 1px rgba(#000, 0.4);
+
+      &:hover {
+        background-color: #5fceb3;
+      }
     }
   }
 }
