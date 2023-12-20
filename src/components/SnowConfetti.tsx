@@ -3,7 +3,7 @@ import TheConfetti from 'react-confetti';
 
 const numPoints = 5;
 
-function drawSnowflake(ctx: CanvasRenderingContext2D) {
+const drawSnowflake = (ctx: CanvasRenderingContext2D) => {
   const _radius = Math.random() * 2 + 4;
   const innerRadius = _radius * 0.2
   const outerRadius = _radius * 0.8
@@ -25,7 +25,7 @@ function drawSnowflake(ctx: CanvasRenderingContext2D) {
 const getNumberOfPieces = () => {
   const { innerWidth: width } = window;
   return width / 25;
-}
+};
 
 export const SnowConfetti = () => {
   const [numberOfPieces, setNumberOfPieces] = React.useState(getNumberOfPieces());

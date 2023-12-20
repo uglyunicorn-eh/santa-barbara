@@ -99,6 +99,20 @@
     }
   }
 
+  .go-home-button {
+    border: 2px solid #313036;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #fff;
+
+    &:hover {
+      background-color: #141414;
+      border-color: #fff;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  }
+
   .hero-foot {
     color: #efefef;
 

@@ -32,7 +32,7 @@ export const PartyContainer = () => {
   }
 
   return (
-    <GarageDoor locked={!party || locked} doorRenderer={renderLoginContainer}>
+    <GarageDoor locked={locked} doorRenderer={renderLoginContainer}>
       {party && <PartyDetails party={party} />}
     </GarageDoor>
   );
