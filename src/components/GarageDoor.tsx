@@ -41,7 +41,7 @@ export const GarageDoor = ({ locked, doorElement, doorRenderer, children }: Prop
             initial={shut ? "closed" : "open"}
             animate={locked ? "closed" : "open"}
             exit="open"
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.75 }}
             onUpdate={onUpdate}
           >
             {door}
