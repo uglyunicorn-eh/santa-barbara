@@ -1,7 +1,9 @@
 import React from 'react';
-
-import type { Party, User } from 'src/types';
 import { Button } from 'react-bulma-components';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+
+import { ConfirmPartyLeave } from 'src/components/hoc/ConfirmPartyLeave';
+import type { Party, User } from 'src/types';
 
 type Props = {
   party: Party;
@@ -9,6 +11,17 @@ type Props = {
 }
 
 export const GuestContent = ({ party, user }: Props) => {
+  const navigate = useNavigate();
+
+  const onConfirm = React.useCallback(
+    () => {
+      navigate('leave');
+    },
+    [
+      navigate,
+    ],
+  );
+
   const participants = React.useMemo(
     () => {
       const result = ['You'];
@@ -55,9 +68,15 @@ export const GuestContent = ({ party, user }: Props) => {
       </p>
 
       {!party.closed && (
-        <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
-          <Button color="black" outlined>I changed my mind and wanna quit...</Button>
-        </p>
+        <>
+          <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
+            <Button color="black" outlined onClick={onConfirm}>I changed my mind and wanna quit...</Button>
+          </p>
+
+          <Routes>
+            <Route path="leave" Component={ConfirmPartyLeave} />
+          </Routes>
+        </>
       )}
     </>
   );

@@ -35,14 +35,25 @@ export const useAppClient = () => {
     [],
   );
 
+  const leaveParty = React.useCallback(
+    async (code: string) => {
+      console.log("API leaveParty", { code });
+      await sleep(500);
+      return error("Hm... we cannot find any party for the code. Please check the code and try again...");
+    },
+    [],
+  );
+
   return React.useMemo(
     () => ({
       joinParty,
       closeParty,
+      leaveParty,
     }),
     [
       joinParty,
       closeParty,
+      leaveParty,
     ],
   );
 };
