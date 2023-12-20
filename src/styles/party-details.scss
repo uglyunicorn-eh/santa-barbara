@@ -54,17 +54,16 @@
     background-color: rgba(#000, 0.7);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     position: relative;
+    transition: all 0.3s ease-in-out;
 
     img {
       position: absolute;
       margin-left: -125px;
       margin-top: -200px;
-      left: 50%;
 
       @include mobile {
         position: relative;
         margin: 0;
-        left: unset;
         width: 200px;
       }
     }
