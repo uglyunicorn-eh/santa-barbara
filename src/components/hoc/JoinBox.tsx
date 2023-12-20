@@ -54,7 +54,7 @@ export const JoinBox = ({ party }: Props) => {
                 <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
                 <h2>
-                  Howdy, {user?.name ?? "Anonymous Ded Moroz"}!<br />
+                  Howdy, {user?.name ?? "anonymous friend"}!<br />
                   Welcome to the {party.name.replace(/!+$/, '')}!
                 </h2>
                 <Button
