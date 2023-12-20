@@ -24,8 +24,8 @@ export const JoinBox = ({ party }: Props) => {
 
   const onActionClick = React.useCallback(
     () => {
-      setBusy(true);
       if (!user) {
+        setBusy(true);
         setTimeout(() => {
           signIn({
             id: "123",
