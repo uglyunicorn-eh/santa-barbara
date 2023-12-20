@@ -94,7 +94,7 @@ export const JoinBox = ({ party }: Props) => {
                       text
                       onClick={onGoHomeClick}
                     >
-                      &larr;&nbsp;Take me home, country road!
+                      &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country road!</span>
                     </Button>
                   )
                   : (
