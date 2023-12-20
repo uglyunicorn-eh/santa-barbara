@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import { DialogBox } from "src/components/DialogBox";
 import { FormField, Input, Submit } from "src/components/forms";
 import { HaveQuestion } from "src/components/HaveQuestion";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient } from "src/components/hooks";
 
 type FormValues = {
@@ -20,26 +19,20 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
+  name: "",
   code: "",
 };
 
 export const JoinParty = () => {
-  const { error } = useNotifications();
   const { joinParty } = useAppClient();
 
   const onSubmit = React.useCallback(
     async (values: FormValues) => {
-      const { data, errors } = await joinParty(values);
-      if (errors?.length) {
-        error(errors[0]);
-      }
-      else {
-        console.log({ data });
-      }
+      const success = await joinParty(values);
+      console.log({ success });
     },
     [
       joinParty,
-      error,
     ],
   );
 
@@ -61,7 +54,7 @@ export const JoinParty = () => {
         <FormField
           name="code"
           label="Secret code"
-          children={<Input autofocus />}
+          children={<Input />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
           extra={<HaveQuestion />}
         />

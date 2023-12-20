@@ -1,56 +1,79 @@
 import React from "react";
 
+import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import type { Party } from "src/types";
+
+type NewPartyInput = {
+  name: string;
+  password?: string;
+}
+
 type JoinPartyInput = {
   code: string;
 }
 
-type ApiResponse<T> = {
-  data: T | null;
-  errors?: string[];
-};
-
-const error = (message: string): ApiResponse<null> => ({
-  data: null,
-  errors: [message],
-});
-
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const useAppClient = () => {
+  const { error } = useNotifications();
+
+  const createParty = React.useCallback(
+    async (data: NewPartyInput): Promise<Party | undefined> => {
+      console.log("API createParty", { data });
+      await sleep(500);
+      error("Hm... we cannot create a new party. Please check the code and try again...");
+      return undefined;
+    },
+    [
+      error,
+    ],
+  );
+
   const joinParty = React.useCallback(
-    async (data: JoinPartyInput) => {
+    async (data: JoinPartyInput): Promise<boolean> => {
       console.log("API joinParty", { data });
       await sleep(500);
-      return error("Hm... we cannot find any party for the code. Please check the code and try again...");
+      error("Hm... we cannot find any party for the code. Please check the code and try again...");
+      return false;
     },
-    [],
+    [
+      error,
+    ],
   );
 
   const closeParty = React.useCallback(
-    async (code: string) => {
+    async (code: string): Promise<boolean> => {
       console.log("API closeParty", { code });
       await sleep(500);
-      return error("Hm... we cannot find any party for the code. Please check the code and try again...");
+      error("Hm... we cannot this party. Please check the code and try again...");
+      return false;
     },
-    [],
+    [
+      error,
+    ],
   );
 
   const leaveParty = React.useCallback(
-    async (code: string) => {
+    async (code: string): Promise<boolean> => {
       console.log("API leaveParty", { code });
       await sleep(500);
-      return error("Hm... we cannot find any party for the code. Please check the code and try again...");
+      error("Hm... you cannot leave this party. Please check the code and try again...");
+      return false;
     },
-    [],
+    [
+      error,
+    ],
   );
 
   return React.useMemo(
     () => ({
+      createParty,
       joinParty,
       closeParty,
       leaveParty,
     }),
     [
+      createParty,
       joinParty,
       closeParty,
       leaveParty,

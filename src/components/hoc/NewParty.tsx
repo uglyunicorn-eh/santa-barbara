@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { DialogBox } from "src/components/DialogBox";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { FormField, Input, Submit } from "src/components/forms";
+import { useAppClient } from "src/components/hooks";
 
 type FormValues = {
   name: string;
@@ -27,12 +28,16 @@ const initialValues = {
 };
 
 export const NewParty = () => {
+  const { createParty } = useAppClient();
+
   const onSubmit = React.useCallback(
-    (values: FormValues) => new Promise<void>((resolve) => {
-      console.log({ values });
-      setTimeout(resolve, 2000);
-    }),
-    [],
+    async (values: FormValues) => {
+      const party = await createParty(values);
+      console.log({ party });
+    },
+    [
+      createParty,
+    ],
   );
 
   return (

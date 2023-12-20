@@ -4,14 +4,10 @@ import { useParams } from "react-router-dom";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
-import { FormField, Input, Submit } from "src/components/forms";
-import { HaveQuestion } from "src/components/HaveQuestion";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { Submit } from "src/components/forms";
 import { useAppClient } from "src/components/hooks";
 
 import SantaImg from "src/images/santa.png";
-
-type FormValues = {};
 
 const validationSchema = Yup.object();
 
@@ -19,7 +15,6 @@ const initialValues = {};
 
 export const ConfirmPartyLeave = () => {
   const { code } = useParams();
-  const { error } = useNotifications();
   const { leaveParty } = useAppClient();
 
   const onSubmit = React.useCallback(
@@ -28,19 +23,12 @@ export const ConfirmPartyLeave = () => {
         return;
       }
 
-      const { data, errors } = await leaveParty(code);
-      console.log({ data, errors })
-      if (errors?.length) {
-        error(errors[0]);
-      }
-      else {
-        console.log({ data });
-      }
+      const success = await leaveParty(code);
+      console.log({ success });
     },
     [
       code,
       leaveParty,
-      error,
     ],
   );
 

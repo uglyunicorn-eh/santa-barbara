@@ -4,12 +4,8 @@ import { useParams } from "react-router-dom";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
-import { FormField, Input, Submit } from "src/components/forms";
-import { HaveQuestion } from "src/components/HaveQuestion";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { Submit } from "src/components/forms";
 import { useAppClient } from "src/components/hooks";
-
-type FormValues = {};
 
 const validationSchema = Yup.object();
 
@@ -17,7 +13,6 @@ const initialValues = {};
 
 export const ConfirmPartyClose = () => {
   const { code } = useParams();
-  const { error } = useNotifications();
   const { closeParty } = useAppClient();
 
   const onSubmit = React.useCallback(
@@ -26,19 +21,12 @@ export const ConfirmPartyClose = () => {
         return;
       }
 
-      const { data, errors } = await closeParty(code);
-      console.log({ data, errors })
-      if (errors?.length) {
-        error(errors[0]);
-      }
-      else {
-        console.log({ data });
-      }
+      const success = await closeParty(code);
+      console.log({ success });
     },
     [
       code,
       closeParty,
-      error,
     ],
   );
 
