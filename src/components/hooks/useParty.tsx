@@ -14,7 +14,7 @@ export const useParty = (code: string) => {
             code: code,
             name: 'Super duper fun party!',
             joined: true,
-            host: true,
+            host: false,
             protected: true,
             closed: false,
             participantCount: 2,
