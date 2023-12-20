@@ -5,7 +5,7 @@ const _radius = 5;
 const innerRadius = _radius * 0.2
 const outerRadius = _radius * 0.8
 
-function drawSnowflake(ctx: any) {
+function drawSnowflake(ctx: CanvasRenderingContext2D) {
   ctx.beginPath()
   ctx.moveTo(0, 0 - outerRadius)
 
@@ -23,12 +23,14 @@ function drawSnowflake(ctx: any) {
 export const SnowConfetti = () => (
   <TheConfetti
     drawShape={drawSnowflake}
-    colors={['#aee1ff', '#cbddf8', '#ede3b6', '#f4bb9a']}
+    colors={['#aee1ff', '#cbddf8', '#ede3b6', '#f4bb9a', '#aed58c']}
     gravity={0.007}
-    wind={0.008}
+    wind={0.001}
+    friction={0.98}
     opacity={0.5}
+    initialVelocityY={-20}
 
-    numberOfPieces={100}
+    numberOfPieces={70}
     style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }}
   />
 );
