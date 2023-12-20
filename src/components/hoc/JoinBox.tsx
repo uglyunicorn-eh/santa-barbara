@@ -23,16 +23,19 @@ export const JoinBox = ({ party }: Props) => {
   const onLoginClick = React.useCallback(
     () => {
       setBusy(true);
-      setTimeout(() => {
-        signIn({
-          id: "123",
-          name: "Fred",
-          email: "",
-        });
-        setBusy(false);
-      }, 1000);
+      if (!user) {
+        setTimeout(() => {
+          signIn({
+            id: "123",
+            name: "Fred",
+            email: "",
+          });
+          setBusy(false);
+        }, 1000);
+      }
     },
     [
+      user,
       signIn,
     ],
   );
@@ -73,7 +76,6 @@ export const JoinBox = ({ party }: Props) => {
 
       <Hero.Footer>
         <Footer profileAsLink>
-          {/* <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" /> */}
           <UnsplashCredit nickname="nicolebaster" name="Nicole Baster" />
         </Footer>
       </Hero.Footer>
