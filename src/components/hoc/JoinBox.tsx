@@ -10,6 +10,7 @@ import { SnowConfetti } from "src/components/SnowConfetti";
 import hiImg from "src/images/grinch.png";
 
 import "src/styles/login.scss";
+import { motion } from "framer-motion";
 
 type Props = {
   party: Party;
@@ -40,27 +41,33 @@ export const JoinBox = ({ party }: Props) => {
     <Hero size={"fullheight"} className="join-container">
       <Hero.Body>
         <Container textAlign="centered">
-          <Card>
-            <Card.Content>
-              <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
+          <motion.div
+            initial={{ opacity: 0.2, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.1 }}
+          >
+            <Card>
+              <Card.Content>
+                <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
-              <h2>
-                Howdy, {user?.name ?? "Anonymous Ded Moroz"}!<br />
-                Welcome to the {party.name.replace(/!+$/, '')}!
-              </h2>
-              <Button
-                size="medium"
-                className="is-rounded is-link login-button"
-                loading={busy}
-                disabled={busy}
-                onClick={onLoginClick}
-              >
-                &#x1F973;&nbsp;{user ? "Join the party!" : "Sign in & Join the party!"}
-              </Button>
+                <h2>
+                  Howdy, {user?.name ?? "Anonymous Ded Moroz"}!<br />
+                  Welcome to the {party.name.replace(/!+$/, '')}!
+                </h2>
+                <Button
+                  size="medium"
+                  className="is-rounded is-link login-button"
+                  loading={busy}
+                  disabled={busy}
+                  onClick={onLoginClick}
+                >
+                  &#x1F973;&nbsp;{user ? "Join the party!" : "Sign in & Join the party!"}
+                </Button>
 
-              <SnowConfetti />
-            </Card.Content>
-          </Card>
+                <SnowConfetti />
+              </Card.Content>
+            </Card>
+          </motion.div>
         </Container>
       </Hero.Body>
 
