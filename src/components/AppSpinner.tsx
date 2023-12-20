@@ -9,12 +9,13 @@ export const AppSpinner = () => (
         style={{
           border: '1px solid rgba(255, 255, 255, 0.9)',
           padding: 2,
-          borderRadius: 4,
+          borderRadius: 6,
+          background: '#141414',
         }}
       >
         <BarLoader
-          color="white"
-          height={5}
+          color="#f7d6a2"
+          height={6}
           width={200}
         />
       </span>
