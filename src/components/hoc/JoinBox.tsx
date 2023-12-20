@@ -65,7 +65,7 @@ export const JoinBox = ({ party }: Props) => {
                 <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
                 <h2>
-                  Buenos noches, {user?.name ?? "anonymous friend"}!
+                  {party?.closed ? "Buenos noches" : "Howdy"}, {user?.name ?? "anonymous friend"}!
                   {
                     party?.closed
                       ? (
