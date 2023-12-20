@@ -1,26 +1,28 @@
+import { motion } from "framer-motion";
 import React from "react";
 import { Button, Card, Container, Hero } from "react-bulma-components";
+import { useNavigate } from "react-router-dom";
 
-import type { Party } from "src/types";
+import { SnowConfetti } from "src/components/SnowConfetti";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 import { useCurrentUser } from "src/components/hooks";
-import { SnowConfetti } from "src/components/SnowConfetti";
+import type { Party } from "src/types";
 
 import hiImg from "src/images/grinch.png";
 
 import "src/styles/login.scss";
-import { motion } from "framer-motion";
 
 type Props = {
   party: Party;
 };
 
 export const JoinBox = ({ party }: Props) => {
+  const navigate = useNavigate();
   const [busy, setBusy] = React.useState(false);
   const { user, signIn } = useCurrentUser();
 
-  const onLoginClick = React.useCallback(
+  const onActionClick = React.useCallback(
     () => {
       setBusy(true);
       if (!user) {
@@ -40,6 +42,15 @@ export const JoinBox = ({ party }: Props) => {
     ],
   );
 
+  const onGoHomeClick = React.useCallback(
+    () => {
+      navigate('/');
+    },
+    [
+      navigate,
+    ],
+  );
+
   return (
     <Hero size={"fullheight"} className="join-container">
       <Hero.Body>
@@ -54,20 +65,51 @@ export const JoinBox = ({ party }: Props) => {
                 <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
                 <h2>
-                  Howdy, {user?.name ?? "anonymous friend"}!<br />
-                  Welcome to the {party.name.replace(/!+$/, '')}!
+                  Buenos noches, {user?.name ?? "anonymous friend"}!
+                  {
+                    party?.closed
+                      ? (
+                        <>
+                          <br />
+                          Sorry to disappoint you,
+                          <br />
+                          but {party.name.replace(/!+$/, '')} is over!
+                        </>
+                      )
+                      : (
+                        <>
+                          <br />
+                          Welcome to the {party.name.replace(/!+$/, '')}!
+                        </>
+                      )
+                  }
                 </h2>
-                <Button
-                  size="medium"
-                  className="is-rounded is-link login-button"
-                  loading={busy}
-                  disabled={busy}
-                  onClick={onLoginClick}
-                >
-                  &#x1F973;&nbsp;{user ? "Join the party!" : "Sign in & Join the party!"}
-                </Button>
 
-                <SnowConfetti />
+                {party?.closed
+                  ? (
+                    <Button
+                      size="medium"
+                      className="go-home-button"
+                      outlined
+                      text
+                      onClick={onGoHomeClick}
+                    >
+                      &larr;&nbsp;Take me home, country road!
+                    </Button>
+                  )
+                  : (
+                    <Button
+                      size="medium"
+                      className="is-rounded is-link login-button"
+                      loading={busy}
+                      disabled={busy}
+                      onClick={onActionClick}
+                    >
+                      &#x1F973;&nbsp;{user ? "Join the party!" : "Sign in & Join the party!"}
+                    </Button>
+                  )}
+
+                {!party?.closed ? <SnowConfetti /> : null}
               </Card.Content>
             </Card>
           </motion.div>
