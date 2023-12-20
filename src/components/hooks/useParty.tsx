@@ -25,7 +25,7 @@ export const useParty = (code: string) => {
             },
           });
         },
-        1000,
+        4000,
       );
 
       return () => clearTimeout(t);

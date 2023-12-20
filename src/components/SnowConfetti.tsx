@@ -1,11 +1,12 @@
 import TheConfetti from 'react-confetti';
 
 const numPoints = 5;
-const _radius = 5;
-const innerRadius = _radius * 0.2
-const outerRadius = _radius * 0.8
 
 function drawSnowflake(ctx: CanvasRenderingContext2D) {
+  const _radius = Math.random() * 2 + 4;
+  const innerRadius = _radius * 0.2
+  const outerRadius = _radius * 0.8
+
   ctx.beginPath()
   ctx.moveTo(0, 0 - outerRadius)
 
