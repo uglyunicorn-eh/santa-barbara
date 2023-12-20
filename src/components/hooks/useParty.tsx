@@ -13,7 +13,7 @@ export const useParty = (code: string) => {
             id: "23423423sadfa",
             code: code,
             name: 'Super duper fun party!',
-            joined: true,
+            joined: false,
             host: false,
             protected: true,
             closed: false,

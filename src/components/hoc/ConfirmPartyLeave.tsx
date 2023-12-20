@@ -48,7 +48,7 @@ export const ConfirmPartyLeave = () => {
     <DialogBox
       className="party-box confirm-party-leave"
       title="Ouch... Not funny :("
-      action={<Submit>&#x1F44B; Bye-e-e!</Submit>}
+      action={<Submit>&#x1F44B; Bye-e-e! See ya later!</Submit>}
       dismissLabel="That was an accident..."
       dismissLocation={`/p/${code}`}
       form={{

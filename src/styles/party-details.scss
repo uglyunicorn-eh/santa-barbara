@@ -40,3 +40,68 @@
     }
   }
 }
+
+.join-container {
+  background-color: #ffffff;
+  background-image: url("/party-garage-door-3.jpg");
+  background-size: cover;
+  background-position: center center;
+
+  .card {
+    display: inline-block;
+    padding: 3em 2em;
+    border-radius: 20px;
+    background-color: rgba(#000, 0.7);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+
+    img {
+      position: absolute;
+      margin-left: -125px;
+      margin-top: -200px;
+      left: 50%;
+    }
+
+    h2 {
+      margin: 2em 0 2em;
+    }
+  }
+
+  .login-button {
+    background-color: rgba(#d92f33, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 3px solid #f4bb9a;
+    font-size: 1.5em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+    &:hover {
+      background-color: #d92f33;
+      border: 2px solid white;
+    }
+
+    &:disabled {
+      background-color: rgba(#d92f33, 0.8);
+      border: 3px solid #f4bb9a;
+    }
+  }
+
+  .hero-foot {
+    color: #efefef;
+
+    a {
+      color: #efefef;
+
+      &:hover {
+        color: white;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  h2 {
+    color: white;
+    margin-bottom: 1em;
+    font-size: 2rem;
+    text-shadow: 0 0 40px black;
+  }
+}
