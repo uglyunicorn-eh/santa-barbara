@@ -154,6 +154,7 @@
 .congratz-box {
   .modal-card {
     background: white url("/congratz.png") bottom center no-repeat;
+    background-size: 100%;
     height: 550px;
     text-shadow: 0 -1px 0 white, -1px 0px 0 white, 0 1px 0 white, 0 0 3px white;
     position: relative;
@@ -170,13 +171,16 @@
       padding: 0 140px;
       color: #000;
 
+      @include mobile {
+        padding: 0 20px;
+      }
+
       h1 {
         color: #000;
         text-align: center;
         font-size: 3rem;
         margin: 0.5em 0 1em;
         letter-spacing: 0.2em;
-        padding: 0.2em 0.5em;
         text-align: center;
         border-radius: 10px;
         font-weight: 500;
