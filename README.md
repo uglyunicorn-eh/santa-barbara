@@ -3,5 +3,4 @@
 # Anonymous Ded Morozes
 
 * [Front-end](https://github.com/uglyunicorn-eh/santa-barbara)
-* [API](https://github.com/uglyunicorn-eh/santa-monika)
-
+* [API](https://github.com/uglyunicorn-eh/santa-monica)
