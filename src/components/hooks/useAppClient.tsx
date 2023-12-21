@@ -21,8 +21,22 @@ export const useAppClient = () => {
     async (data: NewPartyInput): Promise<Party | undefined> => {
       console.log("API createParty", { data });
       await sleep(500);
-      error("Hm... we cannot create a new party. Please check the code and try again...");
-      return undefined;
+
+      if (data.password === '1') {
+        error("Hm... we cannot create a new party. Please check the code and try again...");
+        return undefined;
+      }
+
+      return {
+        code: 'XCERTS',
+        name: 'Super duper fun party!',
+        joined: true,
+        host: true,
+        protected: Boolean(data.password),
+        closed: false,
+        participantCount: 1,
+        participants: ['Fred'],
+      };
     },
     [
       error,
