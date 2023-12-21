@@ -36,9 +36,9 @@
 
   .modal-card {
     max-width: calc(100vw - 60px);
-    box-shadow: 0 0 140px rgba(0, 0, 0, 1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     background-color: white;
-    border-radius: 10px;
+    border-radius: 20px;
 
     @include mobile {
       max-width: calc(100vw - 32px);
@@ -62,6 +62,8 @@
     background: transparent;
     border-top: none;
     justify-content: flex-end;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 
     @include mobile {
       flex-direction: column-reverse;
@@ -146,5 +148,52 @@
 
   .content {
     margin: 1em 2em 2em 1em;
+  }
+}
+
+.congratz-box {
+  .modal-card {
+    background: white url("/congratz.png") bottom center no-repeat;
+    height: 550px;
+    text-shadow: 0 -1px 0 white, -1px 0px 0 white, 0 1px 0 white, 0 0 3px white;
+    position: relative;
+  }
+
+  .modal-card-head {
+    justify-content: center;
+  }
+
+  .modal-card-body {
+    background-color: transparent;
+
+    .content {
+      padding: 0 140px;
+      color: #000;
+
+      h1 {
+        color: #000;
+        text-align: center;
+        font-size: 3rem;
+        margin: 0.5em 0 1em;
+        letter-spacing: 0.2em;
+        padding: 0.2em 0.5em;
+        text-align: center;
+        border-radius: 10px;
+        font-weight: 500;
+        text-shadow: 1px 1px 1px rgba(#fff, 1);
+        -webkit-text-stroke: #fff 1px;
+      }
+    }
+  }
+
+  .modal-card-foot {
+    justify-content: center;
+
+    .button {
+      border: 2px solid #fff;
+      text-shadow: 0 1px 2px rgba(#fff, 0.6);
+      box-shadow: 0 3px 20px rgba(0, 0, 0, 0.5);
+      border: 2px solid white;
+    }
   }
 }

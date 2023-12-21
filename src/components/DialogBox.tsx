@@ -12,6 +12,7 @@ type Props<Values extends FormikValues> = {
   title?: string;
   dismissLocation?: string;
   dismissLabel?: string;
+  noDismiss?: boolean;
   action?: React.ReactNode,
   className?: string;
   children?: React.ReactNode;
@@ -85,6 +86,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   title,
   dismissLabel,
   dismissLocation = "/",
+  noDismiss,
   className,
   action,
   children,
@@ -102,7 +104,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
           {children}
         </Modal.Card.Body>
         <Modal.Card.Footer>
-          <DismissButton dismissLocation={dismissLocation} label={dismissLabel} />
+          {!noDismiss && <DismissButton dismissLocation={dismissLocation} label={dismissLabel} />}
           {action}
         </Modal.Card.Footer>
       </Modal.Card>
