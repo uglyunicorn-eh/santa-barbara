@@ -2,5 +2,5 @@
 
 # Anonymous Ded Morozes
 
-* [Frontard](https://github.com/uglyunicorn-eh/santa-barbara)
+* [Frontyard](https://github.com/uglyunicorn-eh/santa-barbara)
 * [Backyard](https://github.com/uglyunicorn-eh/santa-monica)
