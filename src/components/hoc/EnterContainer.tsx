@@ -1,3 +1,4 @@
+import { gql, useMutation } from '@apollo/client';
 import * as jose from 'jose';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
@@ -7,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
 import { Footer } from 'src/components/hoc/Footer';
 import { useNotifications } from 'src/components/hoc/NotificationsContainer';
+import { useCurrentUser } from 'src/components/hooks';
 
 import { issuer } from 'src/config.json';
 import image from 'src/images/enter.png';
@@ -24,6 +26,7 @@ export const EnterContainer = () => {
   const { token } = useParams();
   const { error, success } = useNotifications();
   const navigate = useNavigate();
+  const { user } = useCurrentUser();
 
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [busy, setBusy] = React.useState(false);
@@ -61,6 +64,21 @@ export const EnterContainer = () => {
     ],
   );
 
+  React.useEffect(
+    () => {
+      if (user && expiredToken && navigate) {
+        if (user.email === expiredToken.email) {
+          navigate('/');
+        }
+      }
+    },
+    [
+      user,
+      expiredToken,
+      navigate,
+    ],
+  );
+
   const goHome = React.useCallback(
     () => {
       navigate('/');
@@ -70,23 +88,47 @@ export const EnterContainer = () => {
     ],
   );
 
+  const [enterRequest, { data, loading, error: apiError }] = useMutation(
+    gql`
+      mutation EnterRequest($input: EnterRequestInput!) {
+        auth {
+          enterRequest(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
   const resend = React.useCallback(
     async () => {
+      if (!expiredToken) {
+        return;
+      }
+
       setBusy(true);
 
-      await sleep(2000);
+      await enterRequest({
+        variables: {
+          input: {
+            email: expiredToken.email,
+            party: expiredToken.party,
+          },
+        },
+      })
 
       setBusy(false);
       setSent(true);
 
       success("Magic must go on! A new link has just been sent to your email address.");
-
-      await sleep(10000);
-
-      setSent(false);
     },
     [
       success,
+      expiredToken,
     ],
   );
 
@@ -95,21 +137,23 @@ export const EnterContainer = () => {
       <Hero.Body>
         <Container>
           <Columns vCentered breakpoint={"tablet"}>
-            <Columns.Column mobile={{ textAlign: "center" }} tablet={{ textAlign: "center" }} desktop={{ textAlign: "right" }}>
+            <Columns.Column mobile={{ textAlign: "center" }} tablet={{ textAlign: "center" }} desktop={{ textAlign: "right", size: 5 }}>
               <Image src={image.src} alt="Magic isn't working anymore" />
             </Columns.Column>
             <Columns.Column>
               <Content>
-                <h1>&mdash; Hey beautiful angel!</h1>
+                <h1>Hey beautiful angel!<br />Or maybe you're a lost soul?</h1>
 
                 <p>
-                  It seems the magic isn't working anymore.
-
-                  {expiredToken ? <>The link you're trying to use is expired.</> : <>The link you're trying to use is not valid.</>}
+                  It seems like the magic isn't working anymore.
+                  {" "}
+                  {expiredToken ? <>Perhaps the link you're trying to use is expired.</> : <>Something is telling me that the link you're trying to use is not valid.</>}
                 </p>
 
+                {sent && <p>Good news! We have just sent you a new, better, more magic powered link! Check out your mailbox and follow the rabbit...</p>}
+
                 <div className="actions">
-                  {expiredToken
+                  {(expiredToken && !sent)
                     ? (
                       <Button onClick={resend} loading={busy} disabled={busy || sent} color={"primary"} rounded>
                         &mdash; Send me that magic again, por favor!
