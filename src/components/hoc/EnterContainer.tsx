@@ -165,7 +165,7 @@ export const EnterContainer = () => {
         </Container>
       </Hero.Body>
       <Hero.Footer>
-        <Footer noUser noHome profileAsLink>
+        <Footer noUser profileAsLink>
           <UnsplashCredit nickname="anniespratt" name="Annie Spratt" />
         </Footer>
       </Hero.Footer>

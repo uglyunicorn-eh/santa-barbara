@@ -2,14 +2,12 @@ import React from "react";
 import { Button, Hero } from "react-bulma-components";
 import { useNavigate } from "react-router-dom";
 
+import { GrinchBox } from "src/components/GrinchBox";
 import { SnowConfetti } from "src/components/SnowConfetti";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 import { useCurrentUser } from "src/components/hooks";
 import type { Party } from "src/types";
-
-import "src/styles/login.scss";
-import { GrinchBox } from "src/components/GrinchBox";
 
 type Props = {
   party: Party;
