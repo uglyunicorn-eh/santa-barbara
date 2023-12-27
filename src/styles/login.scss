@@ -37,4 +37,25 @@
       }
     }
   }
+
+  .grinch-box {
+    .control {
+      width: 100%;
+
+      .input {
+        font-size: 1.5em;
+        background: rgba(#fff, 0.075);
+        color: white;
+        border-radius: 4px;
+
+        &::placeholder {
+          color: #b4b3b4;
+        }
+      }
+    }
+
+    .actions {
+      margin-top: 3em;
+    }
+  }
 }

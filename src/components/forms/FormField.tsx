@@ -8,6 +8,7 @@ type Props = {
   children?: React.ReactNode;
   help?: React.ReactNode;
   extra?: React.ReactNode;
+  horizontal?: boolean;
 };
 
 type FormFieldContextType = {
@@ -16,13 +17,20 @@ type FormFieldContextType = {
 
 export const FormFieldContext = React.createContext<FormFieldContextType>({ name: "" });
 
-export const FormField = ({ name, label, children, help, extra }: Props) => {
+export const FormField = ({ name, label, children, help, extra, horizontal = true }: Props) => {
   const [, meta,] = useField(name);
 
   return (
     <FormFieldContext.Provider value={{ name }}>
-      <Form.Field horizontal>
-        <Form.Label>{label ?? <>&nbsp;</>}</Form.Label>
+      <Form.Field horizontal={horizontal}>
+        {horizontal
+          ? (
+            <Form.Label>{label ?? <>&nbsp;</>}</Form.Label>
+          )
+          : (
+            <>{label && <Form.Label>{label}</Form.Label>}</>
+
+          )}
         <Form.Field.Body>
           <Form.Control>
             {children}

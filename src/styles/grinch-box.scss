@@ -1,0 +1,79 @@
+.grinch-box {
+  .card {
+    display: inline-block;
+    padding: 3em 2em;
+    border-radius: 20px;
+    background-color: rgba(#040102, 0.9);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    transition: all 0.25s ease-in-out;
+    max-width: 600px;
+
+    img {
+      position: absolute;
+      margin-left: -125px;
+      margin-top: -200px;
+      transition: all 0.25s ease-in-out;
+
+      @include mobile {
+        position: relative;
+        margin: 0;
+        width: 200px;
+      }
+    }
+
+    color: white;
+    text-shadow: 0 0 40px black;
+
+    h2 {
+      margin: 2.3em 0 2em;
+      transition: all 0.25s ease-in-out;
+
+      color: white;
+      text-shadow: 0 0 40px black;
+      margin-bottom: 1em;
+      font-size: 2rem;
+
+      @include mobile {
+        margin-top: 0;
+        font-size: 1.5em;
+      }
+    }
+  }
+
+  .is-outlined {
+    border: 2px solid #313036;
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #fff;
+
+    &:hover {
+      background-color: #141414;
+      border-color: #fff;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .is-primary {
+    background-color: rgba(#d92f33, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 3px solid #f4bb9a;
+    font-size: 1.5em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+    @include mobile {
+      font-size: 1.2em;
+    }
+
+    &:hover {
+      background-color: #d92f33;
+      border: 2px solid white;
+    }
+
+    &:disabled {
+      background-color: rgba(#d92f33, 0.8);
+      border: 3px solid #f4bb9a;
+    }
+  }
+}
