@@ -20,8 +20,6 @@ type EnterRequestToken = {
   party?: string;
 }
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 export const EnterContainer = () => {
   const { token } = useParams();
   const { error, success } = useNotifications();
@@ -42,7 +40,7 @@ export const EnterContainer = () => {
         const publicKey = await jose.importSPKI(PUBLIC_KEY, 'RS256');
 
         try {
-          const jwtToken = await jose.jwtVerify<EnterRequestToken>(token, publicKey, { issuer }); //, { currentDate: new Date(1703624459)}
+          const jwtToken = await jose.jwtVerify<EnterRequestToken>(token, publicKey, { issuer });
           console.log({ jwtToken });
         }
         catch (e) {
@@ -112,14 +110,12 @@ export const EnterContainer = () => {
 
       setBusy(true);
 
-      await enterRequest({
-        variables: {
-          input: {
-            email: expiredToken.email,
-            party: expiredToken.party,
-          },
-        },
-      })
+      const input = {
+        email: expiredToken.email,
+        party: expiredToken.party,
+      };
+
+      await enterRequest({ variables: { input } });
 
       setBusy(false);
       setSent(true);
@@ -129,6 +125,7 @@ export const EnterContainer = () => {
     [
       success,
       expiredToken,
+      enterRequest,
     ],
   );
 
