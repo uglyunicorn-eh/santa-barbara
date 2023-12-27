@@ -6,14 +6,20 @@
 
   img {
     // margin: 0 2em;
-    max-width: 400px;
+    width: 400px;
+    max-width: 75%;
   }
 
   .content {
     font-size: 1.5em;
     color: #000;
     text-shadow: 1px 1px 1px rgba(#fff, 0.2);
-    padding: 0 2em;
+    padding: 0 1em;
+
+    @include mobile {
+      padding: 0 0.5em;
+      font-size: unset;
+    }
 
     .actions {
       margin-top: 4em;
@@ -28,6 +34,10 @@
   .button {
     font-size: 1.5rem;
     text-shadow: 1px 1px 2px rgba(#fff, 0.3);
+
+    @include mobile {
+      font-size: 1.1rem;
+    }
 
     &.is-primary {
       background-color: rgba(#5b8872, 0.8);
