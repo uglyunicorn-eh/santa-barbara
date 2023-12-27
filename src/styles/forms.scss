@@ -31,4 +31,12 @@
       }
     }
   }
+
+  .field-body {
+    flex-direction: column;
+
+    .help {
+      text-align: left;
+    }
+  }
 }

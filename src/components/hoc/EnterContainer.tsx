@@ -27,7 +27,6 @@ export const EnterContainer = () => {
   const { user } = useCurrentUser();
 
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
-  const [busy, setBusy] = React.useState(false);
   const [sent, setSent] = React.useState(false);
 
   React.useEffect(
@@ -86,7 +85,7 @@ export const EnterContainer = () => {
     ],
   );
 
-  const [enterRequest, { data, loading, error: apiError }] = useMutation(
+  const [enterRequest, { loading }] = useMutation(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
         auth {
@@ -108,8 +107,6 @@ export const EnterContainer = () => {
         return;
       }
 
-      setBusy(true);
-
       const input = {
         email: expiredToken.email,
         party: expiredToken.party,
@@ -117,7 +114,6 @@ export const EnterContainer = () => {
 
       await enterRequest({ variables: { input } });
 
-      setBusy(false);
       setSent(true);
 
       success("Magic must go on! A new link has just been sent to your email address.");
@@ -152,7 +148,7 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button onClick={resend} loading={busy} disabled={busy || sent} color={"primary"} rounded>
+                      <Button onClick={resend} loading={loading} disabled={loading || sent} color={"primary"} rounded>
                         &mdash; Send me that magic again, por favor!
                       </Button>
                     )
