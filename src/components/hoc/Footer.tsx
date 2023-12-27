@@ -39,7 +39,6 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
   const items = React.useMemo(
     () => [
       { key: "test-party", label: "Test Party", url: "/p/XCERTS", asLink: profileAsLink },
-      { key: "test-enter", label: "Test Enter", url: "/enter/eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsInQiOiJFbnRlclJlcXVlc3QiLCJfIjoiZjU1NDA4MTQyYmQ3ZDlkMiJ9.eyJlbWFpbCI6InBhc2hrYS5yZXpuaWtvdkBnbWFpbC5jb20iLCJleHAiOjE3MDM2MjQ3NDksImlzcyI6ImFwaS5nbm9taWsubWUiLCJpYXQiOjE3MDM2MjQ0NDl9.jotXwULQbG0pbMZsTpsMwiz_C3I61Wpqo6ZTBwvhbRKlUSvolsaTce01pznXMvUnY9qGdYp-43AqfvQrKQG7iw2JWcl6V-KrW6ViU9NfBfNAtB_iHzuCwKz-qS01tarUC37UfeSHi0BzEO4WWUs0CfSEZS5NHj5UIdiccwIAeAnJ02mb9i8hGLBcrzJZKVEMm6X9p7ha5iC-JEpvGEldQMSkl9sOCOYMgibVcNQupLJfxMBttwO6roBpDf9o1SromkGyMhomHwbpJ_ub99ASNCIitfVXpJoYUOyvp5hTk_wtwwGYgcjPPN48RKClpynXj8NF8ZkJZus2K8QpEucNug", asLink: profileAsLink },
       !noHome ? { key: "home", label: "Home", url: "/" } : null,
       (!noUser && user) ? { key: "profile", label: "My Profile", url: "/profile/", asLink: profileAsLink } : null,
       (!noUser && user) ? { key: "sign-out", label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
