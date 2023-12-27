@@ -41,8 +41,19 @@
   .grinch-box {
     font-size: 1.2rem;
 
+    .card {
+      @include mobile {
+        padding: 0;
+        font-size: 1rem;
+      }
+    }
+
     .help {
       font-size: 1.2rem;
+
+      @include mobile {
+        font-size: 1rem;
+      }
     }
 
     .control {
@@ -56,6 +67,10 @@
 
         &::placeholder {
           color: #b4b3b4;
+        }
+
+        @include mobile {
+          font-size: 1rem;
         }
       }
     }

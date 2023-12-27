@@ -11,8 +11,6 @@ import { Form, FormField, Input, Submit } from "src/components/forms";
 import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
 
-import "src/styles/login.scss";
-
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const validationSchema = Yup.object().shape({

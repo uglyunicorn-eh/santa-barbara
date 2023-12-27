@@ -11,7 +11,7 @@
   }
 
   .content {
-    font-size: 1.5em;
+    font-size: 1.5rem;
     color: #000;
     text-shadow: 1px 1px 1px rgba(#fff, 0.2);
     padding: 0 1em;
@@ -19,6 +19,7 @@
     @include mobile {
       padding: 0 0.5em;
       font-size: unset;
+      font-size: 1rem;
     }
 
     .actions {
