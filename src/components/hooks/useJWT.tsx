@@ -31,8 +31,8 @@ export const useJWT = () => {
   );
 
   const decode = React.useCallback(
-    async function <T>(token: string) {
-      return await jose.decodeJwt<T>(token);
+    function <T>(token: string) {
+      return jose.decodeJwt<T>(token);
     },
     [],
   );
