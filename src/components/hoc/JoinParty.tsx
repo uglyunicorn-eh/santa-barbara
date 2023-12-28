@@ -6,6 +6,8 @@ import { DialogBox } from "src/components/DialogBox";
 import { FormField, Input, Submit } from "src/components/forms";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { useAppClient } from "src/components/hooks";
+import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useNavigate } from "react-router";
 
 type FormValues = {
   code: string;
@@ -15,24 +17,33 @@ const validationSchema = Yup.object().shape({
   code: Yup.string()
     .label("Secret code")
     .required()
+    .matches(/^[QWERTYUIPASDFGHJKLZXCVBNMOqwertyuipasdfghjklzxcvbnmo]{5}$/, "Invalid secret code")
     .ensure(),
 });
 
 const initialValues = {
-  name: "",
   code: "",
 };
 
 export const JoinParty = () => {
-  const { joinParty } = useAppClient();
+  const { getParty } = useAppClient();
+  const { error } = useNotifications();
+  const navigate = useNavigate();
 
   const onSubmit = React.useCallback(
     async (values: FormValues) => {
-      const success = await joinParty(values);
-      console.log({ success });
+      const party = await getParty(values.code);
+      if (party) {
+        navigate(`/p/${party.code}`);
+      }
+      else {
+        error("Hm... we cannot find any party for the code. Please check the code and try again...");
+      }
     },
     [
-      joinParty,
+      getParty,
+      error,
+      navigate,
     ],
   );
 
@@ -54,7 +65,7 @@ export const JoinParty = () => {
         <FormField
           name="code"
           label="Secret code"
-          children={<Input />}
+          children={<Input maxLength={5} style={{ textTransform: "uppercase" }} />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
           extra={<HaveQuestion />}
         />
