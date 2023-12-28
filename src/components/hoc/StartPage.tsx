@@ -61,11 +61,11 @@ export const StartPage = () => {
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
           </Columns>
 
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
+          <AnimatePresence>
+            <Routes /*location={location} key={location.pathname}*/>
               <Route path="/new/" Component={NewParty} />
               <Route path="/join/" Component={JoinParty} />
-              <Route path="/profile/" Component={MyProfile} />
+              <Route path="/profile/*" Component={MyProfile} />
             </Routes>
           </AnimatePresence>
 
