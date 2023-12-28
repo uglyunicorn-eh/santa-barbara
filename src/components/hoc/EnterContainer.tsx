@@ -72,6 +72,8 @@ export const EnterContainer = () => {
         return;
       }
 
+      console.log({ enterRequestToken });
+
       (async function () {
         try {
           await verify<EnterRequestToken>(enterRequestToken);
@@ -80,7 +82,7 @@ export const EnterContainer = () => {
 
           signIn({ profile: user, userToken });
 
-          // navigate("/");
+          setTimeout(() => navigate("/"), 750);
         }
         catch (e) {
           const { code } = e as JOSEError;
