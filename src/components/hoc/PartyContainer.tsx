@@ -13,8 +13,6 @@ export const PartyContainer = () => {
   const { code } = useParams();
   const { party } = useParty(code!);
 
-  console.log({ party });
-
   const locked = React.useMemo(
     () => !profile || !party?.isJoined,
     [
@@ -23,12 +21,7 @@ export const PartyContainer = () => {
     ],
   );
 
-  const renderLoginContainer = React.useCallback(
-    () => <>{party && <JoinBox party={party} />}</>,
-    [
-      party,
-    ],
-  );
+  const renderLoginContainer = React.useCallback(() => (party && <JoinBox party={party} />), [party]);
 
   if (party === undefined) {
     return <AppSpinner />;
