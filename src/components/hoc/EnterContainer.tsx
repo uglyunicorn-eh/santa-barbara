@@ -24,7 +24,7 @@ export const EnterContainer = () => {
   const { signIn } = useCurrentUser();
   const { verify, decode, isReady } = useJWT();
 
-  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken>();
+  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken | null>();
 
   const [enterRequest, { loading: enterRequestLoading }] = useMutation(
     gql`
@@ -77,8 +77,8 @@ export const EnterContainer = () => {
 
       (async function () {
         try {
-          const payload = (await verify<EnterRequestToken>(enterRequestToken)).payload;
-          setTokenPayloadUntrusted(payload);
+          await verify<EnterRequestToken>(enterRequestToken);
+          setTokenPayloadUntrusted(null);
 
           const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
 
@@ -142,7 +142,7 @@ export const EnterContainer = () => {
     return <></>;
   }
 
-  if (tokenPayloadUntrusted) {
+  if (tokenPayloadUntrusted !== null) {
     return (
       <LoginBox />
     );

@@ -38,7 +38,7 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
 
   const items = React.useMemo(
     () => [
-      // { key: "test-enter", label: "Test Enter", url: "/enter/eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsInQiOiJFbnRlclJlcXVlc3QiLCJfIjoiNGZjOGM3YTEwYzEzOWViYyJ9.eyJlbWFpbCI6InBhc2hrYS5yZXpuaWtvdkBnbWFpbC5jb20iLCJleHAiOjE3MDM3Mzc3NTgsImlzcyI6ImFwaS5nbm9taWsubWUiLCJpYXQiOjE3MDM3Mzc0NTh9.MHqfGECX0q1fg6NQFwCxg30EAIl-Q_3p2uwy6Ebvc-Ru2NZQQQLtODAHhcbHVp3YidRC1bW20xA_NVSEoxIlDAstiMgeKD2WqF0T82Q_XVhQPhiXlNjqdkVfZcEd311hI-yPxLvcEBYKJa4ONH3w2LOyl_nVViyejlE1vj0j3yXz3OgDng95sTgTf0KKxjQdYDfGeaiHSXisagH3m9MYziAJILePzy9qseXvPIW--P1HILiQ0yjkJMl23IYYtU7F5DfaQFNNChDaLgLzlSRnnSrTVdeeIJGffDI6MQDbM60pRWmp42xWGU9hr2MCm9bLCF2LNCQXlEjv9ecPSPn2cA", asLink: profileAsLink },
+      // { key: "test-enter", label: "Test Enter", url: "/enter/eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsInQiOiJFbnRlclJlcXVlc3QiLCJfIjoiODljNjVmNjU0YjVmNzBlZCJ9.eyJlbWFpbCI6InBhc2hrYS5yZXpuaWtvdkBnbWFpbC5jb20iLCJleHAiOjE3MDM3NDAxOTQsImlzcyI6ImFwaS5nbm9taWsubWUiLCJpYXQiOjE3MDM3Mzk4OTR9.eNDJYTqvzA5N8aOVVAqO6PVhyNuHQFRSYRLW0i9baLTFXGDlGGFPvDgHx3DWd3JXDqntrbqajR6KCCMT2tLkPNYLXjbEntLrrf619bOCEtnpKIAx5hbF8FT9wrgsz7T80WiMjrAZrD_Vn0Y-8pyztHc2Of5W0h4kdDgj2qpw_-M5SgLSqzVNULyXY2uuRc2ywo0QGINoY4yoLcsqDIWZgu2TT7vFOYQUO9ISfZZ1XOjikc48zAP44B5XxNi2c-eEvO6jffDo6xmoBANfLbHk6j4XwP9nDtbDOxV8cH2FmWCH2wQLszoyg4mtUlzkC144gKXEJ3PUNp4fH9IZWn3nuQ", asLink: profileAsLink },
       // { key: "test-party", label: "Test Party", url: "/p/XCERTS", asLink: profileAsLink },
       !noHome ? { key: "home", label: "Home", url: "/" } : null,
       (!noUser && profile) ? { key: "profile", label: "My Profile", url: "/profile/", asLink: profileAsLink } : null,
