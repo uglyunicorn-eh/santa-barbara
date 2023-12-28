@@ -80,7 +80,7 @@ export const EnterContainer = () => {
 
           signIn({ profile: user, userToken });
 
-          navigate("/");
+          // navigate("/");
         }
         catch (e) {
           const { code } = e as JOSEError;
