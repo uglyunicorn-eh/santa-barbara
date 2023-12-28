@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
 import { Footer } from 'src/components/hoc/Footer';
+import { LoginBox } from 'src/components/hoc/LoginBox';
 import { useNotifications } from 'src/components/hoc/NotificationsContainer';
 import { useCurrentUser, useJWT } from 'src/components/hooks';
 
@@ -23,6 +24,8 @@ export const EnterContainer = () => {
   const { signIn } = useCurrentUser();
   const { verify, decode, isReady } = useJWT();
 
+  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken>();
+
   const [enterRequest, { loading: enterRequestLoading }] = useMutation(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
@@ -39,7 +42,7 @@ export const EnterContainer = () => {
     `
   );
 
-  const [enter, { loading: enterLoading }] = useMutation(
+  const [enter] = useMutation(
     gql`
       mutation Enter($input: EnterInput!) {
         auth {
@@ -64,8 +67,6 @@ export const EnterContainer = () => {
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [sent, setSent] = React.useState(false);
 
-  const isPageLoading = enterLoading || !isReady;
-
   React.useEffect(
     () => {
       if (!enterRequestToken || !isReady) {
@@ -76,7 +77,8 @@ export const EnterContainer = () => {
 
       (async function () {
         try {
-          await verify<EnterRequestToken>(enterRequestToken);
+          const payload = (await verify<EnterRequestToken>(enterRequestToken)).payload;
+          setTokenPayloadUntrusted(payload);
 
           const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
 
@@ -86,17 +88,13 @@ export const EnterContainer = () => {
         }
         catch (e) {
           const { code } = e as JOSEError;
-
           if (code === 'ERR_JWT_EXPIRED') {
-            setExpiredToken(await decode<EnterRequestToken>(enterRequestToken));
+            setExpiredToken(decode<EnterRequestToken>(enterRequestToken));
             return;
           }
-
           error("The magic link you are using is not valid. We are not sure where did you get it from, but it's not working.");
         }
-
       })();
-
     },
     [
       isReady,
@@ -139,6 +137,16 @@ export const EnterContainer = () => {
       enterRequest,
     ],
   );
+
+  if (tokenPayloadUntrusted === undefined) {
+    return <></>;
+  }
+
+  if (tokenPayloadUntrusted) {
+    return (
+      <LoginBox />
+    );
+  }
 
   return (
     <Hero size={"fullheight"} className="enter-container">
