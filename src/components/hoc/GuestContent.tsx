@@ -67,7 +67,7 @@ export const GuestContent = ({ party, user }: Props) => {
         Everything's under control; he knows what he's doing!
       </p>
 
-      {!party.closed && (
+      {!party.isClosed && (
         <>
           <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
             <Button color="black" outlined onClick={onConfirm}>I changed my mind and wanna quit...</Button>

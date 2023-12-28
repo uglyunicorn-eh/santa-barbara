@@ -30,10 +30,10 @@ export const useAppClient = () => {
       return {
         code: 'XCERTS',
         name: 'Super duper fun party!',
-        joined: true,
-        host: true,
-        protected: Boolean(data.password),
-        closed: false,
+        isJoined: true,
+        isHost: true,
+        isProtected: Boolean(data.password),
+        isClosed: false,
         participantCount: 1,
         participants: ['Fred'],
       };

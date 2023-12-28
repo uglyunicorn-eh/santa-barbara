@@ -30,9 +30,9 @@ export const PartyDetails = ({ party }: Props) => {
             <Columns.Column>
               <Content className="party-details-content">
                 {profile && (
-                  party.closed
+                  party.isClosed
                     ? <PartyIsClosedContent {...{ party, user: profile }} />
-                    : party.host
+                    : party.isHost
                       ? <HostContent {...{ party, user: profile }} />
                       : <GuestContent {...{ party, user: profile }} />
                 )}
@@ -41,7 +41,7 @@ export const PartyDetails = ({ party }: Props) => {
             <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
               <GnomeSays>
                 <Content>
-                  {party.closed && party.target
+                  {party.isClosed && party.target
                     ? (
                       <>
                         <p className="has-text-left" style={{ marginBottom: '0.5em' }}>

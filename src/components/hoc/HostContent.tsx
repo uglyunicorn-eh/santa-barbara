@@ -43,7 +43,7 @@ const HostContent = ({ party, user }: Props) => {
 
       <p>If you feel you're ready to go, then go ahead! Press the button below. Have fun!</p>
 
-      {!party.closed && (
+      {!party.isClosed && (
         <>
           <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
             <Button color="primary" onClick={onConfirm}>&#x1F643; OK, Let's roll the dice!</Button>

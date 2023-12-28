@@ -13,10 +13,10 @@ export const PartyContainer = () => {
   const { party } = useParty(code!);
 
   const locked = React.useMemo(
-    () => !profile || !party?.joined,
+    () => !profile || !party?.isJoined,
     [
       profile,
-      party?.joined,
+      party?.isJoined,
     ],
   );
 

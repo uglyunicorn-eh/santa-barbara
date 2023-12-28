@@ -19,7 +19,7 @@ type UserToken = {
 }
 
 export const useCurrentUser = () => {
-  const { verify } = useJWT();
+  const { verify, isReady } = useJWT();
 
   const [userTokenValue, setUserTokenValue] = useLocalStorage<string>('userToken');
   const [userToken, setUserToken] = React.useState<UserToken>();
@@ -28,6 +28,10 @@ export const useCurrentUser = () => {
 
   React.useEffect(
     () => {
+      if (!isReady) {
+        return;
+      }
+
       if (!userTokenValue) {
         setUserToken(undefined);
         return;
@@ -37,13 +41,14 @@ export const useCurrentUser = () => {
         try {
           setUserToken((await verify<UserToken>(userTokenValue)).payload);
         }
-        catch {
+        catch (e) {
           setUserToken(undefined);
         }
       })();
     },
     [
       userTokenValue,
+      isReady,
     ],
   );
 
@@ -70,12 +75,14 @@ export const useCurrentUser = () => {
     () => ({
       profile,
       userToken,
+      userTokenJWT: userToken ? userTokenValue : undefined,
       signIn,
       signOut,
     }),
     [
       profile,
       userToken,
+      userTokenValue,
       signIn,
       signOut,
     ],

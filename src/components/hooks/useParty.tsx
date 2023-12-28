@@ -10,12 +10,13 @@ export const useParty = (code: string) => {
       const t = setTimeout(
         () => {
           setParty({
+            id: "",
             code: code,
             name: 'Super duper fun party!',
-            joined: true,
-            host: true,
-            protected: true,
-            closed: false,
+            isJoined: true,
+            isHost: true,
+            isProtected: true,
+            isClosed: false,
             participantCount: 2,
             participants: ['John', 'Jane'],
             target: {
