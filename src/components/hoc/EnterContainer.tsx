@@ -64,6 +64,8 @@ export const EnterContainer = () => {
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [sent, setSent] = React.useState(false);
 
+  const isPageLoading = enterLoading || !isReady;
+
   React.useEffect(
     () => {
       if (!enterRequestToken || !isReady) {
@@ -77,6 +79,8 @@ export const EnterContainer = () => {
           const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
 
           signIn({ profile: user, userToken });
+
+          navigate("/");
         }
         catch (e) {
           const { code } = e as JOSEError;
