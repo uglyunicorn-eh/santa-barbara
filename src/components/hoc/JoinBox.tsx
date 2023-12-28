@@ -52,9 +52,9 @@ export const JoinBox = ({ party }: Props) => {
       <Hero.Body>
         <GrinchBox>
           <h2>
-            {party?.closed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
+            {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
             {
-              party?.closed
+              party?.isClosed
                 ? (
                   <>
                     <br />
@@ -72,7 +72,7 @@ export const JoinBox = ({ party }: Props) => {
             }
           </h2>
 
-          {party?.closed
+          {party?.isClosed
             ? (
               <Button
                 size="medium"
@@ -96,7 +96,7 @@ export const JoinBox = ({ party }: Props) => {
               </Button>
             )}
 
-          {!party?.closed ? <SnowConfetti /> : null}
+          {!party?.isClosed ? <SnowConfetti /> : null}
         </GrinchBox>
       </Hero.Body>
 

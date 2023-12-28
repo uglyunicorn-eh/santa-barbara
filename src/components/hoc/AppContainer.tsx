@@ -26,25 +26,32 @@ export const AppContainer = () => {
 const httpLink = new HttpLink({ uri: `${apiEndpoint}/graph/` });
 
 function Root() {
-  const { userToken } = useCurrentUser();
+  const { userTokenJWT } = useCurrentUser();
 
   const authLink = React.useMemo(
     () => new ApolloLink((operation, forward) => {
       operation.setContext({
         headers: {
-          authorization: userToken ? `Bearer ${userToken}` : null,
+          authorization: userTokenJWT ? `Bearer ${userTokenJWT}` : null,
         },
       });
 
       return forward(operation);
     }),
-    [userToken],
+    [
+      userTokenJWT,
+    ],
   );
 
   const client = React.useMemo(
     () => new ApolloClient({
       link: authLink.concat(httpLink),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          fetchPolicy: "network-only",
+        }
+      }
     }),
     [
       authLink,
