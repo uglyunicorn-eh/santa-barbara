@@ -18,6 +18,7 @@ type Props<Values extends FormikValues> = {
   children?: React.ReactNode;
   form?: FormikConfig<Values>;
   cardStyle?: React.CSSProperties;
+  noHeader?: boolean;
 };
 
 export const BackgroundVariants = {
@@ -92,14 +93,17 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   children,
   form,
   cardStyle,
+  noHeader = false,
 }: Props<Values>) => {
   const modalCard = React.useMemo(
     () => (
       <Modal.Card style={cardStyle}>
-        <Modal.Card.Header>
-          {title}
-          <DismissX dismissLocation={dismissLocation} />
-        </Modal.Card.Header>
+        {!noHeader && (
+          <Modal.Card.Header>
+            {title}
+            <DismissX dismissLocation={dismissLocation} />
+          </Modal.Card.Header>
+        )}
         <Modal.Card.Body>
           {children}
         </Modal.Card.Body>
