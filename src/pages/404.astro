@@ -3,7 +3,7 @@ import Layout from "src/layouts/BaseLayout.astro";
 
 import { Container, Content, Hero } from "react-bulma-components";
 
-import { Footer } from "src/components/hoc/Footer";
+import { AstroFooter } from "src/components/hoc/AstroFooter";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 
 import "src/styles/404.scss";
@@ -30,9 +30,9 @@ import "src/styles/404.scss";
       </Container>
     </Hero.Body>
     <Hero.Footer>
-      <Footer client:only>
+      <AstroFooter>
         <UnsplashCredit nickname="nasa" name="NASA" />
-      </Footer>
+      </AstroFooter>
     </Hero.Footer>
   </Hero>
 </Layout>

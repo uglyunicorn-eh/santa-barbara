@@ -1,4 +1,5 @@
 import { Columns, Container, Content, Hero } from "react-bulma-components";
+import DocumentMeta from "react-document-meta";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "src/components/Confetti";
@@ -20,61 +21,63 @@ export const PartyDetails = ({ party }: Props) => {
   const { profile } = useCurrentUser();
 
   return (
-    <Hero size={"fullheight"} className="party-details">
-      <Hero.Body>
-        <Container>
-          <Columns vCentered breakpoint="desktop">
-            <Columns.Column size={1}>
-              &nbsp;
-            </Columns.Column>
-            <Columns.Column>
-              <Content className="party-details-content">
-                {profile && (
-                  party.isClosed
-                    ? <PartyIsClosedContent {...{ party, user: profile }} />
-                    : party.isHost
-                      ? <HostContent {...{ party, user: profile }} />
-                      : <GuestContent {...{ party, user: profile }} />
-                )}
-              </Content>
-            </Columns.Column>
-            <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
-              <GnomeSays>
-                <Content>
-                  {party.isClosed && party.target
-                    ? (
-                      <div className="has-text-right">
-                        <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
-                          &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
-                        </p>
-                        <SecretText label="&mdash; Yes, please! &#x1F929;">
-                          <Confetti />
-
-                          <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
-                            &mdash; Yes, please!
-                          </p>
-                          <p className="has-text-left">
-                            &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
-                            Good luck with your gift ideas!
-                          </p>
-                        </SecretText>
-                      </div>
-                    )
-                    : (
-                      <SyncLoader size={10} />
-                    )
-                  }
+    <DocumentMeta title={party.name}>
+      <Hero size={"fullheight"} className="party-details">
+        <Hero.Body>
+          <Container>
+            <Columns vCentered breakpoint="desktop">
+              <Columns.Column size={1}>
+                &nbsp;
+              </Columns.Column>
+              <Columns.Column>
+                <Content className="party-details-content">
+                  {profile && (
+                    party.isClosed
+                      ? <PartyIsClosedContent {...{ party, user: profile }} />
+                      : party.isHost
+                        ? <HostContent {...{ party, user: profile }} />
+                        : <GuestContent {...{ party, user: profile }} />
+                  )}
                 </Content>
-              </GnomeSays>
-            </Columns.Column>
-          </Columns>
-        </Container>
-      </Hero.Body>
-      <Hero.Footer>
-        <Footer>
-          <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
-        </Footer>
-      </Hero.Footer>
-    </Hero>
+              </Columns.Column>
+              <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
+                <GnomeSays>
+                  <Content>
+                    {party.isClosed && party.target
+                      ? (
+                        <div className="has-text-right">
+                          <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
+                            &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
+                          </p>
+                          <SecretText label="&mdash; Yes, please! &#x1F929;">
+                            <Confetti />
+
+                            <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
+                              &mdash; Yes, please!
+                            </p>
+                            <p className="has-text-left">
+                              &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
+                              Good luck with your gift ideas!
+                            </p>
+                          </SecretText>
+                        </div>
+                      )
+                      : (
+                        <SyncLoader size={10} />
+                      )
+                    }
+                  </Content>
+                </GnomeSays>
+              </Columns.Column>
+            </Columns>
+          </Container>
+        </Hero.Body>
+        <Hero.Footer>
+          <Footer>
+            <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
+          </Footer>
+        </Hero.Footer>
+      </Hero>
+    </DocumentMeta>
   );
 };

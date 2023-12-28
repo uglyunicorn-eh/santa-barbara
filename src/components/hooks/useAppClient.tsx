@@ -1,3 +1,4 @@
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import React from "react";
 
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
@@ -9,13 +10,64 @@ type NewPartyInput = {
 }
 
 type JoinPartyInput = {
-  code: string;
+  party: string;
+  password?: string;
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const useAppClient = () => {
   const { error } = useNotifications();
+
+  const [getPartyApi] = useLazyQuery(
+    gql`
+      query ($code: String!) {
+        party(code: $code) {
+          id
+          name
+          code
+          isJoined
+          isHost
+          isProtected
+          isClosed
+          participantCount
+          participants
+          target {
+            name
+          }
+        }
+      }
+    `,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
+
+  const [joinPartyApi, { error: joinPartyError }] = useMutation<{ party: Party }, { input: JoinPartyInput }>(
+    gql`
+      mutation JoinParty($code: String!) {
+        parties {
+          joinParty(input: $input) {
+            node {
+              code
+            }
+          }
+        }
+      }
+    `
+  );
+
+  React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
+
+  const getParty = React.useCallback(
+    async (code: string): Promise<Party | undefined> => {
+      const { data } = await getPartyApi({ variables: { code } });
+      return data?.party;
+    },
+    [
+      getPartyApi,
+    ],
+  );
 
   const createParty = React.useCallback(
     async (data: NewPartyInput): Promise<Party | undefined> => {
@@ -44,10 +96,9 @@ export const useAppClient = () => {
   );
 
   const joinParty = React.useCallback(
-    async (data: JoinPartyInput): Promise<boolean> => {
-      console.log("API joinParty", { data });
-      await sleep(500);
-      error("Hm... we cannot find any party for the code. Please check the code and try again...");
+    async (input: JoinPartyInput): Promise<boolean> => {
+      const { data } = await joinPartyApi({ variables: { input } });
+      console.log({ data });
       return false;
     },
     [
@@ -81,12 +132,14 @@ export const useAppClient = () => {
 
   return React.useMemo(
     () => ({
+      getParty,
       createParty,
       joinParty,
       closeParty,
       leaveParty,
     }),
     [
+      getParty,
       createParty,
       joinParty,
       closeParty,
