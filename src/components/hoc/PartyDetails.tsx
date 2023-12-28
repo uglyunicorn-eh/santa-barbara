@@ -43,24 +43,22 @@ export const PartyDetails = ({ party }: Props) => {
                 <Content>
                   {party.isClosed && party.target
                     ? (
-                      <>
+                      <div className="has-text-right">
                         <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
                           &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
                         </p>
-                        <p className="has-text-right">
-                          <SecretText label="&mdash; Yes, please! &#x1F929;">
-                            <Confetti />
+                        <SecretText label="&mdash; Yes, please! &#x1F929;">
+                          <Confetti />
 
-                            <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
-                              &mdash; Yes, please!
-                            </p>
-                            <p className="has-text-left">
-                              &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
-                              Good luck with your gift ideas!
-                            </p>
-                          </SecretText>
-                        </p>
-                      </>
+                          <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
+                            &mdash; Yes, please!
+                          </p>
+                          <p className="has-text-left">
+                            &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
+                            Good luck with your gift ideas!
+                          </p>
+                        </SecretText>
+                      </div>
                     )
                     : (
                       <SyncLoader size={10} />
