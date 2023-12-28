@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 import { useJWT } from "src/components/hooks";
 import { useLocalStorage } from "src/components/hooks/useLocalStorage";
@@ -23,6 +24,7 @@ export const useCurrentUser = () => {
   const [userTokenValue, setUserTokenValue] = useLocalStorage<string>('userToken');
   const [userToken, setUserToken] = React.useState<UserToken>();
   const [profile, setProfile] = useLocalStorage<User>('profile');
+  const navigate = useNavigate();
 
   React.useEffect(
     () => {
@@ -57,8 +59,11 @@ export const useCurrentUser = () => {
     () => {
       setProfile(undefined);
       setUserTokenValue(undefined);
+      navigate("/");
     },
-    [],
+    [
+      navigate,
+    ],
   );
 
   return React.useMemo(
