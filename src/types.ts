@@ -6,12 +6,13 @@ export type User = {
 };
 
 export type Party = {
+  id: string;
   code: string;
   name: string;
-  joined: boolean;
-  host: boolean;
-  protected: boolean;
-  closed: boolean;
+  isJoined: boolean;
+  isHost: boolean;
+  isProtected: boolean;
+  isClosed: boolean;
   participantCount?: number;
   participants?: string[];
   target?: User;
