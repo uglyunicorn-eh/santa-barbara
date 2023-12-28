@@ -31,6 +31,7 @@ interface ButtonProps {
 
 type Props = {
   children?: React.ReactNode;
+  className?: string;
 } & ButtonProps;
 
 export const Submit = (props: Props) => {
