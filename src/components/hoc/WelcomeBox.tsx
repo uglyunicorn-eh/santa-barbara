@@ -6,7 +6,7 @@ import { StartPage } from "src/components/hoc/StartPage";
 import { useCurrentUser } from "src/components/hooks";
 
 export const WelcomeBox = () => {
-  const { user } = useCurrentUser();
+  const { profile } = useCurrentUser();
 
   const renderLoginContainer = React.useCallback(
     () => <LoginBox />,
@@ -14,7 +14,7 @@ export const WelcomeBox = () => {
   );
 
   return (
-    <GarageDoor locked={!user} doorRenderer={renderLoginContainer}>
+    <GarageDoor locked={!profile} doorRenderer={renderLoginContainer}>
       <StartPage />
     </GarageDoor>
   );

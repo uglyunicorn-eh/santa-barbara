@@ -1,19 +1,15 @@
 import { gql, useMutation } from '@apollo/client';
-import * as jose from 'jose';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Button, Columns, Container, Content, Hero, Image, Level } from 'react-bulma-components';
+import { Button, Columns, Container, Content, Hero, Image } from 'react-bulma-components';
 import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
 import { Footer } from 'src/components/hoc/Footer';
 import { useNotifications } from 'src/components/hoc/NotificationsContainer';
-import { useCurrentUser } from 'src/components/hooks';
+import { useCurrentUser, useJWT } from 'src/components/hooks';
 
-import { issuer } from 'src/config.json';
 import image from 'src/images/enter.png';
-
-const PUBLIC_KEY = import.meta.env.PUBLIC_KEY.split('\\n').join('\n');
 
 type EnterRequestToken = {
   email: string;
@@ -21,71 +17,13 @@ type EnterRequestToken = {
 }
 
 export const EnterContainer = () => {
-  const { token } = useParams();
+  const { token: enterRequestToken } = useParams();
   const { error, success } = useNotifications();
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
+  const { signIn } = useCurrentUser();
+  const { verify, decode, isReady } = useJWT();
 
-  const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
-  const [sent, setSent] = React.useState(false);
-
-  React.useEffect(
-    () => {
-      if (!token) {
-        return;
-      }
-
-      (async function () {
-        const publicKey = await jose.importSPKI(PUBLIC_KEY, 'RS256');
-
-        try {
-          const jwtToken = await jose.jwtVerify<EnterRequestToken>(token, publicKey, { issuer });
-          console.log({ jwtToken });
-        }
-        catch (e) {
-          const { code } = e as JOSEError;
-
-          if (code === 'ERR_JWT_EXPIRED') {
-            setExpiredToken(await jose.decodeJwt<EnterRequestToken>(token));
-            return;
-          }
-
-          error("The magic link you are using is not valid. We are not sure where did you get it from, but it's not working.");
-        }
-
-      })();
-
-    },
-    [
-      token,
-    ],
-  );
-
-  React.useEffect(
-    () => {
-      if (user && expiredToken && navigate) {
-        if (user.email === expiredToken.email) {
-          navigate('/');
-        }
-      }
-    },
-    [
-      user,
-      expiredToken,
-      navigate,
-    ],
-  );
-
-  const goHome = React.useCallback(
-    () => {
-      navigate('/');
-    },
-    [
-      navigate,
-    ],
-  );
-
-  const [enterRequest, { loading }] = useMutation(
+  const [enterRequest, { loading: enterRequestLoading }] = useMutation(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
         auth {
@@ -99,6 +37,77 @@ export const EnterContainer = () => {
         }
       }
     `
+  );
+
+  const [enter, { loading: enterLoading }] = useMutation(
+    gql`
+      mutation Enter($input: EnterInput!) {
+        auth {
+          enter(input: $input) {
+            userToken
+            user {
+              id
+              name
+            }
+
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
+  const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
+  const [sent, setSent] = React.useState(false);
+
+  React.useEffect(
+    () => {
+      if (!enterRequestToken || !isReady) {
+        return;
+      }
+
+      (async function () {
+        try {
+          await verify<EnterRequestToken>(enterRequestToken);
+
+          const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
+
+          signIn({ profile: user, userToken });
+        }
+        catch (e) {
+          const { code } = e as JOSEError;
+
+          if (code === 'ERR_JWT_EXPIRED') {
+            setExpiredToken(await decode<EnterRequestToken>(enterRequestToken));
+            return;
+          }
+
+          error("The magic link you are using is not valid. We are not sure where did you get it from, but it's not working.");
+        }
+
+      })();
+
+    },
+    [
+      isReady,
+      enterRequestToken,
+      verify,
+      decode,
+      signIn,
+    ],
+  );
+
+  const goHome = React.useCallback(
+    () => {
+      navigate('/');
+    },
+    [
+      navigate,
+    ],
   );
 
   const resend = React.useCallback(
@@ -148,7 +157,7 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button onClick={resend} loading={loading} disabled={loading || sent} color={"primary"} rounded>
+                      <Button onClick={resend} loading={enterRequestLoading} disabled={enterRequestLoading || sent} color={"primary"} rounded>
                         &mdash; Send me that magic again, por favor!
                       </Button>
                     )

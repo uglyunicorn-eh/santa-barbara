@@ -16,11 +16,11 @@ type Props = {
 export const JoinBox = ({ party }: Props) => {
   const navigate = useNavigate();
   const [busy, setBusy] = React.useState(false);
-  const { user, signIn } = useCurrentUser();
+  const { profile, signIn } = useCurrentUser();
 
   const onActionClick = React.useCallback(
     () => {
-      if (!user) {
+      if (!profile) {
         setBusy(true);
         setTimeout(() => {
           signIn({
@@ -33,7 +33,7 @@ export const JoinBox = ({ party }: Props) => {
       }
     },
     [
-      user,
+      profile,
       signIn,
     ],
   );
@@ -52,7 +52,7 @@ export const JoinBox = ({ party }: Props) => {
       <Hero.Body>
         <GrinchBox>
           <h2>
-            {party?.closed ? "Buenos noches" : "Howdy"}, {user?.name ?? "anonymous friend"}!
+            {party?.closed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
             {
               party?.closed
                 ? (
@@ -92,7 +92,7 @@ export const JoinBox = ({ party }: Props) => {
                 disabled={busy}
                 onClick={onActionClick}
               >
-                &#x1F973;&nbsp;{user ? "Join the party!" : "Sign in & Join the party!"}
+                &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
               </Button>
             )}
 

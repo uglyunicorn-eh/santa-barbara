@@ -1,39 +1,75 @@
 import React from "react";
+import { useJWT } from "src/components/hooks";
 
 import { useLocalStorage } from "src/components/hooks/useLocalStorage";
 
 type User = {
   id: string;
   name: string;
-  email: string;
 };
 
-export const useCurrentUser = () => {
-  const [userToken, setUserToken] = useLocalStorage<string>('userToken')
+type SignInParams = {
+  profile: User;
+  userToken: string;
+};
 
-  const signIn = React.useCallback(
-    (user: User) => {
-      setUserToken(JSON.stringify(user));
+type UserToken = {
+  sub: string;
+}
+
+export const useCurrentUser = () => {
+  const { verify } = useJWT();
+
+  const [userTokenValue, setUserTokenValue] = useLocalStorage<string>('userToken');
+  const [userToken, setUserToken] = React.useState<UserToken>();
+  const [profile, setProfile] = useLocalStorage<User>('profile');
+
+  React.useEffect(
+    () => {
+      if (!userTokenValue) {
+        setUserToken(undefined);
+        return;
+      }
+
+      (async function () {
+        try {
+          setUserToken((await verify<UserToken>(userTokenValue)).payload);
+        }
+        catch {
+          setUserToken(undefined);
+        }
+      })();
     },
     [
-
+      userTokenValue,
     ],
+  );
+
+  const signIn = React.useCallback(
+    ({ profile, userToken }: SignInParams) => {
+      setProfile(profile);
+      setUserTokenValue(userToken);
+    },
+    [],
   );
 
   const signOut = React.useCallback(
     () => {
-      setUserToken(undefined);
+      setProfile(undefined);
+      setUserTokenValue(undefined);
     },
     [],
   );
 
   return React.useMemo(
     () => ({
-      user: JSON.parse(userToken ?? 'null') as User | null,
+      profile,
+      userToken,
       signIn,
       signOut,
     }),
     [
+      profile,
       userToken,
       signIn,
       signOut,
