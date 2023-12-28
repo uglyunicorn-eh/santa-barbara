@@ -39,7 +39,7 @@ const Profile = () => {
 };
 
 const History = () => {
-  const { loading, error, data } = useQuery(gql`
+  const { loading, data } = useQuery(gql`
     {
       parties {
         code
