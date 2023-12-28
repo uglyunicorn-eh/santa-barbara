@@ -1,6 +1,6 @@
 import React from "react";
-import { useJWT } from "src/components/hooks";
 
+import { useJWT } from "src/components/hooks";
 import { useLocalStorage } from "src/components/hooks/useLocalStorage";
 
 type User = {
