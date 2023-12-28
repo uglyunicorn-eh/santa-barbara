@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 
 import { GarageDoor } from "src/components/GarageDoor";
 import { EnterContainer } from "src/components/hoc/EnterContainer";
@@ -23,6 +23,23 @@ export const WelcomeBox = () => {
   return (
     <GarageDoor locked={!profile} doorRenderer={renderLoginContainer}>
       <StartPage />
+
+      <Routes location={location} key={location.pathname}>
+        <Route path="/enter/*" Component={RedirectToHome} />
+      </Routes>
     </GarageDoor>
   );
+};
+
+const RedirectToHome = () => {
+  const navigate = useNavigate();
+
+  React.useEffect(
+    () => {
+      navigate("/");
+    },
+    [],
+  );
+
+  return null;
 }
