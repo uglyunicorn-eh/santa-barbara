@@ -8,6 +8,7 @@
 @import "bulma/sass/elements/container";
 @import "bulma/sass/components/modal";
 @import "bulma/sass/components/card";
+@import "bulma/sass/components/tabs";
 @import "bulma/sass/form/_all";
 
 @import url("https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap");
@@ -21,6 +22,7 @@
 @import "./enter.scss";
 @import "./grinch-box.scss";
 @import "./login.scss";
+@import "./profile.scss";
 
 body {
   font-family: "Cuprum", sans-serif;
@@ -42,7 +44,6 @@ body {
 }
 
 .app-spinner {
-  // background-color: #fff;
   background: #141414 url("/party-garage-door-3.jpg") center center/cover;
 
   .hero-body {
