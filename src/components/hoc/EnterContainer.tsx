@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
 import { Footer } from 'src/components/hoc/Footer';
-import { LoginBox } from 'src/components/hoc/LoginBox';
+import { LoginHero } from 'src/components/hoc/LoginBox';
 import { useNotifications } from 'src/components/hoc/NotificationsContainer';
 import { useCurrentUser, useJWT } from 'src/components/hooks';
 
@@ -23,8 +23,6 @@ export const EnterContainer = () => {
   const navigate = useNavigate();
   const { signIn } = useCurrentUser();
   const { verify, decode, isReady } = useJWT();
-
-  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken | null>();
 
   const [enterRequest, { loading: enterRequestLoading }] = useMutation(
     gql`
@@ -64,8 +62,20 @@ export const EnterContainer = () => {
     `
   );
 
+  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken>();
+  const [tokenPayloadTrusted, setTokenPayloadTrusted] = React.useState<EnterRequestToken | null>();
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [sent, setSent] = React.useState(false);
+
+  React.useEffect(
+    () => {
+      enterRequestToken && setTokenPayloadUntrusted(decode(enterRequestToken));
+    },
+    [
+      enterRequestToken,
+      decode,
+    ],
+  );
 
   React.useEffect(
     () => {
@@ -77,8 +87,7 @@ export const EnterContainer = () => {
 
       (async function () {
         try {
-          await verify<EnterRequestToken>(enterRequestToken);
-          setTokenPayloadUntrusted(null);
+          setTokenPayloadTrusted((await verify<EnterRequestToken>(enterRequestToken)).payload);
 
           const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
 
@@ -87,6 +96,8 @@ export const EnterContainer = () => {
           setTimeout(() => navigate("/"), 750);
         }
         catch (e) {
+          setTokenPayloadTrusted(null);
+
           const { code } = e as JOSEError;
           if (code === 'ERR_JWT_EXPIRED') {
             setExpiredToken(decode<EnterRequestToken>(enterRequestToken));
@@ -138,13 +149,22 @@ export const EnterContainer = () => {
     ],
   );
 
-  if (tokenPayloadUntrusted === undefined) {
+  if (!tokenPayloadUntrusted) {
     return <></>;
   }
 
-  if (tokenPayloadUntrusted !== null) {
+  if (tokenPayloadTrusted === undefined || tokenPayloadTrusted) {
     return (
-      <LoginBox />
+      <LoginHero>
+        <Button
+          size="medium"
+          className="is-rounded is-link login-button"
+          loading
+          disabled
+        >
+          Enter with your email address
+        </Button>
+      </LoginHero>
     );
   }
 

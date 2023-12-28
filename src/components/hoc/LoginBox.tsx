@@ -21,31 +21,36 @@ const validationSchema = Yup.object().shape({
     .email(),
 });
 
-
 export const LoginBox = () => {
   return (
     <>
       <NotificationsContainer />
 
-      <Hero size={"fullheight"} className="login-container has-dark-background">
-        <Hero.Body>
-          <Container textAlign="centered">
-            <Routes>
-              <Route path="/" Component={EnterActions} />
-              <Route path="/enter/" Component={EnterForm} />
-            </Routes>
-          </Container>
-        </Hero.Body>
-
-        <Hero.Footer>
-          <Footer noUser noHome profileAsLink>
-            <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" />
-          </Footer>
-        </Hero.Footer>
-      </Hero>
+      <LoginHero>
+        <Routes>
+          <Route path="/" Component={EnterActions} />
+          <Route path="/enter/" Component={EnterForm} />
+        </Routes>
+      </LoginHero>
     </>
   );
 };
+
+export const LoginHero = ({ children }: { children: React.ReactNode }) => (
+  <Hero size={"fullheight"} className="login-container has-dark-background">
+    <Hero.Body>
+      <Container textAlign="centered">
+        {children}
+      </Container>
+    </Hero.Body>
+
+    <Hero.Footer>
+      <Footer noUser noHome profileAsLink>
+        <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" />
+      </Footer>
+    </Hero.Footer>
+  </Hero>
+);
 
 const EnterActions = () => {
   const navigate = useNavigate();
