@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache } from "@apollo/client";
 import React from "react";
 import DocumentMeta from "react-document-meta";
 import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router
 import { NotificationsContainer } from "src/components/hoc/NotificationsContainer";
 import { PartyContainer } from "src/components/hoc/PartyContainer";
 import { WelcomeBox } from "src/components/hoc/WelcomeBox";
+import { useCurrentUser } from "src/components/hooks";
 
 import { apiEndpoint } from "src/config.json";
 
@@ -22,15 +23,33 @@ export const AppContainer = () => {
   )
 };
 
+const httpLink = new HttpLink({ uri: `${apiEndpoint}/graph/` });
+
 function Root() {
-  const client = React.useMemo(
-    () => new ApolloClient({
-      uri: `${apiEndpoint}/graph/`,
-      cache: new InMemoryCache(),
+  const { userToken } = useCurrentUser();
+
+  const authLink = React.useMemo(
+    () => new ApolloLink((operation, forward) => {
+      operation.setContext({
+        headers: {
+          authorization: userToken ? `Bearer ${userToken}` : null,
+        },
+      });
+
+      return forward(operation);
     }),
-    [],
+    [userToken],
   );
 
+  const client = React.useMemo(
+    () => new ApolloClient({
+      link: authLink.concat(httpLink),
+      cache: new InMemoryCache(),
+    }),
+    [
+      authLink,
+    ],
+  );
 
   return (
     <ApolloProvider client={client}>
