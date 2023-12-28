@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const PartyDetails = ({ party }: Props) => {
-  const { user } = useCurrentUser();
+  const { profile } = useCurrentUser();
 
   return (
     <Hero size={"fullheight"} className="party-details">
@@ -29,12 +29,12 @@ export const PartyDetails = ({ party }: Props) => {
             </Columns.Column>
             <Columns.Column>
               <Content className="party-details-content">
-                {user && (
+                {profile && (
                   party.closed
-                    ? <PartyIsClosedContent {...{ party, user }} />
+                    ? <PartyIsClosedContent {...{ party, user: profile }} />
                     : party.host
-                      ? <HostContent {...{ party, user }} />
-                      : <GuestContent {...{ party, user }} />
+                      ? <HostContent {...{ party, user: profile }} />
+                      : <GuestContent {...{ party, user: profile }} />
                 )}
               </Content>
             </Columns.Column>

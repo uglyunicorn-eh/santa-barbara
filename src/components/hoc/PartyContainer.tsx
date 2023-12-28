@@ -8,14 +8,14 @@ import { PartyDetails } from "src/components/hoc/PartyDetails";
 import { useCurrentUser, useParty } from "src/components/hooks";
 
 export const PartyContainer = () => {
-  const { user } = useCurrentUser();
+  const { profile } = useCurrentUser();
   const { code } = useParams();
   const { party } = useParty(code!);
 
   const locked = React.useMemo(
-    () => !user || !party?.joined,
+    () => !profile || !party?.joined,
     [
-      user,
+      profile,
       party?.joined,
     ],
   );
