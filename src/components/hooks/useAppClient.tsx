@@ -128,6 +128,7 @@ export const useAppClient = () => {
 
   const joinParty = React.useCallback(
     async (input: JoinPartyInput): Promise<boolean> => {
+      console.log({ input });
       const { data } = await joinPartyApi({ variables: { input } });
       console.log({ data });
       return false;
