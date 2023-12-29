@@ -1,4 +1,3 @@
-import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { Button, Container, Hero } from "react-bulma-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
@@ -10,6 +9,8 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
 import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useAppClient } from "src/components/hooks";
+import type { EnterRequestInput } from "src/components/hooks/useAppClient";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -84,59 +85,22 @@ const EnterActions = () => {
 const EnterForm = () => {
   const { error } = useNotifications();
   const navigate = useNavigate();
+  const { enterRequest } = useAppClient();
   const [sentTo, setSentTo] = React.useState<string>();
 
-  const [enterRequest, { loading, data, error: apiError }] = useMutation(
-    gql`
-      mutation EnterRequest($input: EnterRequestInput!) {
-        auth {
-          enterRequest(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const isComplete = React.useMemo(
-    () => !!sentTo && !loading && data,
-    [
-      sentTo,
-      loading,
-      data,
-    ],
-  );
-
-  React.useEffect(
-    () => {
-      if (!data && !apiError) {
-        return;
-      }
-      if (apiError) {
-        error(apiError.message)
-      }
-      else if (data?.auth.enterRequest.status !== "ok") {
-        error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
-      }
-    },
-    [
-      error,
-      data,
-      apiError,
-    ],
-  );
-
   const onSubmit = React.useCallback(
-    async (values: any) => {
+    async (input: EnterRequestInput) => {
+      const submit = async () => {
+        if (! await enterRequest(input)) {
+          error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
+        }
+      };
+
       await Promise.all([
         sleep(1000),
-        enterRequest({ variables: { input: values } }),
+        submit(),
       ]);
-      setSentTo(values.email);
+      setSentTo(input.email);
     },
     [
       error,
@@ -144,27 +108,19 @@ const EnterForm = () => {
     ],
   );
 
-  const goHome = React.useCallback(
-    () => {
-      navigate('/');
-    },
-    [
-      navigate,
-    ],
-  );
+  const goHome = React.useCallback(() => navigate('/'), [navigate]);
 
   return (
     <GrinchBox>
-      {isComplete
+      {sentTo
         ? (
           <>
             <h2>HO-HO-HO!</h2>
+            <br />
             <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
             <p>If you didn't receive anything from us, refresh this page and try again.</p>
 
-            <div className="actions">
-              <Button outlined text rounded onClick={goHome}>Return back to home</Button>
-            </div>
+            <Button outlined text rounded onClick={goHome}>Return back to home</Button>
 
             <SnowConfetti />
           </>
@@ -187,7 +143,7 @@ const EnterForm = () => {
             <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
 
             <div className="actions">
-              <Submit rounded loading={loading}>Send me a magic link!</Submit>
+              <Submit rounded>Send me a magic link!</Submit>
             </div>
           </Form>
         )
