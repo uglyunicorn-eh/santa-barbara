@@ -25,9 +25,17 @@
 @import "./profile.scss";
 @import "./404.scss";
 
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   font-family: "Cuprum", sans-serif;
   overflow-x: hidden;
+
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
 }
 
 .index-page {
@@ -49,5 +57,11 @@ body {
 
   .hero-body {
     justify-content: center;
+  }
+}
+
+.hero-body {
+  @include mobile {
+    padding: 1em 0.5em;
   }
 }
