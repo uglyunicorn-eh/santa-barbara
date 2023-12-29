@@ -46,6 +46,8 @@ export const JoinBox = ({ party }: Props) => {
 
   const { profile } = useCurrentUser();
 
+  const deadEnd = profile?.id && party?.isClosed && !party?.isJoined;
+
   const onGoHomeClick = React.useCallback(() => navigate('/'), [navigate]);
 
   return (
@@ -56,10 +58,10 @@ export const JoinBox = ({ party }: Props) => {
         <Hero.Body>
           <GrinchBox>
             <h2>
-              &mdash; {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name || "anonymous friend"}!
+              &mdash; {deadEnd ? "Buenos noches" : "Howdy"}, {profile?.name || "anonymous friend"}!
             </h2>
 
-            {party.isClosed
+            {deadEnd
               ? (
                 <>
                   <h3>
