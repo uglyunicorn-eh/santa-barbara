@@ -43,9 +43,7 @@ const signInValidationSchema = Yup.object().shape({
 export const JoinBox = ({ party }: Props) => {
   const navigate = useNavigate();
 
-  // const { profile } = useCurrentUser();
-  const profile = null;
-
+  const { profile } = useCurrentUser();
 
   const onGoHomeClick = React.useCallback(() => navigate('/'), [navigate]);
 
