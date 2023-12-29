@@ -6,4 +6,17 @@
   .tabs {
     margin: 0 -20px 1em;
   }
+
+  ul {
+    list-style: none;
+  }
+
+  .is-closed {
+    a {
+      color: gray;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
 }
