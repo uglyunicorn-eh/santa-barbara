@@ -181,7 +181,7 @@ export const useAppClient = () => {
   const leaveParty = React.useCallback(
     async (input: LeavePartyInput): Promise<boolean> => {
       const { data } = await leavePartyApi({ variables: { input } });
-      if (data?.parties.joinParty.status === "error") {
+      if (data?.parties.leaveParty.status === "error") {
         error(data?.parties.leaveParty.userErrors[0].messages[0]);
         return false;
       }
