@@ -6,11 +6,20 @@
 
   .party-details-content {
     text-align: justify;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     margin-bottom: 2em;
+
+    h1 {
+      font-size: 2rem;
+    }
 
     @include mobile {
       text-align: left;
+      font-size: 1.2rem;
+
+      h1 {
+        font-size: 1.8rem;
+      }
 
       .confetti-button {
         display: none;

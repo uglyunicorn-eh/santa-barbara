@@ -31,6 +31,7 @@ export const PartyDetails = ({ party }: Props) => {
               </Columns.Column>
               <Columns.Column>
                 <Content className="party-details-content">
+                  <h1 className="has-text-centered is-visible-mobile">{party.name}</h1>
                   {profile && (
                     party.isClosed
                       ? <PartyIsClosedContent {...{ party, user: profile }} />
