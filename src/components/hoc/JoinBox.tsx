@@ -230,6 +230,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   return (
     <Form
       initialValues={{
+        party: party.id,
         name: profile?.name ?? "",
         password: "",
       }}
@@ -240,7 +241,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
         (
           <FormField
             name="name"
-            label="Let us know your name"
+            label={profile?.name ? "Wanna use your regular name?" : "Let us know your name"}
             horizontal={false}
             children={<Input />}
           />
