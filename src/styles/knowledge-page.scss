@@ -49,6 +49,10 @@
     p {
       text-align: justify;
       font-size: 1.2em;
+
+      @media screen and (max-width: 768px) {
+        text-align: left;
+      }
     }
 
     li {
