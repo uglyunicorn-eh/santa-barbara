@@ -5,7 +5,8 @@ import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
-import { useAppClient } from "src/components/hooks";
+import { useAppClient, useSignals } from "src/components/hooks";
+import { usePartyContext } from "src/components/hoc/PartyContext";
 
 const validationSchema = Yup.object();
 
@@ -14,15 +15,18 @@ const initialValues = {};
 export const ConfirmPartyClose = () => {
   const { code } = useParams();
   const { closeParty } = useAppClient();
+  const { party } = usePartyContext();
+  const { signal } = useSignals();
 
   const onSubmit = React.useCallback(
     async () => {
-      if (!code) {
+      if (!party) {
         return;
       }
 
-      const success = await closeParty(code);
-      console.log({ success });
+      if (await closeParty({ party: party.id })) {
+        signal('party:updated');
+      }
     },
     [
       code,
