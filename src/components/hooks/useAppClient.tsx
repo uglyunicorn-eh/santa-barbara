@@ -137,7 +137,7 @@ export const useAppClient = () => {
         error(data?.parties.joinParty.userErrors[0].messages[0]);
         return false;
       }
-      return false;
+      return true;
     },
     [
       joinPartyApi,
