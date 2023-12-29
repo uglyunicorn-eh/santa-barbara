@@ -227,6 +227,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
     },
     [
       joinParty,
+      signal,
     ],
   );
 
