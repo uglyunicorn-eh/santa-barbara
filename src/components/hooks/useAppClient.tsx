@@ -54,9 +54,7 @@ export const useAppClient = () => {
       mutation JoinParty($input: JoinPartyInput!) {
         parties {
           joinParty(input: $input) {
-            node {
-              code
-            }
+            status
           }
         }
       }
