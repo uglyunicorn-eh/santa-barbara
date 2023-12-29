@@ -8,9 +8,9 @@ import { SnowConfetti } from "src/components/SnowConfetti";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
 import { Footer } from "src/components/hoc/Footer";
-import { useAppClient, useCurrentUser } from "src/components/hooks";
+import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import type { Party, User } from "src/types";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
 import type { JoinPartyInput } from "src/components/hooks/useAppClient";
 
 type Props = {
@@ -49,48 +49,52 @@ export const JoinBox = ({ party }: Props) => {
   const onGoHomeClick = React.useCallback(() => navigate('/'), [navigate]);
 
   return (
-    <Hero size={"fullheight"} className="join-container">
-      <Hero.Body>
-        <GrinchBox>
-          <h2>
-            &mdash; {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
-          </h2>
+    <>
+      <NotificationsContainer />
 
-          {party.isClosed
-            ? (
-              <>
-                <h3>
-                  Sorry to disappoint you, <br />
-                  but {party.name.replace(/!+$/, '')} is over!
-                </h3>
+      <Hero size={"fullheight"} className="join-container">
+        <Hero.Body>
+          <GrinchBox>
+            <h2>
+              &mdash; {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
+            </h2>
 
-                <Button
-                  size="medium"
-                  outlined
-                  text
-                  onClick={onGoHomeClick}
-                >
-                  &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country roads!</span>
-                </Button>
-              </>
-            )
-            : (
-              <>
-                <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
+            {party.isClosed
+              ? (
+                <>
+                  <h3>
+                    Sorry to disappoint you, <br />
+                    but {party.name.replace(/!+$/, '')} is over!
+                  </h3>
 
-                {profile ? <SubmitRequestForm party={party} profile={profile} /> : <SignInControls party={party} />}
-              </>
-            )
-          }
-        </GrinchBox>
-      </Hero.Body>
+                  <Button
+                    size="medium"
+                    outlined
+                    text
+                    onClick={onGoHomeClick}
+                  >
+                    &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country roads!</span>
+                  </Button>
+                </>
+              )
+              : (
+                <>
+                  <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
 
-      <Hero.Footer>
-        <Footer profileAsLink>
-          <UnsplashCredit nickname="nicolebaster" name="Nicole Baster" />
-        </Footer>
-      </Hero.Footer>
-    </Hero >
+                  {profile ? <SubmitRequestForm party={party} profile={profile} /> : <SignInControls party={party} />}
+                </>
+              )
+            }
+          </GrinchBox>
+        </Hero.Body>
+
+        <Hero.Footer>
+          <Footer profileAsLink>
+            <UnsplashCredit nickname="nicolebaster" name="Nicole Baster" />
+          </Footer>
+        </Hero.Footer>
+      </Hero >
+    </>
   );
 };
 
@@ -212,18 +216,17 @@ type SubmitRequestFormProps = {
 }
 
 const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
-  const { error } = useNotifications();
   const { joinParty } = useAppClient();
+  const { signal } = useSignals();
 
   const onSubmit = React.useCallback(
     async (input: JoinPartyInput) => {
-      if (!await joinParty(input)) {
-        error("Unable to join the party. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me")
+      if (await joinParty(input)) {
+        signal('party:updated');
       }
     },
     [
       joinParty,
-      error,
     ],
   );
 
