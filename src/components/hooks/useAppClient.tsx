@@ -49,12 +49,16 @@ export const useAppClient = () => {
     }
   );
 
-  const [joinPartyApi, { error: joinPartyError }] = useMutation<{ party: Party }, { input: JoinPartyInput }>(
+  const [joinPartyApi, { error: joinPartyError }] = useMutation<any, { input: JoinPartyInput }>(
     gql`
       mutation JoinParty($input: JoinPartyInput!) {
         parties {
           joinParty(input: $input) {
             status
+            userErrors {
+              fieldName
+              messages
+            }
           }
         }
       }
@@ -128,12 +132,15 @@ export const useAppClient = () => {
 
   const joinParty = React.useCallback(
     async (input: JoinPartyInput): Promise<boolean> => {
-      console.log({ input });
       const { data } = await joinPartyApi({ variables: { input } });
-      console.log({ data });
+      if (data?.parties.joinParty.status === "error") {
+        error(data?.parties.joinParty.userErrors[0].messages[0]);
+        return false;
+      }
       return false;
     },
     [
+      joinPartyApi,
       error,
     ],
   );
