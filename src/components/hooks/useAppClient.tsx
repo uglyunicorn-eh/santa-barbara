@@ -2,7 +2,8 @@ import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import React from "react";
 
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import type { Party } from "src/types";
+
+import type { Party, User } from "src/types";
 
 export type EnterRequestInput = {
   email: string;
@@ -45,6 +46,20 @@ export const useAppClient = () => {
           target {
             name
           }
+        }
+      }
+    `,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
+
+  const [getProfileApi] = useLazyQuery(
+    gql`
+      query {
+        user {
+          id
+          name
         }
       }
     `,
@@ -112,6 +127,16 @@ export const useAppClient = () => {
     },
     [
       getPartyApi,
+    ],
+  );
+
+  const getProfile = React.useCallback(
+    async (): Promise<User | undefined> => {
+      const { data } = await getProfileApi();
+      return data?.user;
+    },
+    [
+      getProfileApi,
     ],
   );
 
@@ -197,6 +222,7 @@ export const useAppClient = () => {
     () => ({
       enterRequest,
       getParty,
+      getProfile,
       createParty,
       joinParty,
       closeParty,
@@ -205,6 +231,7 @@ export const useAppClient = () => {
     [
       enterRequest,
       getParty,
+      getProfile,
       createParty,
       joinParty,
       closeParty,

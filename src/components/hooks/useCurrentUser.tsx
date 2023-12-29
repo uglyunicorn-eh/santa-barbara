@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-import { useJWT } from "src/components/hooks";
+import { useAppClient, useJWT } from "src/components/hooks";
 import { useLocalStorage } from "src/components/hooks/useLocalStorage";
 
 type User = {
@@ -20,6 +20,7 @@ type UserToken = {
 
 export const useCurrentUser = () => {
   const { verify, isReady } = useJWT();
+  const { getProfile } = useAppClient();
 
   const [userTokenValue, setUserTokenValue] = useLocalStorage<string>('userToken');
   const [userToken, setUserToken] = React.useState<UserToken>();
@@ -49,6 +50,23 @@ export const useCurrentUser = () => {
     [
       userTokenValue,
       isReady,
+    ],
+  );
+
+  React.useEffect(
+    () => {
+      if (userTokenValue && !userToken) {
+        (async () => {
+          const profile = await getProfile();
+          if (profile) {
+            setProfile(profile);
+          }
+        })();
+      }
+    },
+    [
+      userTokenValue,
+      profile,
     ],
   );
 
