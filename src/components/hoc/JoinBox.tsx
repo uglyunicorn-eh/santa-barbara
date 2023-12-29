@@ -218,11 +218,16 @@ type SubmitRequestFormProps = {
 const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   const { joinParty } = useAppClient();
   const { signal } = useSignals();
+  const [busy, setBusy] = React.useState(false);
 
   const onSubmit = React.useCallback(
     async (input: JoinPartyInput) => {
+      setBusy(true);
       if (await joinParty(input)) {
         signal('party:updated');
+      }
+      else {
+        setBusy(false);
       }
     },
     [
@@ -275,6 +280,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
           size="medium"
           color={"primary"}
           className="is-rounded is-link"
+          loading={busy}
         >
           &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
         </Submit>
