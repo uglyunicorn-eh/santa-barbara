@@ -160,7 +160,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   if (displayForm) {
     return (
       <Form
-        initialValues={{ email: "", party: party.id }}
+        initialValues={{ email: "", party: party.code }}
         validationSchema={signInValidationSchema}
         onSubmit={onSubmit}
       >
