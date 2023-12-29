@@ -78,8 +78,6 @@ export const JoinBox = ({ party }: Props) => {
                 <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
 
                 {profile ? <SubmitRequestForm party={party} profile={profile} /> : <SignInControls party={party} />}
-
-                <SnowConfetti />
               </>
             )
           }
@@ -269,6 +267,8 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
           &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
         </Submit>
       </div>
+
+      <SnowConfetti />
     </Form>
   );
 };
