@@ -26,20 +26,20 @@ export const AppContainer = () => {
 const httpLink = new HttpLink({ uri: `${apiEndpoint}/graph/` });
 
 function Root() {
-  const { userTokenJWT } = useCurrentUser();
+  const { userTokenValue } = useCurrentUser();
 
   const authLink = React.useMemo(
     () => new ApolloLink((operation, forward) => {
       operation.setContext({
         headers: {
-          authorization: userTokenJWT ? `Bearer ${userTokenJWT}` : null,
+          ...(userTokenValue ? { authorization: `Bearer ${userTokenValue}` } : {}),
         },
       });
 
       return forward(operation);
     }),
     [
-      userTokenJWT,
+      userTokenValue,
     ],
   );
 

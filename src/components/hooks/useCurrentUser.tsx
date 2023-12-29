@@ -75,7 +75,7 @@ export const useCurrentUser = () => {
     () => ({
       profile,
       userToken,
-      userTokenJWT: userToken ? userTokenValue : undefined,
+      userTokenValue,
       signIn,
       signOut,
     }),
