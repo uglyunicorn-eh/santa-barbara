@@ -120,7 +120,7 @@ export const useAppClient = () => {
     `
   );
 
-  const [enterRequestApi, { error: enterRequestError }] = useMutation(
+  const [enterRequestApi, { error: enterRequestError }] = useMutation<any, { input: EnterRequestInput }>(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
         auth {
