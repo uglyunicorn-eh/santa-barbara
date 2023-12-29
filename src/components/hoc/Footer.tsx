@@ -44,8 +44,9 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
       (!noUser && profile) ? { key: "sign-out", label: "Sign Out", url: "/", onClick: onSignOutClick } : null,
       { key: "hot-it-works", label: "How this works?", url: "/how-it-works/" },
       { key: "privacy", label: "Privacy Policy", url: "/privacy/" },
-      { key: "terms", label: "Terms and Conditions", url: "/terms/" },
+      { key: "terms", label: "Terms", url: "/terms/" },
       { key: "status", label: "Status", url: "https://status.uglyunicorn.ca/", target: "_blank" },
+      { key: "buy-me-coffee", label: "Buy me a coffee", url: "https://www.buymeacoffee.com/uglyunicorn", target: "_blank" },
       { key: "github", label: <GitHub size={18} />, url: "https://github.com/uglyunicorn-eh/santa-barbara", target: "_blank", title: "GitHub" },
     ].filter(Boolean) as MenuItem[],
     [
