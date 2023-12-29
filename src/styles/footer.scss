@@ -19,7 +19,9 @@
 
   .footer-menu {
     @include mobile {
-      visibility: hidden;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      justify-content: center;
     }
 
     display: inline-flex;
@@ -31,6 +33,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      white-space: nowrap;
     }
 
     span {
