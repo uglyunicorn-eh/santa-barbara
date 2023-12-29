@@ -56,7 +56,7 @@ export const JoinBox = ({ party }: Props) => {
         <Hero.Body>
           <GrinchBox>
             <h2>
-              &mdash; {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name ?? "anonymous friend"}!
+              &mdash; {party?.isClosed ? "Buenos noches" : "Howdy"}, {profile?.name || "anonymous friend"}!
             </h2>
 
             {party.isClosed
