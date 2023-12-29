@@ -35,7 +35,7 @@ const HostContent = ({ party, user }: Props) => {
 
   return (
     <>
-      <p>Hey, {user.name}! That's so awesome you're gathering the {party.name.replace(/!+$/, '')}!<br /></p>
+      <p>Hey, {user.name}! That's so awesome you're gathering the <strong>{party.name.replace(/!+$/, '')}</strong>!<br /></p>
 
       <p>{participantCount}</p>
 
