@@ -3,6 +3,20 @@
     margin-bottom: 1em;
   }
 
+  .label {
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  input {
+    font-family: "Cuprum", sans-serif;
+    font-size: 1.2em;
+  }
+
+  .help {
+    font-size: 0.8em;
+  }
+
   &.is-horizontal {
     .label {
       font-weight: 600;
@@ -20,15 +34,6 @@
 
     .field-body {
       flex-direction: column;
-
-      input {
-        font-family: "Cuprum", sans-serif;
-        font-size: 1.2em;
-      }
-
-      .help {
-        font-size: 0.8em;
-      }
     }
   }
 

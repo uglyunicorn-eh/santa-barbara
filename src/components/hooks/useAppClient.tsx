@@ -4,12 +4,17 @@ import React from "react";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import type { Party } from "src/types";
 
-type NewPartyInput = {
+export type EnterRequestInput = {
+  email: string;
+  party?: string;
+}
+
+export type NewPartyInput = {
   name: string;
   password?: string;
 }
 
-type JoinPartyInput = {
+export type JoinPartyInput = {
   party: string;
   password?: string;
 }
@@ -57,7 +62,24 @@ export const useAppClient = () => {
     `
   );
 
+  const [enterRequestApi, { error: enterRequestError }] = useMutation(
+    gql`
+      mutation EnterRequest($input: EnterRequestInput!) {
+        auth {
+          enterRequest(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
   React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
+  React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
 
   const getParty = React.useCallback(
     async (code: string): Promise<Party | undefined> => {
@@ -66,6 +88,16 @@ export const useAppClient = () => {
     },
     [
       getPartyApi,
+    ],
+  );
+
+  const enterRequest = React.useCallback(
+    async (input: EnterRequestInput): Promise<boolean> => {
+      const { data } = await enterRequestApi({ variables: { input } });
+      return data?.auth.enterRequest.status === "ok";
+    },
+    [
+      error,
     ],
   );
 
@@ -132,6 +164,7 @@ export const useAppClient = () => {
 
   return React.useMemo(
     () => ({
+      enterRequest,
       getParty,
       createParty,
       joinParty,
@@ -139,6 +172,7 @@ export const useAppClient = () => {
       leaveParty,
     }),
     [
+      enterRequest,
       getParty,
       createParty,
       joinParty,
