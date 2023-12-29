@@ -39,7 +39,7 @@ const HostContent = ({ party, user }: Props) => {
 
       <p>{participantCount}</p>
 
-      {party.participantCount! > 1 && <p>Here's a full list: {party.participants!.sort().join(', ')}.</p>}
+      {party.participantCount! > 1 && <p>Here's a full list: {party.participants!.join(', ')}.</p>}
 
       <p>If you feel you're ready to go, then go ahead! Press the button below. Have fun!</p>
 
