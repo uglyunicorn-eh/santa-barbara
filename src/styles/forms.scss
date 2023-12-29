@@ -11,6 +11,10 @@
   input {
     font-family: "Cuprum", sans-serif;
     font-size: 1.2em;
+
+    @include mobile {
+      font-size: 1rem;
+    }
   }
 
   .help {
@@ -28,7 +32,7 @@
 
       @include mobile {
         text-align: left;
-        line-height: 1em;
+        line-height: 1.2rem;
       }
     }
 
