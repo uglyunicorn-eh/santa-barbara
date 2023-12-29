@@ -86,7 +86,6 @@ const EnterForm = () => {
   const { error } = useNotifications();
   const navigate = useNavigate();
   const { enterRequest } = useAppClient();
-  const { resetCredentials } = useCurrentUser();
   const [sentTo, setSentTo] = React.useState<string>();
 
   const onSubmit = React.useCallback(
@@ -97,7 +96,6 @@ const EnterForm = () => {
         }
       };
 
-      resetCredentials();
       await Promise.all([
         sleep(1000),
         submit(),
@@ -107,7 +105,6 @@ const EnterForm = () => {
     [
       error,
       enterRequest,
-      resetCredentials,
     ],
   );
 
