@@ -1,11 +1,12 @@
 import React from "react";
 import { Columns, Content } from "react-bulma-components";
+import { useNavigate } from "react-router";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
 import { usePartyContext } from "src/components/hoc/PartyContext";
-import { useAppClient, useSignals } from "src/components/hooks";
+import { useAppClient } from "src/components/hooks";
 
 import SantaImg from "src/images/santa.png";
 
@@ -16,7 +17,7 @@ const initialValues = {};
 export const ConfirmPartyLeave = () => {
   const { party } = usePartyContext();
   const { leaveParty } = useAppClient();
-  const { signal } = useSignals();
+  const navigate = useNavigate();
 
   const onSubmit = React.useCallback(
     async () => {
@@ -25,12 +26,13 @@ export const ConfirmPartyLeave = () => {
       }
 
       if (await leaveParty({ party: party?.id })) {
-        signal('party:updated');
+        navigate("/");
       }
     },
     [
       party?.id,
       leaveParty,
+      navigate,
     ],
   );
 

@@ -182,7 +182,7 @@ export const useAppClient = () => {
     async (input: LeavePartyInput): Promise<boolean> => {
       const { data } = await leavePartyApi({ variables: { input } });
       if (data?.parties.joinParty.status === "error") {
-        error(data?.parties.leavePartyApi.userErrors[0].messages[0]);
+        error(data?.parties.leaveParty.userErrors[0].messages[0]);
         return false;
       }
       return true;
