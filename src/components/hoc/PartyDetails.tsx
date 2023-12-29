@@ -59,6 +59,11 @@ export const PartyDetails = ({ party }: Props) => {
                               &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
                               Good luck with your gift ideas!
                             </p>
+
+                            <p className="has-text-left">
+                              &mdash; If you enjoyed this experience, please consider supporting me by {" "}
+                              <a href="https://www.buymeacoffee.com/uglyunicorn" target="_blank">buying me a coffee &#9749;</a>!
+                            </p>
                           </SecretText>
                         </div>
                       )
