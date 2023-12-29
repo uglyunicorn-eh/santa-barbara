@@ -147,8 +147,6 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   if (sentTo) {
     return (
       <>
-        <h2>HO-HO-HO!</h2>
-        <br />
         <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
         <p>If you didn't receive anything from us, refresh this page and try again.</p>
 
