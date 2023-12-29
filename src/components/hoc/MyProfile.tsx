@@ -3,7 +3,7 @@ import { Content, Tabs } from "react-bulma-components";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Gift } from 'react-feather';
+import { Gift, Star } from 'react-feather';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Tab } from "src/components/Tab";
@@ -47,6 +47,7 @@ const History = () => {
         name
         isProtected
         isClosed
+        isHost
         participantCount
       }
     }
@@ -66,10 +67,10 @@ const History = () => {
           <Content>
             <ul>
               {data?.parties.map(
-                ({ code, name, isClosed }: Party) => (
+                ({ code, name, isClosed, isHost }: Party) => (
                   <li key={code} className={isClosed ? "is-closed" : "is-open"}>
                     <Link to={`/p/${code}/`}>
-                      <Gift size={16} /> {name}
+                      {isHost ? <Star size={16} color="gold" /> : <Gift size={16} />} {name}
                     </Link>
                   </li>
                 ))
