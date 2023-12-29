@@ -11,6 +11,7 @@ import { Footer } from "src/components/hoc/Footer";
 import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { Party, User } from "src/types";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import type { JoinPartyInput } from "src/components/hooks/useAppClient";
 
 type Props = {
   party: Party;
@@ -211,12 +212,18 @@ type SubmitRequestFormProps = {
 }
 
 const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
-  const joinParty = React.useCallback(
-    () => {
+  const { error } = useNotifications();
+  const { joinParty } = useAppClient();
+
+  const onSubmit = React.useCallback(
+    async (input: JoinPartyInput) => {
+      if (!await joinParty(input)) {
+        error("Unable to join the party. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me")
+      }
     },
     [
-      profile,
-      party,
+      joinParty,
+      error,
     ],
   );
 
@@ -227,7 +234,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
         password: "",
       }}
       validationSchema={joinValidationSchema}
-      onSubmit={joinParty}
+      onSubmit={onSubmit}
     >
       {!profile?.name &&
         (

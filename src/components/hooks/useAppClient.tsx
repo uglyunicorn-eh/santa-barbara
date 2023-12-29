@@ -50,7 +50,7 @@ export const useAppClient = () => {
 
   const [joinPartyApi, { error: joinPartyError }] = useMutation<{ party: Party }, { input: JoinPartyInput }>(
     gql`
-      mutation JoinParty($code: String!) {
+      mutation JoinParty($input: JoinPartyInput!) {
         parties {
           joinParty(input: $input) {
             node {
