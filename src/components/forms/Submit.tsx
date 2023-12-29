@@ -34,9 +34,9 @@ type Props = {
   className?: string;
 } & ButtonProps;
 
-export const Submit = (props: Props) => {
+export const Submit = ({ loading, ...props }: Props) => {
   const { isSubmitting } = useFormikContext();
   return (
-    <Button type="submit" color="primary" {...props} loading={isSubmitting} />
+    <Button type="submit" color="primary" {...props} loading={loading || isSubmitting} />
   );
 };
