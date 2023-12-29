@@ -9,7 +9,7 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
 import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useAppClient } from "src/components/hooks";
+import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { EnterRequestInput } from "src/components/hooks/useAppClient";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -86,6 +86,7 @@ const EnterForm = () => {
   const { error } = useNotifications();
   const navigate = useNavigate();
   const { enterRequest } = useAppClient();
+  const { resetCredentials } = useCurrentUser();
   const [sentTo, setSentTo] = React.useState<string>();
 
   const onSubmit = React.useCallback(
@@ -96,6 +97,7 @@ const EnterForm = () => {
         }
       };
 
+      resetCredentials();
       await Promise.all([
         sleep(1000),
         submit(),
@@ -105,6 +107,7 @@ const EnterForm = () => {
     [
       error,
       enterRequest,
+      resetCredentials,
     ],
   );
 

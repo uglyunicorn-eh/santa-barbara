@@ -60,14 +60,22 @@ export const useCurrentUser = () => {
     [],
   );
 
-  const signOut = React.useCallback(
+  const resetCredentials = React.useCallback(
     () => {
       setProfile(undefined);
       setUserTokenValue(undefined);
+    },
+    [],
+  );
+
+  const signOut = React.useCallback(
+    () => {
+      resetCredentials();
       navigate("/");
     },
     [
       navigate,
+      resetCredentials,
     ],
   );
 
@@ -78,6 +86,7 @@ export const useCurrentUser = () => {
       userTokenValue,
       signIn,
       signOut,
+      resetCredentials,
     }),
     [
       profile,
@@ -85,6 +94,7 @@ export const useCurrentUser = () => {
       userTokenValue,
       signIn,
       signOut,
+      resetCredentials,
     ],
   );
 };
