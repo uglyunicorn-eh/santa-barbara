@@ -1,11 +1,11 @@
 import React from "react";
 import { Columns, Content } from "react-bulma-components";
-import { useParams } from "react-router-dom";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
-import { useAppClient } from "src/components/hooks";
+import { usePartyContext } from "src/components/hoc/PartyContext";
+import { useAppClient, useSignals } from "src/components/hooks";
 
 import SantaImg from "src/images/santa.png";
 
@@ -14,20 +14,22 @@ const validationSchema = Yup.object();
 const initialValues = {};
 
 export const ConfirmPartyLeave = () => {
-  const { code } = useParams();
+  const { party } = usePartyContext();
   const { leaveParty } = useAppClient();
+  const { signal } = useSignals();
 
   const onSubmit = React.useCallback(
     async () => {
-      if (!code) {
+      if (!party?.id) {
         return;
       }
 
-      const success = await leaveParty(code);
-      console.log({ success });
+      if (await leaveParty({ party: party?.id })) {
+        signal('party:updated');
+      }
     },
     [
-      code,
+      party?.id,
       leaveParty,
     ],
   );
@@ -38,7 +40,7 @@ export const ConfirmPartyLeave = () => {
       title="Ouch... Not funny :("
       action={<Submit>&#x1F44B; Bye-e-e! See ya later!</Submit>}
       dismissLabel="That was an accident..."
-      dismissLocation={`/p/${code}`}
+      dismissLocation={`/p/${party?.code}`}
       form={{
         validationSchema,
         initialValues,

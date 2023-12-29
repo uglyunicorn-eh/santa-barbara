@@ -20,6 +20,10 @@ export type JoinPartyInput = {
   password?: string;
 }
 
+export type LeavePartyInput = {
+  party: string;
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const useAppClient = () => {
@@ -65,6 +69,22 @@ export const useAppClient = () => {
     `
   );
 
+  const [leavePartyApi, { error: leavePartyError }] = useMutation<any, { input: LeavePartyInput }>(
+    gql`
+      mutation Mutation($input: LeavePartyInput!) {
+        parties {
+          leaveParty(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
   const [enterRequestApi, { error: enterRequestError }] = useMutation(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
@@ -82,6 +102,7 @@ export const useAppClient = () => {
   );
 
   React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
+  React.useEffect(() => { leavePartyError?.message && error(leavePartyError?.message); }, [leavePartyError?.message]);
   React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
 
   const getParty = React.useCallback(
@@ -158,13 +179,16 @@ export const useAppClient = () => {
   );
 
   const leaveParty = React.useCallback(
-    async (code: string): Promise<boolean> => {
-      console.log("API leaveParty", { code });
-      await sleep(500);
-      error("Hm... you cannot leave this party. Please check the code and try again...");
-      return false;
+    async (input: LeavePartyInput): Promise<boolean> => {
+      const { data } = await leavePartyApi({ variables: { input } });
+      if (data?.parties.joinParty.status === "error") {
+        error(data?.parties.leavePartyApi.userErrors[0].messages[0]);
+        return false;
+      }
+      return true;
     },
     [
+      leavePartyApi,
       error,
     ],
   );
