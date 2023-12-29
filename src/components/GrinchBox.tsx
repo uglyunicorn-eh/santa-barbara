@@ -17,7 +17,7 @@ export const GrinchBox = ({ children }: Props) => (
     >
       <Card>
         <Card.Content>
-          <img src={hiImg.src} alt="Hi!" className="hi-img is-hidden-mobile" width={250} />
+          <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
           <Content>
             {children}
