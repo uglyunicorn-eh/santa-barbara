@@ -17,6 +17,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label("Email")
+    .max(128)
     .required()
     .ensure()
     .email(),

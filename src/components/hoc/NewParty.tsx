@@ -17,10 +17,12 @@ type FormValues = {
 const validationSchema = Yup.object().shape({
   name: Yup.string()
     .label("Party name")
+    .max(100)
     .required()
     .ensure(),
   password: Yup.string()
     .label("Secret phrase")
+    .max(100)
     .ensure(),
 });
 

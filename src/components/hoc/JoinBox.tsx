@@ -22,11 +22,13 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const joinValidationSchema = Yup.object().shape({
   name: Yup.string()
     .label("Name")
+    .max(100)
     .required()
     .ensure(),
 
   password: Yup.string()
-    .label("Secret phrase"),
+    .label("Secret phrase")
+    .max(100),
 });
 
 const signInValidationSchema = Yup.object().shape({
