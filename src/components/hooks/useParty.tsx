@@ -1,11 +1,13 @@
-import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { useAppClient } from "src/components/hooks";
+
+import { useAppClient, useRefresher, useSignals } from "src/components/hooks";
 
 import type { Party } from "src/types";
 
 export const useParty = (code: string) => {
+  const { refresher, refresh } = useRefresher();
   const [party, setParty] = React.useState<Party | undefined | null>(undefined);
+  const { subscribe } = useSignals();
 
   const { getParty } = useAppClient();
 
@@ -16,13 +18,21 @@ export const useParty = (code: string) => {
       }
 
       (async () => {
-        const party = await getParty(code);
-        setParty(party);
+        setParty(await getParty(code));
       })();
     },
     [
       code,
       getParty,
+      refresher,
+    ],
+  );
+
+  React.useEffect(
+    () => subscribe('party:updated', refresh),
+    [
+      refresh,
+      subscribe,
     ],
   );
 
