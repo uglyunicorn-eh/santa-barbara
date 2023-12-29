@@ -87,13 +87,19 @@ export const EnterContainer = () => {
 
       (async function () {
         try {
-          setTokenPayloadTrusted((await verify<EnterRequestToken>(enterRequestToken)).payload);
+          const payloadTrusted = (await verify<EnterRequestToken>(enterRequestToken)).payload;
+          setTokenPayloadTrusted(payloadTrusted);
 
           const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
 
           signIn({ profile: user, userToken });
 
-          setTimeout(() => navigate("/"), 750);
+          if (payloadTrusted.party) {
+            navigate(`/p/${payloadTrusted.party}`);
+          }
+          else {
+            setTimeout(() => navigate('/'), 750);
+          }
         }
         catch (e) {
           setTokenPayloadTrusted(null);
