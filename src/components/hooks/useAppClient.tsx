@@ -155,21 +155,8 @@ export const useAppClient = () => {
       console.log("API createParty", { data });
       await sleep(500);
 
-      if (data.password === '1') {
-        error("Hm... we cannot create a new party. Please check the code and try again...");
-        return undefined;
-      }
-
-      return {
-        code: 'XCERTS',
-        name: 'Super duper fun party!',
-        isJoined: true,
-        isHost: true,
-        isProtected: Boolean(data.password),
-        isClosed: false,
-        participantCount: 1,
-        participants: ['Fred'],
-      };
+      error("Hm... we cannot create a new party. Please check the code and try again...");
+      return undefined;
     },
     [
       error,
