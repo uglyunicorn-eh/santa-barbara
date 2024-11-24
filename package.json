@@ -12,7 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.8",
+    "@apollo/client": "^3.11.10",
     "@astrojs/check": "^0.3.2",
     "@astrojs/react": "^3.0.7",
     "apollo-link-context": "^1.0.20",
