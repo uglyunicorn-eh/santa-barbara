@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
-    "@astrojs/check": "^0.3.2",
+    "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^3.0.7",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
