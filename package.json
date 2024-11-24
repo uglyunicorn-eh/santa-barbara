@@ -18,7 +18,7 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "astro": "^4.0.4",
-    "bulma": "^0.9.4",
+    "bulma": "^1.0.2",
     "bulma-divider": "^0.2.0",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.16",
