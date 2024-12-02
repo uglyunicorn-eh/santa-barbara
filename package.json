@@ -17,7 +17,7 @@
     "@astrojs/react": "^3.0.7",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
-    "astro": "^4.16.1",
+    "astro": "^4.16.16",
     "bulma": "<1",
     "bulma-divider": "^0.2.0",
     "formik": "^2.4.5",
