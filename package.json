@@ -14,7 +14,7 @@
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@astrojs/check": "^0.9.4",
-    "@astrojs/react": "^3.0.7",
+    "@astrojs/react": "^4.0.0",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "astro": "^4.16.1",
