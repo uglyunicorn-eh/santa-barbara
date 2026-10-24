@@ -46,10 +46,8 @@ const History = () => {
       parties {
         code
         name
-        isProtected
         isClosed
         isHost
-        participantCount
       }
     }
   `, {
