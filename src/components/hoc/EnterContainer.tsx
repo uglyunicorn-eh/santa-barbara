@@ -1,4 +1,5 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
 import { Button, Columns, Container, Content, Hero, Image } from 'react-bulma-components';
@@ -40,7 +41,7 @@ export const EnterContainer = () => {
     `
   );
 
-  const [enter] = useMutation(
+  const [enter] = useMutation<any>(
     gql`
       mutation Enter($input: EnterInput!) {
         auth {
@@ -62,14 +63,22 @@ export const EnterContainer = () => {
     `
   );
 
-  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken>();
+  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken | null>();
   const [tokenPayloadTrusted, setTokenPayloadTrusted] = React.useState<EnterRequestToken | null>();
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [sent, setSent] = React.useState(false);
 
   React.useEffect(
     () => {
-      enterRequestToken && setTokenPayloadUntrusted(decode(enterRequestToken));
+      if (!enterRequestToken) {
+        return;
+      }
+      try {
+        setTokenPayloadUntrusted(decode(enterRequestToken));
+      } catch {
+        // A malformed link: null shows the "not valid" screen once verification fails.
+        setTokenPayloadUntrusted(null);
+      }
     },
     [
       enterRequestToken,
@@ -155,7 +164,7 @@ export const EnterContainer = () => {
     ],
   );
 
-  if (!tokenPayloadUntrusted) {
+  if (tokenPayloadUntrusted === undefined) {
     return <></>;
   }
 

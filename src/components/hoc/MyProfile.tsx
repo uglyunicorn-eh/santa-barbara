@@ -1,4 +1,5 @@
-import { useQuery, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Content, Tabs } from "react-bulma-components";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
@@ -40,7 +41,7 @@ const Profile = () => {
 };
 
 const History = () => {
-  const { loading, data } = useQuery(gql`
+  const { loading, data } = useQuery<{ parties: Party[] }>(gql`
     {
       parties {
         code
