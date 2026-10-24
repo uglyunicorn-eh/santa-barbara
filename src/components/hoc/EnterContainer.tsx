@@ -63,7 +63,7 @@ export const EnterContainer = () => {
     `
   );
 
-  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken>();
+  const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken | null>();
   const [tokenPayloadTrusted, setTokenPayloadTrusted] = React.useState<EnterRequestToken | null>();
   const [expiredToken, setExpiredToken] = React.useState<EnterRequestToken>();
   const [sent, setSent] = React.useState(false);
@@ -76,8 +76,8 @@ export const EnterContainer = () => {
       try {
         setTokenPayloadUntrusted(decode(enterRequestToken));
       } catch {
-        // A malformed link: verification below reports it as not valid.
-        setTokenPayloadUntrusted(undefined);
+        // A malformed link: null shows the "not valid" screen once verification fails.
+        setTokenPayloadUntrusted(null);
       }
     },
     [
@@ -164,7 +164,7 @@ export const EnterContainer = () => {
     ],
   );
 
-  if (!tokenPayloadUntrusted) {
+  if (tokenPayloadUntrusted === undefined) {
     return <></>;
   }
 
