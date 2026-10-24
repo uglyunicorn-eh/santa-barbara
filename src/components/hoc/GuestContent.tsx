@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bulma-components';
+import { Button } from "src/components/bulma";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConfirmPartyLeave } from 'src/components/hoc/ConfirmPartyLeave';

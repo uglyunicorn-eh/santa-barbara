@@ -1,5 +1,5 @@
 import React from "react";
-import { Columns, Content } from "react-bulma-components";
+import { Columns, Content } from "src/components/bulma";
 import { useNavigate } from "react-router";
 import * as Yup from 'yup';
 

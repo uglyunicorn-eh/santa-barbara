@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Content } from "react-bulma-components";
+import { Button, Content } from "src/components/bulma";
 import * as Yup from 'yup';
 
 import type { Party } from "src/types";

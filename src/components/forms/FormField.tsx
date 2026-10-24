@@ -1,6 +1,6 @@
 import { useField } from "formik";
 import React from "react";
-import { Form } from "react-bulma-components";
+import { Form } from "src/components/bulma";
 
 type Props = {
   name: string;

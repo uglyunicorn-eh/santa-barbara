@@ -1,4 +1,4 @@
-import { Container, Content, Hero } from "react-bulma-components";
+import { Container, Content, Hero } from "src/components/bulma";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 

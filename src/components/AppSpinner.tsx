@@ -1,4 +1,4 @@
-import { Hero } from "react-bulma-components";
+import { Hero } from "src/components/bulma";
 import { BarLoader } from 'react-spinners';
 
 

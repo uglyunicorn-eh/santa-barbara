@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Hero } from "react-bulma-components";
+import { Button, Hero } from "src/components/bulma";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 

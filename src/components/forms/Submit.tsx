@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { Button } from "react-bulma-components";
+import { Button } from "src/components/bulma";
 import type { Color, Size } from "react-bulma-components/src/components";
 
 interface ButtonProps {

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { Card, Container, Content } from 'react-bulma-components';
+import { Card, Container, Content } from "src/components/bulma";
 
 import hiImg from "src/images/grinch.png";
 

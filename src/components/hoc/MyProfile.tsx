@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import { Content, Tabs } from "react-bulma-components";
+import { Content, Tabs } from "src/components/bulma";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';

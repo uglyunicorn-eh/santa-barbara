@@ -1,6 +1,6 @@
 import { useField, useFormikContext } from "formik";
 import React from "react";
-import { Form } from "react-bulma-components";
+import { Form } from "src/components/bulma";
 import type { Color, ElementProps, Size } from "react-bulma-components/src/components";
 
 import { FormFieldContext } from "src/components/forms";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Footer as BulmaFooter } from "react-bulma-components";
+import { Footer as BulmaFooter } from "src/components/bulma";
 import { GitHub } from 'react-feather';
 import { Link } from "react-router-dom";
 

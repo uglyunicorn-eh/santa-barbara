@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Button, Columns, Container, Content, Hero, Image } from 'react-bulma-components';
+import { Button, Columns, Container, Content, Hero, Image } from "src/components/bulma";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
