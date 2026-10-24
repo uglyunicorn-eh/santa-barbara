@@ -1,9 +1,10 @@
 import * as jose from "jose";
 import React from "react";
 
-import { issuer } from 'src/config.json';
+import { issuer, publicKey as PUBLIC_KEY } from 'src/config.json';
 
-const PUBLIC_KEY = import.meta.env.PUBLIC_KEY.split('\\n').join('\n');
+// Tokens from api.gnomik.me are ES256. The public key is not a secret, so it lives in config.json; it has to match
+// the API's JWT_PRIVATE_KEY.
 
 export const useJWT = () => {
   const [publicKey, setPublicKey] = React.useState<jose.KeyLike>();
@@ -11,7 +12,7 @@ export const useJWT = () => {
   React.useEffect(
     () => {
       (async function () {
-        setPublicKey(await jose.importSPKI(PUBLIC_KEY, 'RS256'));
+        setPublicKey(await jose.importSPKI(PUBLIC_KEY, 'ES256'));
       })();
     },
     [],
