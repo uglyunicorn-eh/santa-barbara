@@ -2,7 +2,6 @@ import { Formik, useFormikContext, type FormikConfig, type FormikValues } from "
 import { motion } from "framer-motion";
 import React from "react";
 import { Button, Modal } from "react-bulma-components";
-import DocumentMeta from "react-document-meta";
 import { useNavigate } from "react-router-dom";
 import { X } from 'react-feather';
 
@@ -147,7 +146,8 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
   );
 
   return (
-    <DocumentMeta title={title}>
+    <>
+      <title>{title}</title>
       <Modal show className={className} showClose={false} closeOnEsc={false} closeOnBlur={false}>
         <motion.div className="modal-background-custom" variants={BackgroundVariants} {...defaultMotionProps} />
 
@@ -156,6 +156,6 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
         </motion.div>
 
       </Modal>
-    </DocumentMeta>
+    </>
   );
 };

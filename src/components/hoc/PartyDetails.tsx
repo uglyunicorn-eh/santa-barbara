@@ -1,5 +1,4 @@
 import { Columns, Container, Content, Hero } from "react-bulma-components";
-import DocumentMeta from "react-document-meta";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "src/components/Confetti";
@@ -21,7 +20,8 @@ export const PartyDetails = ({ party }: Props) => {
   const { profile } = useCurrentUser();
 
   return (
-    <DocumentMeta title={party.name}>
+    <>
+      <title>{party.name}</title>
       <Hero size={"fullheight"} className="party-details">
         <Hero.Body>
           <Container>
@@ -84,6 +84,6 @@ export const PartyDetails = ({ party }: Props) => {
           </Footer>
         </Hero.Footer>
       </Hero>
-    </DocumentMeta>
+    </>
   );
 };

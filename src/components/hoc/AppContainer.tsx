@@ -1,6 +1,6 @@
-import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client/react";
 import React from "react";
-import DocumentMeta from "react-document-meta";
 import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router-dom";
 
 import { NotificationsContainer } from "src/components/hoc/NotificationsContainer";
@@ -60,14 +60,13 @@ function Root() {
 
   return (
     <ApolloProvider client={client}>
-      <DocumentMeta title="Anonymous Ded Morozes">
+      <title>Anonymous Ded Morozes</title>
         <NotificationsContainer />
 
         <Routes>
           <Route path="/*" Component={WelcomeBox} />
           <Route path="/p/:code/*" Component={PartyContainer} />
         </Routes>
-      </DocumentMeta>
     </ApolloProvider>
   );
 }

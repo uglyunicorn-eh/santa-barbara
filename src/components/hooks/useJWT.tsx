@@ -7,7 +7,7 @@ import { issuer, publicKey as PUBLIC_KEY } from 'src/config.json';
 // the API's JWT_PRIVATE_KEY.
 
 export const useJWT = () => {
-  const [publicKey, setPublicKey] = React.useState<jose.KeyLike>();
+  const [publicKey, setPublicKey] = React.useState<CryptoKey>();
 
   React.useEffect(
     () => {

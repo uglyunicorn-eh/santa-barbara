@@ -1,4 +1,5 @@
-import { gql, useLazyQuery, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client/react";
 import React from "react";
 
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
@@ -34,7 +35,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const useAppClient = () => {
   const { error } = useNotifications();
 
-  const [getPartyApi] = useLazyQuery(
+  const [getPartyApi] = useLazyQuery<{ party: Party | null }, { code: string }>(
     gql`
       query ($code: String!) {
         party(code: $code) {
@@ -58,7 +59,7 @@ export const useAppClient = () => {
     }
   );
 
-  const [getProfileApi] = useLazyQuery(
+  const [getProfileApi] = useLazyQuery<{ user: User | null }>(
     gql`
       query {
         user {
@@ -144,7 +145,7 @@ export const useAppClient = () => {
   const getParty = React.useCallback(
     async (code: string): Promise<Party | undefined> => {
       const { data } = await getPartyApi({ variables: { code } });
-      return data?.party;
+      return data?.party ?? undefined;
     },
     [
       getPartyApi,
@@ -154,7 +155,7 @@ export const useAppClient = () => {
   const getProfile = React.useCallback(
     async (): Promise<User | undefined> => {
       const { data } = await getProfileApi();
-      return data?.user;
+      return data?.user ?? undefined;
     },
     [
       getProfileApi,

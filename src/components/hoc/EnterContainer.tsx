@@ -1,4 +1,5 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
 import { Button, Columns, Container, Content, Hero, Image } from 'react-bulma-components';
@@ -40,7 +41,7 @@ export const EnterContainer = () => {
     `
   );
 
-  const [enter] = useMutation(
+  const [enter] = useMutation<any>(
     gql`
       mutation Enter($input: EnterInput!) {
         auth {
