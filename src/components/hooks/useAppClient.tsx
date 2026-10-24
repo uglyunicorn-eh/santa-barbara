@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { useLazyQuery, useMutation } from "@apollo/client/react";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import React from "react";
 
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
@@ -32,46 +32,38 @@ export type ClosePartyInput = {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const PARTY_QUERY = gql`
+  query ($code: String!) {
+    party(code: $code) {
+      id
+      name
+      code
+      isJoined
+      isHost
+      isProtected
+      isClosed
+      participantCount
+      participants
+      target {
+        name
+      }
+    }
+  }
+`;
+
+const PROFILE_QUERY = gql`
+  query {
+    user {
+      id
+      name
+    }
+  }
+`;
+
 export const useAppClient = () => {
   const { error } = useNotifications();
 
-  const [getPartyApi] = useLazyQuery<{ party: Party | null }, { code: string }>(
-    gql`
-      query ($code: String!) {
-        party(code: $code) {
-          id
-          name
-          code
-          isJoined
-          isHost
-          isProtected
-          isClosed
-          participantCount
-          participants
-          target {
-            name
-          }
-        }
-      }
-    `,
-    {
-      fetchPolicy: "cache-and-network",
-    }
-  );
-
-  const [getProfileApi] = useLazyQuery<{ user: User | null }>(
-    gql`
-      query {
-        user {
-          id
-          name
-        }
-      }
-    `,
-    {
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  const client = useApolloClient();
 
   const [joinPartyApi, { error: joinPartyError }] = useMutation<any, { input: JoinPartyInput }>(
     gql`
@@ -142,23 +134,37 @@ export const useAppClient = () => {
   React.useEffect(() => { closePartyError?.message && error(closePartyError?.message); }, [closePartyError?.message]);
   React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
 
+  // These are called imperatively (on load, on submit), so they use client.query, which returns a plain promise.
+  // null means "not found"; undefined means the request failed.
   const getParty = React.useCallback(
-    async (code: string): Promise<Party | undefined> => {
-      const { data } = await getPartyApi({ variables: { code } });
-      return data?.party ?? undefined;
+    async (code: string): Promise<Party | null | undefined> => {
+      try {
+        const { data } = await client.query<{ party: Party | null }, { code: string }>({
+          query: PARTY_QUERY,
+          variables: { code },
+          fetchPolicy: "network-only",
+        });
+        return data?.party;
+      } catch {
+        return undefined;
+      }
     },
     [
-      getPartyApi,
+      client,
     ],
   );
 
   const getProfile = React.useCallback(
-    async (): Promise<User | undefined> => {
-      const { data } = await getProfileApi();
-      return data?.user ?? undefined;
+    async (): Promise<User | null | undefined> => {
+      try {
+        const { data } = await client.query<{ user: User | null }>({ query: PROFILE_QUERY, fetchPolicy: "network-only" });
+        return data?.user;
+      } catch {
+        return undefined;
+      }
     },
     [
-      getProfileApi,
+      client,
     ],
   );
 

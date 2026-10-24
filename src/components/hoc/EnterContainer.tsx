@@ -70,7 +70,15 @@ export const EnterContainer = () => {
 
   React.useEffect(
     () => {
-      enterRequestToken && setTokenPayloadUntrusted(decode(enterRequestToken));
+      if (!enterRequestToken) {
+        return;
+      }
+      try {
+        setTokenPayloadUntrusted(decode(enterRequestToken));
+      } catch {
+        // A malformed link: verification below reports it as not valid.
+        setTokenPayloadUntrusted(undefined);
+      }
     },
     [
       enterRequestToken,
