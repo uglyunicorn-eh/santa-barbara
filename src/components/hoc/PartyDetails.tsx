@@ -1,4 +1,4 @@
-import { Columns, Container, Content, Hero } from "react-bulma-components";
+import { Columns, Container, Content, Hero } from "src/components/bulma";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "src/components/Confetti";

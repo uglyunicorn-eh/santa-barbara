@@ -1,5 +1,5 @@
 import React from "react";
-import { Content } from "react-bulma-components";
+import { Content } from "src/components/bulma";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";

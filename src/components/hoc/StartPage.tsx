@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { Columns, Container, Content, Hero } from "react-bulma-components";
+import { Columns, Container, Content, Hero } from "src/components/bulma";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 
 import { Divider } from "src/components/Divider";

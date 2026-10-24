@@ -1,4 +1,4 @@
-import { Tabs } from "react-bulma-components";
+import { Tabs } from "src/components/bulma";
 import { Link, Route, useMatch, useResolvedPath } from "react-router-dom";
 
 type Props = {

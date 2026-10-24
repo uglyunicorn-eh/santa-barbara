@@ -1,7 +1,7 @@
 import { Formik, useFormikContext, type FormikConfig, type FormikValues } from "formik";
 import { motion } from "framer-motion";
 import React from "react";
-import { Button, Modal } from "react-bulma-components";
+import { Button, Modal } from "src/components/bulma";
 import { useNavigate } from "react-router-dom";
 import { X } from 'react-feather';
 

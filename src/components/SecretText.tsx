@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "react-bulma-components";
+import { Button } from "src/components/bulma";
 
 type Props = {
   label: string;
