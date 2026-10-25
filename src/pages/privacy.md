@@ -48,17 +48,16 @@ strictly necessary, we do not show a cookie consent banner.
 
 ## Where Your Data Is Processed
 
-We operate from Canada and process data there. If you are elsewhere, your data is transferred to and maintained in
-Canada, and our service providers may process it in other countries. We take reasonable steps to make sure your data is
-treated securely and in line with this policy.
+We operate from Canada. The Service runs on Cloudflare's global network, so your data may be stored and processed in
+data centres in Canada or other countries, often the ones closest to you. Our email provider may also process data
+outside your country. We take reasonable steps to make sure your data is treated securely and in line with this policy,
+wherever it is located.
 
 ## Retention and Deletion
 
 * **Delete your account yourself** from your profile page. Deleting removes your account and the parties you host that
   have not yet rolled the dice.
 * **Deleted parties** are hidden from everyone and kept for one day so the host can restore them, then removed.
-* **Request deletion by email**: write to [info@gnomik.me](mailto:info@gnomik.me) and we will delete your
-  personal data, and ask our service providers to do the same, within 30 days.
 * We keep data only as long as needed for the purposes above, or as long as the law requires.
 
 ## Your Rights
