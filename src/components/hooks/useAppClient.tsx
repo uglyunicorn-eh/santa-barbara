@@ -30,6 +30,10 @@ export type ClosePartyInput = {
   party: string;
 }
 
+export type UpdateNameInput = {
+  name: string;
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const PARTY_QUERY = gql`
@@ -56,6 +60,7 @@ const PROFILE_QUERY = gql`
     user {
       id
       name
+      email
     }
   }
 `;
@@ -129,10 +134,32 @@ export const useAppClient = () => {
     `
   );
 
+  const [updateNameApi, { error: updateNameError }] = useMutation<any, { input: UpdateNameInput }>(
+    gql`
+      mutation UpdateName($input: UpdateNameInput!) {
+        profile {
+          updateName(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+            user {
+              id
+              name
+              email
+            }
+          }
+        }
+      }
+    `
+  );
+
   React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
   React.useEffect(() => { leavePartyError?.message && error(leavePartyError?.message); }, [leavePartyError?.message]);
   React.useEffect(() => { closePartyError?.message && error(closePartyError?.message); }, [closePartyError?.message]);
   React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
+  React.useEffect(() => { updateNameError?.message && error(updateNameError?.message); }, [updateNameError?.message]);
 
   // These are called imperatively (on load, on submit), so they use client.query, which returns a plain promise.
   // null means "not found"; undefined means the request failed.
@@ -236,6 +263,22 @@ export const useAppClient = () => {
     ],
   );
 
+  const updateName = React.useCallback(
+    async (input: UpdateNameInput): Promise<User | undefined> => {
+      const { data } = await updateNameApi({ variables: { input } });
+      const payload = data?.profile.updateName;
+      if (payload?.status === "error") {
+        error(payload.userErrors[0].messages[0]);
+        return undefined;
+      }
+      return payload?.user ?? undefined;
+    },
+    [
+      updateNameApi,
+      error,
+    ],
+  );
+
   return React.useMemo(
     () => ({
       enterRequest,
@@ -245,6 +288,7 @@ export const useAppClient = () => {
       joinParty,
       closeParty,
       leaveParty,
+      updateName,
     }),
     [
       enterRequest,
@@ -254,6 +298,7 @@ export const useAppClient = () => {
       joinParty,
       closeParty,
       leaveParty,
+      updateName,
     ],
   );
 };

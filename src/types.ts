@@ -3,6 +3,8 @@ import type { Color, Size } from "react-bulma-components/src/components";
 export type User = {
   id: string;
   name: string;
+  /** Only for the signed-in user. */
+  email?: string | null;
 };
 
 export type Party = {

@@ -46,7 +46,24 @@ function Root() {
   const client = React.useMemo(
     () => new ApolloClient({
       link: authLink.concat(httpLink),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          Query: {
+            fields: {
+              // History pages share one cache entry: the first page replaces it, later pages (with `after`) append.
+              partyHistory: {
+                keyArgs: false,
+                merge(existing, incoming, { args }) {
+                  if (!args?.after || !existing) {
+                    return incoming;
+                  }
+                  return { ...incoming, items: [...existing.items, ...incoming.items] };
+                },
+              },
+            },
+          },
+        },
+      }),
       defaultOptions: {
         query: {
           fetchPolicy: "network-only",
