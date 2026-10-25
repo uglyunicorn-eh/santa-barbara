@@ -149,3 +149,48 @@ export const ConfirmEmailChange = () => {
     </LinkPage>
   );
 };
+
+/**
+ * "This wasn't me", from the notice about an email change: the change is stopped and every device is signed out,
+ * this one included, so the owner signs in again with the email they still have.
+ */
+export const CancelEmailChange = () => {
+  const { cancelEmailChange } = useAppClient();
+  const { resetCredentials } = useCurrentUser();
+  const navigate = useNavigate();
+
+  const run = React.useCallback(
+    async (token: string) => {
+      const result = await cancelEmailChange(token);
+      if (result.ok) {
+        // Every session token of the account stopped working, so don't keep one here.
+        resetCredentials();
+      }
+      return result;
+    },
+    [
+      cancelEmailChange,
+      resetCredentials,
+    ],
+  );
+
+  const result = useLinkResult(run);
+
+  if (!result) {
+    return <Working title="Stopping the sleigh..." />;
+  }
+
+  if (!result.ok) {
+    return <LinkFailed message={result.message} />;
+  }
+
+  return (
+    <LinkPage>
+      <h2>Stopped it!</h2>
+      <br />
+      <p>Your email stays the same, and every device was signed out, including whoever asked for the change.</p>
+      <p>Sign in again with your email to carry on.</p>
+      <Button outlined text rounded onClick={() => navigate('/')}>Sign me in</Button>
+    </LinkPage>
+  );
+};

@@ -265,6 +265,15 @@ export const useAppClient = () => {
     [],
   );
 
+  /** "This wasn't me", from the notice about an email change: stops it and signs out everywhere. */
+  const cancelEmailChange = React.useCallback(
+    async (token: string): Promise<LinkResult> => {
+      const result = await apiCall("/me/email-change/cancel", { method: "POST", body: { token }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true } : { ok: false, message: result.error.message || LINK_FAILED };
+    },
+    [],
+  );
+
   return React.useMemo(
     () => ({
       enterRequest,
@@ -283,6 +292,7 @@ export const useAppClient = () => {
       confirmAccountDeletion,
       requestEmailChange,
       confirmEmailChange,
+      cancelEmailChange,
     }),
     [
       enterRequest,
@@ -301,6 +311,7 @@ export const useAppClient = () => {
       confirmAccountDeletion,
       requestEmailChange,
       confirmEmailChange,
+      cancelEmailChange,
     ],
   );
 };
