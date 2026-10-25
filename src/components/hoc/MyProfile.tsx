@@ -19,6 +19,8 @@ import type { Party } from "src/types";
 
 const HISTORY_PAGE_SIZE = 10;
 
+const SITE_NAME = "Anonymous Ded Morozes";
+
 const HISTORY_QUERY = gql`
   query PartyHistory($first: Int, $after: String) {
     partyHistory(first: $first, after: $after) {
@@ -124,6 +126,8 @@ const Profile = () => {
 
   return (
     <div className="profile-settings">
+      <title>{`My profile | ${SITE_NAME}`}</title>
+
       <Setting
         label="Name"
         hint="We'll suggest it when you join a new party. Parties you've already joined keep the name you joined with."
@@ -352,9 +356,12 @@ const History = () => {
     ],
   );
 
+  const title = <title>{`My party history | ${SITE_NAME}`}</title>;
+
   if (loading && !page) {
     return (
       <Content style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {title}
         <ClipLoader />
       </Content>
     );
@@ -363,6 +370,7 @@ const History = () => {
   if (!page?.items.length) {
     return (
       <div className="history-empty">
+        {title}
         <Gift size={32} />
         <p>No parties yet. Host one or join a friend's, and it will show up here.</p>
       </div>
@@ -371,6 +379,7 @@ const History = () => {
 
   return (
     <div className="history">
+      {title}
       <ul className="history-list">
         {page.items.map(party => <HistoryItem key={party.code} party={party} />)}
       </ul>
