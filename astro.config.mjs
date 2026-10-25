@@ -18,7 +18,7 @@ const htmlFiles = dir => readdirSync(dir, { withFileTypes: true, recursive: true
 /**
  * Writes the Content-Security-Policy into the built `_headers` (from public/_headers, where `{{CSP}}` stands for it).
  * Scripts may only come from this site, plus the inline scripts Astro puts in the pages, allowed by their hashes,
- * which are taken from the built pages on every build. Inline styles are allowed: the toast library writes its
+ * which are taken from the built pages on every build, and Cloudflare Web Analytics, which Pages adds to every page. Inline styles are allowed: the toast library writes its
  * styles at runtime, which can't be hashed ahead of time.
  */
 const contentSecurityPolicy = {
@@ -34,11 +34,11 @@ const contentSecurityPolicy = {
       }
       const policy = [
         "default-src 'self'",
-        `script-src 'self' ${[...hashes].sort().join(' ')}`,
+        `script-src 'self' https://static.cloudflareinsights.com ${[...hashes].sort().join(' ')}`,
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data:",
-        `connect-src 'self' ${apiOrigin}`,
+        `connect-src 'self' ${apiOrigin} https://cloudflareinsights.com`,
         "frame-ancestors 'none'",
         "base-uri 'self'",
         "form-action 'self'",
