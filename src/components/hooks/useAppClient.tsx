@@ -14,6 +14,8 @@ export type EnterRequestInput = {
 export type NewPartyInput = {
   name: string;
   password?: string;
+  /** Lets the API treat a repeated request as the same one, so a retry never makes a second party. */
+  requestId?: string;
 }
 
 export type JoinPartyInput = {
@@ -335,10 +337,10 @@ export const useAppClient = () => {
   );
 
   const createParty = React.useCallback(
-    async ({ name, password }: NewPartyInput): Promise<Party | undefined> => {
+    async ({ name, password, requestId }: NewPartyInput): Promise<Party | undefined> => {
       let result;
       try {
-        const { data } = await createPartyApi({ variables: { input: { name, password: password || undefined } } });
+        const { data } = await createPartyApi({ variables: { input: { name, password: password || undefined, requestId } } });
         result = data?.parties.createParty;
       } catch {
         return undefined;

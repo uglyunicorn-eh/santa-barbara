@@ -36,13 +36,26 @@ export const NewParty = () => {
   const navigate = useNavigate();
   const [party, setParty] = React.useState<Party | undefined>(undefined);
 
+  // A double click or a repeated Enter can fire a second submit before the form re-renders as busy; each one would create a party.
+  const submitting = React.useRef(false);
+  // The API returns the same party for a repeated request id, so even a request that was sent twice makes one party.
+  const requestId = React.useRef(crypto.randomUUID());
+
   const onSubmit = React.useCallback(
     async (values: FormValues) => {
-      const party = await createParty(values);
-      if (!party) {
+      if (submitting.current) {
         return;
       }
-      setParty(party);
+      submitting.current = true;
+      try {
+        const party = await createParty({ ...values, requestId: requestId.current });
+        if (!party) {
+          return;
+        }
+        setParty(party);
+      } finally {
+        submitting.current = false;
+      }
     },
     [
       createParty,
