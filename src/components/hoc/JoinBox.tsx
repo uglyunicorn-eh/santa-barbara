@@ -14,6 +14,7 @@ import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import type { Party, User } from "src/types";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
 import type { JoinPartyInput } from "src/components/hooks/useAppClient";
+import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
 
 type Props = {
   party: Party;
@@ -24,22 +25,24 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const joinValidationSchema = Yup.object().shape({
   name: Yup.string()
     .label("Name")
-    .max(100)
+    .max(MAX_NAME_LENGTH)
     .required()
     .ensure(),
 
   password: Yup.string()
     .label("Secret phrase")
-    .max(100),
+    .max(MAX_PHRASE_LENGTH),
 });
 
 const signInValidationSchema = Yup.object().shape({
   email: Yup.string()
     .label("Email")
+    .max(MAX_EMAIL_LENGTH)
     .required()
     .ensure()
     .email(),
   party: Yup.string()
+    .max(MAX_PARTY_CODE_LENGTH)
     .required()
     .ensure(),
 });
@@ -181,7 +184,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
           name="email"
           label="Enter with your email address"
           horizontal={false}
-          children={<Input placeholder="Email address for a magic link" />}
+          children={<Input placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
         />
         <p>
           Enter your email address above and we'll send you a magic link to sign in.
@@ -267,7 +270,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
         name="name"
         label={profile?.name ? "Your name for this party" : "Let us know your name"}
         horizontal={false}
-        children={<Input />}
+        children={<Input maxLength={MAX_NAME_LENGTH} />}
         help={profile?.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
       />
 
@@ -282,7 +285,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
               name="password"
               label="Secret phrase"
               horizontal={false}
-              children={<Input />}
+              children={<Input maxLength={MAX_PHRASE_LENGTH} />}
               help="We beleave your friend didn't forget to tell it to you..."
             />
           </>

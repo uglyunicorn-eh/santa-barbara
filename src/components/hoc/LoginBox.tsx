@@ -13,13 +13,14 @@ import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { EnterRequestInput } from "src/components/hooks/useAppClient";
+import { MAX_EMAIL_LENGTH } from "src/limits";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label("Email")
-    .max(128)
+    .max(MAX_EMAIL_LENGTH)
     .required()
     .ensure()
     .email(),
@@ -143,7 +144,7 @@ const EnterForm = () => {
             <FormField
               name="email"
               horizontal={false}
-              children={<Input placeholder="Email address for a magic link" />}
+              children={<Input placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
             />
 
             <p>Enter your email address above and we'll send you a magic link to sign in.</p>

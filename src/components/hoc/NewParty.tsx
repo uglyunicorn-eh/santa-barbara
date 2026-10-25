@@ -8,6 +8,7 @@ import { HaveQuestion } from "src/components/HaveQuestion";
 import { FormField, Input, Submit } from "src/components/forms";
 import { useAppClient } from "src/components/hooks";
 import { useNavigate } from "react-router-dom";
+import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
 
 type FormValues = {
   name: string;
@@ -17,12 +18,12 @@ type FormValues = {
 const validationSchema = Yup.object().shape({
   name: Yup.string()
     .label("Party name")
-    .max(100)
+    .max(MAX_NAME_LENGTH)
     .required()
     .ensure(),
   password: Yup.string()
     .label("Secret phrase")
-    .max(100)
+    .max(MAX_PHRASE_LENGTH)
     .ensure(),
 });
 
@@ -105,13 +106,13 @@ export const NewParty = () => {
               <FormField
                 name="name"
                 label="Party name"
-                children={<Input autofocus />}
+                children={<Input autofocus maxLength={MAX_NAME_LENGTH} />}
               />
 
               <FormField
                 name="password"
                 label="Secret phrase"
-                children={<Input placeholder="Optional" />}
+                children={<Input placeholder="Optional" maxLength={MAX_PHRASE_LENGTH} />}
                 help="Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."
                 extra={<HaveQuestion />}
               />
