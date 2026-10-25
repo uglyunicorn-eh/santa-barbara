@@ -8,6 +8,22 @@
     text-align: center;
   }
 
+  &.has-start {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+
+    @include mobile {
+      flex-direction: column-reverse;
+      align-items: center;
+    }
+  }
+
+  .footer-start {
+    text-shadow: none;
+  }
+
   a {
     color: white;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
