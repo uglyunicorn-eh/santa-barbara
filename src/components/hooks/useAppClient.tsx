@@ -34,8 +34,6 @@ export type UpdateNameInput = {
   name: string;
 }
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const PARTY_QUERY = gql`
   query ($code: String!) {
     party(code: $code) {
@@ -69,6 +67,31 @@ export const useAppClient = () => {
   const { error } = useNotifications();
 
   const client = useApolloClient();
+
+  const [createPartyApi, { error: createPartyError }] = useMutation<any, { input: NewPartyInput }>(
+    gql`
+      mutation CreateParty($input: CreatePartyInput!) {
+        parties {
+          createParty(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+            node {
+              id
+              name
+              code
+              isJoined
+              isHost
+              isProtected
+              isClosed
+            }
+          }
+        }
+      }
+    `
+  );
 
   const [joinPartyApi, { error: joinPartyError }] = useMutation<any, { input: JoinPartyInput }>(
     gql`
@@ -155,6 +178,7 @@ export const useAppClient = () => {
     `
   );
 
+  React.useEffect(() => { createPartyError?.message && error(createPartyError?.message); }, [createPartyError?.message]);
   React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
   React.useEffect(() => { leavePartyError?.message && error(leavePartyError?.message); }, [leavePartyError?.message]);
   React.useEffect(() => { closePartyError?.message && error(closePartyError?.message); }, [closePartyError?.message]);
@@ -206,14 +230,28 @@ export const useAppClient = () => {
   );
 
   const createParty = React.useCallback(
-    async (data: NewPartyInput): Promise<Party | undefined> => {
-      console.log("API createParty", { data });
-      await sleep(500);
-
-      error("Hm... we cannot create a new party. Please check the code and try again...");
-      return undefined;
+    async ({ name, password }: NewPartyInput): Promise<Party | undefined> => {
+      let result;
+      try {
+        const { data } = await createPartyApi({ variables: { input: { name, password: password || undefined } } });
+        result = data?.parties.createParty;
+      } catch {
+        return undefined;
+      }
+      if (result?.status !== "ok") {
+        // A request error (no session, network) is already shown by the createPartyError effect above.
+        if (result) {
+          error(result.userErrors?.[0]?.messages[0] ?? "Hm... we cannot create a new party. Please try again in a bit.");
+        }
+        return undefined;
+      }
+      // The new party belongs at the top of "my parties".
+      client.refetchQueries({ include: "active" });
+      return result.node;
     },
     [
+      client,
+      createPartyApi,
       error,
     ],
   );
