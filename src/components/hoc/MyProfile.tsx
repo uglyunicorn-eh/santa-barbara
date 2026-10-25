@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
+import { useField, useFormikContext } from "formik";
 import React from "react";
 import { Button, Content, Form as BulmaForm, Tabs } from "src/components/bulma";
 import { Link } from "react-router-dom";
@@ -10,7 +11,7 @@ import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Tab } from "src/components/Tab";
-import { Form, FormField, Input, Submit } from "src/components/forms";
+import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
@@ -121,34 +122,65 @@ const Profile = () => {
   );
 
   return (
-    <>
-      <Form
-        initialValues={{ name: profile?.name ?? "" }}
-        enableReinitialize
-        validationSchema={nameValidationSchema}
-        onSubmit={onSubmit}
+    <div className="profile-settings">
+      <Setting
+        label="Name"
+        hint="We'll suggest it when you join a new party. Parties you've already joined keep the name you joined with."
       >
-        <FormField
-          name="name"
-          label="Name"
-          children={<Input placeholder="How should your friends call you?" />}
-          help="We'll suggest it whenever you join a new party. Parties you've already joined keep the name you joined with."
-        />
+        <Form
+          initialValues={{ name: profile?.name ?? "" }}
+          enableReinitialize
+          validateOnBlur={false}
+          validationSchema={nameValidationSchema}
+          onSubmit={onSubmit}
+        >
+          <InlineField name="name" action={<SaveButton />}>
+            <Input placeholder="How should your friends call you?" />
+          </InlineField>
+        </Form>
+      </Setting>
 
-        <div className="actions">
-          <Submit>Save</Submit>
-        </div>
-      </Form>
+      <EmailSetting email={profile?.email ?? ""} />
 
-      <EmailSection email={profile?.email ?? ""} />
-
-      <DeleteAccountSection email={profile?.email ?? ""} />
-    </>
+      <DeleteAccount email={profile?.email ?? ""} />
+    </div>
   );
 };
 
+/** One row of the profile: a label, its control, and a short hint under the control. */
+const Setting = ({ label, hint, children }: { label: string, hint?: React.ReactNode, children: React.ReactNode }) => (
+  <div className="setting">
+    <div className="setting-label">{label}</div>
+    <div className="setting-body">
+      {children}
+      {hint && <p className="setting-hint">{hint}</p>}
+    </div>
+  </div>
+);
+
+/** An input with its button on the same line, and the field's error (shown after a submit) underneath. */
+const InlineField = ({ name, action, children }: { name: string, action: React.ReactNode, children: React.ReactNode }) => {
+  const [, meta] = useField(name);
+
+  return (
+    <FormFieldContext.Provider value={{ name }}>
+      <div className="setting-control">
+        <div className="setting-input">{children}</div>
+        {action}
+      </div>
+      {meta.error && meta.touched && <BulmaForm.Help color="danger">{meta.error}</BulmaForm.Help>}
+    </FormFieldContext.Provider>
+  );
+};
+
+/** Saves the name; there is nothing to save until it is edited. */
+const SaveButton = () => {
+  const { dirty } = useFormikContext();
+  return <Submit size="small" disabled={!dirty}>Save</Submit>;
+};
+
 /** Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). */
-const EmailSection = ({ email }: { email: string }) => {
+const EmailSetting = ({ email }: { email: string }) => {
   const { requestEmailChange } = useAppClient();
   const [editing, setEditing] = React.useState(false);
   const [sentTo, setSentTo] = React.useState<string>();
@@ -168,44 +200,39 @@ const EmailSection = ({ email }: { email: string }) => {
 
   if (editing) {
     return (
-      <Form initialValues={{ email: "" }} validationSchema={emailValidationSchema} onSubmit={onSubmit}>
-        <FormField
-          name="email"
-          label="New email"
-          children={<Input type="email" placeholder={email} autofocus />}
-          help="We'll send a confirmation link to the new address. Your email changes once you click it."
-        />
-
-        <div className="actions">
-          <Button type="button" text onClick={() => setEditing(false)}>Never mind</Button>
-          <Submit>Send me the link</Submit>
-        </div>
-      </Form>
+      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {email}.</>}>
+        <Form initialValues={{ email: "" }} validateOnBlur={false} validationSchema={emailValidationSchema} onSubmit={onSubmit}>
+          <InlineField
+            name="email"
+            action={
+              <>
+                <Submit size="small">Send link</Submit>
+                <Button type="button" size="small" text onClick={() => setEditing(false)}>Cancel</Button>
+              </>
+            }
+          >
+            <Input type="email" placeholder="Your new email address" autofocus />
+          </InlineField>
+        </Form>
+      </Setting>
     );
   }
 
   return (
-    <BulmaForm.Field horizontal>
-      <BulmaForm.Label>Email</BulmaForm.Label>
-      <BulmaForm.Field.Body>
-        <BulmaForm.Control>
-          <div className="profile-email">
-            <BulmaForm.Input value={email} readOnly isStatic />
-            <Button type="button" size="small" text onClick={() => setEditing(true)}>Change</Button>
-          </div>
-          {sentTo && (
-            <BulmaForm.Help>
-              Our elves have sent a confirmation link to {sentTo}. Until you click it, you're still {email}.
-            </BulmaForm.Help>
-          )}
-        </BulmaForm.Control>
-      </BulmaForm.Field.Body>
-    </BulmaForm.Field>
+    <Setting
+      label="Email"
+      hint={sentTo && <>Check {sentTo} for a confirmation link. Your email changes once you click it.</>}
+    >
+      <div className="setting-control">
+        <span className="setting-value">{email}</span>
+        <Button type="button" size="small" text onClick={() => setEditing(true)}>Change</Button>
+      </div>
+    </Setting>
   );
 };
 
 /** Deleting the account takes two steps: confirm here, then click the emailed link (handled by ConfirmAccountDeletion). */
-const DeleteAccountSection = ({ email }: { email: string }) => {
+const DeleteAccount = ({ email }: { email: string }) => {
   const { requestAccountDeletion } = useAppClient();
   const [stage, setStage] = React.useState<"idle" | "confirming" | "sending" | "sent">("idle");
 
@@ -221,32 +248,38 @@ const DeleteAccountSection = ({ email }: { email: string }) => {
 
   return (
     <div className="danger-zone">
-      <h4>Leaving us?</h4>
-
-      {stage === "idle" && (
-        <Button type="button" color="danger" outlined size="small" onClick={() => setStage("confirming")}>
-          Delete my account
-        </Button>
-      )}
+      <div className="setting-control">
+        <div className="danger-text">
+          <strong>Delete account</strong>
+          <p>
+            {stage === "sent"
+              ? <>We've sent a confirmation link to {email}. Your account is deleted only once you click it.</>
+              : <>Removes your account and the parties you host that haven't rolled the dice yet.</>
+            }
+          </p>
+        </div>
+        {stage === "idle" && (
+          <Button type="button" size="small" color="danger" outlined onClick={() => setStage("confirming")}>
+            Delete account
+          </Button>
+        )}
+      </div>
 
       {(stage === "confirming" || stage === "sending") && (
-        <>
+        <div className="danger-confirm">
           <p>
-            This deletes your account and every party you host that hasn't rolled the dice yet.
-            Parties that already did keep your name, so whoever drew you still knows who to buy a gift for.
-            We'll email you a link to confirm.
+            Sure? Parties that already rolled the dice keep your name, so whoever drew you still knows who to buy a
+            gift for. We'll email you a link to finish.
           </p>
-          <div className="actions">
-            <Button type="button" text onClick={() => setStage("idle")} disabled={stage === "sending"}>No, I'm staying!</Button>
-            <Button type="button" color="danger" onClick={onConfirm} loading={stage === "sending"}>Yes, delete it</Button>
+          <div className="setting-control">
+            <Button type="button" size="small" color="danger" onClick={onConfirm} loading={stage === "sending"}>
+              Yes, email me the link
+            </Button>
+            <Button type="button" size="small" text onClick={() => setStage("idle")} disabled={stage === "sending"}>
+              Keep my account
+            </Button>
           </div>
-        </>
-      )}
-
-      {stage === "sent" && (
-        <p>
-          We've sent a confirmation link to {email}. Your account is deleted only once you click it.
-        </p>
+        </div>
       )}
     </div>
   );
