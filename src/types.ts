@@ -15,6 +15,10 @@ export type Party = {
   isHost: boolean;
   isProtected: boolean;
   isClosed: boolean;
+  /** Set when the host deleted the party (ISO 8601). Only the host still sees it. */
+  deletedAt?: string | null;
+  /** Until when the host can restore it (ISO 8601). */
+  restorableUntil?: string | null;
   participantCount?: number;
   participants?: string[];
   target?: User;

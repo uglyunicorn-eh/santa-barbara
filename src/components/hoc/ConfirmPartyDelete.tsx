@@ -1,0 +1,66 @@
+import React from "react";
+import { Content } from "src/components/bulma";
+import { useNavigate } from "react-router-dom";
+import * as Yup from 'yup';
+
+import { DialogBox } from "src/components/DialogBox";
+import { Submit } from "src/components/forms";
+import { usePartyContext } from "src/components/hoc/PartyContext";
+import { useAppClient, useSignals } from "src/components/hooks";
+
+const validationSchema = Yup.object();
+
+const initialValues = {};
+
+export const ConfirmPartyDelete = () => {
+  const { party } = usePartyContext();
+  const { deleteParty } = useAppClient();
+  const { signal } = useSignals();
+  const navigate = useNavigate();
+
+  const onSubmit = React.useCallback(
+    async () => {
+      if (!party) {
+        return;
+      }
+      if (await deleteParty({ party: party.id })) {
+        signal('party:updated');
+        navigate(`/p/${party.code}`);
+      }
+    },
+    [
+      party,
+      deleteParty,
+      signal,
+      navigate,
+    ],
+  );
+
+  return (
+    <DialogBox
+      className="party-box confirm-party-delete"
+      title="Delete this party?"
+      action={<Submit color="danger">&#x1F5D1;&#xFE0F; Yes, delete it</Submit>}
+      dismissLabel="Keep it"
+      dismissLocation={`/p/${party?.code}`}
+      form={{
+        validationSchema,
+        initialValues,
+        onSubmit,
+      }}
+      cardStyle={{
+        width: 600,
+      }}
+    >
+      <Content>
+        <p>
+          <strong>{party?.name.replace(/!+$/, '')}</strong> will disappear for everyone who joined, and its link
+          will stop working.
+        </p>
+        <p>
+          Changed your mind? You can restore it from this page within 24 hours. After that it's gone for good.
+        </p>
+      </Content>
+    </DialogBox>
+  );
+};

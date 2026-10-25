@@ -27,6 +27,7 @@ const HISTORY_QUERY = gql`
         name
         isClosed
         isHost
+        deletedAt
       }
       hasMore
       endCursor
@@ -338,10 +339,11 @@ const History = () => {
     <Content>
       <ul>
         {page.items.map(
-          ({ code, name, isClosed, isHost }: Party) => (
-            <li key={code} className={isClosed ? "is-closed" : "is-open"}>
+          ({ code, name, isClosed, isHost, deletedAt }: Party) => (
+            <li key={code} className={deletedAt ? "is-deleted" : isClosed ? "is-closed" : "is-open"}>
               <Link to={`/p/${code}/`}>
                 {isHost ? <Star size={16} color="gold" /> : <Gift size={16} />} {name}
+                {deletedAt && <span className="tag is-light">deleted</span>}
               </Link>
             </li>
           ))
