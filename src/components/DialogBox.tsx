@@ -147,7 +147,8 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
 
   return (
     <>
-      <title>{title}</title>
+      {/* An empty <title> would replace the page's; dialogs without one leave it to their content. */}
+      {title && <title>{title}</title>}
       <Modal show className={className} showClose={false} closeOnEsc={false} closeOnBlur={false}>
         <motion.div className="modal-background-custom" variants={BackgroundVariants} {...defaultMotionProps} />
 
