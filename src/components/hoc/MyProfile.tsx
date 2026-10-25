@@ -1,5 +1,3 @@
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
 import { useField, useFormikContext } from "formik";
 import React from "react";
 import { Button, Content, Form as BulmaForm, Tabs } from "src/components/bulma";
@@ -13,7 +11,8 @@ import { DialogBox } from "src/components/DialogBox";
 import { Tab } from "src/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser } from "src/components/hooks";
+import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
+import { PARTIES_CHANGED } from "src/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
 import type { Party } from "src/types";
 
@@ -21,32 +20,64 @@ const HISTORY_PAGE_SIZE = 5;
 
 const SITE_NAME = "Anonymous Ded Morozes";
 
-const HISTORY_QUERY = gql`
-  query PartyHistory($first: Int, $after: String) {
-    partyHistory(first: $first, after: $after) {
-      items {
-        id
-        code
-        name
-        isClosed
-        isHost
-        isProtected
-        createdAt
-        rolledAt
-        deletedAt
-      }
-      hasMore
-      endCursor
-    }
-  }
-`;
+type HistoryPage = {
+  items: Party[];
+  hasMore: boolean;
+  endCursor: string | null;
+};
 
-type PartyHistory = {
-  partyHistory: {
-    items: Party[];
-    hasMore: boolean;
-    endCursor: string | null;
-  } | null;
+/** The person's parties, a page at a time. Loads again from the start whenever their parties change. */
+const usePartyHistory = () => {
+  const { getPartyHistory } = useAppClient();
+  const { subscribe } = useSignals();
+  const [page, setPage] = React.useState<HistoryPage | null>();
+  const [loading, setLoading] = React.useState(true);
+  const [reloads, setReloads] = React.useState(0);
+
+  React.useEffect(
+    () => {
+      let current = true;
+      setLoading(true);
+      getPartyHistory(HISTORY_PAGE_SIZE).then(first => {
+        if (current) {
+          setPage(first);
+          setLoading(false);
+        }
+      });
+      return () => {
+        current = false;
+      };
+    },
+    [
+      getPartyHistory,
+      reloads,
+    ],
+  );
+
+  React.useEffect(
+    () => subscribe(PARTIES_CHANGED, () => setReloads(n => n + 1)),
+    [
+      subscribe,
+    ],
+  );
+
+  const fetchMore = React.useCallback(
+    async () => {
+      if (!page?.endCursor) {
+        return;
+      }
+      const next = await getPartyHistory(HISTORY_PAGE_SIZE, page.endCursor);
+      if (next) {
+        setPage(previous => previous && { items: [...previous.items, ...next.items], hasMore: next.hasMore, endCursor: next.endCursor });
+      }
+    },
+    [
+      getPartyHistory,
+      page?.endCursor,
+    ],
+  );
+
+  return { loading, page, fetchMore };
 };
 
 const nameValidationSchema = Yup.object().shape({
@@ -316,17 +347,13 @@ const DeleteAccount = ({ email }: { email: string }) => {
 };
 
 const History = () => {
-  const { loading, data, fetchMore } = useQuery<PartyHistory>(HISTORY_QUERY, {
-    variables: { first: HISTORY_PAGE_SIZE },
-    fetchPolicy: "cache-and-network",
-  });
+  const { loading, page, fetchMore } = usePartyHistory();
 
   const [loadingMore, setLoadingMore] = React.useState(false);
   // After the first "More" click, further pages load as the list is scrolled.
   const [autoLoad, setAutoLoad] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
 
-  const page = data?.partyHistory;
   const hasMore = Boolean(page?.hasMore && page.endCursor);
 
   const loadMore = React.useCallback(
@@ -336,7 +363,7 @@ const History = () => {
       }
       setLoadingMore(true);
       try {
-        await fetchMore({ variables: { first: HISTORY_PAGE_SIZE, after: page.endCursor } });
+        await fetchMore();
       }
       finally {
         setLoadingMore(false);

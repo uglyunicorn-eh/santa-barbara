@@ -24,7 +24,7 @@ export const ConfirmPartyClose = () => {
         return;
       }
 
-      if (await closeParty({ party: party.id })) {
+      if (await closeParty({ party: party.code })) {
         signal('party:updated');
       }
     },

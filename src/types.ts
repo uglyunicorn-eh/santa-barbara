@@ -7,8 +7,8 @@ export type User = {
   email?: string | null;
 };
 
+/** A party as the API returns it. Parties are identified by their code. */
 export type Party = {
-  id: string;
   code: string;
   name: string;
   isJoined: boolean;
@@ -23,9 +23,13 @@ export type Party = {
   deletedAt?: string | null;
   /** Until when the host can restore it (ISO 8601). */
   restorableUntil?: string | null;
-  participantCount?: number;
-  participants?: string[];
-  target?: User;
+  /** The host's secret phrase, for the host only. */
+  password?: string | null;
+  /** Only for members. */
+  participantCount?: number | null;
+  participants?: string[] | null;
+  /** Who this person gives a gift to, once the dice are rolled: just a name. */
+  target?: { name: string } | null;
 };
 
 export interface ButtonProps {

@@ -21,16 +21,16 @@ export const ConfirmPartyLeave = () => {
 
   const onSubmit = React.useCallback(
     async () => {
-      if (!party?.id) {
+      if (!party?.code) {
         return;
       }
 
-      if (await leaveParty({ party: party?.id })) {
+      if (await leaveParty({ party: party.code })) {
         navigate("/");
       }
     },
     [
-      party?.id,
+      party?.code,
       leaveParty,
       navigate,
     ],

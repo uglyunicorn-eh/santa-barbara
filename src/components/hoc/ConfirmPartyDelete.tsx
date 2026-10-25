@@ -23,7 +23,7 @@ export const ConfirmPartyDelete = () => {
       if (!party) {
         return;
       }
-      if (await deleteParty({ party: party.id })) {
+      if (await deleteParty({ party: party.code })) {
         signal('party:updated');
         navigate(`/p/${party.code}`);
       }

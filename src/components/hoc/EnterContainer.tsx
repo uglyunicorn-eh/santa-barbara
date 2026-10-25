@@ -1,5 +1,3 @@
-import { gql } from '@apollo/client';
-import { useMutation } from '@apollo/client/react';
 import type { JOSEError } from 'jose/errors';
 import React from "react";
 import { Button, Columns, Container, Content, Hero, Image } from "src/components/bulma";
@@ -9,7 +7,8 @@ import { UnsplashCredit } from 'src/components/UnsplashCredit';
 import { Footer } from 'src/components/hoc/Footer';
 import { LoginHero } from 'src/components/hoc/LoginBox';
 import { useNotifications } from 'src/components/hoc/NotificationsContainer';
-import { useCurrentUser, useJWT } from 'src/components/hooks';
+import { newKey } from 'src/api/client';
+import { useAppClient, useCurrentUser, useJWT } from 'src/components/hooks';
 
 import image from 'src/images/enter.png';
 
@@ -25,43 +24,10 @@ export const EnterContainer = () => {
   const { signIn } = useCurrentUser();
   const { verify, decode, isReady } = useJWT();
 
-  const [enterRequest, { loading: enterRequestLoading }] = useMutation(
-    gql`
-      mutation EnterRequest($input: EnterRequestInput!) {
-        auth {
-          enterRequest(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [enter] = useMutation<any>(
-    gql`
-      mutation Enter($input: EnterInput!) {
-        auth {
-          enter(input: $input) {
-            userToken
-            user {
-              id
-              name
-            }
-
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
+  const { enter, enterRequest } = useAppClient();
+  // One key for this page's "send a new link" button, so a double click sends one email.
+  const resendKey = React.useRef(newKey());
+  const [resending, setResending] = React.useState(false);
 
   const [tokenPayloadUntrusted, setTokenPayloadUntrusted] = React.useState<EnterRequestToken | null>();
   const [tokenPayloadTrusted, setTokenPayloadTrusted] = React.useState<EnterRequestToken | null>();
@@ -92,16 +58,18 @@ export const EnterContainer = () => {
         return;
       }
 
-      console.log({ enterRequestToken });
-
       (async function () {
         try {
           const payloadTrusted = (await verify<EnterRequestToken>(enterRequestToken)).payload;
           setTokenPayloadTrusted(payloadTrusted);
 
-          const { data: { auth: { enter: { userToken, user } } } } = await enter({ variables: { input: { enterRequestToken } } });
+          // A reload of this page repeats the same request, which signs in again instead of "already used".
+          const entered = await enter(enterRequestToken);
+          if (!entered.ok) {
+            throw new Error(entered.message);
+          }
 
-          signIn({ profile: user, userToken });
+          signIn({ profile: entered.user, userToken: entered.userToken });
 
           if (payloadTrusted.party) {
             navigate(`/p/${payloadTrusted.party}`);
@@ -128,6 +96,7 @@ export const EnterContainer = () => {
       verify,
       decode,
       signIn,
+      enter,
     ],
   );
 
@@ -151,7 +120,13 @@ export const EnterContainer = () => {
         party: expiredToken.party,
       };
 
-      await enterRequest({ variables: { input } });
+      setResending(true);
+      try {
+        await enterRequest(input, resendKey.current);
+      }
+      finally {
+        setResending(false);
+      }
 
       setSent(true);
 
@@ -206,7 +181,7 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button onClick={resend} loading={enterRequestLoading} disabled={enterRequestLoading || sent} color={"primary"} rounded>
+                      <Button onClick={resend} loading={resending} disabled={resending || sent} color={"primary"} rounded>
                         &mdash; Send me that magic again, por favor!
                       </Button>
                     )
