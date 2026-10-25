@@ -38,9 +38,5 @@
     "prop-types": "^15.8.1",
     "sass": "^1.106.1",
     "typescript": "^6"
-  },
-  "resolutions": {
-    "@types/react": "^19",
-    "@types/react-dom": "^19"
   }
 }
