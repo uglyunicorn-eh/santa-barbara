@@ -58,7 +58,11 @@ export const PARTIES_CHANGED = "parties:changed";
 
 const LINK_FAILED = "Something went wrong on our side. Please try the link again in a few minutes.";
 
-const path = (code: string) => `/parties/${encodeURIComponent(code)}`;
+/**
+ * A party code lets anyone into a party without a secret phrase, and request logs record URLs, so it never goes in a
+ * path: writes send it in the JSON body, and viewing a party sends it as `?code=`, which the API's logs leave out.
+ */
+const partyQuery = (code: string) => `/parties?code=${encodeURIComponent(code)}`;
 
 export const useAppClient = () => {
   const { error } = useNotifications();
@@ -101,7 +105,7 @@ export const useAppClient = () => {
   /** null means "not found"; undefined means the request failed. */
   const getParty = React.useCallback(
     async (code: string): Promise<Party | null | undefined> => {
-      const result = await call<Party>(path(code), { retry: true });
+      const result = await call<Party>(partyQuery(code), { retry: true });
       if (result.ok) {
         return result.data;
       }
@@ -157,35 +161,35 @@ export const useAppClient = () => {
 
   const joinParty = React.useCallback(
     async ({ party, name, password }: JoinPartyInput): Promise<boolean> =>
-      Boolean(await partyAction(`${path(party)}/join`, { method: "POST", body: { name, ...(password ? { password } : {}) } })),
+      Boolean(await partyAction("/parties/join", { method: "POST", body: { code: party, name, ...(password ? { password } : {}) } })),
     [
       partyAction,
     ],
   );
 
   const leaveParty = React.useCallback(
-    async ({ party }: LeavePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/leave`, { method: "POST" })),
+    async ({ party }: LeavePartyInput): Promise<boolean> => Boolean(await partyAction("/parties/leave", { method: "POST", body: { code: party } })),
     [
       partyAction,
     ],
   );
 
   const closeParty = React.useCallback(
-    async ({ party }: ClosePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/draw`, { method: "POST" })),
+    async ({ party }: ClosePartyInput): Promise<boolean> => Boolean(await partyAction("/parties/draw", { method: "POST", body: { code: party } })),
     [
       partyAction,
     ],
   );
 
   const deleteParty = React.useCallback(
-    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction(path(party), { method: "DELETE" })),
+    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction("/parties/delete", { method: "POST", body: { code: party } })),
     [
       partyAction,
     ],
   );
 
   const restoreParty = React.useCallback(
-    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/restore`, { method: "POST" })),
+    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction("/parties/restore", { method: "POST", body: { code: party } })),
     [
       partyAction,
     ],
