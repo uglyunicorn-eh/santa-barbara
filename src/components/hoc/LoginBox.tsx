@@ -50,7 +50,7 @@ export const LoginHero = ({ children }: { children: React.ReactNode }) => (
 
     <Hero.Footer>
       <Footer noUser noHome profileAsLink>
-        <UnsplashCredit nickname="callmefred" name="Frederick Tubiermont" />
+        <UnsplashCredit photo="login-garage-door" />
       </Footer>
     </Hero.Footer>
   </Hero>

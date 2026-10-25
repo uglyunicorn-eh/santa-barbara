@@ -96,7 +96,7 @@ export const JoinBox = ({ party }: Props) => {
 
         <Hero.Footer>
           <Footer profileAsLink>
-            <UnsplashCredit nickname="nicolebaster" name="Nicole Baster" />
+            <UnsplashCredit photo="party-garage-door-3" />
           </Footer>
         </Hero.Footer>
       </Hero >

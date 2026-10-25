@@ -83,7 +83,7 @@ export const PartyDetails = ({ party }: Props) => {
         </Hero.Body>
         <Hero.Footer>
           <Footer>
-            <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
+            <UnsplashCredit photo="party-background" />
           </Footer>
         </Hero.Footer>
       </Hero>

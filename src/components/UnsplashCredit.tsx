@@ -1,15 +1,17 @@
+import { type UnsplashPhoto, unsplashPhotos, unsplashPhotoUrl, unsplashProfileUrl } from "src/unsplashPhotos";
+
 type Props = {
-  name?: string;
-  nickname: string;
+  photo: UnsplashPhoto;
 };
 
-export const UnsplashCredit = ({ name, nickname }: Props) => (
-  <div className={"unsplash-credit"}>
-    <>Photo by </>
-    <a href={`https://unsplash.com/@${nickname}?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`} target="_blank" rel="noopener noreferrer">
-      {name || nickname}
-    </a>
-    <> on </>
-    <a href={`https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`} target="_blank" rel="noopener noreferrer">Unsplash</a>
-  </div>
-)
+export const UnsplashCredit = ({ photo }: Props) => {
+  const { id, name, username } = unsplashPhotos[photo];
+  return (
+    <div className={"unsplash-credit"}>
+      <>Photo by </>
+      <a href={unsplashProfileUrl(username)} target="_blank" rel="noopener noreferrer">{name}</a>
+      <> on </>
+      <a href={unsplashPhotoUrl(id)} target="_blank" rel="noopener noreferrer">Unsplash</a>
+    </div>
+  );
+};
