@@ -199,7 +199,7 @@ export const EnterContainer = () => {
       </Hero.Body>
       <Hero.Footer>
         <Footer noUser profileAsLink>
-          <UnsplashCredit photo="enter-background" />
+          <UnsplashCredit id="lNUQnuhqnLQ" name="Annie Spratt" username="anniespratt" />
         </Footer>
       </Hero.Footer>
     </Hero>

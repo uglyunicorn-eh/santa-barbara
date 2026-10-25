@@ -19,7 +19,7 @@ export const PartyNotFound = () => (
     </Hero.Body>
     <Hero.Footer>
       <Footer>
-        <UnsplashCredit photo="not-found" />
+        <UnsplashCredit id="Yj1M5riCKk4" name="NASA" username="nasa" />
       </Footer>
     </Hero.Footer>
   </Hero>
