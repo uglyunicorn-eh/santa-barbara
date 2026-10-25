@@ -6,7 +6,7 @@ import { Button, Content, Form as BulmaForm, Tabs } from "src/components/bulma";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Gift, Star } from 'react-feather';
+import { ChevronRight, Gift, Lock, Star } from 'react-feather';
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
@@ -28,6 +28,7 @@ const HISTORY_QUERY = gql`
         name
         isClosed
         isHost
+        isProtected
       }
       hasMore
       endCursor
@@ -361,34 +362,53 @@ const History = () => {
 
   if (!page?.items.length) {
     return (
-      <Content>
+      <div className="history-empty">
+        <Gift size={32} />
         <p>No parties yet. Host one or join a friend's, and it will show up here.</p>
-      </Content>
+      </div>
     );
   }
 
   return (
-    <Content>
-      <ul>
-        {page.items.map(
-          ({ code, name, isClosed, isHost }: Party) => (
-            <li key={code} className={isClosed ? "is-closed" : "is-open"}>
-              <Link to={`/p/${code}/`}>
-                {isHost ? <Star size={16} color="gold" /> : <Gift size={16} />} {name}
-              </Link>
-            </li>
-          ))
-        }
+    <div className="history">
+      <ul className="history-list">
+        {page.items.map(party => <HistoryItem key={party.code} party={party} />)}
       </ul>
 
       {hasMore && (
         <div className="history-more" ref={sentinelRef}>
           {autoLoad
             ? loadingMore && <ClipLoader size={20} />
-            : <Button text onClick={onMoreClick} loading={loadingMore}>More</Button>
+            : <Button outlined size="small" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
           }
         </div>
       )}
-    </Content>
+    </div>
   );
 };
+
+/** One party: whether you host it or joined it, its code, and whether the dice were already rolled. */
+const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected } }: { party: Party }) => (
+  <li className={isClosed ? "is-closed" : "is-open"}>
+    <Link to={`/p/${code}/`}>
+      <span className={`history-icon ${isHost ? "is-host" : "is-guest"}`}>
+        {isHost ? <Star size={18} /> : <Gift size={18} />}
+      </span>
+
+      <span className="history-text">
+        <span className="history-name">{name}</span>
+        <span className="history-meta">
+          {isHost ? "You host" : "You joined"} &middot; <code>{code}</code>
+          {isProtected && <> &middot; <Lock size={12} /> secret phrase</>}
+          <span className="history-meta-status"> &middot; {isClosed ? "Dice rolled" : "Open"}</span>
+        </span>
+      </span>
+
+      <span className={`history-status ${isClosed ? "is-closed" : "is-open"}`}>
+        {isClosed ? "Dice rolled" : "Open"}
+      </span>
+
+      <ChevronRight size={18} className="history-chevron" />
+    </Link>
+  </li>
+);

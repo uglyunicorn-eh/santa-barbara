@@ -111,18 +111,152 @@
     }
   }
 
+  .history-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.85em;
+      padding: 0.6em 0.75em;
+      border-radius: 12px;
+      color: inherit;
+
+      @include mobile {
+        gap: 0.65em;
+        padding: 0.55em 0.25em;
+      }
+      transition: background-color 0.15s ease-in-out;
+
+      &:hover {
+        background-color: #f5f5f7;
+
+        .history-chevron {
+          opacity: 1;
+          transform: translateX(2px);
+        }
+      }
+    }
+
+    .is-closed .history-name {
+      color: #7a7a7a;
+    }
+  }
+
+  .history-icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25em;
+    height: 2.25em;
+    border-radius: 50%;
+
+    &.is-host {
+      color: #c99700;
+      background: #fff6d6;
+    }
+
+    &.is-guest {
+      color: #d92f33;
+      background: #fdeaea;
+    }
+  }
+
+  .history-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+
+  .history-name {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .history-meta {
+    font-size: 0.85rem;
+    color: #8a8a8a;
+
+    code {
+      padding: 0;
+      background: none;
+      color: inherit;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+    }
+
+    svg {
+      vertical-align: -1px;
+    }
+  }
+
+  .history-status {
+    flex: none;
+    padding: 0.15em 0.7em;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    &.is-open {
+      color: #257942;
+      background: #effaf3;
+    }
+
+    &.is-closed {
+      color: #7a7a7a;
+      background: #f2f2f2;
+    }
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  // On phones the status moves into the subtitle, so the name keeps the width.
+  .history-meta-status {
+    display: none;
+
+    @include mobile {
+      display: inline;
+    }
+  }
+
+  .history-chevron {
+    flex: none;
+    color: #b5b5b5;
+    opacity: 0.6;
+    transition: all 0.15s ease-in-out;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .history-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    padding: 2em 1em;
+    color: #8a8a8a;
+    text-align: center;
+  }
+
   .history-more {
     display: flex;
     justify-content: center;
     min-height: 2.5em;
-  }
-
-  .is-closed {
-    a {
-      color: gray;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    margin-top: 0.75em;
   }
 }
