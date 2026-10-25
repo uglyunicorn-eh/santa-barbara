@@ -56,7 +56,7 @@ const HostContent = ({ party, user }: Props) => {
         </>
       )}
 
-      <DeletePartyLink />
+      {!party.isClosed && <DeletePartyLink />}
     </>
   );
 }

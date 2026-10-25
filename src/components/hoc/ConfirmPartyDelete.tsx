@@ -40,7 +40,7 @@ export const ConfirmPartyDelete = () => {
     <DialogBox
       className="party-box confirm-party-delete"
       title="Delete this party?"
-      action={<Submit color="danger">&#x1F5D1;&#xFE0F; Yes, delete it</Submit>}
+      action={<Submit color="danger">&#x1F4A5; Yes, delete it</Submit>}
       dismissLabel="Keep it"
       dismissLocation={`/p/${party?.code}`}
       form={{

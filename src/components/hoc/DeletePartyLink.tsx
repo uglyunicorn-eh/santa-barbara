@@ -11,8 +11,11 @@ export const DeletePartyLink = () => {
 
   return (
     <>
-      <p className="has-text-centered-touch" style={{ marginTop: '2em' }}>
-        <Button color="danger" outlined size="small" onClick={onClick}>Delete this party</Button>
+      <p className="has-text-centered-touch" style={{ marginTop: '3em' }}>
+        <Button color="danger" light onClick={onClick}>
+          <span aria-hidden="true" style={{ marginRight: '0.5em' }}>💥</span>
+          Delete this party
+        </Button>
       </p>
       <Routes>
         <Route path="delete" Component={ConfirmPartyDelete} />
