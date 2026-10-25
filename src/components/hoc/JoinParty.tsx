@@ -17,7 +17,8 @@ const validationSchema = Yup.object().shape({
   code: Yup.string()
     .label("Secret code")
     .required()
-    .matches(/^[QWERTYUIPASDFGHJKLZXCVBNMOqwertyuipasdfghjklzxcvbnmo]{5}$/, "Invalid secret code")
+    // New parties have 8-letter codes; older ones keep their 5 letters.
+    .matches(/^(?:[QWERTYUIPASDFGHJKLZXCVBNMO]{5}|[QWERTYUIPASDFGHJKLZXCVBNMO]{8})$/i, "Invalid secret code")
     .ensure(),
 });
 
@@ -65,7 +66,7 @@ export const JoinParty = () => {
         <FormField
           name="code"
           label="Secret code"
-          children={<Input maxLength={5} style={{ textTransform: "uppercase" }} />}
+          children={<Input maxLength={8} style={{ textTransform: "uppercase" }} />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
           extra={<HaveQuestion />}
         />
