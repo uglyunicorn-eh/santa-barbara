@@ -3,11 +3,7 @@ import { useNavigate } from "react-router";
 
 import { useJWT } from "src/components/hooks";
 import { useLocalStorage } from "src/components/hooks/useLocalStorage";
-
-type User = {
-  id: string;
-  name: string;
-};
+import type { User } from "src/types";
 
 type SignInParams = {
   profile: User;
@@ -60,6 +56,14 @@ export const useCurrentUser = () => {
     [],
   );
 
+  /** Replaces the cached profile, e.g. after it was edited or reloaded from the API. */
+  const updateProfile = React.useCallback(
+    (profile: User) => {
+      setProfile(profile);
+    },
+    [],
+  );
+
   const resetCredentials = React.useCallback(
     () => {
       setProfile(undefined);
@@ -86,6 +90,7 @@ export const useCurrentUser = () => {
       userTokenValue,
       signIn,
       signOut,
+      updateProfile,
       resetCredentials,
     }),
     [
@@ -94,6 +99,7 @@ export const useCurrentUser = () => {
       userTokenValue,
       signIn,
       signOut,
+      updateProfile,
       resetCredentials,
     ],
   );

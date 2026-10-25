@@ -11,6 +11,18 @@
     list-style: none;
   }
 
+  form .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1em;
+  }
+
+  .history-more {
+    display: flex;
+    justify-content: center;
+    min-height: 2.5em;
+  }
+
   .is-closed {
     a {
       color: gray;

@@ -221,6 +221,7 @@ type SubmitRequestFormProps = {
 
 const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   const { joinParty } = useAppClient();
+  const { updateProfile } = useCurrentUser();
   const { signal } = useSignals();
   const [busy, setBusy] = React.useState(false);
 
@@ -228,6 +229,10 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
     async (input: JoinPartyInput) => {
       setBusy(true);
       if (await joinParty(input)) {
+        // The first party joined gives an empty profile its name; mirror that so the cached profile is current.
+        if (!profile.name) {
+          updateProfile({ ...profile, name: input.name });
+        }
         signal('party:updated');
       }
       else {
@@ -237,6 +242,8 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
     [
       joinParty,
       signal,
+      profile,
+      updateProfile,
     ],
   );
 
@@ -250,16 +257,13 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
       validationSchema={joinValidationSchema}
       onSubmit={onSubmit}
     >
-      {!profile?.name &&
-        (
-          <FormField
-            name="name"
-            label={profile?.name ? "Wanna use your regular name?" : "Let us know your name"}
-            horizontal={false}
-            children={<Input />}
-          />
-        )
-      }
+      <FormField
+        name="name"
+        label={profile?.name ? "Your name for this party" : "Let us know your name"}
+        horizontal={false}
+        children={<Input />}
+        help={profile?.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
+      />
 
       {party.isProtected &&
         (
