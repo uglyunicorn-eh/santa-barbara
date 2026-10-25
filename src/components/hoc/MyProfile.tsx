@@ -16,7 +16,10 @@ import { PARTIES_CHANGED } from "src/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
 import type { Party } from "src/types";
 
-const HISTORY_PAGE_SIZE = 5;
+/** The latest parties shown when the history opens. */
+const HISTORY_FIRST_PAGE_SIZE = 5;
+/** How many more each "Show more" (or scroll to the end) loads. */
+const HISTORY_MORE_PAGE_SIZE = 10;
 
 const SITE_NAME = "Anonymous Ded Morozes";
 
@@ -38,7 +41,7 @@ const usePartyHistory = () => {
     () => {
       let current = true;
       setLoading(true);
-      getPartyHistory(HISTORY_PAGE_SIZE).then(first => {
+      getPartyHistory(HISTORY_FIRST_PAGE_SIZE).then(first => {
         if (current) {
           setPage(first);
           setLoading(false);
@@ -66,7 +69,7 @@ const usePartyHistory = () => {
       if (!page?.endCursor) {
         return;
       }
-      const next = await getPartyHistory(HISTORY_PAGE_SIZE, page.endCursor);
+      const next = await getPartyHistory(HISTORY_MORE_PAGE_SIZE, page.endCursor);
       if (next) {
         setPage(previous => previous && { items: [...previous.items, ...next.items], hasMore: next.hasMore, endCursor: next.endCursor });
       }
@@ -350,7 +353,9 @@ const History = () => {
   const { loading, page, fetchMore } = usePartyHistory();
 
   const [loadingMore, setLoadingMore] = React.useState(false);
-  // After the first "More" click, further pages load as the list is scrolled.
+  // State updates land a render late, so a ref keeps a second request from starting while one is on its way.
+  const inFlight = React.useRef(false);
+  // After the first "More" click, scrolling to the end of the list loads the next page too.
   const [autoLoad, setAutoLoad] = React.useState(false);
   const sentinelRef = React.useRef<HTMLDivElement>(null);
 
@@ -358,20 +363,21 @@ const History = () => {
 
   const loadMore = React.useCallback(
     async () => {
-      if (!page?.endCursor || loadingMore) {
+      if (!page?.endCursor || inFlight.current) {
         return;
       }
+      inFlight.current = true;
       setLoadingMore(true);
       try {
         await fetchMore();
       }
       finally {
+        inFlight.current = false;
         setLoadingMore(false);
       }
     },
     [
       page?.endCursor,
-      loadingMore,
       fetchMore,
     ],
   );
@@ -392,9 +398,17 @@ const History = () => {
       if (!autoLoad || !hasMore || loadingMore || !sentinel) {
         return;
       }
-      // The list scrolls inside the dialog, not the page.
+      // Only scrolling the end of the list into view loads a page. The observer's first report is where the list stands
+      // right now, just after a click or a page loaded: acting on it would load a second page nobody asked for.
+      let first = true;
       const observer = new IntersectionObserver(
-        entries => entries.some(entry => entry.isIntersecting) && loadMore(),
+        entries => {
+          if (!first && entries.some(entry => entry.isIntersecting)) {
+            loadMore();
+          }
+          first = false;
+        },
+        // The list scrolls inside the dialog, not the page.
         { root: sentinel.closest('.modal-card-body'), rootMargin: "100px" },
       );
       observer.observe(sentinel);
@@ -438,8 +452,8 @@ const History = () => {
 
       {hasMore && (
         <div className="history-more" ref={sentinelRef}>
-          {autoLoad
-            ? loadingMore && <ClipLoader size={20} />
+          {autoLoad && loadingMore
+            ? <ClipLoader size={20} />
             : <Button outlined size="small" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
           }
         </div>
