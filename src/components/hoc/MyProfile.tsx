@@ -15,6 +15,7 @@ import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import { PARTIES_CHANGED } from "src/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
 import type { Party } from "src/types";
+import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH } from "src/limits";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
@@ -87,7 +88,7 @@ const nameValidationSchema = Yup.object().shape({
   name: Yup.string()
     .label("Name")
     .trim()
-    .max(100)
+    .max(MAX_NAME_LENGTH)
     .required()
     .ensure(),
 });
@@ -97,7 +98,7 @@ const emailValidationSchema = (currentEmail: string) => Yup.object().shape({
   email: Yup.string()
     .label("New email")
     .trim()
-    .max(128)
+    .max(MAX_EMAIL_LENGTH)
     .required()
     .email()
     .test("not-current", "That's already your email.", value => value?.toLowerCase() !== currentEmail.toLowerCase())
@@ -179,7 +180,7 @@ const Profile = () => {
           onSubmit={onSubmit}
         >
           <InlineField name="name" action={<SaveButton />}>
-            <Input placeholder="How should your friends call you?" />
+            <Input placeholder="How should your friends call you?" maxLength={MAX_NAME_LENGTH} />
           </InlineField>
         </Form>
       </Setting>
@@ -265,7 +266,7 @@ const EmailSetting = ({ email }: { email: string }) => {
               </>
             }
           >
-            <Input type="email" placeholder="Your new email address" autofocus />
+            <Input type="email" placeholder="Your new email address" autofocus maxLength={MAX_EMAIL_LENGTH} />
           </InlineField>
         </Form>
       </Setting>
