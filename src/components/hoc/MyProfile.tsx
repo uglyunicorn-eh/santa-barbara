@@ -6,7 +6,7 @@ import { Button, Content, Form as BulmaForm, Tabs } from "src/components/bulma";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { ChevronRight, Gift, Lock, Star } from 'react-feather';
+import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
@@ -31,6 +31,8 @@ const HISTORY_QUERY = gql`
         isClosed
         isHost
         isProtected
+        createdAt
+        rolledAt
       }
       hasMore
       endCursor
@@ -396,28 +398,49 @@ const History = () => {
   );
 };
 
-/** One party: whether you host it or joined it, its code, and whether the dice were already rolled. */
-const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected } }: { party: Party }) => (
-  <li className={isClosed ? "is-closed" : "is-open"}>
-    <Link to={`/p/${code}/`}>
-      <span className={`history-icon ${isHost ? "is-host" : "is-guest"}`}>
-        {isHost ? <Star size={18} /> : <Gift size={18} />}
-      </span>
+const dateFormat = new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short", year: "numeric" });
 
-      <span className="history-text">
-        <span className="history-name">{name}</span>
-        <span className="history-meta">
-          {isHost ? "You host" : "You joined"} &middot; <code>{code}</code>
-          {isProtected && <> &middot; <Lock size={12} /> secret phrase</>}
-          <span className="history-meta-status"> &middot; {isClosed ? "Dice rolled" : "Open"}</span>
+const formatDate = (iso?: string | null) => {
+  const date = iso ? new Date(iso) : null;
+  return date && !isNaN(date.getTime()) ? dateFormat.format(date) : null;
+};
+
+/**
+ * One party: whether you host it or joined it, its code, when it started and when the dice were rolled (parties
+ * rolled before that was recorded have no roll date), and its status.
+ */
+const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected, createdAt, rolledAt } }: { party: Party }) => {
+  const started = formatDate(createdAt);
+  const rolled = formatDate(rolledAt);
+
+  return (
+    <li className={isClosed ? "is-closed" : "is-open"}>
+      <Link to={`/p/${code}/`}>
+        <span className={`history-icon ${isHost ? "is-host" : "is-guest"}`}>
+          {isHost ? <Star size={18} /> : <Gift size={18} />}
         </span>
-      </span>
 
-      <span className={`history-status ${isClosed ? "is-closed" : "is-open"}`}>
-        {isClosed ? "Dice rolled" : "Open"}
-      </span>
+        <span className="history-text">
+          <span className="history-name">{name}</span>
+          <span className="history-meta">
+            {isHost ? "You host" : "You joined"} &middot; <code>{code}</code>
+            {isProtected && <> &middot; <Lock size={12} /> secret phrase</>}
+            <span className="history-meta-status"> &middot; {isClosed ? "Dice rolled" : "Open"}</span>
+          </span>
+          {started && (
+            <span className="history-dates">
+              <Calendar size={12} /> Started {started}
+              {rolled && <> &middot; rolled {rolled}</>}
+            </span>
+          )}
+        </span>
 
-      <ChevronRight size={18} className="history-chevron" />
-    </Link>
-  </li>
-);
+        <span className={`history-status ${isClosed ? "is-closed" : "is-open"}`}>
+          {isClosed ? "Dice rolled" : "Open"}
+        </span>
+
+        <ChevronRight size={18} className="history-chevron" />
+      </Link>
+    </li>
+  );
+};
