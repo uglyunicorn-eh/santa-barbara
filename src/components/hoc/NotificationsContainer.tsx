@@ -20,7 +20,7 @@ export const NotificationsContainer = () => {
             primary: 'white',
             secondary: 'rgb(241, 70, 104)',
           },
-          duration: 10000,
+          duration: 5000,
         },
         success: {
           style: {
