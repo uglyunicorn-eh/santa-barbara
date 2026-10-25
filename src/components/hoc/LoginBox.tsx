@@ -1,4 +1,6 @@
 import React from "react";
+
+import { newKey } from "src/api/client";
 import { Button, Container, Hero } from "src/components/bulma";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
@@ -87,12 +89,16 @@ const EnterForm = () => {
   const { error } = useNotifications();
   const navigate = useNavigate();
   const { enterRequest } = useAppClient();
+  const requestKey = React.useRef(newKey());
   const [sentTo, setSentTo] = React.useState<string>();
 
   const onSubmit = React.useCallback(
     async (input: EnterRequestInput) => {
       const submit = async () => {
-        if (! await enterRequest(input)) {
+        // One key per submission: a retry or a double click sends one email; submitting again later sends another.
+        const sent = await enterRequest(input, requestKey.current);
+        requestKey.current = newKey();
+        if (!sent) {
           error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
         }
       };

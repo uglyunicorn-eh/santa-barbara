@@ -1,8 +1,10 @@
-import { gql } from "@apollo/client";
-import { useApolloClient, useMutation } from "@apollo/client/react";
 import React from "react";
 
+import { apiCall, linkKey } from "src/api/client";
+import type { ApiResult, CallOptions } from "src/api/client";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useCurrentUser } from "src/components/hooks/useCurrentUser";
+import { useSignals } from "src/components/hooks/useSignals";
 
 import type { Party, User } from "src/types";
 
@@ -18,23 +20,21 @@ export type NewPartyInput = {
   requestId?: string;
 }
 
+/** `party` is the party's code. */
 export type JoinPartyInput = {
   party: string;
   name: string;
   password?: string;
 }
 
-export type LeavePartyInput = {
+/** `party` is the party's code. */
+export type PartyActionInput = {
   party: string;
 }
 
-export type ClosePartyInput = {
-  party: string;
-}
-
-export type DeletePartyInput = {
-  party: string;
-}
+export type LeavePartyInput = PartyActionInput;
+export type ClosePartyInput = PartyActionInput;
+export type DeletePartyInput = PartyActionInput;
 
 export type UpdateNameInput = {
   name: string;
@@ -51,492 +51,227 @@ export type LinkResult<T = {}> =
   | ({ ok: true } & T)
   | { ok: false, message: string };
 
-const USER_ERRORS = `
-  status
-  userErrors {
-    fieldName
-    messages
-  }
-`;
+export type Session = { user: User, userToken: string };
 
-const REQUEST_ACCOUNT_DELETION = gql`
-  mutation RequestAccountDeletion($input: RequestAccountDeletionInput) {
-    profile {
-      requestAccountDeletion(input: $input) {
-        ${USER_ERRORS}
-      }
-    }
-  }
-`;
-
-const CONFIRM_ACCOUNT_DELETION = gql`
-  mutation ConfirmAccountDeletion($input: ConfirmAccountDeletionInput!) {
-    profile {
-      confirmAccountDeletion(input: $input) {
-        ${USER_ERRORS}
-      }
-    }
-  }
-`;
-
-const REQUEST_EMAIL_CHANGE = gql`
-  mutation RequestEmailChange($input: RequestEmailChangeInput!) {
-    profile {
-      requestEmailChange(input: $input) {
-        ${USER_ERRORS}
-      }
-    }
-  }
-`;
-
-const CONFIRM_EMAIL_CHANGE = gql`
-  mutation ConfirmEmailChange($input: ConfirmEmailChangeInput!) {
-    profile {
-      confirmEmailChange(input: $input) {
-        ${USER_ERRORS}
-        userToken
-        user {
-          id
-          name
-          email
-        }
-      }
-    }
-  }
-`;
+/** Signal sent when the person's party list may have changed, so lists showing it load again. */
+export const PARTIES_CHANGED = "parties:changed";
 
 const LINK_FAILED = "Something went wrong on our side. Please try the link again in a few minutes.";
 
-const PARTY_QUERY = gql`
-  query ($code: String!) {
-    party(code: $code) {
-      id
-      name
-      code
-      isJoined
-      isHost
-      isProtected
-      isClosed
-      deletedAt
-      restorableUntil
-      participantCount
-      participants
-      target {
-        name
-      }
-    }
-  }
-`;
-
-const PROFILE_QUERY = gql`
-  query {
-    user {
-      id
-      name
-      email
-    }
-  }
-`;
+const path = (code: string) => `/parties/${encodeURIComponent(code)}`;
 
 export const useAppClient = () => {
   const { error } = useNotifications();
+  const { userTokenValue, signOut } = useCurrentUser();
+  const { signal } = useSignals();
 
-  const client = useApolloClient();
-
-  const [createPartyApi, { error: createPartyError }] = useMutation<any, { input: NewPartyInput }>(
-    gql`
-      mutation CreateParty($input: CreatePartyInput!) {
-        parties {
-          createParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-            node {
-              id
-              name
-              code
-              isJoined
-              isHost
-              isProtected
-              isClosed
-            }
-          }
-        }
+  /** Calls the API with the session. A 401 means the session is gone (expired, revoked): sign out. */
+  const call = React.useCallback(
+    async function <T>(route: string, options: CallOptions = {}): Promise<ApiResult<T>> {
+      const result = await apiCall<T>(route, { token: userTokenValue, ...options });
+      if (!result.ok && result.error.status === 401 && userTokenValue) {
+        signOut();
       }
-    `
+      return result;
+    },
+    [
+      userTokenValue,
+      signOut,
+    ],
   );
 
-  const [joinPartyApi, { error: joinPartyError }] = useMutation<any, { input: JoinPartyInput }>(
-    gql`
-      mutation JoinParty($input: JoinPartyInput!) {
-        parties {
-          joinParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
+  /** Runs a party action; shows the API's message and returns undefined when it refuses. */
+  const partyAction = React.useCallback(
+    async (route: string, options: CallOptions): Promise<Party | undefined> => {
+      const result = await call<Party>(route, { retry: true, ...options });
+      if (!result.ok) {
+        error(result.error.message);
+        return undefined;
       }
-    `
+      signal(PARTIES_CHANGED);
+      return result.data;
+    },
+    [
+      call,
+      error,
+      signal,
+    ],
   );
 
-  const [leavePartyApi, { error: leavePartyError }] = useMutation<any, { input: LeavePartyInput }>(
-    gql`
-      mutation Mutation($input: LeavePartyInput!) {
-        parties {
-          leaveParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [closePartyApi, { error: closePartyError }] = useMutation<any, { input: LeavePartyInput }>(
-    gql`
-      mutation Mutation($input: ClosePartyInput!) {
-        parties {
-          closeParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [deletePartyApi, { error: deletePartyError }] = useMutation<any, { input: DeletePartyInput }>(
-    gql`
-      mutation DeleteParty($input: DeletePartyInput!) {
-        parties {
-          deleteParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [restorePartyApi, { error: restorePartyError }] = useMutation<any, { input: DeletePartyInput }>(
-    gql`
-      mutation RestoreParty($input: RestorePartyInput!) {
-        parties {
-          restoreParty(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [enterRequestApi, { error: enterRequestError }] = useMutation<any, { input: EnterRequestInput }>(
-    gql`
-      mutation EnterRequest($input: EnterRequestInput!) {
-        auth {
-          enterRequest(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const [updateNameApi, { error: updateNameError }] = useMutation<any, { input: UpdateNameInput }>(
-    gql`
-      mutation UpdateName($input: UpdateNameInput!) {
-        profile {
-          updateName(input: $input) {
-            status
-            userErrors {
-              fieldName
-              messages
-            }
-            user {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-    `
-  );
-
-  React.useEffect(() => { createPartyError?.message && error(createPartyError?.message); }, [createPartyError?.message]);
-  React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
-  React.useEffect(() => { leavePartyError?.message && error(leavePartyError?.message); }, [leavePartyError?.message]);
-  React.useEffect(() => { closePartyError?.message && error(closePartyError?.message); }, [closePartyError?.message]);
-  React.useEffect(() => { deletePartyError?.message && error(deletePartyError?.message); }, [deletePartyError?.message]);
-  React.useEffect(() => { restorePartyError?.message && error(restorePartyError?.message); }, [restorePartyError?.message]);
-  React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
-  React.useEffect(() => { updateNameError?.message && error(updateNameError?.message); }, [updateNameError?.message]);
-
-  // These are called imperatively (on load, on submit), so they use client.query, which returns a plain promise.
-  // null means "not found"; undefined means the request failed.
+  /** null means "not found"; undefined means the request failed. */
   const getParty = React.useCallback(
     async (code: string): Promise<Party | null | undefined> => {
-      try {
-        const { data } = await client.query<{ party: Party | null }, { code: string }>({
-          query: PARTY_QUERY,
-          variables: { code },
-          fetchPolicy: "network-only",
-        });
-        return data?.party;
-      } catch {
-        return undefined;
+      const result = await call<Party>(path(code), { retry: true });
+      if (result.ok) {
+        return result.data;
       }
+      return result.error.status === 404 ? null : undefined;
     },
     [
-      client,
+      call,
     ],
   );
 
+  /** null means "no session" (or a revoked one); undefined means the request failed. */
   const getProfile = React.useCallback(
     async (): Promise<User | null | undefined> => {
-      try {
-        const { data } = await client.query<{ user: User | null }>({ query: PROFILE_QUERY, fetchPolicy: "network-only" });
-        return data?.user;
-      } catch {
-        return undefined;
+      if (!userTokenValue) {
+        return null;
       }
+      const result = await apiCall<User>("/me", { token: userTokenValue, retry: true });
+      if (result.ok) {
+        return result.data;
+      }
+      return result.error.status === 401 ? null : undefined;
     },
     [
-      client,
+      userTokenValue,
     ],
   );
 
+  /** Emails a magic link. `key` makes repeats of one form's submission send one email. */
   const enterRequest = React.useCallback(
-    async (input: EnterRequestInput): Promise<boolean> => {
-      const { data } = await enterRequestApi({ variables: { input } });
-      return data?.auth.enterRequest.status === "ok";
+    async (input: EnterRequestInput, key?: string): Promise<boolean> => {
+      const result = await apiCall("/auth/magic-link", { method: "POST", body: input, key, retry: Boolean(key) });
+      return result.ok;
     },
-    [
-      error,
-    ],
+    [],
+  );
+
+  /** Signs in with a magic link. Repeating it from this tab (say, after a reload) signs in again. */
+  const enter = React.useCallback(
+    async (token: string): Promise<LinkResult<Session>> => {
+      const result = await apiCall<Session>("/auth/session", { method: "POST", body: { token }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message };
+    },
+    [],
   );
 
   const createParty = React.useCallback(
-    async ({ name, password, requestId }: NewPartyInput): Promise<Party | undefined> => {
-      let result;
-      try {
-        const { data } = await createPartyApi({ variables: { input: { name, password: password || undefined, requestId } } });
-        result = data?.parties.createParty;
-      } catch {
-        return undefined;
-      }
-      if (result?.status !== "ok") {
-        // A request error (no session, network) is already shown by the createPartyError effect above.
-        if (result) {
-          error(result.userErrors?.[0]?.messages[0] ?? "Hm... we cannot create a new party. Please try again in a bit.");
-        }
-        return undefined;
-      }
-      // The new party belongs at the top of "my parties".
-      client.refetchQueries({ include: "active" });
-      return result.node;
-    },
+    async ({ name, password, requestId }: NewPartyInput): Promise<Party | undefined> =>
+      partyAction("/parties", { method: "POST", body: { name, ...(password ? { password } : {}) }, key: requestId, retry: Boolean(requestId) }),
     [
-      client,
-      createPartyApi,
-      error,
+      partyAction,
     ],
   );
 
   const joinParty = React.useCallback(
-    async (input: JoinPartyInput): Promise<boolean> => {
-      const { data } = await joinPartyApi({ variables: { input } });
-      if (data?.parties.joinParty.status === "error") {
-        error(data?.parties.joinParty.userErrors[0].messages[0]);
-        return false;
-      }
-      return true;
-    },
+    async ({ party, name, password }: JoinPartyInput): Promise<boolean> =>
+      Boolean(await partyAction(`${path(party)}/join`, { method: "POST", body: { name, ...(password ? { password } : {}) } })),
     [
-      joinPartyApi,
-      error,
+      partyAction,
+    ],
+  );
+
+  const leaveParty = React.useCallback(
+    async ({ party }: LeavePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/leave`, { method: "POST" })),
+    [
+      partyAction,
     ],
   );
 
   const closeParty = React.useCallback(
-    async (input: ClosePartyInput): Promise<boolean> => {
-      const { data } = await closePartyApi({ variables: { input } });
-      if (data?.parties.closeParty.status === "error") {
-        error(data?.parties.closeParty.userErrors[0].messages[0]);
-        return false;
-      }
-      return true;
-    },
+    async ({ party }: ClosePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/draw`, { method: "POST" })),
     [
-      leavePartyApi,
-      error,
-    ],
-  );
-
-  /** Runs deleteParty or restoreParty; shows the API's message and returns false when it refuses. */
-  const runPartyAction = React.useCallback(
-    async (api: typeof deletePartyApi, field: 'deleteParty' | 'restoreParty', input: DeletePartyInput): Promise<boolean> => {
-      try {
-        const { data } = await api({ variables: { input } });
-        const result = data?.parties[field];
-        if (result?.status !== "ok") {
-          error(result?.userErrors?.[0]?.messages[0] ?? "Something went wrong. Please try again in a bit.");
-          return false;
-        }
-      } catch {
-        return false; // shown by the request-error effect above
-      }
-      // The party list shows deleted parties differently, and guests' lists change too.
-      client.refetchQueries({ include: "active" });
-      return true;
-    },
-    [
-      client,
-      error,
+      partyAction,
     ],
   );
 
   const deleteParty = React.useCallback(
-    (input: DeletePartyInput) => runPartyAction(deletePartyApi, 'deleteParty', input),
-    [deletePartyApi, runPartyAction],
+    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction(path(party), { method: "DELETE" })),
+    [
+      partyAction,
+    ],
   );
 
   const restoreParty = React.useCallback(
-    (input: DeletePartyInput) => runPartyAction(restorePartyApi, 'restoreParty', input),
-    [restorePartyApi, runPartyAction],
+    async ({ party }: DeletePartyInput): Promise<boolean> => Boolean(await partyAction(`${path(party)}/restore`, { method: "POST" })),
+    [
+      partyAction,
+    ],
   );
 
-  const leaveParty = React.useCallback(
-    async (input: LeavePartyInput): Promise<boolean> => {
-      const { data } = await leavePartyApi({ variables: { input } });
-      if (data?.parties.leaveParty.status === "error") {
-        error(data?.parties.leaveParty.userErrors[0].messages[0]);
-        return false;
-      }
-      return true;
+  /** One page of the person's parties, newest first; null when it couldn't be loaded. */
+  const getPartyHistory = React.useCallback(
+    async (first: number, after?: string | null) => {
+      const query = new URLSearchParams({ first: String(first), ...(after ? { after } : {}) });
+      const result = await call<{ items: Party[], hasMore: boolean, endCursor: string | null }>(`/me/parties?${query}`, { retry: true });
+      return result.ok ? result.data : null;
     },
     [
-      leavePartyApi,
-      error,
+      call,
     ],
   );
 
   const updateName = React.useCallback(
-    async (input: UpdateNameInput): Promise<User | undefined> => {
-      const { data } = await updateNameApi({ variables: { input } });
-      const payload = data?.profile.updateName;
-      if (payload?.status === "error") {
-        error(payload.userErrors[0].messages[0]);
+    async ({ name }: UpdateNameInput): Promise<User | undefined> => {
+      const result = await call<User>("/me", { method: "PATCH", body: { name }, retry: true });
+      if (!result.ok) {
+        error(result.error.message);
         return undefined;
       }
-      return payload?.user ?? undefined;
+      return result.data;
     },
     [
-      updateNameApi,
+      call,
       error,
     ],
   );
 
-  // The account and email mutations are called imperatively, so they go through the client directly. Request mutations
-  // report problems as notifications; confirm mutations return them, for the link pages to show.
-  const mutate = React.useCallback(
-    async (mutation: any, variables?: any): Promise<any> => {
-      try {
-        const { data } = await client.mutate<any>({ mutation, variables });
-        return data?.profile;
-      } catch (e) {
-        return { error: (e as Error).message };
-      }
-    },
-    [
-      client,
-    ],
-  );
+  // Request routes report problems as notifications; confirm routes return them, for the link pages to show.
 
   /** Repeats with the same `requestId` send no second email. */
   const requestAccountDeletion = React.useCallback(
     async (requestId?: string): Promise<boolean> => {
-      const result = await mutate(REQUEST_ACCOUNT_DELETION, { input: { requestId } });
-      const payload = result?.requestAccountDeletion;
-      if (payload?.status !== "ok") {
-        error(payload?.userErrors?.[0]?.messages[0] ?? result?.error ?? LINK_FAILED);
-        return false;
+      const result = await call("/me/deletion", { method: "POST", key: requestId, retry: Boolean(requestId) });
+      if (!result.ok) {
+        error(result.error.message);
       }
-      return true;
+      return result.ok;
     },
     [
-      mutate,
+      call,
       error,
     ],
   );
 
   const requestEmailChange = React.useCallback(
-    async (input: RequestEmailChangeInput): Promise<boolean> => {
-      const result = await mutate(REQUEST_EMAIL_CHANGE, { input });
-      const payload = result?.requestEmailChange;
-      if (payload?.status !== "ok") {
-        error(payload?.userErrors?.[0]?.messages[0] ?? result?.error ?? LINK_FAILED);
-        return false;
+    async ({ email, requestId }: RequestEmailChangeInput): Promise<boolean> => {
+      const result = await call("/me/email-change", { method: "POST", body: { email }, key: requestId, retry: Boolean(requestId) });
+      if (!result.ok) {
+        error(result.error.message);
       }
-      return true;
+      return result.ok;
     },
     [
-      mutate,
+      call,
       error,
     ],
   );
 
   const confirmAccountDeletion = React.useCallback(
     async (token: string): Promise<LinkResult> => {
-      const payload = (await mutate(CONFIRM_ACCOUNT_DELETION, { input: { token } }))?.confirmAccountDeletion;
-      return payload?.status === "ok"
-        ? { ok: true }
-        : { ok: false, message: payload?.userErrors?.[0]?.messages[0] ?? LINK_FAILED };
+      const result = await apiCall("/me/deletion/confirm", { method: "POST", body: { token }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true } : { ok: false, message: result.error.message || LINK_FAILED };
     },
-    [
-      mutate,
-    ],
+    [],
   );
 
   const confirmEmailChange = React.useCallback(
-    async (token: string): Promise<LinkResult<{ user: User, userToken: string }>> => {
-      const payload = (await mutate(CONFIRM_EMAIL_CHANGE, { input: { token } }))?.confirmEmailChange;
-      return payload?.status === "ok" && payload.userToken && payload.user
-        ? { ok: true, user: payload.user, userToken: payload.userToken }
-        : { ok: false, message: payload?.userErrors?.[0]?.messages[0] ?? LINK_FAILED };
+    async (token: string): Promise<LinkResult<Session>> => {
+      const result = await apiCall<Session>("/me/email-change/confirm", { method: "POST", body: { token }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message || LINK_FAILED };
     },
-    [
-      mutate,
-    ],
+    [],
   );
 
   return React.useMemo(
     () => ({
       enterRequest,
+      enter,
       getParty,
       getProfile,
+      getPartyHistory,
       createParty,
       joinParty,
       closeParty,
@@ -551,8 +286,10 @@ export const useAppClient = () => {
     }),
     [
       enterRequest,
+      enter,
       getParty,
       getProfile,
+      getPartyHistory,
       createParty,
       joinParty,
       closeParty,

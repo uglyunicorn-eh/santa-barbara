@@ -1,4 +1,6 @@
 import React from "react";
+
+import { newKey } from "src/api/client";
 import { Button, Hero } from "src/components/bulma";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
@@ -109,6 +111,7 @@ type SignInControlsProps = {
 const SignInControls = ({ party }: SignInControlsProps) => {
   const { error } = useNotifications();
   const { enterRequest } = useAppClient();
+  const requestKey = React.useRef(newKey());
   const navigate = useNavigate();
 
   const [busy, setBusy] = React.useState(false);
@@ -132,7 +135,10 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   const onSubmit = React.useCallback(
     async (input: any) => {
       const submit = async () => {
-        if (! await enterRequest(input)) {
+        // One key per submission: a retry or a double click sends one email; submitting again later sends another.
+        const sent = await enterRequest(input, requestKey.current);
+        requestKey.current = newKey();
+        if (!sent) {
           error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
         }
       };
@@ -250,7 +256,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   return (
     <Form
       initialValues={{
-        party: party.id,
+        party: party.code,
         name: profile?.name ?? "",
         password: "",
       }}

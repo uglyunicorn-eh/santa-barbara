@@ -23,7 +23,7 @@ export const DeletedPartyContent = ({ party, user }: Props) => {
     async () => {
       setBusy(true);
       try {
-        if (await restoreParty({ party: party.id })) {
+        if (await restoreParty({ party: party.code })) {
           signal('party:updated');
         }
       } finally {
@@ -31,7 +31,7 @@ export const DeletedPartyContent = ({ party, user }: Props) => {
       }
     },
     [
-      party.id,
+      party.code,
       restoreParty,
       signal,
     ],
