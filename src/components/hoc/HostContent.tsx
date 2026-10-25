@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from "src/components/bulma";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { ConfirmPartyClose } from 'src/components/hoc/ConfirmPartyClose';
-import { DeletePartyLink } from 'src/components/hoc/DeletePartyLink';
 
 import type { Party, User } from 'src/types';
 
@@ -55,8 +54,6 @@ const HostContent = ({ party, user }: Props) => {
           </Routes>
         </>
       )}
-
-      <DeletePartyLink />
     </>
   );
 }

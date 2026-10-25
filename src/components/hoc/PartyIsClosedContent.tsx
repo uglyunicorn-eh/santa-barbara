@@ -1,4 +1,3 @@
-import { DeletePartyLink } from 'src/components/hoc/DeletePartyLink';
 import type { Party, User } from 'src/types';
 
 type Props = {
@@ -23,8 +22,6 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
       <p>
         Have fun! And Happy Holidays!
       </p>
-
-      {party.isHost && <DeletePartyLink />}
     </>
   );
 }

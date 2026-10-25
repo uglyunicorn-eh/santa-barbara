@@ -7,6 +7,8 @@ import { useCurrentUser } from "src/components/hooks";
 
 type Props = {
   children?: React.ReactNode;
+  /** Shown on the left, across from the menu. */
+  start?: React.ReactNode;
   noUser?: boolean;
   noHome?: boolean;
   profileAsLink?: boolean;
@@ -22,7 +24,7 @@ type MenuItem = {
   asLink?: boolean;
 };
 
-export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
+export const Footer = ({ children, start, noUser, noHome, profileAsLink }: Props) => {
   const { profile, signOut } = useCurrentUser();
 
   const onSignOutClick = React.useCallback(
@@ -56,22 +58,25 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
   );
 
   return (
-    <BulmaFooter className="page-footer">
-      <div className="footer-menu">
-        {items.map(({ key, url, label, asLink, ...rest }, index) => (
-          <React.Fragment key={key}>
-            {index ? <span> | </span> : null}
-            {asLink
-              ? <Link to={url}>{label}</Link>
-              : <a href={url} {...rest}>{label}</a>
-            }
-          </React.Fragment>
-        ))}
+    <BulmaFooter className={start ? "page-footer has-start" : "page-footer"}>
+      {start && <div className="footer-start">{start}</div>}
+      <div className="footer-end">
+        <div className="footer-menu">
+          {items.map(({ key, url, label, asLink, ...rest }, index) => (
+            <React.Fragment key={key}>
+              {index ? <span> | </span> : null}
+              {asLink
+                ? <Link to={url}>{label}</Link>
+                : <a href={url} {...rest}>{label}</a>
+              }
+            </React.Fragment>
+          ))}
+        </div>
+        <div className="footer-copy is-size-7">
+          Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
+        </div>
+        {children && <div className="is-size-7">{children}</div>}
       </div>
-      <div className="footer-copy is-size-7">
-        Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
-      </div>
-      {children && <div className="is-size-7">{children}</div>}
     </BulmaFooter >
   );
 };

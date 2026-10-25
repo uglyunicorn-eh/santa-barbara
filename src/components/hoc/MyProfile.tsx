@@ -17,7 +17,7 @@ import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
 import type { Party } from "src/types";
 
-const HISTORY_PAGE_SIZE = 10;
+const HISTORY_PAGE_SIZE = 5;
 
 const SITE_NAME = "Anonymous Ded Morozes";
 
