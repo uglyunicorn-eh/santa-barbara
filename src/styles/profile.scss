@@ -201,6 +201,15 @@
     }
   }
 
+  .history-dates {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+
+    svg {
+      vertical-align: -1px;
+    }
+  }
+
   .history-status {
     flex: none;
     padding: 0.15em 0.7em;

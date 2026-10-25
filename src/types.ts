@@ -15,6 +15,10 @@ export type Party = {
   isHost: boolean;
   isProtected: boolean;
   isClosed: boolean;
+  /** ISO 8601. */
+  createdAt?: string;
+  /** ISO 8601; when the dice were rolled. Unknown for parties rolled before it was recorded. */
+  rolledAt?: string | null;
   participantCount?: number;
   participants?: string[];
   target?: User;
