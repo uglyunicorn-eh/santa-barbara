@@ -194,11 +194,21 @@ const EmailSetting = ({ email }: { email: string }) => {
   const { requestEmailChange } = useAppClient();
   const [editing, setEditing] = React.useState(false);
   const [sentTo, setSentTo] = React.useState<string>();
+  // One id per opened form: sending the same address again from it doesn't email twice; a new address is a new request.
+  const requestId = React.useRef("");
+
+  const startEditing = React.useCallback(
+    () => {
+      requestId.current = crypto.randomUUID();
+      setEditing(true);
+    },
+    [],
+  );
 
   const onSubmit = React.useCallback(
     async (input: RequestEmailChangeInput) => {
       const newEmail = input.email.trim();
-      if (await requestEmailChange({ email: newEmail })) {
+      if (await requestEmailChange({ email: newEmail, requestId: requestId.current })) {
         setSentTo(newEmail);
         setEditing(false);
       }
@@ -235,7 +245,7 @@ const EmailSetting = ({ email }: { email: string }) => {
     >
       <div className="setting-control">
         <span className="setting-value">{email}</span>
-        <Button type="button" size="small" text onClick={() => setEditing(true)}>Change</Button>
+        <Button type="button" size="small" text onClick={startEditing}>Change</Button>
       </div>
     </Setting>
   );
@@ -245,11 +255,21 @@ const EmailSetting = ({ email }: { email: string }) => {
 const DeleteAccount = ({ email }: { email: string }) => {
   const { requestAccountDeletion } = useAppClient();
   const [stage, setStage] = React.useState<"idle" | "confirming" | "sending" | "sent">("idle");
+  // One id per confirmation: retrying it after a failure is fine, it never emails twice.
+  const requestId = React.useRef("");
+
+  const startConfirming = React.useCallback(
+    () => {
+      requestId.current = crypto.randomUUID();
+      setStage("confirming");
+    },
+    [],
+  );
 
   const onConfirm = React.useCallback(
     async () => {
       setStage("sending");
-      setStage(await requestAccountDeletion() ? "sent" : "confirming");
+      setStage(await requestAccountDeletion(requestId.current) ? "sent" : "confirming");
     },
     [
       requestAccountDeletion,
@@ -269,7 +289,7 @@ const DeleteAccount = ({ email }: { email: string }) => {
           </p>
         </div>
         {stage === "idle" && (
-          <Button type="button" size="small" color="danger" outlined onClick={() => setStage("confirming")}>
+          <Button type="button" size="small" color="danger" outlined onClick={startConfirming}>
             Delete account
           </Button>
         )}

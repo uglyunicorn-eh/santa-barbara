@@ -42,6 +42,8 @@ export type UpdateNameInput = {
 
 export type RequestEmailChangeInput = {
   email: string;
+  /** Repeats with the same id (and address) send no second email. */
+  requestId?: string;
 }
 
 /** What a confirmation link did: ok, or the reason it didn't work. */
@@ -58,9 +60,9 @@ const USER_ERRORS = `
 `;
 
 const REQUEST_ACCOUNT_DELETION = gql`
-  mutation RequestAccountDeletion {
+  mutation RequestAccountDeletion($input: RequestAccountDeletionInput) {
     profile {
-      requestAccountDeletion {
+      requestAccountDeletion(input: $input) {
         ${USER_ERRORS}
       }
     }
@@ -473,9 +475,10 @@ export const useAppClient = () => {
     ],
   );
 
+  /** Repeats with the same `requestId` send no second email. */
   const requestAccountDeletion = React.useCallback(
-    async (): Promise<boolean> => {
-      const result = await mutate(REQUEST_ACCOUNT_DELETION);
+    async (requestId?: string): Promise<boolean> => {
+      const result = await mutate(REQUEST_ACCOUNT_DELETION, { input: { requestId } });
       const payload = result?.requestAccountDeletion;
       if (payload?.status !== "ok") {
         error(payload?.userErrors?.[0]?.messages[0] ?? result?.error ?? LINK_FAILED);
