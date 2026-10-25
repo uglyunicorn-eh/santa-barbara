@@ -58,13 +58,15 @@ const nameValidationSchema = Yup.object().shape({
     .ensure(),
 });
 
-const emailValidationSchema = Yup.object().shape({
+/** Rejects the current address here, so the request (and its emailing rate limit) is never spent on it. */
+const emailValidationSchema = (currentEmail: string) => Yup.object().shape({
   email: Yup.string()
     .label("New email")
     .trim()
     .max(128)
     .required()
     .email()
+    .test("not-current", "That's already your email.", value => value?.toLowerCase() !== currentEmail.toLowerCase())
     .ensure(),
 });
 
@@ -209,7 +211,7 @@ const EmailSetting = ({ email }: { email: string }) => {
   if (editing) {
     return (
       <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {email}.</>}>
-        <Form initialValues={{ email: "" }} validateOnBlur={false} validationSchema={emailValidationSchema} onSubmit={onSubmit}>
+        <Form initialValues={{ email: "" }} validateOnBlur={false} validationSchema={emailValidationSchema(email)} onSubmit={onSubmit}>
           <InlineField
             name="email"
             action={
