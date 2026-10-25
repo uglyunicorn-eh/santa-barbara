@@ -34,6 +34,71 @@ export type UpdateNameInput = {
   name: string;
 }
 
+export type RequestEmailChangeInput = {
+  email: string;
+}
+
+/** What a confirmation link did: ok, or the reason it didn't work. */
+export type LinkResult<T = {}> =
+  | ({ ok: true } & T)
+  | { ok: false, message: string };
+
+const USER_ERRORS = `
+  status
+  userErrors {
+    fieldName
+    messages
+  }
+`;
+
+const REQUEST_ACCOUNT_DELETION = gql`
+  mutation RequestAccountDeletion {
+    profile {
+      requestAccountDeletion {
+        ${USER_ERRORS}
+      }
+    }
+  }
+`;
+
+const CONFIRM_ACCOUNT_DELETION = gql`
+  mutation ConfirmAccountDeletion($input: ConfirmAccountDeletionInput!) {
+    profile {
+      confirmAccountDeletion(input: $input) {
+        ${USER_ERRORS}
+      }
+    }
+  }
+`;
+
+const REQUEST_EMAIL_CHANGE = gql`
+  mutation RequestEmailChange($input: RequestEmailChangeInput!) {
+    profile {
+      requestEmailChange(input: $input) {
+        ${USER_ERRORS}
+      }
+    }
+  }
+`;
+
+const CONFIRM_EMAIL_CHANGE = gql`
+  mutation ConfirmEmailChange($input: ConfirmEmailChangeInput!) {
+    profile {
+      confirmEmailChange(input: $input) {
+        ${USER_ERRORS}
+        userToken
+        user {
+          id
+          name
+          email
+        }
+      }
+    }
+  }
+`;
+
+const LINK_FAILED = "Something went wrong on our side. Please try the link again in a few minutes.";
+
 const PARTY_QUERY = gql`
   query ($code: String!) {
     party(code: $code) {
@@ -317,6 +382,78 @@ export const useAppClient = () => {
     ],
   );
 
+  // The account and email mutations are called imperatively, so they go through the client directly. Request mutations
+  // report problems as notifications; confirm mutations return them, for the link pages to show.
+  const mutate = React.useCallback(
+    async (mutation: any, variables?: any): Promise<any> => {
+      try {
+        const { data } = await client.mutate<any>({ mutation, variables });
+        return data?.profile;
+      } catch (e) {
+        return { error: (e as Error).message };
+      }
+    },
+    [
+      client,
+    ],
+  );
+
+  const requestAccountDeletion = React.useCallback(
+    async (): Promise<boolean> => {
+      const result = await mutate(REQUEST_ACCOUNT_DELETION);
+      const payload = result?.requestAccountDeletion;
+      if (payload?.status !== "ok") {
+        error(payload?.userErrors?.[0]?.messages[0] ?? result?.error ?? LINK_FAILED);
+        return false;
+      }
+      return true;
+    },
+    [
+      mutate,
+      error,
+    ],
+  );
+
+  const requestEmailChange = React.useCallback(
+    async (input: RequestEmailChangeInput): Promise<boolean> => {
+      const result = await mutate(REQUEST_EMAIL_CHANGE, { input });
+      const payload = result?.requestEmailChange;
+      if (payload?.status !== "ok") {
+        error(payload?.userErrors?.[0]?.messages[0] ?? result?.error ?? LINK_FAILED);
+        return false;
+      }
+      return true;
+    },
+    [
+      mutate,
+      error,
+    ],
+  );
+
+  const confirmAccountDeletion = React.useCallback(
+    async (token: string): Promise<LinkResult> => {
+      const payload = (await mutate(CONFIRM_ACCOUNT_DELETION, { input: { token } }))?.confirmAccountDeletion;
+      return payload?.status === "ok"
+        ? { ok: true }
+        : { ok: false, message: payload?.userErrors?.[0]?.messages[0] ?? LINK_FAILED };
+    },
+    [
+      mutate,
+    ],
+  );
+
+  const confirmEmailChange = React.useCallback(
+    async (token: string): Promise<LinkResult<{ user: User, userToken: string }>> => {
+      const payload = (await mutate(CONFIRM_EMAIL_CHANGE, { input: { token } }))?.confirmEmailChange;
+      return payload?.status === "ok" && payload.userToken && payload.user
+        ? { ok: true, user: payload.user, userToken: payload.userToken }
+        : { ok: false, message: payload?.userErrors?.[0]?.messages[0] ?? LINK_FAILED };
+    },
+    [
+      mutate,
+    ],
+  );
+
   return React.useMemo(
     () => ({
       enterRequest,
@@ -327,6 +464,10 @@ export const useAppClient = () => {
       closeParty,
       leaveParty,
       updateName,
+      requestAccountDeletion,
+      confirmAccountDeletion,
+      requestEmailChange,
+      confirmEmailChange,
     }),
     [
       enterRequest,
@@ -337,6 +478,10 @@ export const useAppClient = () => {
       closeParty,
       leaveParty,
       updateName,
+      requestAccountDeletion,
+      confirmAccountDeletion,
+      requestEmailChange,
+      confirmEmailChange,
     ],
   );
 };

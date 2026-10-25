@@ -17,6 +17,32 @@
     margin-top: 1em;
   }
 
+  form .actions,
+  .danger-zone .actions {
+    gap: 0.5em;
+  }
+
+  .profile-email {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .danger-zone {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #eee;
+
+    h4 {
+      margin-bottom: 0.5em;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
   .history-more {
     display: flex;
     justify-content: center;
