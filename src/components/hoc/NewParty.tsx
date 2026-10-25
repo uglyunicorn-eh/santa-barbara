@@ -43,7 +43,8 @@ export const NewParty = () => {
 
   const onSubmit = React.useCallback(
     async (values: FormValues) => {
-      if (submitting.current) {
+      // The party is made; the form stays mounted under the congratulations, so ignore any later submit.
+      if (submitting.current || party) {
         return;
       }
       submitting.current = true;
@@ -59,6 +60,7 @@ export const NewParty = () => {
     },
     [
       createParty,
+      party,
     ],
   );
 
@@ -82,7 +84,8 @@ export const NewParty = () => {
       action={
         !party
           ? <Submit>&#x1F389; Rock'n'Roll!</Submit>
-          : <Button onClick={goToParty} color="warning" size="large" rounded>&#x1F973; Yahooooooo!</Button>
+          // Still inside the form: without type="button" it would submit it again.
+          : <Button type="button" onClick={goToParty} color="warning" size="large" rounded>&#x1F973; Yahooooooo!</Button>
       }
       noDismiss={party !== undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}
