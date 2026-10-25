@@ -2,83 +2,95 @@
 layout: src/layouts/KnowledgePageLayout.astro
 title: "Terms and Conditions"
 image: "/terms.png"
+description: "The rules of the game: how accounts, parties and deleting things work on Anonymous Ded Morozes."
 ---
 
 # Terms and Conditions
 
-Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the website
-(the "Service") operated by **Anonymous Ded Morozes** ("us", "we", or "our").
+*Effective date: October 24, 2026*
 
-Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms
-apply to all visitors, users and others who access or use the Service.
+Please read these Terms and Conditions ("Terms") carefully before using [gnomik.me](https://gnomik.me) (the "Service"),
+operated by **Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or "our").
 
-By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then
-you may not access the Service.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of them, you may
+not use the Service.
+
+## The Service
+
+The Service lets you host or join a secret gift-exchange party, randomly assigns each participant someone to give a
+gift to, and keeps those assignments private. The Service is provided for personal, non-commercial use.
 
 ## Accounts
 
-When you create an account with us, you must provide us information that is accurate, complete, and current at all
-times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on
-our Service.
+You sign in with a one-time link sent to your email address. You must provide an email address that is accurate and that
+you control. Anyone with access to your inbox can sign in as you, so keep your email account secure and tell us
+promptly if you suspect unauthorized use of your account.
 
-You are responsible for safeguarding the password that you use to access the Service and for any activities or actions
-under your password, whether your password is with our Service or a third-party service.
+You can change your email address, change your name, and delete your account from your profile page.
 
-You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any
-breach of security or unauthorized use of your account.
+## Parties and Your Content
+
+You keep ownership of what you provide to the Service, such as your name, party names and wishlists ("Your Content").
+You give us a limited licence to store and display it as needed to run the Service.
+
+Participants in a party can see the party's details and the names of the other participants. Nobody except you can see
+who you were assigned, and we do not reveal assignments to anyone else.
+
+Hosts can delete a party. A deleted party is hidden from everyone and can be restored by its host for one day. After
+that it may be permanently removed.
+
+## Acceptable Use
+
+You agree not to:
+
+* use the Service for anything unlawful, or to harass, threaten or impersonate anyone;
+* post content that is abusive, hateful or infringes anyone else's rights;
+* attempt to access other users' data, break or overload the Service, or interfere with its security;
+* use automated means to create accounts or parties, or to scrape the Service.
+
+We may remove content or suspend accounts that break these rules.
+
+## Account Deletion and Termination
+
+You may delete your account at any time from your profile page. Deleting your account removes it together with the
+parties you host that have not yet rolled the dice. See our [Privacy Policy](/privacy) for how long data is kept.
+
+We may suspend or terminate your access to the Service at any time, with or without notice, including if you breach these
+Terms. Provisions that by their nature should survive termination, including ownership, warranty disclaimers and
+limitations of liability, will survive.
+
+## Disclaimer of Warranties
+
+The Service is provided "as is" and "as available", without warranties of any kind, express or implied, including
+fitness for a particular purpose and uninterrupted or error-free operation. We do not guarantee that emails will be
+delivered or that the Service will always be available. We are not responsible for gifts that are late, wrong, or
+exactly what the recipient mentioned last Tuesday.
+
+## Limitation of Liability
+
+To the maximum extent permitted by law, we are not liable for any indirect, incidental, special or consequential
+damages, or for loss of data, profits or goodwill, arising from your use of the Service. Our total liability for any
+claim relating to the Service is limited to CAD $100. Nothing in these Terms limits liability that cannot be limited
+under applicable law.
 
 ## Links To Other Web Sites
 
-Our Service may contain links to third-party web sites or services that are not owned or controlled by
-**Anonymous Ded Morozes**.
-
-**Anonymous Ded Morozes** has no control over, and assumes no responsibility for, the content, privacy policies, or
-practices of any third party web sites or services. You further acknowledge and agree that **Anonymous Ded Morozes**
-shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or
-in connection with use of or reliance on any such content, goods or services available on or through any such web sites
-or services.
-
-We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services
-that you visit.
-
-## Termination
-
-We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason
-whatsoever, including without limitation if you breach the Terms.
-
-All provisions of the Terms which by their nature should survive termination shall survive termination, including,
-without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
-
-We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever,
-including without limitation if you breach the Terms.
-
-Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may
-simply discontinue using the Service.
-
-All provisions of the Terms which by their nature should survive termination shall survive termination, including,
-without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.
+The Service may link to third-party sites that we do not own or control. We are not responsible for their content or
+practices, and we advise you to read their terms and privacy policies.
 
 ## Governing Law
 
-These Terms shall be governed and construed in accordance with the laws of Canada, without regard to its conflict of
-law provisions.
-
-Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any
-provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will
-remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and
-replace any prior agreements we might have between us regarding the Service.
+These Terms are governed by the laws of Canada and the province in which Ugly Unicorn is based, without regard to
+conflict of law provisions. Our failure to enforce a provision is not a waiver of it. If a provision is held
+unenforceable, the rest of the Terms remain in effect. These Terms are the entire agreement between us regarding the
+Service.
 
 ## Changes
 
-We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material
-we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change
-will be determined at our sole discretion.
-
-By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised
-terms. If you do not agree to the new terms, please stop using the Service.
+We may modify these Terms at any time. If a revision is material we will try to give at least 30 days' notice before it
+takes effect. By continuing to use the Service after revisions take effect, you agree to the revised Terms. If you do
+not agree, please stop using the Service.
 
 ## Contact Us
 
-If you have any questions about these Terms, please contact us:
-
-- By email: info@uglyunicorn.ca.
+Questions about these Terms? Write to us at [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca).

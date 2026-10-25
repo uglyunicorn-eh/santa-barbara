@@ -3,10 +3,19 @@ import "src/styles/global.scss";
 
 interface Props {
   title?: string;
+  description?: string;
   pageClassNames?: string[];
 }
 
-const { title, pageClassNames } = Astro.props;
+const SITE_NAME = "Anonymous Ded Morozes";
+const DEFAULT_DESCRIPTION =
+  "You're invited to a secret gift exchange. Join the party, wait for the dice roll, and find out who you're getting a gift for. No passwords, no spam.";
+
+const { title, description = DEFAULT_DESCRIPTION, pageClassNames } = Astro.props;
+
+const fullTitle = [title, SITE_NAME].filter(Boolean).join(" | ");
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL("/og-image.png", Astro.site);
 ---
 
 <!doctype html>
@@ -14,9 +23,30 @@ const { title, pageClassNames } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      {[title, "Anonymous Ded Mororzes"].filter(Boolean).join(" | ")}
-    </title>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#b3202c" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="A scruffy Santa holding a wrapped gift next to the words You're invited: Secret Gift Exchange"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
   </head>
   <body>
     <slot />

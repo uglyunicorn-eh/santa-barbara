@@ -2,152 +2,92 @@
 layout: src/layouts/KnowledgePageLayout.astro
 title: "Privacy Policy"
 image: "/privacy.png"
+description: "What we collect, who sees it, and how to delete it. Short version: your email, your name, and no tracking."
 ---
 
 # Privacy Policy
 
-**Anonymous Ded Morozes** ("us", "we", or "our") operates the [gnomik.me](https://gnomik.me)
-website (hereinafter referred to as the "Service").
+*Effective date: October 24, 2026*
 
-This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our
-Service and the choices you have associated with that data.
+**Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or "our"), operates [gnomik.me](https://gnomik.me)
+(the "Service"). This page explains what personal data we collect, how we use it, and the choices you have. Terms not
+defined here have the meaning given in our [Terms and Conditions](/terms).
 
-We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of
-information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms used in this
-Privacy Policy have the same meanings as in our Terms and Conditions, accessible from
-[gnomik.me](https://gnomik.me).
+## Information We Collect
 
-## Information Collection And Use
+* **Email address**, used to sign you in with a magic link and to send you emails about your account and parties.
+* **Name**, which you choose. It is shown to the other participants of parties you join.
+* **Party information**: parties you host or join, your wishlist details if you add any, and the gift assignment you
+  receive once the dice are rolled.
+* **Technical data**, such as your IP address, browser type and request times, which our servers and hosting providers
+  process routinely to deliver and secure the Service.
 
-We collect several different types of information for various purposes to provide and improve our Service to you.
+We do not ask for passwords or payment details, and we do not sell your data.
 
-## Types of Data Collected
+## Cookies and Browser Storage
 
-### Personal Data
+We do not use advertising, analytics or tracking cookies. To keep you signed in, the Service stores a sign-in token and
+a copy of your basic profile in your browser's local storage. This is strictly necessary for the Service to work, is
+never used to track you, and is removed when you sign out or clear your browser data. Because we use only what is
+strictly necessary, we do not show a cookie consent banner.
 
-While using our Service, we may ask you to provide us with certain personally identifiable information that can be used
-to contact or identify you ("Personal Data"). Personally identifiable information may include, but is not limited to:
+## How We Use Your Data
 
-- Email address
-- First name and last name
-- Address, State, Province, ZIP/Postal code, City
-- Cookies and Usage Data
+* to provide and maintain the Service, including signing you in and assigning gift recipients;
+* to email you the links and notifications you ask for, and to tell you about changes to the Service;
+* to provide support;
+* to keep the Service secure and to detect, prevent and address technical issues.
 
-### Usage Data
+## Who Can See Your Data
 
-We may also collect information on how the Service is accessed and used ("Usage Data"). This Usage Data may include
-information such as your computer's Internet Protocol address (e.g. IP address), browser type, browser version, the
-pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device
-identifiers and other diagnostic data.
+* **Other participants** in your parties can see your name. Only you can see who you were assigned.
+* **Service providers** that host the Service and send email on our behalf process data only to perform those
+  services for us.
+* **Legal requirements**: we may disclose data where required by law, to protect rights, property or safety, or to
+  prevent or investigate wrongdoing.
 
-### Tracking & Cookies Data
+## Where Your Data Is Processed
 
-We use cookies and similar tracking technologies to track the activity on our Service and hold certain information.
+We operate from Canada and process data there. If you are elsewhere, your data is transferred to and maintained in
+Canada, and our service providers may process it in other countries. We take reasonable steps to make sure your data is
+treated securely and in line with this policy.
 
-Cookies are files with small amount of data which may include an anonymous unique identifier. Cookies are sent to your
-browser from a website and stored on your device. Tracking technologies also used are beacons, tags, and scripts to
-collect and track information and to improve and analyze our Service.
+## Retention and Deletion
 
-You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not
-accept cookies, you may not be able to use some portions of our Service. You can learn more how to manage cookies in
-the [Browser Cookies Guide](https://privacypolicies.com/blog/how-to-delete-cookies/).
+* **Delete your account yourself** from your profile page. Deleting removes your account and the parties you host that
+  have not yet rolled the dice.
+* **Deleted parties** are hidden from everyone and kept for one day so the host can restore them, then removed.
+* **Request deletion by email**: write to [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca) and we will delete your
+  personal data, and ask our service providers to do the same, within 30 days.
+* We keep data only as long as needed for the purposes above, or as long as the law requires.
 
-Examples of Cookies we use:
+## Your Rights
 
-- **Session Cookies**. We use Session Cookies to operate our Service.
-- **Preference Cookies**. We use Preference Cookies to remember your preferences and various settings.
-- **Security Cookies**. We use Security Cookies for security purposes.
+You can ask us to access, correct, export or delete the personal data we hold about you, and to withdraw consent where
+we rely on it. You can change your name and email on your profile page. For anything else, contact
+[info@uglyunicorn.ca](mailto:info@uglyunicorn.ca). If you are unhappy with our response, you may complain to your
+privacy regulator, such as the Office of the Privacy Commissioner of Canada.
 
-## Use of Data
+## Security
 
-**Anonymous Ded Morozes** uses the collected data for various purposes:
-
-- To provide and maintain the Service
-- To notify you about changes to our Service
-- To allow you to participate in interactive features of our Service when you choose to do so
-- To provide customer care and support
-- To provide analysis or valuable information so that we can improve the Service
-- To monitor the usage of the Service
-- To detect, prevent and address technical issues
-
-## Transfer Of Data
-
-Your information, including Personal Data, may be transferred to — and maintained on — computers located outside of
-your state, province, country or other governmental jurisdiction where the data protection laws may differ than those
-from your jurisdiction.
-
-If you are located outside Canada and choose to provide information to us, please note that we transfer the data,
-including Personal Data, to Canada and process it there.
-
-Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that
-transfer.
-
-**Anonymous Ded Morozes** will take all steps reasonably necessary to ensure that your data is treated securely and in
-accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a
-country unless there are adequate controls in place including the security of your data and other personal information.
-
-## The Right to Delete Personal Data
-
-You have the right to request the deletion of Your Personal Data. You can send a free-form request to
-info@uglyunicorn.ca. Once We receive and confirm Your request, We will delete (and direct Our Service Providers to
-delete) Your personal information from our records. This may take up to 30 days upon we receive the request.
-
-## Disclosure Of Data
-
-### Legal Requirements
-
-**Anonymous Ded Morozes** may disclose your Personal Data in the good faith belief that such action is necessary to:
-
-- To comply with a legal obligation
-- To protect and defend the rights or property of **Anonymous Ded Morozes**
-- To prevent or investigate possible wrongdoing in connection with the Service
-- To protect the personal safety of users of the Service or the public
-- To protect against legal liability
-
-## Security Of Data
-
-The security of your data is important to us, but remember that no method of transmission over the Internet, or method
-of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal
-Data, we cannot guarantee its absolute security.
-
-## Service Providers
-
-We may employ third party companies and individuals to facilitate our Service ("Service Providers"), to provide the
-Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.
-
-These third parties have access to your Personal Data only to perform these tasks on our behalf and are obligated not
-to disclose or use it for any other purpose.
-
-## Links To Other Sites
-
-Our Service may contain links to other sites that are not operated by us. If you click on a third party link, you will
-be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit.
-
-We have no control over and assume no responsibility for the content, privacy policies or practices of any third party
-sites or services.
+We use commercially reasonable measures to protect your data, but no method of transmission or storage is 100% secure,
+so we cannot guarantee absolute security.
 
 ## Children's Privacy
 
-Our Service does not address anyone under the age of 18 ("Children").
+The Service is not intended for anyone under 18, and we do not knowingly collect personal data from children. If you
+believe a child has given us personal data, please contact us and we will remove it.
 
-We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or
-guardian and you are aware that your Children has provided us with Personal Data, please contact us. If we become aware
-that we have collected Personal Data from children without verification of parental consent, we take steps to remove
-that information from our servers.
+## Links To Other Sites
 
-## Changes To This Privacy Policy
+The Service may link to sites we do not operate. We have no control over their content or privacy practices and advise
+you to review their policies.
 
-We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy
-on this page.
+## Changes To This Policy
 
-We will let you know via email and/or a prominent notice on our Service, prior to the change becoming effective and
-update the "effective date" at the top of this Privacy Policy.
-
-You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are
-effective when they are posted on this page.
+We may update this policy from time to time. We will post the new version here and update the effective date. For
+material changes we will also notify you by email or with a notice on the Service before they take effect.
 
 ## Contact Us
 
-If you have any questions about this Privacy Policy, please contact us:
-
-- By email: info@uglyunicorn.ca
+Privacy questions or requests: [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca).

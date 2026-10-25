@@ -2,6 +2,7 @@
 layout: src/layouts/KnowledgePageLayout.astro
 title: "How Anonymous Ded Morozes work?"
 image: "/how.png"
+description: "Six easy steps from the first magic link to the last mandarin. Host a party, roll the dice, keep it secret."
 ---
 
 # How Anonymous Ded Morozes work?
