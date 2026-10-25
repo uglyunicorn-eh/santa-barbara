@@ -33,6 +33,7 @@ const HISTORY_QUERY = gql`
         isProtected
         createdAt
         rolledAt
+        deletedAt
       }
       hasMore
       endCursor
@@ -407,14 +408,16 @@ const formatDate = (iso?: string | null) => {
 
 /**
  * One party: whether you host it or joined it, its code, when it started and when the dice were rolled (parties
- * rolled before that was recorded have no roll date), and its status.
+ * rolled before that was recorded have no roll date), and its status: open, rolled, or deleted by its host.
  */
-const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected, createdAt, rolledAt } }: { party: Party }) => {
+const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected, createdAt, rolledAt, deletedAt } }: { party: Party }) => {
   const started = formatDate(createdAt);
   const rolled = formatDate(rolledAt);
+  const state = deletedAt ? "is-deleted" : isClosed ? "is-closed" : "is-open";
+  const status = deletedAt ? "Deleted" : isClosed ? "Dice rolled" : "Open";
 
   return (
-    <li className={isClosed ? "is-closed" : "is-open"}>
+    <li className={state}>
       <Link to={`/p/${code}/`}>
         <span className={`history-icon ${isHost ? "is-host" : "is-guest"}`}>
           {isHost ? <Star size={18} /> : <Gift size={18} />}
@@ -425,7 +428,7 @@ const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected, creat
           <span className="history-meta">
             {isHost ? "You host" : "You joined"} &middot; <code>{code}</code>
             {isProtected && <> &middot; <Lock size={12} /> secret phrase</>}
-            <span className="history-meta-status"> &middot; {isClosed ? "Dice rolled" : "Open"}</span>
+            <span className="history-meta-status"> &middot; {status}</span>
           </span>
           {started && (
             <span className="history-dates">
@@ -435,8 +438,8 @@ const HistoryItem = ({ party: { code, name, isClosed, isHost, isProtected, creat
           )}
         </span>
 
-        <span className={`history-status ${isClosed ? "is-closed" : "is-open"}`}>
-          {isClosed ? "Dice rolled" : "Open"}
+        <span className={`history-status ${state}`}>
+          {status}
         </span>
 
         <ChevronRight size={18} className="history-chevron" />

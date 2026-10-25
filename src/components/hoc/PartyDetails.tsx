@@ -8,6 +8,7 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 import GuestContent from "src/components/hoc/GuestContent";
 import HostContent from "src/components/hoc/HostContent";
+import { DeletedPartyContent } from "src/components/hoc/DeletedPartyContent";
 import { PartyIsClosedContent } from "src/components/hoc/PartyIsClosedContent";
 import { useCurrentUser } from "src/components/hooks";
 import type { Party } from "src/types";
@@ -33,7 +34,9 @@ export const PartyDetails = ({ party }: Props) => {
                 <Content className="party-details-content">
                   <h1 className="has-text-centered is-visible-mobile">{party.name}</h1>
                   {profile && (
-                    party.isClosed
+                    party.deletedAt
+                      ? <DeletedPartyContent {...{ party, user: profile }} />
+                      : party.isClosed
                       ? <PartyIsClosedContent {...{ party, user: profile }} />
                       : party.isHost
                         ? <HostContent {...{ party, user: profile }} />

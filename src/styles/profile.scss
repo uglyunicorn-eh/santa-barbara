@@ -147,6 +147,12 @@
     .is-closed .history-name {
       color: #7a7a7a;
     }
+
+    // Deleted parties stay in the host's history until they can no longer be restored.
+    .is-deleted .history-name {
+      color: #9a9a9a;
+      text-decoration: line-through;
+    }
   }
 
   .history-icon {
@@ -225,6 +231,11 @@
     &.is-closed {
       color: #7a7a7a;
       background: #f2f2f2;
+    }
+
+    &.is-deleted {
+      color: #b02a2d;
+      background: #fdeaea;
     }
 
     @include mobile {

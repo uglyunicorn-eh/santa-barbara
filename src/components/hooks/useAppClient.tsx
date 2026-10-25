@@ -30,6 +30,10 @@ export type ClosePartyInput = {
   party: string;
 }
 
+export type DeletePartyInput = {
+  party: string;
+}
+
 export type UpdateNameInput = {
   name: string;
 }
@@ -109,6 +113,8 @@ const PARTY_QUERY = gql`
       isHost
       isProtected
       isClosed
+      deletedAt
+      restorableUntil
       participantCount
       participants
       target {
@@ -206,6 +212,38 @@ export const useAppClient = () => {
     `
   );
 
+  const [deletePartyApi, { error: deletePartyError }] = useMutation<any, { input: DeletePartyInput }>(
+    gql`
+      mutation DeleteParty($input: DeletePartyInput!) {
+        parties {
+          deleteParty(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
+  const [restorePartyApi, { error: restorePartyError }] = useMutation<any, { input: DeletePartyInput }>(
+    gql`
+      mutation RestoreParty($input: RestorePartyInput!) {
+        parties {
+          restoreParty(input: $input) {
+            status
+            userErrors {
+              fieldName
+              messages
+            }
+          }
+        }
+      }
+    `
+  );
+
   const [enterRequestApi, { error: enterRequestError }] = useMutation<any, { input: EnterRequestInput }>(
     gql`
       mutation EnterRequest($input: EnterRequestInput!) {
@@ -247,6 +285,8 @@ export const useAppClient = () => {
   React.useEffect(() => { joinPartyError?.message && error(joinPartyError?.message); }, [joinPartyError?.message]);
   React.useEffect(() => { leavePartyError?.message && error(leavePartyError?.message); }, [leavePartyError?.message]);
   React.useEffect(() => { closePartyError?.message && error(closePartyError?.message); }, [closePartyError?.message]);
+  React.useEffect(() => { deletePartyError?.message && error(deletePartyError?.message); }, [deletePartyError?.message]);
+  React.useEffect(() => { restorePartyError?.message && error(restorePartyError?.message); }, [restorePartyError?.message]);
   React.useEffect(() => { enterRequestError?.message && error(enterRequestError?.message); }, [enterRequestError?.message]);
   React.useEffect(() => { updateNameError?.message && error(updateNameError?.message); }, [updateNameError?.message]);
 
@@ -349,6 +389,39 @@ export const useAppClient = () => {
       leavePartyApi,
       error,
     ],
+  );
+
+  /** Runs deleteParty or restoreParty; shows the API's message and returns false when it refuses. */
+  const runPartyAction = React.useCallback(
+    async (api: typeof deletePartyApi, field: 'deleteParty' | 'restoreParty', input: DeletePartyInput): Promise<boolean> => {
+      try {
+        const { data } = await api({ variables: { input } });
+        const result = data?.parties[field];
+        if (result?.status !== "ok") {
+          error(result?.userErrors?.[0]?.messages[0] ?? "Something went wrong. Please try again in a bit.");
+          return false;
+        }
+      } catch {
+        return false; // shown by the request-error effect above
+      }
+      // The party list shows deleted parties differently, and guests' lists change too.
+      client.refetchQueries({ include: "active" });
+      return true;
+    },
+    [
+      client,
+      error,
+    ],
+  );
+
+  const deleteParty = React.useCallback(
+    (input: DeletePartyInput) => runPartyAction(deletePartyApi, 'deleteParty', input),
+    [deletePartyApi, runPartyAction],
+  );
+
+  const restoreParty = React.useCallback(
+    (input: DeletePartyInput) => runPartyAction(restorePartyApi, 'restoreParty', input),
+    [restorePartyApi, runPartyAction],
   );
 
   const leaveParty = React.useCallback(
@@ -462,6 +535,8 @@ export const useAppClient = () => {
       createParty,
       joinParty,
       closeParty,
+      deleteParty,
+      restoreParty,
       leaveParty,
       updateName,
       requestAccountDeletion,
@@ -476,6 +551,8 @@ export const useAppClient = () => {
       createParty,
       joinParty,
       closeParty,
+      deleteParty,
+      restoreParty,
       leaveParty,
       updateName,
       requestAccountDeletion,

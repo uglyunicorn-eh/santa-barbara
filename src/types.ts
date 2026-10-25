@@ -19,6 +19,10 @@ export type Party = {
   createdAt?: string;
   /** ISO 8601; when the dice were rolled. Unknown for parties rolled before it was recorded. */
   rolledAt?: string | null;
+  /** Set when the host deleted the party (ISO 8601). Only the host still sees it. */
+  deletedAt?: string | null;
+  /** Until when the host can restore it (ISO 8601). */
+  restorableUntil?: string | null;
   participantCount?: number;
   participants?: string[];
   target?: User;
