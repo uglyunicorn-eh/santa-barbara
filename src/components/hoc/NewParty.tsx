@@ -6,7 +6,7 @@ import type { Party } from "src/types";
 import { DialogBox } from "src/components/DialogBox";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { FormField, Input, Submit } from "src/components/forms";
-import { useAppClient, useCurrentUser } from "src/components/hooks";
+import { useAppClient } from "src/components/hooks";
 import { useNavigate } from "react-router-dom";
 
 type FormValues = {
@@ -31,77 +31,7 @@ const initialValues = {
   password: "",
 };
 
-const signInValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .label("Email")
-    .required()
-    .ensure()
-    .email(),
-});
-
-/** Creating a party needs a session: signed-out visitors get a magic link first, then come back here. */
-const SignInFirst = () => {
-  const { enterRequest } = useAppClient();
-  const [sentTo, setSentTo] = React.useState<string>();
-  const [failed, setFailed] = React.useState(false);
-
-  const onSubmit = React.useCallback(
-    async ({ email }: { email: string }) => {
-      if (await enterRequest({ email })) {
-        setSentTo(email);
-      } else {
-        setFailed(true);
-      }
-    },
-    [enterRequest],
-  );
-
-  return (
-    <DialogBox
-      className="party-box"
-      title="Let's start a new party!"
-      action={!sentTo && <Submit>&#x2709;&#xFE0F; Send me a magic link</Submit>}
-      noDismiss={sentTo !== undefined}
-      dismissLocation="/"
-      form={{
-        validationSchema: signInValidationSchema,
-        initialValues: { email: "" },
-        onSubmit,
-      }}
-      cardStyle={{
-        width: 600,
-      }}
-    >
-      <Content>
-        {sentTo
-          ? (
-            <>
-              <p>Our elves have sent a magic link to {sentTo}. Follow it to sign in, then start your party from the home page.</p>
-              <p>Didn't get anything? Check your spam folder, or refresh this page and try again.</p>
-            </>
-          )
-          : (
-            <>
-              <p>First, let's sign you in. We'll email you a magic link, no password needed.</p>
-              <FormField
-                name="email"
-                label="Email"
-                children={<Input autofocus placeholder="Email address for a magic link" />}
-                help={failed ? "We couldn't send the link just now. Please try again in a bit." : undefined}
-              />
-            </>
-          )}
-      </Content>
-    </DialogBox>
-  );
-};
-
 export const NewParty = () => {
-  const { profile } = useCurrentUser();
-  return profile ? <NewPartyForm /> : <SignInFirst />;
-};
-
-const NewPartyForm = () => {
   const { createParty } = useAppClient();
   const navigate = useNavigate();
   const [party, setParty] = React.useState<Party | undefined>(undefined);
