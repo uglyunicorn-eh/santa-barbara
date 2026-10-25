@@ -5,7 +5,6 @@ import { Confetti } from "src/components/Confetti";
 import { GnomeSays } from "src/components/GnomeSays";
 import { SecretText } from "src/components/SecretText";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { DeletePartyLink } from "src/components/hoc/DeletePartyLink";
 import { Footer } from "src/components/hoc/Footer";
 import GuestContent from "src/components/hoc/GuestContent";
 import HostContent from "src/components/hoc/HostContent";
@@ -83,7 +82,7 @@ export const PartyDetails = ({ party }: Props) => {
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          <Footer start={profile && party.isHost && !party.isClosed && !party.deletedAt ? <DeletePartyLink /> : null}>
+          <Footer>
             <UnsplashCredit nickname="joannakosinska" name="Joanna Kosinska" />
           </Footer>
         </Hero.Footer>

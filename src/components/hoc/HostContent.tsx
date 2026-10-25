@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from "src/components/bulma";
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { DeletePartyLink } from 'src/components/hoc/DeletePartyLink';
 import { ConfirmPartyClose } from 'src/components/hoc/ConfirmPartyClose';
 
 import type { Party, User } from 'src/types';
@@ -47,6 +48,8 @@ const HostContent = ({ party, user }: Props) => {
         <>
           <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
             <Button color="primary" onClick={onConfirm}>&#x1F643; OK, Let's roll the dice!</Button>
+            {' '}
+            <DeletePartyLink />
           </p>
 
           <Routes>
