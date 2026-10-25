@@ -1,15 +1,19 @@
 type Props = {
-  name?: string;
-  nickname: string;
+  /** Unsplash photo ID, the last part of the photo page URL. */
+  id: string;
+  name: string;
+  username: string;
 };
 
-export const UnsplashCredit = ({ name, nickname }: Props) => (
+// Unsplash asks for links back to it to name the referring site.
+const referral = "utm_source=gnomik.me&utm_medium=referral";
+
+/** Credit line in the format Unsplash's attribution guideline recommends. */
+export const UnsplashCredit = ({ id, name, username }: Props) => (
   <div className={"unsplash-credit"}>
     <>Photo by </>
-    <a href={`https://unsplash.com/@${nickname}?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`} target="_blank" rel="noopener noreferrer">
-      {name || nickname}
-    </a>
+    <a href={`https://unsplash.com/@${username}?${referral}`} target="_blank" rel="noopener noreferrer">{name}</a>
     <> on </>
-    <a href={`https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`} target="_blank" rel="noopener noreferrer">Unsplash</a>
+    <a href={`https://unsplash.com/photos/${id}?${referral}`} target="_blank" rel="noopener noreferrer">Unsplash</a>
   </div>
-)
+);
