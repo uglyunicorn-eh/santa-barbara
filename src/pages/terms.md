@@ -2,6 +2,7 @@
 layout: src/layouts/KnowledgePageLayout.astro
 title: "Terms and Conditions"
 image: "/terms.png"
+description: "The rules of the game: how accounts, parties and deleting things work on Anonymous Ded Morozes."
 ---
 
 # Terms and Conditions

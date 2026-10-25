@@ -15,6 +15,7 @@ interface Props {
   pageClassNames?: string[];
   frontmatter?: {
     title: string;
+    description?: string;
     image?: string;
   };
 }
@@ -29,6 +30,7 @@ const {
 
 <BaseLayout
   title={title ?? frontmatter?.title}
+  description={frontmatter?.description}
   pageClassNames={["knowledge-page"].concat(...(pageClassNames || []))}
 >
   <Container>
