@@ -26,12 +26,13 @@ const LONG_NAME = "Maximiliana Wilhelmina Bartholomew-Featherstonehaugh Maximili
 const LONG_EMAIL = `${"santa.helper.".repeat(10).slice(0, 115)}@example.com`.slice(0, 128);
 
 const COLOR_GROUPS: { name: string; tokens: [string, string][] }[] = [
-  { name: "Red (primary)", tokens: [["red-50", "#fdf3f3"], ["red-100", "#fbe3e3"], ["red-200", "#f6c6c7"], ["red-500", "#dc3a40"], ["red-600", "#c62a30"], ["red-700", "#a8222a"], ["red-800", "#8a1f25"], ["red-900", "#741a1f"]] },
+  { name: "Turquoise (primary)", tokens: [["teal-50", "#eefcfa"], ["teal-300", "#93ecde"], ["teal-500", "#00d1b2"], ["teal-600", "#00b89c"], ["teal-700", "#007a68"], ["teal-900", "#04342c"]] },
+  { name: "Red (brand, danger)", tokens: [["red-50", "#fdf3f3"], ["red-100", "#fbe3e3"], ["red-200", "#f6c6c7"], ["red-500", "#dc3a40"], ["red-600", "#c62a30"], ["red-700", "#a8222a"], ["red-800", "#8a1f25"], ["red-900", "#741a1f"]] },
   { name: "Zinc (neutrals)", tokens: [["zinc-50", "#fafafa"], ["zinc-100", "#f4f4f5"], ["zinc-200", "#e4e4e7"], ["zinc-300", "#d4d4d8"], ["zinc-400", "#a1a1aa"], ["zinc-500", "#71717a"], ["zinc-600", "#52525b"], ["zinc-700", "#3f3f46"], ["zinc-900", "#18181b"], ["night", "#111217"]] },
   { name: "Accents and success", tokens: [["cream", "#f7f7c6"], ["cream-50", "#fff6d6"], ["gold", "#c99700"], ["green-50", "#effaf3"], ["green-200", "#acdcbf"], ["green-700", "#257942"]] },
 ];
 const ROLES: [string, string][] = [
-  ["primary", "bg-primary"], ["primary-hover", "bg-primary-hover"], ["destructive", "bg-destructive"],
+  ["brand", "bg-brand"], ["primary", "bg-primary"], ["primary-hover", "bg-primary-hover"], ["destructive", "bg-destructive"],
   ["destructive-strong", "bg-destructive-strong"], ["link", "bg-link"], ["success", "bg-success"],
   ["border", "bg-border"], ["input", "bg-input"], ["ring", "bg-ring"], ["muted-foreground", "bg-muted-foreground"],
 ];
@@ -178,7 +179,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                             ? <a href="#" class={cn(buttonVariants({ variant: "link", surface: toneOf(surface.id) }), forced(v.id, surface.id, state), state === "disabled" && "pointer-events-none opacity-50")} aria-disabled={state === "disabled" ? "true" : undefined}>Check out</a>
                             : (
                               <Button variant={v.id} surface={toneOf(surface.id)} className={forced(v.id, surface.id, state)} disabled={state === "disabled"} loading={state === "loading"}>
-                                {v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "💥 Delete this party" : "Delete my account"}
+                                {v.id === "brand" ? "Send me a magic link!" : v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "💥 Delete this party" : "Delete my account"}
                               </Button>
                             )}
                         </td>
@@ -200,7 +201,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
               <Button variant="secondary" size="sm" surface={toneOf(surface.id)}>Show more parties</Button>
               <Button variant="ghost" size="sm" surface={toneOf(surface.id)}>Cancel</Button>
               {surface.id !== "paper" && (
-                <Button variant="primary" size="lg" surface={toneOf(surface.id)} pill>Enter with your email address</Button>
+                <Button variant="brand" size="lg" surface={toneOf(surface.id)} pill>Enter with your email address</Button>
               )}
             </div>
             <div class={`mt-2 text-sm ${muted(surface.id)} ${onPhoto(surface.id)}`}>

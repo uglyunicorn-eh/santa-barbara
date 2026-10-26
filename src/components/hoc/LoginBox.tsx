@@ -75,7 +75,7 @@ const EnterActions = () => {
   );
 
   return (
-    <Button variant="primary" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
+    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
       Enter with your email address
     </Button>
   );
@@ -146,7 +146,7 @@ const EnterForm = () => {
             <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
 
             <div className="actions">
-              <Submit size="lg" surface="dark" pill>Send me a magic link!</Submit>
+              <Submit variant="brand" size="lg" surface="dark" pill>Send me a magic link!</Submit>
             </div>
           </Form>
         )

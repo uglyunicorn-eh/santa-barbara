@@ -447,8 +447,8 @@ its own, and each is built to the Phase 2 spec and shown on the UI kit page firs
   types and reuse `ButtonProps`. `Submit` keeps reading `isSubmitting` from Formik until 4.2.
 
 **Done** (`ui/button`). `src/components/ui/button.tsx` is shadcn's Base UI button with the
-spec's variants: `primary`, `secondary`, `ghost`, `ghost-destructive`, `destructive`,
-`link`; sizes `sm` / `md` / `lg`; `surface` (`light` | `dark`, for night and glass);
+spec's variants: `brand`, `primary`, `secondary`, `ghost`, `ghost-destructive`,
+`destructive`, `link`; sizes `sm` / `md` / `lg`; `surface` (`light` | `dark`, for night and glass);
 `pill`, `fullWidth`, `loading`. Every `<Button>`, `Submit` and `a.button` uses it, and
 `bulma.tsx` no longer exports `Button`. What came up:
 - `npx shadcn add` re-installs the `cn` package and imports it; uninstall it and point
@@ -463,10 +463,16 @@ spec's variants: `primary`, `secondary`, `ghost`, `ghost-destructive`, `destruct
   light) and every dialog.
 - One rule for shape and size, so the same kind of button looks the same everywhere
   (also in the comment at the top of `button.tsx`): on hero screens (sign-in, join, the
-  sign-in link page, account links, party not found, 404) the main action is `primary`
+  sign-in link page, account links, party not found, 404) the main action is `brand`
   `lg` `pill` and going home or back is `secondary` `pill` (md); on content screens
-  (party pages, dialogs, the profile, knowledge pages) no pill and `md`, with `sm` only in
-  the profile's setting rows.
+  (party pages, dialogs, the profile, knowledge pages) the main action is `primary`, no
+  pill and `md`, with `sm` only in the profile's setting rows.
+- Two main-action colours, decided after seeing the red everywhere: `brand` is the red
+  (`#c62a30`) for hero screens; `primary` is the app's old turquoise (`#00d1b2`) with a
+  dark teal label (`#04342c`, 7:1) for content screens, so "go" and "delete" never share
+  a colour there. Links and focus rings on light backgrounds are teal-700 (`#007a68`,
+  5.3:1), and Bulma's `$primary` / `$link` follow. Red on a content screen now means
+  danger only.
 - SCSS that styled `.button` (sizes, colours, `.login-button`) no longer applies; the
   dialog footer gets its own `gap` (Bulma spaced footer buttons with a margin on `.button`).
 - The UI kit renders the real Button now.

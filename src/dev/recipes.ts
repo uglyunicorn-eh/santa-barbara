@@ -19,11 +19,12 @@ const dark = (surface: Surface) => surface !== "paper";
 // ---------------------------------------------------------------------------------------------------------------
 // Buttons
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "ghost-destructive" | "destructive" | "link";
+export type ButtonVariant = "brand" | "primary" | "secondary" | "ghost" | "ghost-destructive" | "destructive" | "link";
 export type ButtonSize = "sm" | "md" | "lg";
 
 export const BUTTON_VARIANTS: { id: ButtonVariant; name: string; use: string }[] = [
-  { id: "primary", name: "primary", use: "The one main action on a screen" },
+  { id: "brand", name: "brand", use: "A hero screen's main action" },
+  { id: "primary", name: "primary", use: "A content screen's main action" },
   { id: "secondary", name: "secondary", use: "Dismiss, cancel, show more" },
   { id: "ghost", name: "ghost", use: "Quiet actions in rows: Change, Cancel" },
   { id: "ghost-destructive", name: "ghost + destructive", use: "Delete actions, until the final confirm" },
@@ -39,12 +40,13 @@ export const toneOf = (surface: Surface) => (surface === "paper" ? "light" : "da
  * the Button's `hover:` classes) or the focus ring (its `focus-visible:` ring).
  */
 const hovered: Record<ButtonVariant, Record<"light" | "dark", string>> = {
+  brand: { light: "bg-brand-hover", dark: "bg-brand-hover" },
   primary: { light: "bg-primary-hover", dark: "bg-primary-hover" },
   secondary: { light: "bg-zinc-50", dark: "bg-white/10" },
   ghost: { light: "bg-zinc-100 text-zinc-900", dark: "bg-white/10" },
   "ghost-destructive": { light: "bg-red-50", dark: "bg-white/10" },
   destructive: { light: "bg-destructive-strong-hover", dark: "bg-destructive-strong-hover" },
-  link: { light: "text-red-800", dark: "text-white" },
+  link: { light: "text-teal-900", dark: "text-white" },
 };
 
 /** The focus ring: 2px in the ring colour with a 2px gap in the surface colour. */

@@ -186,7 +186,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
           Enter your email address above and we'll send you a magic link to sign in.
         </p>
         <div className="actions">
-          <Submit size="lg" surface="dark" pill>
+          <Submit variant="brand" size="lg" surface="dark" pill>
             &#x1F973;&nbsp;Send me a magic link!
           </Submit>
         </div>
@@ -200,7 +200,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
         To join the party, please sign in with your email address. We promise not to send you any marketing materials or share your personal data with third parties.
       </p >
       <div className="actions">
-        <Button variant="primary" size="lg" surface="dark" pill loading={busy} onClick={onActionClick}>
+        <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onActionClick}>
           &#x1F973;&nbsp;Sign in to join the party!
         </Button>
       </div >
@@ -278,7 +278,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
       }
 
       <div className="actions">
-        <Submit size="lg" surface="dark" pill loading={busy}>
+        <Submit variant="brand" size="lg" surface="dark" pill loading={busy}>
           &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
         </Submit>
       </div>

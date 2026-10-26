@@ -11,9 +11,10 @@ import { cn } from "@/lib/utils";
 //
 // Which shape and size where, so the same kind of button looks the same everywhere:
 // - Hero screens (sign-in, join, the sign-in link page, the account links, party not found, 404): the main action is
-//   `primary` `lg` `pill`; going home or back is `secondary` `pill` (md).
-// - Content screens (party pages, dialogs, the profile, knowledge pages): no pill, `md`; `sm` only in the profile's
-//   setting rows. Delete actions are `ghost-destructive` until the final confirm, which is `destructive`.
+//   `brand` (red) `lg` `pill`; going home or back is `secondary` `pill` (md).
+// - Content screens (party pages, dialogs, the profile, knowledge pages): the main action is `primary` (turquoise);
+//   no pill, `md`; `sm` only in the profile's setting rows. Delete actions are `ghost-destructive` until the final
+//   confirm, which is `destructive`. Red on a content screen means danger.
 
 const buttonVariants = cva(
   [
@@ -28,8 +29,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /** The one main action on a screen. */
+        /** The one main action on a content screen: turquoise with a dark label. */
         primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        /** The main action on a hero screen: the brand red. */
+        brand: "bg-brand text-brand-foreground hover:bg-brand-hover",
         /** Dismiss, cancel, show more. */
         secondary: "",
         /** Quiet actions in rows: Change, Cancel. */
@@ -62,9 +65,9 @@ const buttonVariants = cva(
       { variant: "ghost", surface: "dark", class: "text-white hover:bg-white/10" },
       { variant: "ghost-destructive", surface: "light", class: "text-destructive hover:bg-red-50" },
       { variant: "ghost-destructive", surface: "dark", class: "text-red-200 hover:bg-white/10" },
-      { variant: ["primary", "destructive"], surface: "dark", class: "shadow-sm" },
+      { variant: ["primary", "brand", "destructive"], surface: "dark", class: "shadow-sm" },
       { variant: "link", class: "min-h-0 p-0" },
-      { variant: "link", surface: "light", class: "text-link hover:text-red-800" },
+      { variant: "link", surface: "light", class: "text-link hover:text-teal-900" },
       { variant: "link", surface: "dark", class: "text-zinc-100 hover:text-white" },
     ],
     defaultVariants: {

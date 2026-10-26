@@ -147,7 +147,7 @@ export const EnterContainer = () => {
   if (tokenPayloadTrusted === undefined || tokenPayloadTrusted) {
     return (
       <LoginHero>
-        <Button variant="primary" size="lg" surface="dark" pill loading>
+        <Button variant="brand" size="lg" surface="dark" pill loading>
           Enter with your email address
         </Button>
       </LoginHero>
@@ -177,7 +177,7 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button variant="primary" size="lg" pill onClick={resend} loading={resending} disabled={sent}>
+                      <Button variant="brand" size="lg" pill onClick={resend} loading={resending} disabled={sent}>
                         &mdash; Send me that magic again, por favor!
                       </Button>
                     )
