@@ -52,6 +52,30 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
 
+    <!-- How this works, Terms and Privacy open like a sheet: they slide up over the page you came from, and slide back
+         down when you leave them (src/styles/base.css). Between two of them, or anywhere else, pages just fade. -->
+    <script is:inline>
+      window.addEventListener("pagereveal", (event) => {
+        const transition = event.viewTransition;
+        if (!transition) {
+          return;
+        }
+        const isSheet = path => /^\/(how-it-works|privacy|terms)\/?$/.test(path);
+        let fromPath = "";
+        try {
+          const from = new URL(window.navigation?.activation?.from?.url || document.referrer);
+          fromPath = from.origin === location.origin ? from.pathname : "";
+        } catch {}
+        const toSheet = isSheet(location.pathname);
+        const fromSheet = isSheet(fromPath);
+        if (toSheet && !fromSheet) {
+          transition.types.add("sheet-up");
+        } else if (fromSheet && !toSheet) {
+          transition.types.add("sheet-down");
+        }
+      });
+    </script>
+
     <slot name="head" />
   </head>
   <body>

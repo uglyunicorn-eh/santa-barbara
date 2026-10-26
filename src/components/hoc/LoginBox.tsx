@@ -2,7 +2,7 @@ import React from "react";
 
 import { newKey } from "@/api/client";
 import { Container, Hero } from "@/components/layout";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
@@ -158,12 +158,11 @@ const EnterForm = () => {
 
             <div className="actions flex flex-col items-center gap-3">
               <Submit variant="brand" size="lg" surface="dark" pill>Send me a magic link!</Submit>
-              <a href="/how-it-works/" target="_blank" className={buttonVariants({ variant: "ghost", surface: "dark", pill: true })}>How this works?</a>
             </div>
 
             <p className="legal">
               By entering, you confirm you're 18 or older and agree to
-              our <a href="/terms/" target="_blank">Terms</a> and <a href="/privacy/" target="_blank">Privacy&nbsp;Policy</a>.
+              our <a href="/terms/">Terms</a> and <a href="/privacy/">Privacy&nbsp;Policy</a>.
             </p>
           </Form>
         )

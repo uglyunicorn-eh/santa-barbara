@@ -45,6 +45,7 @@ const {
               href="/"
               class={buttonVariants({ variant: "secondary", fullWidth: true })}
               data-astro-prefetch
+              data-back
             >
               <ArrowLeft size={18} aria-hidden="true" />
               Jeez, get me out of here
@@ -63,4 +64,19 @@ const {
       <UnsplashCredit id="kFbSKhukfIQ" name="Erin McKenna" username="epw615" />
     </AstroFooter>
   </Container>
+
+  <!-- "Get me out of here" goes back to the page you came from on this site; arriving from anywhere else (a search, a
+       link in a new tab), it goes home as its href says. -->
+  <script is:inline>
+    document.querySelector("a[data-back]")?.addEventListener("click", event => {
+      let cameFromHere = false;
+      try {
+        cameFromHere = new URL(document.referrer).origin === location.origin;
+      } catch {}
+      if (cameFromHere && history.length > 1) {
+        event.preventDefault();
+        history.back();
+      }
+    });
+  </script>
 </BaseLayout>
