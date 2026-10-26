@@ -2,7 +2,8 @@ import React from "react";
 import { Footer as BulmaFooter } from "src/components/bulma";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 
-import { COMPACT_KEYS, moreItemClass, morePopupClass, moreTriggerClass } from "src/components/hoc/footerMenu";
+import { menuItemClass, menuPopupClass } from "@/components/ui/menu";
+import { COMPACT_KEYS, moreTriggerClass } from "src/components/hoc/footerMenu";
 
 type Props = {
   children?: React.ReactNode;
@@ -44,9 +45,9 @@ export const AstroFooter = ({ children }: Props) => (
         <summary className={`${moreTriggerClass} list-none [&::-webkit-details-marker]:hidden`} aria-label="More links" title="More links">
           <MenuIcon size={18} aria-hidden="true" />
         </summary>
-        <div className={`${morePopupClass} absolute right-0 bottom-full z-10 mb-2`}>
+        <div className={`${menuPopupClass} absolute right-0 bottom-full z-10 mb-2`}>
           {items.filter(({ key }) => !COMPACT_KEYS.includes(key)).map(({ key, url, label, menuLabel, ...rest }) => (
-            <a key={key} href={url} className={moreItemClass} {...rest}>{menuLabel ?? label}</a>
+            <a key={key} href={url} className={menuItemClass} {...rest}>{menuLabel ?? label}</a>
           ))}
         </div>
       </details>

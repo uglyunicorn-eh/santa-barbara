@@ -45,7 +45,8 @@ export const PartyDetails = ({ party }: Props) => {
                 </Content>
               </Columns.Column>
               <Columns.Column desktop={{ size: 5 }} textAlign={"center"}>
-                <GnomeSays>
+                {/* A deleted party has no name to tell: the gnome stays quiet. */}
+                <GnomeSays silent={!!party.deletedAt}>
                   <Content>
                     {party.isClosed && party.target
                       ? (

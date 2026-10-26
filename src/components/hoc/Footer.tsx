@@ -1,11 +1,11 @@
 import React from "react";
 import { Footer as BulmaFooter } from "src/components/bulma";
 import { Menu } from "@base-ui/react/menu";
-import { cn } from "@/lib/utils";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 import { Link } from "react-router-dom";
 
-import { COMPACT_KEYS, moreItemClass, morePopupClass, moreTriggerClass } from "src/components/hoc/footerMenu";
+import { menuItemClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
+import { COMPACT_KEYS, moreTriggerClass } from "src/components/hoc/footerMenu";
 import { useCurrentUser } from "src/components/hooks";
 
 type Props = {
@@ -98,19 +98,19 @@ const FooterLinks = ({ items }: { items: MenuItem[] }) => (
   </>
 );
 
-/** The footer's other links in a small menu that opens upwards; above the garage door (z-index 9999). */
+/** The footer's other links in a small menu that opens upwards. */
 const MoreMenu = ({ items }: { items: MenuItem[] }) => (
   <Menu.Root>
     <Menu.Trigger className={moreTriggerClass} aria-label="More links" title="More links">
       <MenuIcon size={18} aria-hidden="true" />
     </Menu.Trigger>
     <Menu.Portal>
-      <Menu.Positioner side="top" align="center" sideOffset={8} collisionPadding={16} className="z-10000">
-        <Menu.Popup className={cn(morePopupClass, "origin-(--transform-origin) transition-[opacity,scale] duration-150 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0")}>
+      <Menu.Positioner side="top" align="center" sideOffset={8} collisionPadding={16} className={menuPositionerClass}>
+        <Menu.Popup className={menuPopupClass}>
           {items.map(({ key, url, label, menuLabel, asLink, onClick, title: _title, ...rest }) => (
             asLink
-              ? <Menu.LinkItem key={key} className={moreItemClass} closeOnClick render={<Link to={url} />}>{menuLabel ?? label}</Menu.LinkItem>
-              : <Menu.LinkItem key={key} className={moreItemClass} closeOnClick href={url} onClick={onClick} {...rest}>{menuLabel ?? label}</Menu.LinkItem>
+              ? <Menu.LinkItem key={key} className={menuItemClass} closeOnClick render={<Link to={url} />}>{menuLabel ?? label}</Menu.LinkItem>
+              : <Menu.LinkItem key={key} className={menuItemClass} closeOnClick href={url} onClick={onClick} {...rest}>{menuLabel ?? label}</Menu.LinkItem>
           ))}
         </Menu.Popup>
       </Menu.Positioner>
