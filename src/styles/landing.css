@@ -457,14 +457,24 @@
     /* Longhands, and the timeline in a rule of its own: the CSS minifier otherwise folds animation-timeline into the
        animation shorthand, which browsers reject, dropping the whole declaration. */
     .landing-backdrop > div {
+      /* Where the animation starts, also while its timeline isn't running yet (the first frame after the app swaps
+         the page in), so the photo never shows at its own size and then jumps to 108%. */
+      transform: scale(1.08);
       animation-name: landing-parallax;
       animation-timing-function: linear;
       animation-fill-mode: both;
     }
 
+    /* The static page (before the app loads) scrolls on the root: the nearest scroller would be <body>, a scroll box
+       that never scrolls, which leaves the photo at its own size until the app swaps in at 108%. In the app the page
+       scrolls inside the garage door, its nearest scroller. */
     .landing-main .landing-backdrop > div {
-      animation-timeline: scroll();
+      animation-timeline: scroll(root);
       animation-range: 0 100vh;
+    }
+
+    .garage-door .landing-main .landing-backdrop > div {
+      animation-timeline: scroll(nearest);
     }
   }
 }
