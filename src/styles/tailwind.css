@@ -1,5 +1,5 @@
 /*
- * Tailwind CSS, beside Bulma until the migration ends (docs/tailwind-migration-plan.md, Phase 3).
+ * Tailwind CSS, beside Bulma until Bulma is gone.
  *
  * Cascade layers, lowest first. Bulma and all of our SCSS live in `bulma`: above Tailwind's reset, so today's pages
  * keep their look, and below the utilities, so a Tailwind class always wins. The same order is declared at the top of
@@ -13,9 +13,9 @@
 @import "tw-animate-css";
 
 /*
- * Where Tailwind looks for class names: the app's code only. Not docs/ (the plan and spec are full of example
- * classes) and not scripts/. And never Tailwind's own `container`: Bulma's <Container> renders class="container",
- * and Tailwind's version (other max-widths) would win over Bulma's. Phase 5 replaces it with our own Container.
+ * Where Tailwind looks for class names: the app's code only. Not docs/ (full of example classes) and not
+ * scripts/. And never Tailwind's own `container`: Bulma's <Container> renders class="container",
+ * and Tailwind's version (other max-widths) would win over Bulma's. Until a Container of our own replaces it.
  */
 @source "../components";
 @source "../layouts";
@@ -23,7 +23,7 @@
 @source not inline("container");
 
 /*
- * Design tokens: docs/design-spec.md. Tailwind's default palette and breakpoints are switched off, so only these
+ * Design tokens: docs/ui-kit.md. Tailwind's default palette and breakpoints are switched off, so only these
  * exist; a class that isn't here (`bg-blue-500`, `md:`) doesn't build. `static`: every token is emitted as a CSS
  * variable even before a class uses it, so plain CSS (artwork styles, the UI kit page) can use them too.
  */

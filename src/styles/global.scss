@@ -4,7 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap");
 
-// Bulma's colours, pointed at docs/design-spec.md, so what Bulma still styles until Phase 5 (text links, the profile
+// Bulma's colours, pointed at the UI kit's (docs/ui-kit.md), so what Bulma still styles until it's replaced (text links, the profile
 // tabs, input focus, form errors) matches the new controls. Must come before Bulma's utilities.
 $primary: #00d1b2; // teal-500, the content screens' primary
 $link: #007a68; // teal-700, the spec's link and focus colour
@@ -18,8 +18,8 @@ $success: #257942; // green-700
   @import "bulma/sass/utilities/_all";
 
   // Tailwind's reset makes media blocks; the pages were laid out with the browser's inline default (which leaves the
-  // baseline gap under an image). Restore it until Phase 6 turns the reset on for real. Bulma rules that set these
-  // on purpose (e.g. `.image img`) are more specific and still win.
+  // baseline gap under an image). Restore it until Bulma is gone and the reset applies for real. Bulma rules that set
+  // these on purpose (e.g. `.image img`) are more specific and still win.
   img, svg, video, canvas, audio, iframe, embed, object {
     display: revert;
     vertical-align: revert;

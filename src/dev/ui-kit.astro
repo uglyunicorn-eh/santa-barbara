@@ -1,5 +1,5 @@
 ---
-// The UI kit: every control from docs/design-spec.md in every state, on the app's three surfaces. Dev only (see the
+// The UI kit (docs/ui-kit.md): every control in every state, on the app's three surfaces. Dev only (see the
 // ui-kit integration in astro.config.mjs): open http://localhost:4321/ui-kit while `npm run dev` runs.
 import BaseLayout from "src/layouts/BaseLayout.astro";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -61,9 +61,10 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       <p class={`${kicker} text-muted-foreground`}>Dev only · not in production builds</p>
       <h1 class="mt-1 text-3xl font-semibold">UI kit</h1>
       <p class="mt-2 max-w-200 text-muted-foreground">
-        Every control from <code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">docs/design-spec.md</code>, in every state, on the app's three
+        Every control, in every state, on the app's three
         surfaces. Buttons are the real component (<code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">src/components/ui/button.tsx</code>);
-        form fields, dialogs, tabs and toasts are still prototypes from the spec until Phase 4 builds them. Hover and focus
+        form fields, dialogs, tabs and toasts are still prototypes until they're built. The rules are in
+        <code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">docs/ui-kit.md</code>. Hover and focus
         are shown forced, side by side; the "try it" column is live.
       </p>
       <nav class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm" aria-label="Sections">
