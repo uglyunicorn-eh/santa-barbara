@@ -6,3 +6,5 @@ export { useJWT } from './useJWT';
 export { useRefresher } from './useRefresher';
 export { useSignals } from './useSignals';
 export { useLiveParty } from './useLiveParty';
+export { useLiveSocket } from './useLiveSocket';
+export { useRevealReminders } from './useRevealReminders';

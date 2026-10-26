@@ -1,9 +1,11 @@
 import React from "react";
-import { AlertCircle, CheckCircle } from "react-feather";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "sonner";
 
-// Toasts (docs/ui-kit.md, "Toasts"): one toaster for the whole app, mounted once in AppContainer, above the garage
-// door. They follow the surface: dark on the night pages, light on the party page (which asks with useToastSurface).
+// Toasts (docs/ui-kit.md, "Toasts"), on Sonner: one toaster for the whole app, mounted once in AppContainer, above the
+// garage door. Each toast has a title, maybe a description and an action, and a dismiss button. Errors go after
+// 2.5 s, other messages after 4 s; reminders (`remind`) stay until dismissed or opened.
+//
+// They follow the surface: dark on the night pages, light on the party page (which asks with useToastSurface).
 
 type Surface = "dark" | "light";
 
@@ -30,57 +32,79 @@ export const useToastSurface = (next: Surface) => {
   );
 };
 
-const looks = {
-  dark: { background: "#18181b", color: "#fff", border: "rgb(255 255 255 / 0.15)", error: "#f6c6c7", success: "#acdcbf" },
-  light: { background: "#fff", color: "#18181b", border: "#e4e4e7", error: "#a8222a", success: "#257942" },
-};
+const ERROR_MS = 2500;
+const MESSAGE_MS = 4000;
 
 export const NotificationsContainer = () => {
   const current = React.useSyncExternalStore(subscribe, () => surface, () => surface);
-  const look = looks[current];
 
   return (
     <Toaster
+      theme={current}
       position="top-center"
-      containerStyle={{ inset: 16, zIndex: 10001 }}
+      closeButton
+      offset={16}
+      mobileOffset={16}
+      visibleToasts={4}
+      style={{ zIndex: 10001, fontFamily: '"Cuprum", sans-serif' }}
       toastOptions={{
-        style: {
-          maxWidth: "min(560px, calc(100vw - 32px))",
-          padding: "12px 16px",
-          borderRadius: 8,
-          border: `1px solid ${look.border}`,
-          background: look.background,
-          color: look.color,
-          boxShadow: "0 8px 20px rgb(0 0 0 / 0.25)",
-          fontFamily: "inherit",
-          fontSize: 18,
-          lineHeight: "28px",
-          overflowWrap: "anywhere",
-        },
-        error: {
-          icon: <AlertCircle size={20} color={look.error} aria-hidden="true" style={{ flex: "none" }} />,
-          duration: 5000,
-        },
-        success: {
-          icon: <CheckCircle size={20} color={look.success} aria-hidden="true" style={{ flex: "none" }} />,
-          duration: 10000,
+        classNames: {
+          toast: "rounded-lg! text-base! shadow-md!",
+          title: "text-base! font-semibold!",
+          description: "text-sm!",
+          actionButton: "rounded-lg! px-3! text-sm! font-medium!",
         },
       }}
     />
   );
-}
+};
+
+export type Reminder = {
+  /** Stable id: showing the same reminder again doesn't add another. */
+  id: string;
+  title: string;
+  description?: React.ReactNode;
+  action: { label: string; onClick: () => void };
+  /** Called when the user dismisses it (not when it's opened or taken away). */
+  onDismiss?: () => void;
+};
+
+/** Reminders taken away by the app (not by the user), so their `onDismiss` isn't called. */
+const forgotten = new Set<string>();
+
+/** A reminder toast: rich (title, description, action), and it stays until the user dismisses or opens it. */
+export const remind = ({ id, title, description, action, onDismiss }: Reminder) => {
+  forgotten.delete(id);
+  toast(title, {
+    id,
+    description,
+    action,
+    duration: Infinity,
+    onDismiss: () => {
+      if (!forgotten.delete(id)) {
+        onDismiss?.();
+      }
+    },
+  });
+};
+
+/** Takes a reminder away (it was answered in another tab, or its screen closed), without counting as dismissed. */
+export const forget = (id: string) => {
+  forgotten.add(id);
+  toast.dismiss(id);
+};
 
 export const useNotifications = () => {
   const error = React.useCallback(
     (message: string) => {
-      toast.error(message);
+      toast.error(message, { duration: ERROR_MS });
     },
     []
   );
 
   const success = React.useCallback(
     (message: string) => {
-      toast.success(message);
+      toast.success(message, { duration: MESSAGE_MS });
     },
     []
   );
