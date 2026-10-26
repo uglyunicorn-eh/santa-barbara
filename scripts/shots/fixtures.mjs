@@ -13,7 +13,9 @@ export const CODES = {
   slow: "SLOWPART",
 };
 
-const NAME_MAX = 100;
+// The same numbers as src/limits.ts.
+const PERSON_NAME_MAX = 32;
+const PARTY_NAME_MAX = 48;
 const EMAIL_MAX = 128;
 
 /** Exactly `n` characters of `text`, repeated as needed. */
@@ -83,14 +85,14 @@ export const SETS = {
   }),
   worst: makeSet({
     // A 100-character person name with ordinary words; every participant has one too.
-    userName: fill("Maximiliana Wilhelmina Bartholomew-Featherstonehaugh ", NAME_MAX).trim().padEnd(NAME_MAX, "e"),
+    userName: fill("Maximiliana Wilhelmina Bartholomew-Featherstonehaugh ", PERSON_NAME_MAX).trim().padEnd(PERSON_NAME_MAX, "e"),
     userEmail: email(EMAIL_MAX),
     // A 100-character party name with no spaces at all: the hardest case for wrapping.
-    partyName: fill("TheVeryLongestSecretSantaPartyNameEver", NAME_MAX),
-    participantName: (i) => `${fill("Wolfeschlegelsteinhausenbergerdorff ", NAME_MAX - 4).trim()} ${String(i + 1).padStart(3, "0")}`.slice(0, NAME_MAX),
+    partyName: fill("TheVeryLongestSecretSantaPartyNameEver", PARTY_NAME_MAX),
+    participantName: (i) => `${fill("Wolfeschlegelsteinhausenbergerdorff ", PERSON_NAME_MAX - 4).trim()} ${String(i + 1).padStart(3, "0")}`.slice(0, PERSON_NAME_MAX),
     participantCount: 100,
     historyCount: 25,
   }),
 };
 
-export const LIMITS = { NAME_MAX, EMAIL_MAX };
+export const LIMITS = { PERSON_NAME_MAX, PARTY_NAME_MAX, EMAIL_MAX };

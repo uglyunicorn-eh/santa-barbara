@@ -17,7 +17,7 @@ import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
 import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
 import type { Party } from "@/types";
-import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH } from "@/limits";
+import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
@@ -87,7 +87,7 @@ const usePartyHistory = () => {
 };
 
 const nameSchema = v.object({
-  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Name", MAX_NAME_LENGTH))),
+  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_PERSON_NAME_LENGTH, maxLen("Name", MAX_PERSON_NAME_LENGTH))),
 });
 
 /** Rejects the current address here, so the request (and its emailing rate limit) is never spent on it. */
@@ -178,7 +178,7 @@ const Profile = () => {
           onSubmit={onSubmit}
         >
           <InlineField name="name" action={<SaveButton />}>
-            <Input placeholder="How should your friends call you?" maxLength={MAX_NAME_LENGTH} />
+            <Input placeholder="How should your friends call you?" maxLength={MAX_PERSON_NAME_LENGTH} />
           </InlineField>
         </Form>
       </Setting>

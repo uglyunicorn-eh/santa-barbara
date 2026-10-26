@@ -10,10 +10,10 @@ import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
 import { useAppClient } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
-import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
+import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
 const schema = v.object({
-  name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Party name", MAX_NAME_LENGTH))),
+  name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_PARTY_NAME_LENGTH, maxLen("Party name", MAX_PARTY_NAME_LENGTH))),
   password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
 });
 
@@ -96,7 +96,7 @@ export const NewParty = () => {
               <FormField
                 name="name"
                 label="Party name"
-                children={<Input autofocus maxLength={MAX_NAME_LENGTH} />}
+                children={<Input autofocus maxLength={MAX_PARTY_NAME_LENGTH} />}
               />
 
               <FormField
