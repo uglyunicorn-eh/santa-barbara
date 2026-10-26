@@ -26,8 +26,8 @@ const LONG_NAME = "Maximiliana Wilhelmina Bartholomew-Featherstonehaugh Maximili
 const LONG_EMAIL = `${"santa.helper.".repeat(10).slice(0, 115)}@example.com`.slice(0, 128);
 
 const COLOR_GROUPS: { name: string; tokens: [string, string][] }[] = [
-  { name: "Turquoise (primary)", tokens: [["teal-50", "#eefcfa"], ["teal-300", "#93ecde"], ["teal-500", "#00d1b2"], ["teal-600", "#00b89c"], ["teal-700", "#007a68"], ["teal-900", "#04342c"]] },
-  { name: "Red (brand, danger)", tokens: [["red-50", "#fdf3f3"], ["red-100", "#fbe3e3"], ["red-200", "#f6c6c7"], ["red-500", "#dc3a40"], ["red-600", "#c62a30"], ["red-700", "#a8222a"], ["red-800", "#8a1f25"], ["red-900", "#741a1f"]] },
+  { name: "Turquoise (primary)", tokens: [["teal-50", "#eefcfa"], ["teal-300", "#93ecde"], ["teal-400", "#33dac1"], ["teal-500", "#00d1b2"], ["teal-700", "#007a68"], ["teal-900", "#04342c"]] },
+  { name: "Red (brand, danger)", tokens: [["red-50", "#fdf3f3"], ["red-100", "#fbe3e3"], ["red-200", "#f6c6c7"], ["red-500", "#dc3a40"], ["red-600", "#c62a30"], ["red-700", "#a8222a"], ["red-800", "#8a1f25"]] },
   { name: "Zinc (neutrals)", tokens: [["zinc-50", "#fafafa"], ["zinc-100", "#f4f4f5"], ["zinc-200", "#e4e4e7"], ["zinc-300", "#d4d4d8"], ["zinc-400", "#a1a1aa"], ["zinc-500", "#71717a"], ["zinc-600", "#52525b"], ["zinc-700", "#3f3f46"], ["zinc-900", "#18181b"], ["night", "#111217"]] },
   { name: "Accents and success", tokens: [["cream", "#f7f7c6"], ["cream-50", "#fff6d6"], ["gold", "#c99700"], ["green-50", "#effaf3"], ["green-200", "#acdcbf"], ["green-700", "#257942"]] },
 ];
@@ -329,7 +329,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   </div>
                 </div>
               ))}
-              <p class="text-sm text-muted-foreground tablet:pl-41.5">Have a question? <a href="#" class={buttonVariants({ variant: "link" })}>Check out</a> how this works.</p>
+              <p class="text-sm text-muted-foreground tablet:pl-41.5">Have a question? <a href="#" class={buttonVariants({ variant: "link", surface: "light" })}>Check out</a> how this works.</p>
             </div>
             <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
               <Button variant="secondary" surface="light" className="max-tablet:w-full">Nah, never mind</Button>
@@ -361,7 +361,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
           <a href="#tabs" aria-current="page" class="flex-1 border-b-2 border-primary py-3 text-center text-lg font-medium text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">Profile</a>
           <a href="#tabs" class="flex-1 border-b-2 border-transparent py-3 text-center text-lg font-medium text-muted-foreground transition-colors duration-150 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">Latest history</a>
         </nav>
-        <div class="p-4 text-muted-foreground tablet:p-6">The current tab: 2px red underline. Others: muted, darker on hover.</div>
+        <div class="p-4 text-muted-foreground tablet:p-6">The current tab: 2px turquoise underline. Others: muted, darker on hover.</div>
       </div>
     </section>
 
@@ -376,8 +376,8 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
               ["success", "Done! We've sent a magic link to your inbox."],
               ["error", `We couldn't send a link to ${LONG_EMAIL}. Please try again in a bit.`],
             ].map(([kind, text]) => (
-              <div role="status" class="flex w-full max-w-140 items-start gap-3 rounded-lg border border-white/15 bg-zinc-900 px-4 py-3 text-base text-white shadow-md">
-                <span class={`mt-0.5 shrink-0 ${kind === "error" ? "text-red-200" : "text-green-200"}`} set:html={kind === "error" ? iconAlert : iconCheck}></span>
+              <div role="status" class={cn("flex w-full max-w-140 items-start gap-3 rounded-lg border px-4 py-3 text-base shadow-md", s === "night" ? "border-white/15 bg-zinc-900 text-white" : "border-border bg-white text-zinc-900")}>
+                <span class={cn("mt-0.5 shrink-0", s === "night" ? (kind === "error" ? "text-red-200" : "text-green-200") : (kind === "error" ? "text-destructive" : "text-success"))} set:html={kind === "error" ? iconAlert : iconCheck}></span>
                 <span class="min-w-0 wrap-anywhere">{text}</span>
               </div>
             ))}

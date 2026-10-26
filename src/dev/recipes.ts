@@ -52,16 +52,22 @@ const hovered: Record<ButtonVariant, Record<"light" | "dark", string>> = {
   link: { light: "text-teal-900", dark: "text-white" },
 };
 
-/** The focus ring: 2px in the ring colour with a 2px gap in the surface colour. */
-const focusRing = (surface: Surface) =>
-  surface === "paper" ? "ring-2 ring-ring ring-offset-2 ring-offset-white" : "ring-2 ring-white ring-offset-2 ring-offset-night";
+/** The focus ring: 2px in the ring colour (red for red buttons on paper) with a 2px gap in the surface colour. */
+const focusRing = (surface: Surface, variant?: ButtonVariant) =>
+  surface !== "paper"
+    ? "ring-2 ring-white ring-offset-2 ring-offset-night"
+    : variant === "brand"
+      ? "ring-2 ring-brand ring-offset-2 ring-offset-white"
+      : variant === "destructive" || variant === "ghost-destructive"
+        ? "ring-2 ring-destructive ring-offset-2 ring-offset-white"
+        : "ring-2 ring-ring ring-offset-2 ring-offset-white";
 const focusVisible = (surface: Surface) =>
   surface === "paper"
     ? "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     : "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-night";
 
 export const forced = (variant: ButtonVariant, surface: Surface, state: State) =>
-  state === "hover" ? hovered[variant][toneOf(surface)] : state === "focus" ? focusRing(surface) : "";
+  state === "hover" ? hovered[variant][toneOf(surface)] : state === "focus" ? focusRing(surface, variant) : "";
 
 // ---------------------------------------------------------------------------------------------------------------
 // Form fields

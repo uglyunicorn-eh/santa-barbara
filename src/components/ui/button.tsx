@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 //   no pill, `md`; `sm` only in the profile's setting rows. Delete actions are `ghost-destructive` until the final
 //   confirm, which is `destructive`. Red on a content screen means danger.
 
-const buttonVariants = cva(
+const variants = cva(
   [
     "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg border border-transparent",
     // No nowrap: a label too long for the screen wraps instead of overflowing (sizes are minimum heights).
@@ -65,8 +65,12 @@ const buttonVariants = cva(
       { variant: "ghost", surface: "dark", class: "text-white hover:bg-white/10" },
       { variant: "ghost-destructive", surface: "light", class: "text-destructive hover:bg-red-50" },
       { variant: "ghost-destructive", surface: "dark", class: "text-red-200 hover:bg-white/10" },
+      // On light, red buttons get a red focus ring like the button, not the usual teal.
+      { variant: "brand", surface: "light", class: "focus-visible:ring-brand" },
+      { variant: ["destructive", "ghost-destructive"], surface: "light", class: "focus-visible:ring-destructive" },
       { variant: ["primary", "brand", "destructive"], surface: "dark", class: "shadow-sm" },
-      { variant: "link", class: "min-h-0 p-0" },
+      // Sits inside a sentence: inline, with the sentence's size and line height.
+      { variant: "link", class: "inline min-h-0 rounded-sm p-0 text-[length:inherit] leading-[inherit] select-auto" },
       { variant: "link", surface: "light", class: "text-link hover:text-teal-900" },
       { variant: "link", surface: "dark", class: "text-zinc-100 hover:text-white" },
     ],
@@ -80,7 +84,10 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants> & {
+/** The button's classes, merged so a variant's overrides win: also for links styled as buttons (`<a className=…>`). */
+const buttonVariants = (props?: Parameters<typeof variants>[0]) => cn(variants(props));
+
+type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof variants> & {
   /** Busy: a spinner before the label, the width stays, and it can't be pressed. */
   loading?: boolean;
 };
