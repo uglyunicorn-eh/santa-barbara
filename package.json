@@ -17,7 +17,7 @@
     "@astrojs/check": "^0.9.12",
     "@astrojs/react": "^7",
     "@base-ui/react": "^1.9.0",
-    "@hookform/resolvers": "^5.9.2",
+    "@hookform/resolvers": "^6.0.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7",
     "class-variance-authority": "^0.7.1",
