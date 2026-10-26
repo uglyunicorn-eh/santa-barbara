@@ -16,8 +16,11 @@ of both repos at fed0d99 / 061bacf)
 - Phase 2 step 2, the screenshot script: `npm run shots` (`scripts/shots/`), with
   "before" screenshots taken on `main`.
 
-**Next:** the rest of Phase 2, the design spec and the UI kit page. The spec needs
-decisions (palette first), so it starts as a proposal.
+- Phase 2 step 3, the design spec: `docs/design-spec.md`, settled (#162).
+- Phase 3, Tailwind and shadcn (Base UI) beside Bulma, with the spec's tokens: no visible
+  change (see Phase 3's "What it took").
+
+**Next:** the UI kit page (Phase 2 step 4), then Phase 4.
 
 **Frontend (santa-barbara):** talks to the backend's plain JSON API (`src/api/client`);
 hosted on Cloudflare Pages, with a Content-Security-Policy from `public/_headers` that
@@ -295,21 +298,29 @@ rebuilds that screen; Phase 6 confirms none are left.
 Nothing should look different after this phase; it only makes Tailwind available. The
 screenshot script (Phase 2) checks that, including after the reset in step 5.
 
-1. Install: `npm install tailwindcss @tailwindcss/vite @tailwindcss/typography tw-animate-css`
-   and `npm install class-variance-authority clsx tailwind-merge @base-ui/react`
-   (or let `shadcn init` add these). The old package name `@base-ui-components/react`
-   stopped at `1.0.0-rc.0`; Base UI ships as `@base-ui/react` (1.9.0 today).
+1. Install: `npm install tailwindcss @tailwindcss/vite tw-animate-css`
+   and `npm install class-variance-authority clsx tailwind-merge @base-ui/react`.
+   The old package name `@base-ui-components/react` stopped at `1.0.0-rc.0`; Base UI
+   ships as `@base-ui/react` (1.9.0 today). `@tailwindcss/typography` waits for Phase 5,
+   where `prose` is first used: it pins `postcss-selector-parser` 6.0.10, which has a
+   moderate advisory fixed only in 7.1.6, so check for a fixed release then.
 2. `astro.config.mjs`: add `vite: { plugins: [tailwindcss()] }`, next to the existing
    `react()` and `contentSecurityPolicy` integrations (keep both).
 3. `tsconfig.json`: add `"paths": { "@/*": ["./src/*"] }`. Keep the existing
    `src/...` imports working; `baseUrl` is deprecated in TS 6, so plan to switch every
    import to `@/` later (one mechanical commit).
-4. Run `npx shadcn@latest init --base base-ui` (check `--help` for the exact flag).
-   Point `components.json` at `src/styles/tailwind.css` with aliases
-   `@/components/ui` and `@/lib/utils`, and let it add `cn()` in `src/lib/utils.ts`.
-   Run it **before** editing `tailwind.css` (step 5): init writes the file with the full
-   `@import "tailwindcss";`, which includes Tailwind's reset (preflight). Step 5 then
-   replaces that import.
+4. Create `src/styles/tailwind.css` with just `@import "tailwindcss";` (init looks for
+   it), then run `npx shadcn@latest init --base base --preset nova --yes --no-monorepo
+   --no-rtl --pointer` (the flag is `--base base`). It writes `components.json`
+   (aliases `@/components/ui`, `@/lib/utils`) and rewrites `tailwind.css`. Then undo
+   what we don't want from it:
+   - It adds the whole `shadcn` CLI package (~270 packages) as a dependency, only for
+     `@import "shadcn/tailwind.css"`. Uninstall it and copy that file's `data-*` state
+     variants (MIT) into `tailwind.css`; run the CLI with `npx` to add components.
+   - It makes `cn()` re-export a new `cn` package (pre-1.0). Uninstall it; `cn()` in
+     `src/lib/utils.ts` is the usual `twMerge(clsx(…))`.
+   - It adds the Geist font and `lucide-react`. Uninstall both: the font stays Cuprum,
+     and `npx shadcn add` installs `lucide-react` again when a component needs it.
 5. Edit `src/styles/tailwind.css`: the design tokens from the Phase 2 spec go in
    `@theme`, mapped onto shadcn's semantic variables (`--primary`, `--destructive`,
    `--ring`, `--radius`, …), plus Bulma's breakpoints so layouts don't move:
@@ -328,7 +339,6 @@ screenshot script (Phase 2) checks that, including after the reset in step 5.
    @import "tailwindcss/preflight.css" layer(base);   /* see "The reset" below */
    @import "tailwindcss/utilities.css" layer(utilities);
    @import "tw-animate-css";
-   @plugin "@tailwindcss/typography";
    ```
    ```scss
    // global.scss: repeat the order first (whichever file the browser sees first sets it)
@@ -359,6 +369,35 @@ screenshot script (Phase 2) checks that, including after the reset in step 5.
    points them at the new palette.
 7. Checks: build passes, `dist/_headers` still has a filled-in CSP, no CSP errors in the
    browser console, and the screens match the Phase 2 "before" screenshots.
+
+**What it took** (done: `build/tailwind-setup`). The screenshot comparison against
+`main` (`npm run shots:compare`) found four ways the setup changed pages, each fixed:
+
+- **Tailwind scanned the whole repo**, including the class examples in `docs/`, and
+  generated real utilities for them. `container` hit Bulma's `<Container>`
+  (`class="container"`) with different max-widths. Fix: `source(none)` on the utilities
+  import, `@source` for `src/components`, `src/layouts`, `src/pages` only, and
+  `@source not inline("container")`.
+- **Bulma's `@extend`ed rules escaped the layer.** `utilities/_all` defines placeholders
+  (`%control`, …); Sass writes extended rules where the placeholder is defined, so with
+  that import outside `@layer bulma`, `.button`'s 1rem came out unlayered and beat
+  `.button.is-medium`. Fix: import it inside the layer too.
+- **A partial with its own layer wrapper became a nested layer.** `404.scss` is both a
+  partial of `global.scss` and was imported by `404.astro`; wrapped in `@layer bulma`, its
+  copy inside `global.scss` became `bulma.bulma`, which loses to rules directly in
+  `bulma`. Fix: it's a plain partial again, and `404.astro` relies on `global.scss`.
+  Only files that aren't partials get their own wrapper.
+- **The reset made media blocks**, removing the baseline gap under inline images (7px on
+  the sign-in card). Fix: `display` and `vertical-align` revert to the browser's for
+  media, inside the `bulma` layer (Bulma's own `.image img` still wins).
+
+Result: 154 of 186 screenshots identical; the other 32 differ by at most 0.1%, and a
+second run of the same code differs on the same 32 (snow, confetti, the spinner).
+Checked structurally too: nothing is outside a layer but the font import, Tailwind's
+`@property` rules and `:root` variables, and no layer is nested.
+
+Also: `@theme static`, so every token is a CSS variable from the start;
+`npm run shots:compare` (pixel diff of two runs) added to the screenshot script.
 
 ## Phase 4: Shared components (4–5 days, 4–5 PRs)
 

@@ -1,70 +1,74 @@
-.knowledge-page {
-  background: #d3d4d8 url("/pagebg.jpg") center bottom no-repeat;
-  background-size: contain;
-  color: black;
-  min-height: 100vh;
+@layer theme, base, bulma, components, utilities;
 
-  body {
-    overflow: unset;
-  }
+@layer bulma {
+  .knowledge-page {
+    background: #d3d4d8 url("/pagebg.jpg") center bottom no-repeat;
+    background-size: contain;
+    color: black;
+    min-height: 100vh;
 
-  h1,
-  h2 {
-    text-shadow: 1px 2px 1px rgba(#fff, 0.1);
-  }
-
-  .knowledge-page-section {
-    padding-bottom: 35vw;
-  }
-
-  .knowledge-page-info {
-    top: 48px;
-    position: sticky;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @media screen and (min-width: 800px) {
-      padding-bottom: 180px;
+    body {
+      overflow: unset;
     }
 
-    img {
-      margin-bottom: 2em;
+    h1,
+    h2 {
+      text-shadow: 1px 2px 1px rgba(#fff, 0.1);
     }
 
-    .button {
-      background: transparent;
-      border-color: #aaa;
-      color: #000;
+    .knowledge-page-section {
+      padding-bottom: 35vw;
+    }
 
-      &:hover {
-        border-color: #000;
+    .knowledge-page-info {
+      top: 48px;
+      position: sticky;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      @media screen and (min-width: 800px) {
+        padding-bottom: 180px;
+      }
+
+      img {
+        margin-bottom: 2em;
+      }
+
+      .button {
+        background: transparent;
+        border-color: #aaa;
+        color: #000;
+
+        &:hover {
+          border-color: #000;
+        }
       }
     }
-  }
 
-  .knowledge-page-content {
-    color: black;
+    .knowledge-page-content {
+      color: black;
 
-    p {
-      text-align: justify;
-      font-size: 1.2em;
+      p {
+        text-align: justify;
+        font-size: 1.2em;
+
+        @media screen and (max-width: 768px) {
+          text-align: left;
+        }
+      }
+
+      li {
+        font-size: 1.2em;
+      }
+    }
+
+    .footer {
+      padding-bottom: 6em;
 
       @media screen and (max-width: 768px) {
-        text-align: left;
+        padding-bottom: 1em;
       }
-    }
-
-    li {
-      font-size: 1.2em;
-    }
-  }
-
-  .footer {
-    padding-bottom: 6em;
-
-    @media screen and (max-width: 768px) {
-      padding-bottom: 1em;
     }
   }
 }
