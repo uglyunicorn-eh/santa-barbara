@@ -28,6 +28,8 @@ const webApplication = {
 
 <Layout title={HOME_TITLE} description={HOME_DESCRIPTION} pageClassNames={["index-page"]}>
   <Fragment slot="head">
+    {/* The elf is the largest thing on the first screen: fetched first, before the inlined styles have been read. */}
+    <link rel="preload" as="image" href="/elf-2.webp" fetchpriority="high" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(webApplication)} />
     {/* Someone signed in goes straight past the door, so the static copy below would only flash at them. */}
     <script is:inline>

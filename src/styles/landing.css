@@ -106,7 +106,8 @@
   pointer-events: none;
   filter: drop-shadow(0 14px 24px rgb(0 0 0 / 0.6));
   transform-origin: 50% 70%;
-  animation: landing-elf 5s ease-in-out infinite;
+  /* Still, in the wiggle's first pose, until the app takes over (below). */
+  transform: rotate(9deg);
 
   @media (max-width: 1099px) {
     top: -110px;
@@ -130,7 +131,20 @@
     margin: 0 auto;
     width: 230px;
     height: 230px;
-    animation-name: landing-elf-phone;
+    transform: rotate(3deg);
+  }
+}
+
+/* The wiggle starts once the app has the page. The app draws its own copy of the elf over the static one, and Chrome
+   counts it as the page's largest paint (LCP) if it shows more of itself; caught mid-wiggle, the static elf shows a
+   little less. Both start in the same pose, so the app's copy doesn't move LCP to after the app has loaded. */
+@media (prefers-reduced-motion: no-preference) {
+  .garage-door .landing-logo {
+    animation: landing-elf 5s ease-in-out infinite;
+
+    @media (max-width: 768px) {
+      animation-name: landing-elf-phone;
+    }
   }
 }
 
@@ -144,16 +158,7 @@
   50% { transform: rotate(-2deg) translateY(-8px); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .landing-logo {
-    animation: none;
-    transform: rotate(8deg);
 
-    @media (max-width: 768px) {
-      transform: rotate(3deg);
-    }
-  }
-}
 
 .landing-card-text {
   position: relative;

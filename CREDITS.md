@@ -66,7 +66,7 @@ These libraries are bundled into the site's JavaScript and CSS.
 
 | Font | License | Copyright |
 | --- | --- | --- |
-| [Cuprum](https://fonts.google.com/specimen/Cuprum), served by Google Fonts | SIL Open Font License 1.1 | © Jovanny Lemonad |
+| [Cuprum](https://fonts.google.com/specimen/Cuprum), served from this site (`src/fonts/`) | SIL Open Font License 1.1 | © Jovanny Lemonad |
 
 ### For building the site
 

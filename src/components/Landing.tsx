@@ -16,17 +16,17 @@ type Props = {
 
 const STEPS = [
   {
-    image: "/santa-1.png",
+    image: "/santa-1.webp",
     title: "Sign in with a magic link",
     text: "Type your email address and click the link our elves send you. No passwords to forget.",
   },
   {
-    image: "/santa-2.png",
+    image: "/santa-2.webp",
     title: "Host or join a party",
     text: "A host gets a secret code to share. Friends type it in, and they're on the list.",
   },
   {
-    image: "/santa-3.png",
+    image: "/santa-3.webp",
     title: "Roll the dice",
     text: "Everyone gets one name: the person they give a gift to. Nobody else sees it.",
   },
@@ -55,7 +55,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
         <Hero.Body>
           <Container textAlign="centered">
             <div className="landing-card">
-              <img className="landing-logo" src="/elf-2.png" alt="" width={512} height={512} />
+              <img className="landing-logo" src="/elf-2.webp" alt="" width={512} height={512} fetchPriority="high" />
               <div className="landing-card-text">
                 <h1>{SITE_NAME}</h1>
                 <p className="landing-tagline">{TAGLINE}</p>
@@ -85,7 +85,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           <ol className="landing-steps">
             {STEPS.map(({ image, title, text }, index) => (
               <li key={title}>
-                <img src={image} alt="" width={512} height={512} loading="lazy" />
+                <img src={image} alt="" width={400} height={400} loading="lazy" />
                 <span className="landing-step-number">{index + 1}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>
