@@ -53,7 +53,7 @@ const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
   <Hero size={"fullheight"} className="login-container">
     <Hero.Body>
       <Container textAlign="centered">
-        {children}
+        <div className="enter-bezel">{children}</div>
       </Container>
     </Hero.Body>
 
