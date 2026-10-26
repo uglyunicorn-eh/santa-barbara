@@ -76,23 +76,11 @@ const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
 const EnterActions = ({ label = "Enter with your email address" }: { label?: string }) => {
   const navigate = useNavigate();
 
-  const [busy, setBusy] = React.useState(false);
-
-  const onLoginClick = React.useCallback(
-    async () => {
-      setBusy(true);
-      await sleep(500);
-      navigate("/enter/");
-      // The button stays on the page behind the sign-in dialog: when the dialog closes, it's ready again.
-      setBusy(false);
-    },
-    [
-      navigate,
-    ],
-  );
+  // The dialog opens on the click, and the page steps back behind it at the same moment (GrinchDialog).
+  const onLoginClick = React.useCallback(() => navigate("/enter/"), [navigate]);
 
   return (
-    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
+    <Button variant="brand" size="lg" surface="dark" pill onClick={onLoginClick}>
       {label}
     </Button>
   );
@@ -166,12 +154,17 @@ const EnterForm = () => {
             />
 
             <p>Enter your email address above and we'll send you a magic link to sign in.</p>
-            <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
+            <p>We promise not to send you any marketing materials or share your personal data with third parties. No tracking cookies either: we only keep what's needed to sign you in.</p>
 
             <div className="actions flex flex-col items-center gap-3">
               <Submit variant="brand" size="lg" surface="dark" pill>Send me a magic link!</Submit>
               <a href="/how-it-works/" target="_blank" className={buttonVariants({ variant: "ghost", surface: "dark", pill: true })}>How this works?</a>
             </div>
+
+            <p className="legal">
+              By entering, you confirm you're 18 or older and agree to
+              our <a href="/terms/" target="_blank">Terms</a> and <a href="/privacy/" target="_blank">Privacy&nbsp;Policy</a>.
+            </p>
           </Form>
         )
       }

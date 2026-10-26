@@ -48,9 +48,18 @@
   font-size: 1.2rem;
 
   .card {
+    padding-bottom: 1.5em;
+
     @media (max-width: 768px) {
       padding: 0;
       font-size: 1rem;
+    }
+
+    /* On phones the card has no padding, so the content keeps its own. */
+    @media (min-width: 769px) {
+      .card-content {
+        padding-bottom: 0;
+      }
     }
 
     p {
@@ -60,6 +69,30 @@
 
   .actions {
     margin-top: 3em;
+  }
+
+  /* The fine print under the buttons: age and Terms, set apart by a hairline. */
+  .card p.legal {
+    margin: 2em 0 0;
+    padding-top: 1.25em;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.8em;
+    line-height: 1.5;
+    text-align: center;
+    text-wrap: balance;
+    color: #b4b3b4;
+
+    a {
+      color: #e4e3e4;
+      text-decoration: underline;
+      text-decoration-color: rgb(255 255 255 / 0.35);
+      text-underline-offset: 3px;
+
+      &:hover {
+        color: white;
+        text-decoration-color: white;
+      }
+    }
   }
 }
 

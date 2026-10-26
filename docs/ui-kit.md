@@ -125,8 +125,8 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   dialog keeps one height on both tabs (nearly the whole screen on phones), its tabs pinned to the top edge.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
-- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's
-  links. The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
+  edges. The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
   the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the

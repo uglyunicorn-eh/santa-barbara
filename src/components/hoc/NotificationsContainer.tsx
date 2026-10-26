@@ -39,9 +39,6 @@ export const useToastSurface = (next: Surface) => {
 const ERROR_MS = 2500;
 const MESSAGE_MS = 4000;
 
-/** Room left under bottom-right toasts for the footer (its links and credits). */
-const FOOTER_CLEARANCE = 112;
-
 export const NotificationsContainer = () => {
   const current = React.useSyncExternalStore(subscribe, () => surface, () => surface);
   const tabletUp = useTabletUp();
@@ -52,8 +49,7 @@ export const NotificationsContainer = () => {
       position={tabletUp ? "bottom-right" : "top-center"}
       closeButton
       className="app-toaster"
-      // From tablet up, above the footer's links in the bottom-right corner.
-      offset={tabletUp ? { right: 16, bottom: FOOTER_CLEARANCE } : 16}
+      offset={16}
       // On phones, below the status bar (the page draws under it: viewport-fit=cover).
       mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: 16, right: 16, bottom: 16 }}
       visibleToasts={4}

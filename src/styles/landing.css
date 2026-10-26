@@ -428,6 +428,8 @@
 .landing-backdrop {
   position: absolute;
   inset: 0;
+  /* The photo starts a little larger than the screen (below): no sideways scrolling for that. */
+  overflow: clip;
 
   > div {
     position: sticky;
@@ -449,11 +451,18 @@
 }
 
 /* Parallax where the browser can tie an animation to scrolling: while the first screen scrolls by, the photo drifts up
-   at a third of the speed and dims a little. Elsewhere it simply holds still. */
+   at a third of the speed, settles from 108% to its own size and dims a little. Elsewhere it simply holds still. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
+    /* Longhands, and the timeline in a rule of its own: the CSS minifier otherwise folds animation-timeline into the
+       animation shorthand, which browsers reject, dropping the whole declaration. */
     .landing-backdrop > div {
-      animation: landing-parallax linear both;
+      animation-name: landing-parallax;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .landing-main .landing-backdrop > div {
       animation-timeline: scroll();
       animation-range: 0 100vh;
     }
@@ -461,8 +470,8 @@
 }
 
 @keyframes landing-parallax {
-  from { transform: translateY(0); filter: brightness(1); }
-  to { transform: translateY(-33vh); filter: brightness(0.6); }
+  from { transform: translateY(0) scale(1.08); filter: brightness(100%); }
+  to { transform: translateY(-33vh) scale(1); filter: brightness(0.5); }
 }
 
 /* The reveal: the closing section and footer stay pinned to the bottom, under everything above them, which slides up

@@ -132,3 +132,35 @@ table {
     }
   }
 }
+
+/* Between pages (the home page, How this works, Terms, Privacy...): the old page fades out as it sinks back a little,
+   the new one fades in as it settles. Browsers without cross-page view transitions just switch pages. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 200ms ease-in both page-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 300ms ease-out 80ms both page-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@keyframes page-out {
+  to { opacity: 0; transform: scale(0.98); }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: scale(1.02); }
+}
