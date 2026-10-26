@@ -5,26 +5,31 @@ of both repos at fed0d99 / 061bacf)
 
 ## Where things stand
 
-**Frontend (santa-barbara, `main` at fed0d99):**
-- Talks to the backend's plain JSON API (`src/api/client`); Apollo and GraphQL are gone.
-- Hosted on Cloudflare Pages. `public/_headers` sets a Content-Security-Policy, which an
-  integration in `astro.config.mjs` fills in at build time with hashes of Astro's inline
-  scripts. Inline styles are allowed; fonts may come from Google Fonts only.
-- Still on Yarn 1 (`yarn.lock`, `resolutions`). The npm switch (Phase 0) isn't merged.
-- Forms use Formik + Yup with hard-coded lengths. The shared `src/limits.ts` (Phase 1)
-  isn't merged, though the backend's docs already point to it.
-- `npm run build` passes on `main`: `astro check` 0 errors, 0 warnings.
+**Done:**
+- Phase 0, npm: uglyunicorn-eh/santa-barbara#158.
+- Phase 1.2, frontend limits (`src/limits.ts`, a max on every field and input): #159.
+- Phase 1.3, at most 100 people per party: uglyunicorn-eh/santa-monica#39.
+- Phase 1.4, layouts at the limits: recorded in `docs/layout-audit.md`. Six screens
+  overflow with normal data on small phones (e.g. the 8-letter code in the "party
+  created" dialog is cut off at 320px), and party, join and email-change screens break
+  with the longest values. Each is fixed by the PR that rebuilds its screen.
+- Phase 2 step 2, the screenshot script: `npm run shots` (`scripts/shots/`), with
+  "before" screenshots taken on `main`.
 
-**Backend (santa-monica, `main` at 061bacf):**
-- Plain JSON API on Hono with Valibot (pinned `1.5.0`) for every input and output, npm
-  with `package-lock.json`.
-- Every input is bounded (`src/api/limits.ts`: 16 KB bodies, names and phrases 100,
-  emails 128, tokens 2048, cursors 100, page size 1–100). Not bounded: members per party.
+**Next:** the rest of Phase 2, the design spec and the UI kit page. The spec needs
+decisions (palette first), so it starts as a proposal.
 
-**Work already done once and lost:** the npm switch and the frontend limits were built
-and verified, then discarded when another session reset the shared checkout. Phases 0
-and 1 below describe the work in full, so they can be redone from scratch. (On Pavel's
-machine a copy survives in `stash@{0}`; see 1.2 for how to reuse it safely.)
+**Frontend (santa-barbara):** talks to the backend's plain JSON API (`src/api/client`);
+hosted on Cloudflare Pages, with a Content-Security-Policy from `public/_headers` that
+an integration in `astro.config.mjs` fills in at build time. Inline styles are allowed;
+fonts may come from Google Fonts only. Forms still use Formik + Yup.
+
+**Backend (santa-monica):** plain JSON API on Hono with Valibot (pinned `1.5.0`) for
+every input and output, npm with `package-lock.json`. Every input is bounded
+(`src/api/limits.ts`), and so is the number of people per party.
+
+Nothing in this plan depends on the backend; its only links to it are the shared length
+limits and using the same Valibot version.
 
 ## Goal
 
@@ -184,17 +189,6 @@ then checked against the same worst cases.
 2. Every Yup schema uses the constants (no number literals), and every `<Input>` gets a
    matching `maxLength`, so the browser stops typing at the limit. Includes the missing
    `.max` on JoinBox's sign-in email and on its hidden `party` field.
-
-   Reusing the saved copy in `stash@{0}`: don't `git stash apply` it or check files out
-   of it. It also deletes `yarn.lock` (that's Phase 0's job), and its JoinBox, LoginBox
-   and MyProfile are older than `main`'s, so checking them out would undo later work.
-   Take only the form changes, as a three-way patch:
-   ```bash
-   git diff 'stash@{0}^1' 'stash@{0}' -- src/components/hoc | git apply -3
-   git show 'stash@{0}^3:src/limits.ts' > src/limits.ts
-   ```
-   Then fix the saved file's comment: the API's limits now live in
-   `src/api/limits.ts`, not `src/limits.ts`.
 3. Joining a full party: API errors from party actions already appear as an error
    notification with the API's message (`partyAction` in `useAppClient`), so nothing new
    is needed; check the wording once 1.3 lands.
@@ -252,10 +246,10 @@ rebuilds that screen; Phase 6 confirms none are left.
    (`npm run shots`, under `scripts/`) that:
    - fakes the API with `page.route()`, answering from JSON fixture files in
      `scripts/fixtures/` (normal and worst-case data from 1.4), so no backend, seeding
-     or magic-link sign-in is needed. Signed-in screens need a session token the app
-     accepts: it checks the token's ES256 signature in the browser (`useJWT`), so sign a
-     test token with a throwaway key pair and run the dev server with
-     `PUBLIC_JWT_PUBLIC_KEY` set to its public key;
+     or magic-link sign-in is needed. Signed-in screens only need a `profile` and a
+     `userToken` in `localStorage` (nothing on screen checks the token); the sign-in link
+     page does check its token's signature, so the build gets a throwaway key pair
+     (`PUBLIC_JWT_PUBLIC_KEY`) and the script signs those links itself;
    - visits every screen in step 1 at every width and saves the shots to a folder
      named after the branch;
    - optionally diffs two folders (e.g. `main` vs. a branch) and lists what changed.
