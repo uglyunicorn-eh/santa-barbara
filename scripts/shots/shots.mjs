@@ -124,7 +124,8 @@ async function typeInvalidCode(page) {
 
 /** Opens the sign-in dialog from the front door and closes it again: the button must be ready, not spinning. */
 async function openAndCloseSignIn(page) {
-  await page.getByRole("button", { name: "Enter with your email address" }).click();
+  // The hero's button: the landing page has a second one at its end.
+  await page.getByRole("button", { name: "Enter with your email address" }).first().click();
   await page.waitForTimeout(1200);
   await page.keyboard.press("Escape");
   await page.waitForTimeout(600);

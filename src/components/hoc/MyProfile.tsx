@@ -18,13 +18,12 @@ import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
 import type { Party } from "@/types";
 import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
+import { pageTitle } from "@/site";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
 /** How many more each "Show more" (or scroll to the end) loads. */
 const HISTORY_MORE_PAGE_SIZE = 10;
-
-const SITE_NAME = "Anonymous Ded Morozes";
 
 type HistoryPage = {
   items: Party[];
@@ -170,7 +169,7 @@ const Profile = () => {
 
   return (
     <div className="profile-settings">
-      <title>{`My profile | ${SITE_NAME}`}</title>
+      <title>{pageTitle("My profile")}</title>
 
       <Setting
         label="Name"
@@ -439,7 +438,7 @@ const History = () => {
     ],
   );
 
-  const title = <title>{`My party history | ${SITE_NAME}`}</title>;
+  const title = <title>{pageTitle("My party history")}</title>;
 
   if (loading && !page) {
     return (

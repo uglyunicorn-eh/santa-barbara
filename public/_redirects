@@ -1,0 +1,14 @@
+# Cloudflare Pages: the app's own paths load the app (status 200, the address stays); anything else is a real 404
+# (404.html). Party links get the invite shell, whose link preview is an invitation (src/pages/invite.astro).
+# Every route in the app and every link the API emails (/enter/link, /profile/delete, /profile/email, /p/<code>/)
+# must be covered here.
+/p/*        /invite/  200
+/profile    /         200
+/profile/*  /         200
+/enter      /         200
+/enter/*    /         200
+/rolled/*   /         200
+/new        /         200
+/new/       /         200
+/join       /         200
+/join/      /         200

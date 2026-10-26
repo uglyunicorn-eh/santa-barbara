@@ -22,6 +22,7 @@
 @import "./enter.css" layer(app);
 @import "./grinch-box.css" layer(app);
 @import "./login.css" layer(app);
+@import "./landing.css" layer(app);
 @import "./profile.css" layer(app);
 @import "./404.css" layer(app);
 @import "./garage.css" layer(app);

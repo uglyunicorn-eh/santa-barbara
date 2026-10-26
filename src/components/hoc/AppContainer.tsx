@@ -6,6 +6,7 @@ import { NotificationsContainer } from "@/components/hoc/NotificationsContainer"
 import { PartyContainer } from "@/components/hoc/PartyContainer";
 import { WelcomeBox } from "@/components/hoc/WelcomeBox";
 import { UnrevealedProvider } from "@/components/hooks/useUnrevealed";
+import { HOME_TITLE, pageTitle } from "@/site";
 
 export const AppContainer = () => {
   const router = React.useMemo(
@@ -23,7 +24,7 @@ export const AppContainer = () => {
 function Root() {
   return (
     <UnrevealedProvider>
-      <title>Anonymous Ded Morozes</title>
+      <title>{pageTitle(HOME_TITLE)}</title>
       <NotificationsContainer />
 
       <Routes>

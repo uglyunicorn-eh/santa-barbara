@@ -7,6 +7,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
 import { GrinchDialog } from "@/components/GrinchBox";
+import { Landing } from "@/components/Landing";
 import { SnowConfetti } from "@/components/SnowConfetti";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "@/components/forms";
@@ -29,9 +30,10 @@ const schema = v.object({
 });
 
 export const LoginBox = () => {
+  usePageTint(TINTS.loginDoor);
   return (
-    <>
-      <LoginHero>
+    <Landing
+      enter={
         <Routes>
           <Route path="/" Component={EnterActions} />
           {/* The sign-in form opens over the front door, which stays as it was behind it. */}
@@ -39,10 +41,18 @@ export const LoginBox = () => {
           {/* Signed out, every other page (the profile, a new party…) is the front door. */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </LoginHero>
-    </>
+      }
+      enterAgain={<EnterActions label="Let's get this party started!" />}
+      footer={<DoorFooter />}
+    />
   );
 };
+
+const DoorFooter = () => (
+  <Footer noUser noHome profileAsLink>
+    <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
+  </Footer>
+);
 
 export const LoginHero = ({ children }: { children: React.ReactNode }) => {
   usePageTint(TINTS.loginDoor);
@@ -58,14 +68,12 @@ const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
     </Hero.Body>
 
     <Hero.Footer>
-      <Footer noUser noHome profileAsLink>
-        <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
-      </Footer>
+      <DoorFooter />
     </Hero.Footer>
   </Hero>
 );
 
-const EnterActions = () => {
+const EnterActions = ({ label = "Enter with your email address" }: { label?: string }) => {
   const navigate = useNavigate();
 
   const [busy, setBusy] = React.useState(false);
@@ -85,7 +93,7 @@ const EnterActions = () => {
 
   return (
     <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
-      Enter with your email address
+      {label}
     </Button>
   );
 }
