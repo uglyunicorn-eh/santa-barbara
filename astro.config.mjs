@@ -38,8 +38,8 @@ const contentSecurityPolicy = {
       const policy = [
         "default-src 'self'",
         `script-src 'self' https://static.cloudflareinsights.com ${[...hashes].sort().join(' ')}`,
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-        "font-src 'self' https://fonts.gstatic.com",
+        "style-src 'self' 'unsafe-inline'",
+        "font-src 'self'",
         "img-src 'self' data:",
         `connect-src 'self' ${apiOrigin} ${liveOrigin} https://cloudflareinsights.com`,
         "frame-ancestors 'none'",
@@ -118,6 +118,10 @@ export default defineConfig({
   ],
   devToolbar: {
     enabled: false,
+  },
+  build: {
+    // The styles go into each page instead of a stylesheet the page has to wait for before it can paint.
+    inlineStylesheets: 'always',
   },
   vite: {
     plugins: [tailwindcss()],

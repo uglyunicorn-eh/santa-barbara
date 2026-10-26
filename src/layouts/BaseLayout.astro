@@ -2,6 +2,8 @@
 import "@/styles/tailwind.css";
 
 import { HOME_DESCRIPTION, SITE_NAME, pageTitle } from "@/site";
+// The Latin file of the self-hosted font (src/styles/fonts.css), preloaded so text doesn't wait for the stylesheet.
+import cuprumLatin from "@/fonts/cuprum-latin.woff2?url";
 
 interface Props {
   title?: string;
@@ -15,7 +17,8 @@ const { title, description = HOME_DESCRIPTION, pageClassNames, noindex } = Astro
 
 const fullTitle = pageTitle(title);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
-const imageUrl = new URL("/og-image.png", Astro.site);
+// Chat apps keep preview images by URL: bump v when the card changes (scripts/og/render.mjs) so they fetch the new one.
+const imageUrl = new URL("/og-image.png?v=2", Astro.site);
 ---
 
 <!doctype html>
@@ -27,9 +30,7 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#b3202c" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap" />
+    <link rel="preload" href={cuprumLatin} as="font" type="font/woff2" crossorigin />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}
 
@@ -44,7 +45,7 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="A scruffy Santa holding a wrapped gift next to the words You're invited: Secret Gift Exchange"
+      content="A startled elf next to the words You're invited: Secret gift exchange, over a glowing HO HO HO sign"
     />
 
     <meta name="twitter:card" content="summary_large_image" />
