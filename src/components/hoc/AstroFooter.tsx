@@ -18,7 +18,7 @@ const items = [
   { key: "github", label: <GitHub size={18} />, menuLabel: <><GitHub size={18} aria-hidden="true" /> GitHub</>, url: "https://github.com/uglyunicorn-eh/santa-barbara", target: "_blank", title: "GitHub" },
 ];
 
-type Item = (typeof items)[number] & { menuLabel?: React.ReactNode };
+type Item = (typeof items)[number];
 
 const Links = ({ list }: { list: Item[] }) => (
   <>
@@ -31,7 +31,7 @@ const Links = ({ list }: { list: Item[] }) => (
   </>
 );
 
-// Static HTML (no script on these pages), so a ☰ menu is a native <details> rather than the app's menu.
+// Static HTML (no script on these pages), so the ☰ menu is a native <details> rather than the app's Base UI menu.
 export const AstroFooter = ({ children }: Props) => (
   <BulmaFooter className="page-footer">
     <div className="footer-menu max-tablet:hidden">
@@ -45,7 +45,7 @@ export const AstroFooter = ({ children }: Props) => (
           <MenuIcon size={18} aria-hidden="true" />
         </summary>
         <div className={`${morePopupClass} absolute right-0 bottom-full z-10 mb-2`}>
-          {(items as Item[]).filter(({ key }) => !COMPACT_KEYS.includes(key)).map(({ key, url, label, menuLabel, ...rest }) => (
+          {items.filter(({ key }) => !COMPACT_KEYS.includes(key)).map(({ key, url, label, menuLabel, ...rest }) => (
             <a key={key} href={url} className={moreItemClass} {...rest}>{menuLabel ?? label}</a>
           ))}
         </div>

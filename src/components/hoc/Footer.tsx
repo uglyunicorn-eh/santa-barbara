@@ -18,7 +18,7 @@ type Props = {
 type MenuItem = {
   key: string;
   label: React.ReactNode;
-  /** The label in the a ☰ menu menu, when `label` isn't text (the GitHub icon). */
+  /** The label in the ☰ menu, when `label` isn't text (the GitHub icon). */
   menuLabel?: React.ReactNode;
   url: string;
   target?: string;
@@ -54,8 +54,11 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
       { key: "github", label: <GitHub size={18} />, menuLabel: <><GitHub size={18} aria-hidden="true" /> GitHub</>, url: "https://github.com/uglyunicorn-eh/santa-barbara", target: "_blank", title: "GitHub" },
     ].filter(Boolean) as MenuItem[],
     [
+      noHome,
+      noUser,
       profile,
-      signOut,
+      profileAsLink,
+      onSignOutClick,
     ],
   );
 
@@ -104,7 +107,7 @@ const MoreMenu = ({ items }: { items: MenuItem[] }) => (
     <Menu.Portal>
       <Menu.Positioner side="top" align="center" sideOffset={8} collisionPadding={16} className="z-10000">
         <Menu.Popup className={cn(morePopupClass, "origin-(--transform-origin) transition-[opacity,scale] duration-150 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0")}>
-          {items.map(({ key, url, label, menuLabel, asLink, onClick, title, ...rest }) => (
+          {items.map(({ key, url, label, menuLabel, asLink, onClick, title: _title, ...rest }) => (
             asLink
               ? <Menu.LinkItem key={key} className={moreItemClass} closeOnClick render={<Link to={url} />}>{menuLabel ?? label}</Menu.LinkItem>
               : <Menu.LinkItem key={key} className={moreItemClass} closeOnClick href={url} onClick={onClick} {...rest}>{menuLabel ?? label}</Menu.LinkItem>

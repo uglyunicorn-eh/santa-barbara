@@ -18,13 +18,15 @@ of both repos at fed0d99 / 061bacf)
 
 - Phase 2 step 3, the design spec: `docs/design-spec.md`, settled (#162).
 - Phase 3, Tailwind and shadcn (Base UI) beside Bulma, with the spec's tokens: no visible
-  change (see Phase 3's "What it took").
-
-- Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev`.
-- Phase 4.1, the Button: every button in the app uses `src/components/ui/button.tsx`.
-
-Open as a stack, to merge in order: #162 (design spec, on its own) and #163 (Tailwind
-setup) → #164 (UI kit) → #165 (Button).
+  change (see Phase 3's "What it took") (#163).
+- Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev` (#164).
+- Phase 4.1, the Button: every button in the app uses `src/components/ui/button.tsx`
+  (#165). Reviewed in the browser along the way, so #165 also has: the sign-in card keeps
+  the Grinch in view and has an X (Esc too) back home; signed out, any page but `/` and
+  `/enter/` goes home; the garage door scrolls when its content is taller than the window,
+  with the sign-in photo fixed on it; form fields keep one message line so an error
+  doesn't push the form down; inputs on the dark cards focus in white; on phones the
+  footer keeps two links and puts the rest under a ☰ menu.
 
 **Next:** Phase 4.2 (form fields; Formik → React Hook Form, Yup → Valibot).
 
