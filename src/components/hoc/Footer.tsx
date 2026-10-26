@@ -15,6 +15,8 @@ type Props = {
   profileAsLink?: boolean;
   /** Where the profile dialog opens (its tabs live under it): "/profile/" on the home screen, under the party on its page. */
   profileBase?: string;
+  /** The links kept in the phone footer's line (the rest go under ☰); COMPACT_KEYS by default. */
+  compactKeys?: string[];
 };
 
 type MenuItem = {
@@ -29,7 +31,7 @@ type MenuItem = {
   asLink?: boolean;
 };
 
-export const Footer = ({ children, noUser, noHome, profileAsLink, profileBase = "/profile/" }: Props) => {
+export const Footer = ({ children, noUser, noHome, profileAsLink, profileBase = "/profile/", compactKeys = COMPACT_KEYS }: Props) => {
   const { profile, signOut } = useCurrentUser();
   // Rolled parties whose name the user hasn't heard yet: a dot on "My Profile", which then opens on the history.
   const { parties: unrevealed } = useUnrevealed();
@@ -77,8 +79,8 @@ export const Footer = ({ children, noUser, noHome, profileAsLink, profileBase = 
   );
 
   // On phones only these two stay in the line; the rest go under a ☰ menu.
-  const inline = items.filter(({ key }) => COMPACT_KEYS.includes(key));
-  const more = items.filter(({ key }) => !COMPACT_KEYS.includes(key));
+  const inline = items.filter(({ key }) => compactKeys.includes(key));
+  const more = items.filter(({ key }) => !compactKeys.includes(key));
 
   return (
     <PageFooter className="page-footer">

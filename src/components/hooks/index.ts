@@ -11,3 +11,4 @@ export { useRevealReminders } from './useRevealReminders';
 export { useTabletUp } from './useTabletUp';
 export { UnrevealedProvider, useUnrevealed } from './useUnrevealed';
 export { useCopyPartyLink } from './useCopy';
+export { TINTS, usePageTint } from './usePageTint';
