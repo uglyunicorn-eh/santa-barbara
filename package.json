@@ -9,7 +9,8 @@
     "start": "astro dev",
     "build": "astro check && astro build && mv dist/404.html dist/_404.html",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "shots": "node scripts/shots/shots.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
@@ -35,6 +36,7 @@
     "@emnapi/runtime": "^1.7.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "playwright": "^1.64.1",
     "prop-types": "^15.8.1",
     "sass": "^1.106.1",
     "typescript": "^6"
