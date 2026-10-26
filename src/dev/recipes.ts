@@ -1,11 +1,7 @@
-// Helpers for the UI kit page. Buttons are the real component now (src/components/ui/button.tsx); the field recipes
-// below are still prototypes (docs/ui-kit.md) until the real form fields are built.
+// Helpers for the UI kit page, which shows the real components (Button, Input, the toaster). These add the looks the
+// kit can't trigger without a mouse or keyboard (hover, focus), and the surfaces it shows them on.
 
 import type { ButtonProps } from "@/components/ui/button";
-//
-// A recipe takes a `state` so the kit can show hover and focus without a mouse; "live" leaves them to the browser.
-
-import { cn } from "@/lib/utils";
 
 export type Surface = "paper" | "night" | "glass";
 export type State = "default" | "hover" | "focus" | "disabled" | "loading" | "live";
@@ -61,11 +57,6 @@ const focusRing = (surface: Surface, variant?: ButtonVariant) =>
       : variant === "destructive" || variant === "ghost-destructive"
         ? "ring-2 ring-destructive ring-offset-2 ring-offset-white"
         : "ring-2 ring-ring ring-offset-2 ring-offset-white";
-const focusVisible = (surface: Surface) =>
-  surface === "paper"
-    ? "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-    : "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-night";
-
 export const forced = (variant: ButtonVariant, surface: Surface, state: State) =>
   state === "hover" ? hovered[variant][toneOf(surface)] : state === "focus" ? focusRing(surface, variant) : "";
 
@@ -74,20 +65,12 @@ export const forced = (variant: ButtonVariant, surface: Surface, state: State) =
 
 export type FieldState = "default" | "focus" | "filled" | "error" | "disabled" | "live";
 
-export function input({ state = "default", size = "md", surface }: { state?: FieldState; size?: ButtonSize; surface: Surface }) {
-  return cn(
-    "w-full min-w-0 rounded-lg border bg-white font-sans text-zinc-900 placeholder:text-zinc-500 outline-none transition-colors duration-150",
-    size === "sm" ? "h-8 px-3 text-sm" : size === "lg" ? "h-12 px-4 text-lg" : "h-10 px-3 text-base",
-    state === "error" ? "border-destructive" : "border-input",
-    // Focus: teal on paper; white on dark surfaces.
-    state === "focus" && `${dark(surface) ? "border-white" : "border-primary"} ${focusRing(surface)}`,
-    state === "live" && `${dark(surface) ? "focus-visible:border-white" : "focus-visible:border-primary"} ${focusVisible(surface)}`,
-    state === "disabled" && "bg-zinc-50 text-zinc-500 pointer-events-none",
-  );
-}
+/** The focus look of the real Input (its `focus-visible:` border and ring), forced for the kit's "focus" sample. */
+export const fieldFocus = (surface: Surface) => `${dark(surface) ? "border-white" : "border-ring"} ${focusRing(surface)}`;
 
-export const label = (surface: Surface) => (dark(surface) ? "text-sm font-medium text-zinc-300" : "text-sm font-medium text-zinc-700");
-export const help = (surface: Surface) => (dark(surface) ? "text-sm text-zinc-400" : "text-sm text-muted-foreground");
+// Labels and notes, as FormField draws them.
+export const label = (surface: Surface) => (dark(surface) ? "text-base font-semibold text-zinc-300" : "text-base font-semibold text-zinc-700");
+export const help = (surface: Surface) => (dark(surface) ? "text-sm text-zinc-300" : "text-sm text-muted-foreground");
 export const error = (surface: Surface) => (dark(surface) ? "text-sm text-red-200" : "text-sm text-destructive");
 
 // ---------------------------------------------------------------------------------------------------------------

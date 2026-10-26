@@ -42,9 +42,7 @@ export const ConfirmPartyClose = () => {
         defaultValues,
         onSubmit,
       }}
-      cardStyle={{
-        width: 700,
-      }}
+      size="md"
     >
       <Content>
 

@@ -44,9 +44,7 @@ export const ConfirmPartyLeave = () => {
         defaultValues,
         onSubmit,
       }}
-      cardStyle={{
-        width: 700,
-      }}
+      size="md"
     >
       <Columns>
         <Columns.Column narrow mobile={{ display: 'hidden' }} className="tablet:flex">

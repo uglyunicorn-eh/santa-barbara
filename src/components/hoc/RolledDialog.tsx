@@ -34,7 +34,7 @@ export const RolledDialog = () => {
       title="This is it! The message you've been waiting for!"
       dismissLabel="Later"
       action={<Button variant="primary" onClick={() => navigate(`/p/${code}/`)}>🦄 Get me to the Gnomik!</Button>}
-      cardStyle={{ width: 600 }}
+      size="sm"
     >
       <Content className="rolled-message">
         <p>Good day, beautiful person!</p>

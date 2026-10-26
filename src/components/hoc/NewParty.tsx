@@ -87,9 +87,7 @@ export const NewParty = () => {
         defaultValues,
         onSubmit,
       }}
-      cardStyle={{
-        width: 600,
-      }}
+      size="sm"
     >
       <Content>
         {!party

@@ -25,9 +25,12 @@ type Props<Values extends FieldValues> = {
   className?: string;
   children?: React.ReactNode;
   form?: FormProps<Values>;
-  cardStyle?: React.CSSProperties;
+  /** The width from tablet up: sm 600px, md 700px (the default), lg 800px. On phones, full width minus 16px. */
+  size?: "sm" | "md" | "lg";
   noHeader?: boolean;
 };
+
+const WIDTHS = { sm: 600, md: 700, lg: 800 };
 
 /** The footer's left side, which content can fill with <DialogFooterStart> (e.g. "Show more parties"). */
 const FooterStartContext = React.createContext<HTMLElement | null>(null);
@@ -93,7 +96,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
   action,
   children,
   form,
-  cardStyle,
+  size = "md",
   noHeader = false,
 }: Props<Values>) => {
   const navigate = useNavigate();
@@ -151,7 +154,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
               ref={popupRef}
               initialFocus={popupRef}
               className="dialog-card relative mx-4 flex max-h-[calc(100vh-40px)] w-full max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-card bg-white shadow-lg outline-none transition-[opacity,scale] duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0 tablet:mx-auto tablet:w-160 tablet:max-w-[calc(100vw-60px)]"
-              style={cardStyle}
+              style={{ width: WIDTHS[size] }}
             >
               {/* In the page's top-right corner, but inside the popup so Tab reaches it in order. */}
               {!noHeader && (
