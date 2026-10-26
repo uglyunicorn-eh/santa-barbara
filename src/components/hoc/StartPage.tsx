@@ -59,7 +59,7 @@ export const StartPage = () => {
               <Divider label="OR" />
             </Columns.Column>
             {/* On phones the two choices stack, with the divider lying flat between them: — OR —, close to both. */}
-            <Columns.Column tablet={{ display: "hidden" }} className="-my-2 py-0" aria-hidden="true">
+            <Columns.Column tablet={{ display: "hidden" }} className="-my-1 py-0" aria-hidden="true">
               <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
                 <span className="w-10 border-t-[0.1rem] border-zinc-300" />
                 OR
