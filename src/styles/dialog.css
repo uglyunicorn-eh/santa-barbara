@@ -147,8 +147,8 @@
   }
 }
 
-/* "The dice are rolled": the email's message as a letter (sender, subject, a stamp), over a bed of envelopes that fills
-   the page behind the card. */
+/* "The dice are rolled": the email's message as a letter (sender, subject, the email's postcard), over a bed of
+   envelopes that fills the page behind the card. */
 .rolled-backdrop {
   background: #111217 url("/rolled-envelopes.jpg") center / cover no-repeat;
   /* Dimmed a little, so the white card stands out. */
@@ -168,24 +168,28 @@
     color: #18181b;
   }
 
-  .rolled-stamp {
-    position: absolute;
-    top: 1.25em;
-    right: 1.25em;
-    display: grid;
-    width: 3.25rem;
-    height: 3.75rem;
-    place-items: center;
-    font-size: 1.75rem;
-    background: #fff;
-    border: 2px dashed #c62a30;
-    outline: 4px solid #fff;
-    transform: rotate(4deg);
-    box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+  /* The email's postcard, pinned to the letter's corner and a little askew; across the top on phones. */
+  .rolled-postcard {
+    float: right;
+    width: min(46%, 340px);
+    height: auto;
+    margin: -0.25em -0.5em 0.75em 1.25em;
+    transform: rotate(3deg);
+    filter: drop-shadow(0 4px 8px rgb(0 0 0 / 0.25));
+
+    @media (max-width: 768px) {
+      float: none;
+      display: block;
+      width: 100%;
+      margin: 0 0 1em;
+      transform: rotate(-1.5deg);
+    }
   }
 
   .rolled-mail-head {
-    margin: 0.25em 4.5rem 1em 0;
+    /* Beside the postcard, not under it: its rule ends where the postcard starts. */
+    display: flow-root;
+    margin: 0.25em 0 1em;
     padding-bottom: 0.75em;
     border-bottom: 1px solid #e4e4e7;
     font-size: 0.9375rem;
