@@ -95,7 +95,9 @@ exist. Components use the roles, not the colours:
 
 Base UI menus (`@base-ui/react/menu`) with the classes in `src/components/ui/menu.ts`: a white card that opens above
 its ☰ button, above everything else on the page. The footer uses one on phones for all but two of its links (on the
-static pages, a native `<details>` with the same look).
+static pages, a native `<details>` with the same look); when "My Profile" is in it with its red dot (rolled
+parties to reveal), the ☰ shows the dot too. The host's ☰ beside "Roll the dice" has Copy link, Invite by email…
+and, after a divider, Delete this party in red; items have a 16px icon.
 
 ## Form fields
 
@@ -106,6 +108,9 @@ static pages, a native `<details>` with the same look).
 - **Inline fields** (the profile's name and email): input and buttons on one line, all 40px; the error below. "Save"
   appears only once the name has changed.
 - **On glass** (the sign-in card): labels and help in `zinc-300`, white focus, errors in light red.
+- **Email tags** (`EmailTags`, the invite dialog): addresses become teal pills as you type Enter, a comma, a space or
+  paste a list; one that doesn't look like an address stays, as a red pill, to fix or remove. Backspace in the empty
+  field takes the last one back. At most 10.
 - Fields at their limit just stop typing.
 
 ## Dialogs, tabs, toasts
@@ -119,12 +124,12 @@ static pages, a native `<details>` with the same look).
   dialog keeps one height on both tabs, its tabs pinned to the top edge.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
-- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's links. Stacked. The
-  dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight, the icon
-  beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green (`green-700`), white
-  text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`) have an icon (the 🎲), a title, a
-  description and an action ("Open"), stay until dismissed or opened, and follow the surface: dark on night, light on
-  the party page.
+- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's
+  links. The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+  the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
+  (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
+  have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
+  surface: dark on night, light on the party page.
 
 ## Emails
 

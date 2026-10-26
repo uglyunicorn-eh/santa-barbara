@@ -8,8 +8,7 @@ import { DialogBox } from "@/components/DialogBox";
 import { HaveQuestion } from "@/components/HaveQuestion";
 import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
-import { useAppClient } from "@/components/hooks";
-import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import { useAppClient, useCopy } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
 import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
@@ -58,20 +57,13 @@ export const NewParty = () => {
     ],
   );
 
-  const { info, error } = useNotifications();
+  const copy = useCopy();
   const copyCode = React.useCallback(
-    async () => {
-      if (!party) {
-        return;
-      }
-      try {
-        await navigator.clipboard.writeText(party.code);
-        info(`Code ${party.code} copied! Pass it on to your friends.`);
-      } catch {
-        error(`We couldn't copy the code. It's ${party.code}.`);
-      }
-    },
-    [party, info, error],
+    () => party && copy(party.code, {
+      copied: `Code ${party.code} copied! Pass it on to your friends.`,
+      failed: `We couldn't copy the code. It's ${party.code}.`,
+    }),
+    [party, copy],
   );
 
   const goToParty = React.useCallback(

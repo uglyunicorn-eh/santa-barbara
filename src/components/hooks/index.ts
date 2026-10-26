@@ -10,4 +10,4 @@ export { useLiveSocket } from './useLiveSocket';
 export { useRevealReminders } from './useRevealReminders';
 export { useTabletUp } from './useTabletUp';
 export { UnrevealedProvider, useUnrevealed } from './useUnrevealed';
-export { partyLink, useCopyPartyLink } from './useCopyPartyLink';
+export { useCopy, useCopyPartyLink } from './useCopy';

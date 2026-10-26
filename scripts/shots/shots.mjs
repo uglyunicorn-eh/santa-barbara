@@ -70,7 +70,7 @@ const SCREENS = [
   { name: "rolled-dialog", path: `/rolled/${CODES.closed}`, signedIn: true },
   { name: "new-party", path: "/new/", signedIn: true },
   { name: "new-party-created", path: "/new/", signedIn: true, act: submitForm },
-  { name: "new-party-code-copied", path: "/new/", signedIn: true, act: async (page) => { await submitForm(page); await page.locator(".code-sticker").click(); await page.waitForTimeout(500); } },
+  { name: "new-party-code-copied", path: "/new/", signedIn: true, act: copyNewCode },
   { name: "join-by-code", path: "/join/", signedIn: true },
   { name: "party-host", path: `/p/${CODES.hostOpen}/`, signedIn: true },
   { name: "party-guest", path: `/p/${CODES.guestOpen}/`, signedIn: true },
@@ -102,6 +102,13 @@ function openMenu(label) {
       await page.waitForTimeout(400);
     }
   };
+}
+
+/** Creates the party, then clicks its code sticker (which copies the code, with a toast). */
+async function copyNewCode(page) {
+  await submitForm(page);
+  await page.locator(".code-sticker").click();
+  await page.waitForTimeout(500);
 }
 
 /** Clicks the button whose name contains this text, and waits for what it opens. */

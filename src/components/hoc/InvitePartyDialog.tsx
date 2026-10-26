@@ -35,15 +35,13 @@ export const InvitePartyDialog = () => {
   const { success, info } = useNotifications();
   const navigate = useNavigate();
   const partyPath = `/p/${party?.code}/`;
-  // One id per opened dialog: a retry of the same request never emails twice.
-  const requestId = React.useRef(crypto.randomUUID());
 
   const onSubmit = React.useCallback(
     async ({ emails }: Values) => {
       if (!party) {
         return;
       }
-      const result = await inviteToParty({ code: party.code, emails, requestId: requestId.current });
+      const result = await inviteToParty({ code: party.code, emails });
       if (!result) {
         return;
       }

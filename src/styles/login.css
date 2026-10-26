@@ -21,11 +21,10 @@
       }
     }
   }
-
 }
 
-/* The sign-in card: on the front door, or in its dialog (portalled out of the door, so it needs its own rules). */
-:is(.hero.login-container, .login-dialog) .grinch-box {
+/* The sign-in card, in its dialog over the front door (portalled out of the door, so not under .login-container). */
+.login-dialog .grinch-box {
   font-size: 1.2rem;
 
   .card {

@@ -141,7 +141,6 @@
 
         @media (max-width: 768px) {
           font-size: 2rem;
-          letter-spacing: 0.15em;
         }
       }
     }
@@ -157,10 +156,6 @@
 }
 
 .rolled-box {
-  .dialog-body {
-    background-color: transparent;
-  }
-
   .rolled-mail {
     position: relative;
     padding: 1em 1.25em 0.25em;

@@ -75,8 +75,8 @@ export const NotificationsContainer = () => {
 export type Reminder = {
   /** Stable id: showing the same reminder again doesn't add another. */
   id: string;
-  /** Shown beside the title, like the other toasts' icons (an emoji is fine). */
-  icon?: React.ReactNode;
+  /** An emoji shown beside the title, where the other toasts have their icon. */
+  icon?: string;
   title: string;
   description?: React.ReactNode;
   action: { label: string; onClick: () => void };
@@ -92,7 +92,7 @@ export const remind = ({ id, icon, title, description, action, onDismiss }: Remi
   forgotten.delete(id);
   toast(title, {
     id,
-    icon,
+    icon: icon && <span className="toast-emoji">{icon}</span>,
     description,
     action,
     duration: Infinity,

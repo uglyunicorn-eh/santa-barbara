@@ -5,16 +5,19 @@ import { useNavigate } from 'react-router-dom';
 import { X } from 'react-feather';
 import { Card, Container, Content } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import hiImg from "@/images/grinch.png";
 
 type Props = {
   /** Where the X in the top-right corner (and Esc) goes. No X without it. */
   closeTo?: string,
+  /** In a dialog, which handles Esc itself: the X only. */
+  inDialog?: boolean,
   children?: React.ReactNode,
 };
 
-export const GrinchBox = ({ closeTo, children }: Props) => (
+export const GrinchBox = ({ closeTo, inDialog = false, children }: Props) => (
   <Container textAlign="centered" className="grinch-box">
     <motion.div
       initial={{ opacity: 0.2, scale: 0.9 }}
@@ -22,7 +25,7 @@ export const GrinchBox = ({ closeTo, children }: Props) => (
       transition={{ duration: 0.1 }}
     >
       <Card>
-        {closeTo && <CloseX to={closeTo} />}
+        {closeTo && <CloseX to={closeTo} onEscape={!inDialog} />}
         <Card.Content>
           <img src={hiImg.src} alt="Hi!" className="hi-img" width={250} />
 
@@ -50,10 +53,10 @@ export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string
     <Dialog.Root open modal onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-10000 bg-black/55 backdrop-blur-[2px] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-        <Dialog.Viewport className={`grinch-dialog fixed inset-0 z-10000 overflow-y-auto overscroll-contain ${className ?? ""}`}>
+        <Dialog.Viewport className={cn("fixed inset-0 z-10000 overflow-y-auto overscroll-contain", className)}>
           <div className="flex min-h-full items-center justify-center px-4 pb-8">
             <Dialog.Popup ref={popupRef} initialFocus={popupRef} className="outline-none">
-              <GrinchBox closeTo={closeTo}>{children}</GrinchBox>
+              <GrinchBox closeTo={closeTo} inDialog>{children}</GrinchBox>
             </Dialog.Popup>
           </div>
         </Dialog.Viewport>
@@ -62,10 +65,13 @@ export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string
   );
 };
 
-const CloseX = ({ to }: { to: string }) => {
+const CloseX = ({ to, onEscape }: { to: string; onEscape: boolean }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    if (!onEscape) {
+      return;
+    }
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !e.defaultPrevented && !e.isComposing) {
         navigate(to);
@@ -73,7 +79,7 @@ const CloseX = ({ to }: { to: string }) => {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [navigate, to]);
+  }, [navigate, to, onEscape]);
 
   const onClick = React.useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {

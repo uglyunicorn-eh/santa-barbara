@@ -285,10 +285,13 @@ export const useAppClient = () => {
     ],
   );
 
-  /** Emails invites to the party (host only). Undefined, after an error toast, when it failed. */
+  /**
+   * Emails invites to the party (host only). Safe to retry: the API skips addresses it invited in the last day.
+   * Undefined, after an error toast, when it failed.
+   */
   const inviteToParty = React.useCallback(
-    async ({ code, emails, requestId }: { code: string; emails: string[]; requestId: string }): Promise<InviteResult | undefined> => {
-      const result = await call<InviteResult>("/parties/invite", { method: "POST", body: { code, emails }, key: requestId, retry: true });
+    async ({ code, emails }: { code: string; emails: string[] }): Promise<InviteResult | undefined> => {
+      const result = await call<InviteResult>("/parties/invite", { method: "POST", body: { code, emails }, retry: true });
       if (!result.ok) {
         error(result.error.message);
         return undefined;

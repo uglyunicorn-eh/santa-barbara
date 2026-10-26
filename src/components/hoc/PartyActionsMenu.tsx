@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu } from "@base-ui/react/menu";
 import { Link2, Mail, Menu as MenuIcon, Trash2 } from 'react-feather';
 import { Route, Routes, useNavigate } from 'react-router-dom';
