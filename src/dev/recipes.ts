@@ -1,5 +1,5 @@
 // Helpers for the UI kit page. Buttons are the real component now (src/components/ui/button.tsx); the field recipes
-// below are still prototypes from docs/design-spec.md until Phase 4.2 builds the real form fields.
+// below are still prototypes (docs/ui-kit.md) until the real form fields are built.
 
 import type { ButtonProps } from "@/components/ui/button";
 //

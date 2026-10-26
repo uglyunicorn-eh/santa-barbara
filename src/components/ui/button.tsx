@@ -3,8 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-// Buttons from docs/design-spec.md §5 (shadcn's Base UI button, with our variants). The UI kit (/ui-kit in dev)
-// shows every variant in every state.
+// Buttons from docs/ui-kit.md (shadcn's Base UI button, with our variants). The UI kit (/ui-kit in dev) shows every
+// variant in every state.
 //
 // `surface` is what the button sits on: "light" (white cards, the light party page) or "dark" (night photos and
 // glass panels). Only secondary, ghost and link look different on dark.

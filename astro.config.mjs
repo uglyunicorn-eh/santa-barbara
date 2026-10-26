@@ -52,7 +52,7 @@ const contentSecurityPolicy = {
 };
 
 /**
- * The UI kit (docs/tailwind-migration-plan.md, Phase 2 step 4): every control in every state on the app's surfaces,
+ * The UI kit (docs/ui-kit.md): every control in every state on the app's surfaces,
  * at /ui-kit. Only in `npm run dev`: the page lives outside src/pages/, so a production build never emits it.
  */
 const uiKit = {

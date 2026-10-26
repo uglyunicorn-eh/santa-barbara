@@ -1,8 +1,8 @@
 # Screenshots (`npm run shots`)
 
 Takes a screenshot of every screen in the app at 320, 375 and 1280px wide, once with normal data and once with the
-longest values the API allows, and writes a report of anything that overflows. It's how the Bulma → Tailwind
-migration checks that layouts don't move (see `docs/tailwind-migration-plan.md`, Phase 2).
+longest values the API allows, and writes a report of anything that overflows. It's how a styling change
+checks that layouts don't move.
 
 ```bash
 npm run shots                                   # all screens, into .shots/<branch>/
