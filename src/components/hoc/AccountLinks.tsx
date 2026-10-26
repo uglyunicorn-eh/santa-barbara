@@ -6,7 +6,6 @@ import { ClipLoader } from 'react-spinners';
 import { GrinchBox } from "src/components/GrinchBox";
 import { SnowConfetti } from "src/components/SnowConfetti";
 import { LoginHero } from "src/components/hoc/LoginBox";
-import { NotificationsContainer } from "src/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser } from "src/components/hooks";
 import type { LinkResult } from "src/components/hooks/useAppClient";
 
@@ -39,7 +38,6 @@ const useLinkResult = <T,>(run: (token: string) => Promise<LinkResult<T>>) => {
 
 const LinkPage = ({ children }: { children: React.ReactNode }) => (
   <>
-    <NotificationsContainer />
     <LoginHero>
       <GrinchBox>
         {children}
