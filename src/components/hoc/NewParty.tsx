@@ -8,7 +8,7 @@ import { DialogBox } from "@/components/DialogBox";
 import { HaveQuestion } from "@/components/HaveQuestion";
 import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
-import { useAppClient, useCopy } from "@/components/hooks";
+import { useAppClient, useCopyPartyLink } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
 import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
@@ -57,14 +57,8 @@ export const NewParty = () => {
     ],
   );
 
-  const copy = useCopy();
-  const copyCode = React.useCallback(
-    () => party && copy(party.code, {
-      copied: `Code ${party.code} copied! Pass it on to your friends.`,
-      failed: `We couldn't copy the code. It's ${party.code}.`,
-    }),
-    [party, copy],
-  );
+  // The sticker copies the party's link (what friends open), not just the code.
+  const copyLink = useCopyPartyLink(party ?? { code: "", isProtected: false });
 
   const goToParty = React.useCallback(
     () => {
@@ -130,8 +124,8 @@ export const NewParty = () => {
                 Here's your party's secret code:
               </p>
 
-              {/* A sticker with its corner lifting, as if you could peel the code off and hand it over: a click copies it. */}
-              <button type="button" className="code-sticker" onClick={copyCode} title="Copy the code" aria-label={`Copy the code ${party.code}`}>
+              {/* A sticker with its corner lifting, as if you could peel the code off and hand it over: a click copies the party's link. */}
+              <button type="button" className="code-sticker" onClick={copyLink} title="Copy the party's link" aria-label={`${party.code}: copy the party's link`}>
                 <span className="code-sticker-text">{party.code}</span>
               </button>
             </>

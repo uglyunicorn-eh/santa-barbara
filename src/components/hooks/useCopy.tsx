@@ -7,7 +7,7 @@ import type { Party } from "@/types";
  * Copies text to the clipboard and says so in an info toast; when the browser won't copy, an error toast shows the
  * text instead, so it can still be copied by hand.
  */
-export const useCopy = () => {
+const useCopy = () => {
   const { info, error } = useNotifications();
 
   return React.useCallback(
