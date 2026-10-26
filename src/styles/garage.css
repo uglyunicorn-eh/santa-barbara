@@ -11,3 +11,26 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 }
+
+/* The page steps back behind the sign-in dialog (useSteppedBack in src/components/GrinchBox.tsx): on desktop it
+   shrinks into a black frame with rounded corners. "ready" is full size, on black; "back" is stepped back. */
+@media (min-width: 769px) {
+  html[data-behind],
+  html[data-behind] body {
+    background: #000;
+  }
+
+  html[data-behind] .garage-door {
+    clip-path: inset(0 0 round 0);
+    transition: transform 250ms ease-out, clip-path 250ms ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  html[data-behind="back"] .garage-door {
+    transform: scale(var(--behind-scale));
+    clip-path: inset(var(--behind-clip-y) 0 round var(--behind-radius));
+  }
+}

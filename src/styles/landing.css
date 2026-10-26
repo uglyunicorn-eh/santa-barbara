@@ -1,0 +1,571 @@
+/* The front door for anyone signed out (src/components/Landing.tsx): a hero over the HO HO HO photo, then sections */
+/* on dark warm backgrounds. In the app it scrolls inside the garage door, whose photo stays put behind the hero. */
+
+.landing {
+  --landing-ember: #140a0b;
+  --landing-night: #0f1015;
+  --landing-accent: #f87171;
+
+  color: #d4d4d8;
+
+  h1,
+  h2,
+  h3 {
+    color: white;
+    font-weight: 600;
+  }
+
+  .landing-reveal > .page-footer {
+    background: var(--landing-ember);
+    padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Hero ------------------------------------------------------------------------------------------------------------ */
+
+/* The elf's picture spills past the card, and on a narrow desktop its transparent margin past the screen: no sideways
+   scrolling for that. */
+.landing-hero {
+  overflow-x: clip;
+}
+
+.landing-hero .hero-body {
+  padding: 140px 24px 48px;
+
+  /* Room above the card for the elf hanging over its corner. */
+  @media (max-width: 899px) {
+    padding: 140px 16px 24px;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 110px;
+  }
+}
+
+/* Frosted glass over the bright letters, with the elf breaking out over its top-right corner (centred on phones). */
+.landing-card {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 64px 360px 64px 64px;
+  border-radius: 36px;
+  background: rgb(10 4 5 / 0.72);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  backdrop-filter: blur(16px) saturate(0.8);
+  -webkit-backdrop-filter: blur(16px) saturate(0.8);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.45);
+  color: #e4e4e7;
+  text-align: left;
+
+  h1 {
+    font-size: 4.25rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 1099px) {
+    padding-right: 300px;
+
+    h1 {
+      font-size: 3.6rem;
+    }
+  }
+
+  /* Stacked and centred, the elf hanging over the top-right corner (over the middle on phones). */
+  @media (max-width: 899px) {
+    max-width: 620px;
+    padding: 150px 40px 40px;
+    text-align: center;
+
+    h1 {
+      font-size: 3.25rem;
+    }
+  }
+
+  /* Darker on phones: the letters behind are bigger and brighter there. */
+  @media (max-width: 768px) {
+    padding: 112px 22px 28px;
+    border-radius: 28px;
+    background: rgb(10 4 5 / 0.82);
+
+    h1 {
+      font-size: 2.6rem;
+    }
+  }
+}
+
+.landing-logo {
+  /* The sticker has a wide transparent margin, so it's drawn large and placed by its middle. */
+  position: absolute;
+  top: -150px;
+  right: -110px;
+  width: 500px;
+  height: 500px;
+  max-width: none;
+  pointer-events: none;
+  filter: drop-shadow(0 14px 24px rgb(0 0 0 / 0.6));
+  transform-origin: 50% 70%;
+  animation: landing-elf 5s ease-in-out infinite;
+
+  @media (max-width: 1099px) {
+    top: -110px;
+    right: -50px;
+    width: 400px;
+    height: 400px;
+  }
+
+  @media (max-width: 899px) {
+    top: -170px;
+    right: -50px;
+    width: 320px;
+    height: 320px;
+  }
+
+  /* Phones: centred over the card's top edge. */
+  @media (max-width: 768px) {
+    top: -120px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 230px;
+    height: 230px;
+    animation-name: landing-elf-phone;
+  }
+}
+
+@keyframes landing-elf {
+  0%, 100% { transform: rotate(9deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(-10px); }
+}
+
+@keyframes landing-elf-phone {
+  0%, 100% { transform: rotate(3deg) translateY(0); }
+  50% { transform: rotate(-2deg) translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-logo {
+    animation: none;
+    transform: rotate(8deg);
+
+    @media (max-width: 768px) {
+      transform: rotate(3deg);
+    }
+  }
+}
+
+.landing-card-text {
+  position: relative;
+}
+
+.landing-tagline {
+  margin-top: 20px;
+  font-size: 1.45rem;
+  line-height: 1.35;
+  text-wrap: pretty;
+
+  @media (max-width: 899px) {
+    text-wrap: balance;
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 14px;
+    font-size: 1.15rem;
+  }
+}
+
+.landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+
+  /* Both buttons the same size, a full row each on a phone. */
+  > *,
+  > astro-slot > * {
+    min-width: 220px;
+  }
+
+  @media (max-width: 899px) {
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-top: 24px;
+
+    > *,
+    > astro-slot > * {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+}
+
+/* The closing section's button, centred under its heading. */
+.landing-final .landing-actions {
+  justify-content: center;
+}
+
+/* The pulsing ring grows past the screen's edges on a phone: no sideways scrolling for that. */
+.landing-final {
+  overflow-x: clip;
+}
+
+.landing-hero .hero-foot {
+  text-align: center;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+}
+
+.landing-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.45);
+  color: rgb(255 255 255 / 0.85);
+  font-size: 1.05rem;
+
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
+
+  svg {
+    animation: landing-nudge 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes landing-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-more svg {
+    animation: none;
+  }
+}
+
+/* Sections -------------------------------------------------------------------------------------------------------- */
+
+.landing-section {
+  padding: 88px 16px;
+  background: var(--landing-ember);
+  font-size: 1.1rem;
+  line-height: 1.5;
+
+  & + & {
+    background: var(--landing-night);
+  }
+
+  h2 {
+    margin: 4px 0 40px;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  h3 {
+    margin: 12px 0 6px;
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    padding: 56px 16px;
+
+    h2 {
+      margin-bottom: 28px;
+      font-size: 1.9rem;
+    }
+  }
+}
+
+.landing-eyebrow {
+  color: var(--landing-accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landing-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+
+  li {
+    position: relative;
+    padding: 24px 28px 32px;
+    border-radius: 24px;
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    text-align: center;
+  }
+
+  img {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    img {
+      width: 128px;
+      height: 128px;
+    }
+  }
+}
+
+.landing-step-number {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: white;
+  font-weight: 600;
+}
+
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  li {
+    padding: 24px;
+    border-radius: 20px;
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  svg {
+    color: var(--landing-accent);
+  }
+
+  @media (max-width: 1023px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.landing-section.landing-final {
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),
+    var(--landing-ember);
+
+  h2 {
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 1.25rem;
+    text-wrap: balance;
+  }
+
+  .landing-actions {
+    margin-top: 44px;
+    margin-bottom: 24px;
+  }
+
+  /* Phones: the rim hugs the button rather than filling the width, so its pulse has room inside the screen. */
+  @media (max-width: 768px) {
+    padding-bottom: 32px;
+
+    p {
+      font-size: 1.15rem;
+    }
+
+    .landing-actions {
+      align-items: center;
+      margin: 32px 0 8px;
+
+      > * {
+        width: auto;
+      }
+    }
+  }
+}
+
+/* The static copy of the landing on the home page (index.astro), shown until the app loads. Signed in, the app */
+/* skips the door, so the copy stays hidden rather than flashing. */
+.signed-in .door-fallback {
+  display: none;
+}
+
+/* The hero and sections, above the pinned closing block (.landing-reveal). */
+.landing-main {
+  position: relative;
+  z-index: 1;
+
+  > .landing-hero,
+  > .landing-section {
+    position: relative;
+  }
+
+  /* See-through, over the backdrop (login.css gives a sign-in hero its own photo). */
+  > .hero.landing-hero.login-container {
+    background: transparent;
+  }
+}
+
+/* The HO HO HO photo: a track the height of the hero and sections, with the photo inside it one window tall, pinned
+   to the top while the hero scrolls off it and the sections slide over it. It can't stick past the end of the track,
+   so it never reaches the pinned closing block. */
+.landing-backdrop {
+  position: absolute;
+  inset: 0;
+  /* The photo starts a little larger than the screen (below): no sideways scrolling for that. */
+  overflow: clip;
+
+  > div {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #170505;
+    background-image: url("/login-garage-door.jpg");
+    background-size: cover;
+    background-position: center center;
+
+    @media (max-width: 768px) and (orientation: portrait) {
+      background-image: url("/login-garage-door-portrait.jpg");
+      /* As on the sign-in door (login.css): HO HO HO turned on its side, filling the screen. */
+      background-size: 145% auto;
+      background-position: 36% center;
+    }
+  }
+}
+
+/* Parallax where the browser can tie an animation to scrolling: while the first screen scrolls by, the photo drifts up
+   at a third of the speed, settles from 108% to its own size and dims a little. Elsewhere it simply holds still. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Longhands, and the timeline in a rule of its own: the CSS minifier otherwise folds animation-timeline into the
+       animation shorthand, which browsers reject, dropping the whole declaration. */
+    .landing-backdrop > div {
+      animation-name: landing-parallax;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .landing-main .landing-backdrop > div {
+      animation-timeline: scroll();
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+@keyframes landing-parallax {
+  from { transform: translateY(0) scale(1.08); filter: brightness(100%); }
+  to { transform: translateY(-33vh) scale(1); filter: brightness(0.5); }
+}
+
+/* The reveal: the closing section and footer stay pinned to the bottom, under everything above them, which slides up
+   off them at the end of the page. Only where they fit in the window; on a short screen they'd lose their top. */
+@media (min-height: 700px) {
+  .landing-main > .landing-section:last-of-type {
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.6);
+  }
+
+  .landing-reveal {
+    position: sticky;
+    bottom: 0;
+    z-index: 0;
+    background: var(--landing-ember);
+  }
+}
+
+/* Past either end (Safari's bounce) shows the garage door's own background, which holds the sign-in photo. With the
+   landing, the hero carries the photo itself, so the door shows the colour of whatever end it's bouncing at: the
+   photo's dark top above, the footer's colour below. */
+.garage-door:has(.landing) {
+  background: linear-gradient(#090304 50%, #140a0b 50%);
+}
+
+/* The closing section's button: a white rim with a soft glow, a ring pulsing out of it, and a little wiggle now and
+   then. On the wrapper, not the button, so the button's own focus ring stays as it is. */
+.landing-party-bezel {
+  position: relative;
+  display: inline-flex;
+  padding: 12px;
+  border-radius: 999px;
+  border: 2px solid white;
+  box-shadow:
+    0 0 24px rgb(255 255 255 / 0.25),
+    inset 0 0 12px rgb(255 255 255 / 0.12);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    border: 2px solid white;
+    pointer-events: none;
+    animation: landing-party-pulse 2.4s ease-out infinite;
+  }
+
+  > *,
+  > astro-slot > * {
+    animation: landing-party-wiggle 4s ease-in-out infinite;
+  }
+
+  &:hover > *,
+  &:hover > astro-slot > *,
+  &:focus-within > *,
+  &:focus-within > astro-slot > * {
+    animation-play-state: paused;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+
+    &::after {
+      animation-name: landing-party-pulse-small;
+    }
+  }
+}
+
+@keyframes landing-party-pulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.12, 1.45); }
+}
+
+@keyframes landing-party-wiggle {
+  0%, 84%, 100% { transform: rotate(0) scale(1); }
+  87% { transform: rotate(-3deg) scale(1.04); }
+  90% { transform: rotate(3deg) scale(1.04); }
+  93% { transform: rotate(-2deg) scale(1.02); }
+  96% { transform: rotate(1deg) scale(1); }
+}
+
+/* Smaller on phones, to stay inside the screen. */
+@keyframes landing-party-pulse-small {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.08, 1.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-party-bezel::after,
+  .landing-party-bezel > *,
+  .landing-party-bezel > astro-slot > * {
+    animation: none;
+  }
+
+  .landing-party-bezel::after {
+    opacity: 0;
+  }
+}

@@ -15,6 +15,11 @@ operated by **Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or
 By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of them, you may
 not use the Service.
 
+## Eligibility
+
+You must be at least 18 years old to use the Service. Some of its illustrations are cheeky and meant for grown-ups. By
+signing in you confirm that you are 18 or older.
+
 ## The Service
 
 The Service lets you host or join a secret gift-exchange party, randomly assigns each participant someone to give a

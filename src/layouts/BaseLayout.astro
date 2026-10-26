@@ -1,25 +1,25 @@
 ---
 import "@/styles/tailwind.css";
 
+import { HOME_DESCRIPTION, SITE_NAME, pageTitle } from "@/site";
+
 interface Props {
   title?: string;
   description?: string;
   pageClassNames?: string[];
+  /** Keeps the page out of search results; it then has no canonical URL either. */
+  noindex?: boolean;
 }
 
-const SITE_NAME = "Anonymous Ded Morozes";
-const DEFAULT_DESCRIPTION =
-  "You're invited to a secret gift exchange. Join the party, wait for the dice roll, and find out who you're getting a gift for. No passwords, no spam.";
+const { title, description = HOME_DESCRIPTION, pageClassNames, noindex } = Astro.props;
 
-const { title, description = DEFAULT_DESCRIPTION, pageClassNames } = Astro.props;
-
-const fullTitle = [title, SITE_NAME].filter(Boolean).join(" | ");
+const fullTitle = pageTitle(title);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const imageUrl = new URL("/og-image.png", Astro.site);
 ---
 
 <!doctype html>
-<html class:list={pageClassNames}>
+<html lang="en" class:list={pageClassNames}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -31,13 +31,13 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={canonicalUrl} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
+    {!noindex && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
@@ -51,6 +51,8 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={imageUrl} />
+
+    <slot name="head" />
   </head>
   <body>
     <slot />

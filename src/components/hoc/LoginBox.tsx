@@ -7,6 +7,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
 import { GrinchDialog } from "@/components/GrinchBox";
+import { Landing } from "@/components/Landing";
 import { SnowConfetti } from "@/components/SnowConfetti";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "@/components/forms";
@@ -29,9 +30,10 @@ const schema = v.object({
 });
 
 export const LoginBox = () => {
+  usePageTint(TINTS.loginDoor);
   return (
-    <>
-      <LoginHero>
+    <Landing
+      enter={
         <Routes>
           <Route path="/" Component={EnterActions} />
           {/* The sign-in form opens over the front door, which stays as it was behind it. */}
@@ -39,10 +41,18 @@ export const LoginBox = () => {
           {/* Signed out, every other page (the profile, a new party…) is the front door. */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </LoginHero>
-    </>
+      }
+      enterAgain={<EnterActions label="Let's get this party started!" />}
+      footer={<DoorFooter />}
+    />
   );
 };
+
+const DoorFooter = () => (
+  <Footer noUser noHome profileAsLink>
+    <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
+  </Footer>
+);
 
 export const LoginHero = ({ children }: { children: React.ReactNode }) => {
   usePageTint(TINTS.loginDoor);
@@ -58,34 +68,20 @@ const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
     </Hero.Body>
 
     <Hero.Footer>
-      <Footer noUser noHome profileAsLink>
-        <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
-      </Footer>
+      <DoorFooter />
     </Hero.Footer>
   </Hero>
 );
 
-const EnterActions = () => {
+const EnterActions = ({ label = "Enter with your email address" }: { label?: string }) => {
   const navigate = useNavigate();
 
-  const [busy, setBusy] = React.useState(false);
-
-  const onLoginClick = React.useCallback(
-    async () => {
-      setBusy(true);
-      await sleep(500);
-      navigate("/enter/");
-      // The button stays on the page behind the sign-in dialog: when the dialog closes, it's ready again.
-      setBusy(false);
-    },
-    [
-      navigate,
-    ],
-  );
+  // The dialog opens on the click, and the page steps back behind it at the same moment (GrinchDialog).
+  const onLoginClick = React.useCallback(() => navigate("/enter/"), [navigate]);
 
   return (
-    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
-      Enter with your email address
+    <Button variant="brand" size="lg" surface="dark" pill onClick={onLoginClick}>
+      {label}
     </Button>
   );
 }
@@ -158,12 +154,17 @@ const EnterForm = () => {
             />
 
             <p>Enter your email address above and we'll send you a magic link to sign in.</p>
-            <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
+            <p>We promise not to send you any marketing materials or share your personal data with third parties. No tracking cookies either: we only keep what's needed to sign you in.</p>
 
             <div className="actions flex flex-col items-center gap-3">
               <Submit variant="brand" size="lg" surface="dark" pill>Send me a magic link!</Submit>
               <a href="/how-it-works/" target="_blank" className={buttonVariants({ variant: "ghost", surface: "dark", pill: true })}>How this works?</a>
             </div>
+
+            <p className="legal">
+              By entering, you confirm you're 18 or older and agree to
+              our <a href="/terms/" target="_blank">Terms</a> and <a href="/privacy/" target="_blank">Privacy&nbsp;Policy</a>.
+            </p>
           </Form>
         )
       }

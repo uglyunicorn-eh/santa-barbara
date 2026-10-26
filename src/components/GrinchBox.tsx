@@ -20,9 +20,10 @@ type Props = {
 export const GrinchBox = ({ closeTo, inDialog = false, children }: Props) => (
   <Container textAlign="centered" className="grinch-box">
     <motion.div
-      initial={{ opacity: 0.2, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.1 }}
+      // In step with the backdrop and the page stepping back behind a dialog (src/styles/garage.css).
+      transition={{ duration: 0.25, ease: "easeOut" }}
     >
       <Card>
         {closeTo && <CloseX to={closeTo} onEscape={!inDialog} />}
@@ -44,6 +45,7 @@ export const GrinchBox = ({ closeTo, inDialog = false, children }: Props) => (
  * scrolls inside the dialog. Above the garage door (z-index 9999), like the menus.
  */
 export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string; className?: string; children?: React.ReactNode }) => {
+  useSteppedBack();
   const navigate = useNavigate();
   const onOpenChange = React.useCallback((open: boolean) => { if (!open) navigate(closeTo); }, [navigate, closeTo]);
   // Focus starts on the card, not the X; a field marked `autofocus` takes it next.
@@ -52,7 +54,7 @@ export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string
   return (
     <Dialog.Root open modal onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-10000 bg-black/55 backdrop-blur-[2px] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+        <Dialog.Backdrop className="fixed inset-0 z-10000 bg-black/55 backdrop-blur-[2px] transition-opacity duration-250 ease-out data-ending-style:opacity-0 data-starting-style:opacity-0" />
         <Dialog.Viewport className={cn("fixed inset-0 z-10000 overflow-y-auto overscroll-contain", className)}>
           <div className="flex min-h-full items-center justify-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
             <Dialog.Popup ref={popupRef} initialFocus={popupRef} className="outline-none">
@@ -63,6 +65,67 @@ export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string
       </Dialog.Portal>
     </Dialog.Root>
   );
+};
+
+/** The black frame around the page behind the dialog, and the page's rounded corners, in screen pixels. */
+const FRAME = 20;
+/** As long as the step back takes (src/styles/garage.css), so the black stays until the page is full size again. */
+const STEP_MS = 250;
+
+let stepForwardDone: ReturnType<typeof setTimeout> | undefined;
+
+const measureStepBack = () => {
+  const root = document.documentElement;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const scale = (width - 2 * FRAME) / width;
+  // Clip and radius apply before the shrinking: in the page's own pixels.
+  const clipY = Math.max(0, FRAME - (height * (1 - scale)) / 2) / scale;
+  root.style.setProperty("--behind-scale", String(scale));
+  root.style.setProperty("--behind-clip-y", `${clipY}px`);
+  root.style.setProperty("--behind-radius", `${FRAME / scale}px`);
+};
+
+/**
+ * The page steps back for a dialog (on desktop, src/styles/garage.css): it shrinks to leave a black frame of FRAME px
+ * on every side, with rounded corners. It shrinks evenly, so on a wide window the shrinking alone leaves less than
+ * FRAME above and below: a clip takes the rest off the top and bottom.
+ */
+const stepBack = () => {
+  const root = document.documentElement;
+  clearTimeout(stepForwardDone);
+  if (root.dataset.behind === "back") {
+    return;
+  }
+  measureStepBack();
+  // Full size first, so the step back animates from there.
+  root.dataset.behind = "ready";
+  void root.offsetWidth;
+  root.dataset.behind = "back";
+};
+
+/** The page comes forward to full size again; the black goes once it's there. */
+const stepForward = () => {
+  const root = document.documentElement;
+  root.dataset.behind = "ready";
+  stepForwardDone = setTimeout(() => {
+    delete root.dataset.behind;
+    for (const name of ["--behind-scale", "--behind-clip-y", "--behind-radius"]) {
+      root.style.removeProperty(name);
+    }
+  }, STEP_MS);
+};
+
+/** The page stays stepped back while the dialog is open (a link straight to it included), and resizes with the window. */
+const useSteppedBack = () => {
+  React.useEffect(() => {
+    stepBack();
+    window.addEventListener("resize", measureStepBack);
+    return () => {
+      window.removeEventListener("resize", measureStepBack);
+      stepForward();
+    };
+  }, []);
 };
 
 const CloseX = ({ to, onEscape }: { to: string; onEscape: boolean }) => {

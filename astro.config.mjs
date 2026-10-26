@@ -68,6 +68,45 @@ const uiKit = {
   },
 };
 
+/**
+ * The rules in public/_redirects, in `npm run dev` too: Cloudflare Pages follows them in production, the dev server
+ * doesn't know them, so /enter/, /profile/ and the other app paths would be a 404 there. A 200 serves the target and
+ * keeps the address; any other status redirects. As on Pages, `*` matches anything, nothing included, and `:name`
+ * one path segment.
+ */
+const devRedirects = {
+  name: 'dev-redirects',
+  hooks: {
+    'astro:server:setup': ({ server }) => {
+      const rules = readFileSync(new URL('./public/_redirects', import.meta.url), 'utf8')
+        .split('\n')
+        .map(line => line.replace(/#.*/, '').trim())
+        .filter(Boolean)
+        .map(line => {
+          const [from, to, status = '302'] = line.split(/\s+/);
+          const pattern = from
+            .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+            .replace(/\*/g, '.*')
+            .replace(/:\w+/g, '[^/]+');
+          return { from: new RegExp(`^${pattern}$`), to, status: Number(status) };
+        });
+
+      server.middlewares.use((req, res, next) => {
+        const url = new URL(req.url ?? '/', 'http://localhost');
+        const rule = rules.find(({ from }) => from.test(url.pathname));
+        if (!rule) {
+          return next();
+        }
+        if (rule.status === 200) {
+          req.url = rule.to + url.search;
+          return next();
+        }
+        res.writeHead(rule.status, { Location: rule.to + url.search }).end();
+      });
+    },
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://gnomik.me",
@@ -75,6 +114,7 @@ export default defineConfig({
     react(),
     contentSecurityPolicy,
     uiKit,
+    devRedirects,
   ],
   devToolbar: {
     enabled: false,

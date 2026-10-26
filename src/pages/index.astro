@@ -1,9 +1,51 @@
 ---
 import Layout from "@/layouts/BaseLayout.astro";
 
+import { buttonVariants } from "@/components/ui/button";
+
+import { Landing } from "@/components/Landing";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { AppContainer } from "@/components/hoc/AppContainer";
+import { AstroFooter } from "@/components/hoc/AstroFooter";
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_NAME } from "@/site";
+
+const enterClass = buttonVariants({ variant: "brand", size: "lg", surface: "dark", pill: true });
+
+// For search engines: what the site is, as structured data.
+const webApplication = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: SITE_NAME,
+  alternateName: "Secret Santa Generator",
+  url: Astro.site?.href,
+  description: HOME_DESCRIPTION,
+  applicationCategory: "LifestyleApplication",
+  operatingSystem: "Any",
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
 ---
 
-<Layout pageClassNames={["index-page"]}>
-  <AppContainer client:only="react" />
+<Layout title={HOME_TITLE} description={HOME_DESCRIPTION} pageClassNames={["index-page"]}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(webApplication)} />
+    {/* Someone signed in goes straight past the door, so the static copy below would only flash at them. */}
+    <script is:inline>
+      try { if (localStorage.getItem("profile")) document.documentElement.classList.add("signed-in"); } catch {}
+    </script>
+  </Fragment>
+
+  <AppContainer client:only="react">
+    {/* The front door as plain HTML, until the app takes over: what search engines without JavaScript read. */}
+    <div slot="fallback" class="door-fallback">
+      {/* Astro hands named slots to a React component as props of the same names. */}
+      <Landing>
+        <a slot="enter" href="/enter/" class={enterClass}>Enter with your email address</a>
+        <a slot="enterAgain" href="/enter/" class={enterClass}>Let's get this party started!</a>
+        <AstroFooter slot="footer">
+          <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
+        </AstroFooter>
+      </Landing>
+    </div>
+  </AppContainer>
 </Layout>
