@@ -78,6 +78,8 @@
   --color-green-50: #effaf3;
   --color-green-200: #acdcbf;
   --color-green-700: #257942;
+  /* Info toasts only. */
+  --color-blue-600: #1f63a8;
 
   /* Turquoise: the app's old primary (Bulma's #00d1b2) at 500; 400 is it with 20% white, the primary fill. */
   --color-teal-50: #eefcfa;

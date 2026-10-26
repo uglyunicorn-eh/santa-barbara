@@ -116,9 +116,12 @@ static pages, a native `<details>` with the same look).
   ("Show more parties", "How this works?"); on phones they stack, main action first and full width. The profile
   dialog keeps one height on both tabs.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
-- **Toasts** (Sonner, `NotificationsContainer`): top centre, stacked, each with a dismiss button. Errors go after
-  2.5 s, other messages after 4 s. Reminders (`remind`) have a title, a description and an action ("Open"), and stay
-  until dismissed or opened. They follow the surface: dark on night, light on the party page.
+- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's links. Stacked. The
+  dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight, the icon
+  beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green (`green-700`), white
+  text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`) have an icon (the 🎲), a title, a
+  description and an action ("Open"), stay until dismissed or opened, and follow the surface: dark on night, light on
+  the party page.
 
 ## Emails
 

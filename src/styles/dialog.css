@@ -93,16 +93,68 @@
   }
 }
 
-/* "The dice are rolled": the email's message on a bed of envelopes, the text on a light panel so it reads. */
+/* "The dice are rolled": the email's message as a letter (sender, subject, a stamp), over a bed of envelopes that fills
+   the page behind the card. */
+.rolled-backdrop {
+  background: #111217 url("/rolled-envelopes.jpg") center / cover no-repeat;
+  /* Dimmed a little, so the white card stands out. */
+  box-shadow: inset 0 0 0 100vmax rgb(0 0 0 / 0.35);
+}
+
 .rolled-box {
-  .dialog-card {
-    background: #fff url("/rolled-envelopes.jpg") center / cover no-repeat;
+  .dialog-body {
+    background-color: transparent;
   }
 
-  .rolled-message {
-    padding: 1em 1.25em;
+  .rolled-mail {
+    position: relative;
+    padding: 1em 1.25em 0.25em;
     border-radius: 12px;
-    background: rgb(255 255 255 / 0.88);
+    background:
+      /* An airmail edge along the top. */
+      repeating-linear-gradient(-45deg, #c62a30 0 12px, #fff 12px 20px, #1f63a8 20px 32px, #fff 32px 40px) top / 100% 6px no-repeat,
+      #fffdf7;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), inset 0 0 0 1px #e4e4e7;
     color: #18181b;
+  }
+
+  .rolled-stamp {
+    position: absolute;
+    top: 1.25em;
+    right: 1.25em;
+    display: grid;
+    width: 3.25rem;
+    height: 3.75rem;
+    place-items: center;
+    font-size: 1.75rem;
+    background: #fff;
+    border: 2px dashed #c62a30;
+    outline: 4px solid #fff;
+    transform: rotate(4deg);
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+  }
+
+  .rolled-mail-head {
+    margin: 0.25em 4.5rem 1em 0;
+    padding-bottom: 0.75em;
+    border-bottom: 1px solid #e4e4e7;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+
+    div {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    dt {
+      width: 4.25em;
+      flex-shrink: 0;
+      color: #71717a;
+    }
+
+    dd {
+      margin: 0;
+      min-width: 0;
+    }
   }
 }

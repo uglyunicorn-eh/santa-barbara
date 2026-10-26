@@ -92,3 +92,37 @@ table {
     color: #363636;
   }
 }
+
+/* Toasts (NotificationsContainer, docs/ui-kit.md): the dismiss button only on hover or keyboard focus, and the icon
+   beside the first line of text rather than the middle of the toast. */
+.app-toaster [data-sonner-toast] {
+  [data-close-button] {
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+
+  &:hover [data-close-button],
+  &:focus-within [data-close-button] {
+    opacity: 1;
+  }
+
+  [data-icon] {
+    align-self: flex-start;
+    /* Centred on the title's first 1.75rem line. */
+    margin-top: calc((1.75rem - 20px) / 2);
+  }
+
+  /* Errors, info and success are solid colour: their text, icon and dismiss button are white on it. */
+  &:is([data-type="error"], [data-type="info"], [data-type="success"]) {
+    [data-description],
+    [data-icon] {
+      color: #fff;
+    }
+
+    [data-close-button] {
+      background: inherit;
+      border-color: rgb(255 255 255 / 0.5);
+      color: #fff;
+    }
+  }
+}

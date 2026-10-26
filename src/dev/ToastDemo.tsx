@@ -15,7 +15,7 @@ const Surface = ({ tone }: { tone: Tone }) => {
 let reminders = 0;
 
 export const ToastDemo = ({ tone, longEmail }: { tone: Tone; longEmail: string }) => {
-  const { error, success } = useNotifications();
+  const { error, info, success } = useNotifications();
   const [active, setActive] = React.useState(false);
   // Only the panel last clicked sets the surface, so the two panels don't fight over it.
   const fire = (show: () => void) => {
@@ -47,13 +47,17 @@ export const ToastDemo = ({ tone, longEmail }: { tone: Tone; longEmail: string }
       <Button variant="secondary" size="sm" surface={tone} onClick={() => fire(() => success("Done! We've sent a magic link to your inbox."))}>
         Success
       </Button>
+      <Button variant="secondary" size="sm" surface={tone} onClick={() => fire(() => info("Link copied. Share it with your friends!"))}>
+        Info
+      </Button>
       <Button
         variant="secondary"
         size="sm"
         surface={tone}
         onClick={() => fire(() => remind({
           id: `kit-reminder-${++reminders}`,
-          title: "🎲 The dice are rolled!",
+          icon: "🎲",
+          title: "The dice are rolled!",
           description: <>In <strong className="font-semibold text-current wrap-anywhere">Office Secret Santa 2026</strong>. Find out whom you give a gift to.</>,
           action: { label: "Open", onClick: () => undefined },
         }))}

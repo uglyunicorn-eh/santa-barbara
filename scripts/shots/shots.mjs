@@ -74,6 +74,7 @@ const SCREENS = [
   { name: "party-host", path: `/p/${CODES.hostOpen}/`, signedIn: true },
   { name: "party-guest", path: `/p/${CODES.guestOpen}/`, signedIn: true },
   { name: "party-closed", path: `/p/${CODES.closed}/`, signedIn: true },
+  { name: "party-closed-revealed", path: `/p/${CODES.closed}/`, signedIn: true, act: clickButton("Yes, please!") },
   { name: "party-deleted", path: `/p/${CODES.deleted}/`, signedIn: true },
   { name: "party-join", path: `/p/${CODES.notJoined}/`, signedIn: true },
   { name: "party-join-protected", path: `/p/${CODES.protectedNotJoined}/`, signedIn: true },
@@ -96,6 +97,14 @@ function openMenu(label) {
       await trigger.click();
       await page.waitForTimeout(400);
     }
+  };
+}
+
+/** Clicks the button whose name contains this text, and waits for what it opens. */
+function clickButton(label) {
+  return async (page) => {
+    await page.getByRole("button", { name: label }).first().click();
+    await page.waitForTimeout(600);
   };
 }
 

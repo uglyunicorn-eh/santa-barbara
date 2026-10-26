@@ -8,3 +8,4 @@ export { useSignals } from './useSignals';
 export { useLiveParty } from './useLiveParty';
 export { useLiveSocket } from './useLiveSocket';
 export { useRevealReminders } from './useRevealReminders';
+export { useTabletUp } from './useTabletUp';
