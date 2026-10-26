@@ -164,3 +164,59 @@ table {
 @keyframes page-in {
   from { opacity: 0; transform: scale(1.02); }
 }
+
+/* How this works, Terms and Privacy as a sheet (the script in BaseLayout.astro tags the transition): arriving, the
+   sheet slides up from the bottom over the page you came from, which sinks back and dims; leaving, it slides back down
+   and the page underneath comes forward again. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Black around the page as it shrinks; the two pages lie on top of each other, not blended. */
+  html:active-view-transition-type(sheet-up, sheet-down) {
+    &::view-transition {
+      background: #000;
+    }
+
+    &::view-transition-old(root),
+    &::view-transition-new(root) {
+      mix-blend-mode: normal;
+    }
+  }
+
+  html:active-view-transition-type(sheet-up) {
+    &::view-transition-old(root) {
+      animation: 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both sheet-under;
+    }
+
+    &::view-transition-new(root) {
+      animation: 400ms cubic-bezier(0.2, 0.8, 0.2, 1) both sheet-in;
+    }
+  }
+
+  html:active-view-transition-type(sheet-down) {
+    /* The sheet leaving stays on top of the page coming back. */
+    &::view-transition-old(root) {
+      z-index: 1;
+      animation: 220ms cubic-bezier(0.4, 0, 1, 1) both sheet-out;
+    }
+
+    &::view-transition-new(root) {
+      animation: 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both sheet-over;
+    }
+  }
+}
+
+@keyframes sheet-in {
+  from { transform: translateY(100%); }
+}
+
+@keyframes sheet-out {
+  to { transform: translateY(100%); }
+}
+
+/* The page under the sheet: a little smaller and darker while the sheet covers it. */
+@keyframes sheet-under {
+  to { transform: scale(0.94); filter: brightness(0.5); }
+}
+
+@keyframes sheet-over {
+  from { transform: scale(0.94); filter: brightness(0.5); }
+}
