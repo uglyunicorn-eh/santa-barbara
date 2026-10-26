@@ -6,6 +6,10 @@
 
   @media (max-width: 768px) and (orientation: portrait) {
     background-image: url("/login-garage-door-portrait.jpg");
+    /* The letters fill only the middle 61% of the photo, a little left of centre (73-378 px of 496). Blown up and
+       nudged left so HO HO HO spans about 90% of the screen, centred. Upright, the photo still overfills the height. */
+    background-size: 145% auto;
+    background-position: 36% center;
   }
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 
@@ -60,6 +64,10 @@
      sideways, the original. */
   @media (max-width: 768px) and (orientation: portrait) {
     background-image: url("/login-garage-door-portrait.jpg");
+    /* The letters fill only the middle 61% of the photo, a little left of centre (73-378 px of 496). Blown up and
+       nudged left so HO HO HO spans about 90% of the screen, centred. Upright, the photo still overfills the height. */
+    background-size: 145% auto;
+    background-position: 36% center;
   }
 
   .hero.login-container {
