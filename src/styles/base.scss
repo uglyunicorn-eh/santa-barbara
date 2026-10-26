@@ -1,0 +1,92 @@
+// The page basics on top of Tailwind's reset: the text colour and size, links, and a few elements' defaults. These are
+// what the pages were laid out with (they came from Bulma), so they stay until each screen is restyled.
+
+html {
+  background-color: #fff;
+  font-size: 16px;
+  min-width: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+}
+
+body {
+  color: #4a4a4a;
+  font-family: "Cuprum", sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+// Tailwind's reset makes media blocks; the pages were laid out with the browser's inline default (which leaves the
+// baseline gap under an image). Rules that set these on purpose (e.g. `.image img`) are more specific and still win.
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: revert;
+  vertical-align: revert;
+}
+
+a {
+  color: #007a68; // teal-700, the link colour
+  cursor: pointer;
+  text-decoration: none;
+
+  strong {
+    color: currentColor;
+  }
+
+  &:hover {
+    color: #363636;
+  }
+}
+
+code {
+  background-color: #f5f5f5;
+  color: #a8222a;
+  font-size: 0.875em;
+  font-weight: normal;
+  padding: 0.25em 0.5em;
+}
+
+hr {
+  background-color: #f5f5f5;
+  border: none;
+  display: block;
+  height: 2px;
+  margin: 1.5rem 0;
+}
+
+small {
+  font-size: 0.875em;
+}
+
+span {
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+strong {
+  color: #363636;
+  font-weight: 700;
+}
+
+fieldset {
+  border: none;
+}
+
+table {
+  td,
+  th {
+    vertical-align: top;
+
+    &:not([align]) {
+      text-align: inherit;
+    }
+  }
+
+  th {
+    color: #363636;
+  }
+}

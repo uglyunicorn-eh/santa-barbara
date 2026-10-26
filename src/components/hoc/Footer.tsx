@@ -1,5 +1,5 @@
 import React from "react";
-import { Footer as BulmaFooter } from "src/components/bulma";
+import { PageFooter } from "src/components/layout";
 import { Menu } from "@base-ui/react/menu";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 import { Link } from "react-router-dom";
@@ -67,7 +67,7 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
   const more = items.filter(({ key }) => !COMPACT_KEYS.includes(key));
 
   return (
-    <BulmaFooter className="page-footer">
+    <PageFooter className="page-footer">
       <div className="footer-menu max-tablet:hidden">
         <FooterLinks items={items} />
       </div>
@@ -76,11 +76,11 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
         <span> | </span>
         <MoreMenu items={more} />
       </div>
-      <div className="footer-copy is-size-7">
+      <div className="footer-copy text-xs">
         Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
       </div>
-      {children && <div className="is-size-7">{children}</div>}
-    </BulmaFooter>
+      {children && <div className="text-xs">{children}</div>}
+    </PageFooter>
   );
 };
 

@@ -46,7 +46,7 @@ const HostContent = ({ party, user }: Props) => {
 
       {!party.isClosed && (
         <>
-          <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
+          <p style={{ margin: '2em 0' }} className="max-desktop:text-center">
             <Button variant="primary" onClick={onConfirm}>&#x1F643; OK, Let's roll the dice!</Button>
             {' '}
             <DeletePartyLink />

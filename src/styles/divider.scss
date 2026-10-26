@@ -1,9 +1,0 @@
-@layer theme, base, bulma, components, utilities;
-
-@layer bulma {
-  @import "bulma-divider/dist/css/bulma-divider.min";
-
-  .is-divider-vertical[data-content]::after {
-    background: #17181d;
-  }
-}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Footer as BulmaFooter } from "src/components/bulma";
+import { PageFooter } from "src/components/layout";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 
 import { menuItemClass, menuPopupClass } from "@/components/ui/menu";
@@ -34,7 +34,7 @@ const Links = ({ list }: { list: Item[] }) => (
 
 // Static HTML (no script on these pages), so the ☰ menu is a native <details> rather than the app's Base UI menu.
 export const AstroFooter = ({ children }: Props) => (
-  <BulmaFooter className="page-footer">
+  <PageFooter className="page-footer">
     <div className="footer-menu max-tablet:hidden">
       <Links list={items} />
     </div>
@@ -52,9 +52,9 @@ export const AstroFooter = ({ children }: Props) => (
         </div>
       </details>
     </div>
-    <div className="footer-copy is-size-7">
+    <div className="footer-copy text-xs">
       Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
     </div>
-    {children && <div className="is-size-7">{children}</div>}
-  </BulmaFooter>
+    {children && <div className="text-xs">{children}</div>}
+  </PageFooter>
 );

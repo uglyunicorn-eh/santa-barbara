@@ -1,5 +1,5 @@
 import React from "react";
-import { Content } from "src/components/bulma";
+import { Content } from "src/components/layout";
 import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
@@ -70,8 +70,8 @@ export const JoinParty = () => {
           label="Secret code"
           children={<Input maxLength={MAX_PARTY_CODE_LENGTH} style={{ textTransform: "uppercase" }} />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
-          extra={<HaveQuestion />}
         />
+        <HaveQuestion />
 
       </Content>
     </DialogBox>

@@ -1,53 +1,46 @@
 import { useField, useFormikContext } from "formik";
 import React from "react";
-import { Form } from "src/components/bulma";
-import type { Color, ElementProps, Size } from "react-bulma-components/src/components";
 
-import { FormFieldContext } from "src/components/forms";
+import { Input as BaseInput, type InputProps as BaseInputProps } from "@/components/ui/input";
+import { FormFieldContext } from "src/components/forms/FormField";
 
-interface InputProps<T> {
-  size?: Size;
-  color?: Color;
-  readOnly?: boolean;
-  isStatic?: boolean;
-  status?: 'focus' | 'hover';
-  value?: T;
+type Props = Omit<BaseInputProps, "name" | "value" | "onChange" | "onBlur"> & {
+  /** Focus (and select) the input once it's shown. */
   autofocus?: boolean;
-}
+};
 
-type Props<TValue> = Omit<
-  InputProps<TValue> & ElementProps<InputProps<TValue>, 'input'>,
-  'renderAs' | 'readonly'
->
-
-export const Input = function <TValue>({
-  autofocus,
-  disabled,
-  ...rest
-}: Props<TValue>) {
-  const inputRef = React.useRef(null);
-
-  const { name } = React.useContext(FormFieldContext);
-  const [field,] = useField({ name });
+/** A text input bound to its FormField's Formik field; disabled while the form submits. */
+export const Input = ({ autofocus, disabled, ...rest }: Props) => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { name, id, messageId, invalid, surface, size } = React.useContext(FormFieldContext);
+  const [field] = useField({ name });
   const { isSubmitting } = useFormikContext();
 
   React.useEffect(
     () => {
       if (autofocus) {
-        setTimeout(() => {
-          if (inputRef.current) {
-            (inputRef.current as any).focus();
-            (inputRef.current as any).select();
-          }
+        // After the dialog has placed its own focus.
+        const timer = setTimeout(() => {
+          inputRef.current?.focus();
+          inputRef.current?.select();
         }, 5);
+        return () => clearTimeout(timer);
       }
     },
-    [
-      autofocus,
-    ],
-  )
+    [autofocus],
+  );
 
   return (
-    <Form.Input {...field} {...rest} disabled={disabled || isSubmitting} domRef={inputRef} />
-  )
+    <BaseInput
+      {...field}
+      id={id}
+      surface={surface}
+      size={size}
+      aria-invalid={invalid || undefined}
+      aria-describedby={messageId}
+      {...rest}
+      disabled={disabled || isSubmitting}
+      ref={inputRef}
+    />
+  );
 };

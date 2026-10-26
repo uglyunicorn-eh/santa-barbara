@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import { Columns, Container, Content, Hero } from "src/components/bulma";
+import { Columns, Container, Content, Hero } from "src/components/layout";
 import { Link, Route, Routes } from "react-router-dom";
 
 import { Divider } from "src/components/Divider";
@@ -22,7 +22,7 @@ export const StartPage = () => {
               <img src={grinchImg.src} alt="Grinch" width={128} height={128} />
             </Columns.Column>
             <Columns.Column mobile={{ display: "hidden" }}>&nbsp;</Columns.Column>
-            <Columns.Column size="one-third" className="has-text-right-tablet has-text-centered-mobile">
+            <Columns.Column size="one-third" className="tablet:text-right max-tablet:text-center">
               <h1>
                 Welcome to the Anonymous Ded Morozes!
               </h1>
@@ -44,13 +44,13 @@ export const StartPage = () => {
 
           <Columns vCentered>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
-            <Columns.Column className="has-text-right-tablet">
+            <Columns.Column className="tablet:text-right">
               <Link to="/new/">
                 I wanna start playing this weird game with my soulmates... Let's rock'n'roll!
               </Link>
             </Columns.Column>
             <Columns.Column narrow textAlign="centered" mobile={{ display: "hidden" }}>
-              <Divider vertical={true} label="OR" />
+              <Divider label="OR" />
             </Columns.Column>
             <Columns.Column>
               <Link to="/join/">

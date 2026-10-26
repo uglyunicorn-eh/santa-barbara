@@ -1,99 +1,10 @@
-.modal-background {
-  visibility: hidden;
-}
-
-.modal-background-custom {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-.modal {
-  .modal-x {
-    scale: 1.5;
-    opacity: 0.7;
-    color: #fff;
-    position: fixed;
-    top: 16px;
-    right: 16px;
-
-    @include mobile {
-      visibility: hidden;
-    }
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .modal-content,
-  .modal-card {
-    margin: 0;
-  }
-
-  .modal-card {
-    max-width: calc(100vw - 60px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    border-radius: 20px;
-
-    @include mobile {
-      max-width: calc(100vw - 32px);
-    }
-  }
-
-  .modal-card-body {
-    font-size: 1.25rem;
-  }
-
-  .modal-card-head {
-    background: transparent;
-    border-bottom: none;
-    font-size: 2rem;
-    text-shadow: 0 1px 2px white;
-
-    color: #000;
-
-    @include mobile {
-      font-size: 1.5rem;
-    }
-  }
-
-  .modal-card-foot {
-    background: transparent;
-    border-top: none;
-    justify-content: flex-end;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-
-    @include mobile {
-      flex-direction: column-reverse;
-      gap: 1em;
-      align-items: stretch;
-    }
-
-    .button {
-      @include mobile {
-        margin: 0;
-      }
-    }
-  }
-
-  .delete {
-    display: none;
-  }
-}
-
-.party-box .modal-card .modal-card-head {
+.party-box .dialog-card .dialog-head {
   background: transparent url("/flags.png") top right no-repeat;
   background-size: 50%;
 }
 
 .confirm-party-close {
-  .modal-card {
+  .dialog-card {
     background: white right bottom url("/rockenroll.png") no-repeat;
     background-size: 55%;
 
@@ -102,11 +13,11 @@
     }
   }
 
-  .modal-card-head {
+  .dialog-head {
     justify-content: center;
   }
 
-  .modal-card-body {
+  .dialog-body {
     background-color: transparent;
   }
 
@@ -125,28 +36,10 @@
     }
   }
 
-  .button {
-    background-color: rgba(#fff, 0.7);
-    transition: all 0.2s;
-
-    &:hover {
-      background-color: #fff;
-      transition: all 0.2s;
-    }
-
-    &.is-primary {
-      background-color: rgba(#5fceb3, 0.95);
-      text-shadow: 1px 1px 1px rgba(#000, 0.4);
-
-      &:hover {
-        background-color: #5fceb3;
-      }
-    }
-  }
 }
 
 .confirm-party-leave {
-  .modal-card-head {
+  .dialog-head {
     justify-content: center;
   }
 
@@ -156,7 +49,7 @@
 }
 
 .congratz-box {
-  .modal-card {
+  .dialog-card {
     background: white url("/congratz.png") bottom center no-repeat;
     background-size: 100%;
     height: 550px;
@@ -164,11 +57,11 @@
     position: relative;
   }
 
-  .modal-card-head {
+  .dialog-head {
     justify-content: center;
   }
 
-  .modal-card-body {
+  .dialog-body {
     background-color: transparent;
 
     .content {
@@ -194,14 +87,8 @@
     }
   }
 
-  .modal-card-foot {
+  .dialog-foot {
     justify-content: center;
 
-    .button {
-      border: 2px solid #fff;
-      text-shadow: 0 1px 2px rgba(#fff, 0.6);
-      box-shadow: 0 3px 20px rgba(0, 0, 0, 0.5);
-      border: 2px solid white;
-    }
   }
 }

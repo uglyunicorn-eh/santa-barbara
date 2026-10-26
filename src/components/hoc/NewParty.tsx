@@ -1,5 +1,5 @@
 import React from "react";
-import { Content } from "src/components/bulma";
+import { Content } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import * as Yup from 'yup';
 
@@ -115,8 +115,8 @@ export const NewParty = () => {
                 label="Secret phrase"
                 children={<Input placeholder="Optional" maxLength={MAX_PHRASE_LENGTH} />}
                 help="Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."
-                extra={<HaveQuestion />}
               />
+              <HaveQuestion />
             </>
           )
           : (

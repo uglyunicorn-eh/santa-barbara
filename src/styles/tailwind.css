@@ -1,11 +1,11 @@
 /*
- * Tailwind CSS, beside Bulma until Bulma is gone.
+ * Tailwind CSS, with the app's own SCSS (src/styles/*.scss).
  *
- * Cascade layers, lowest first. Bulma and all of our SCSS live in `bulma`: above Tailwind's reset, so today's pages
- * keep their look, and below the utilities, so a Tailwind class always wins. The same order is declared at the top of
- * every SCSS entry file, since whichever stylesheet the browser sees first fixes it.
+ * Cascade layers, lowest first. Our SCSS (page basics, layout pieces, each screen's artwork styles) lives in `app`:
+ * above Tailwind's reset and below the utilities, so a Tailwind class always wins. The same order is declared at the
+ * top of every SCSS entry file, since whichever stylesheet the browser sees first fixes it.
  */
-@layer theme, base, bulma, components, utilities;
+@layer theme, base, app, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
@@ -14,8 +14,8 @@
 
 /*
  * Where Tailwind looks for class names: the app's code only. Not docs/ (full of example classes) and not
- * scripts/. And never Tailwind's own `container`: Bulma's <Container> renders class="container",
- * and Tailwind's version (other max-widths) would win over Bulma's. Until a Container of our own replaces it.
+ * scripts/. And never Tailwind's own `container`: our <Container> (src/components/layout.tsx) renders
+ * class="container" for its own widths (src/styles/layout.scss), and Tailwind's would win over them.
  */
 @source "../components";
 @source "../layouts";

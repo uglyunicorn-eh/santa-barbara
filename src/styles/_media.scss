@@ -1,0 +1,32 @@
+// Breakpoint mixins for our SCSS, the same as Tailwind's `tablet` / `desktop` (src/styles/tailwind.css).
+// mobile: up to 768px; tablet: 769px and up; desktop: 1024px and up.
+
+@mixin mobile {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: 769px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin widescreen {
+  @media screen and (min-width: 1216px) {
+    @content;
+  }
+}
+
+@mixin fullhd {
+  @media screen and (min-width: 1408px) {
+    @content;
+  }
+}

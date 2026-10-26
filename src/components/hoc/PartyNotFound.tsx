@@ -1,4 +1,4 @@
-import { Container, Content, Hero } from "src/components/bulma";
+import { Container, Content, Hero } from "src/components/layout";
 import { buttonVariants } from "@/components/ui/button";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";

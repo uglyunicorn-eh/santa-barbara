@@ -1,4 +1,4 @@
-import { Columns, Container, Content, Hero } from "src/components/bulma";
+import { Columns, Container, Content, Hero } from "src/components/layout";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "src/components/Confetti";
@@ -32,7 +32,7 @@ export const PartyDetails = ({ party }: Props) => {
               </Columns.Column>
               <Columns.Column>
                 <Content className="party-details-content">
-                  <h1 className="has-text-centered is-visible-mobile">{party.name}</h1>
+                  <h1 className="text-center">{party.name}</h1>
                   {profile && (
                     party.deletedAt
                       ? <DeletedPartyContent {...{ party, user: profile }} />
@@ -50,22 +50,22 @@ export const PartyDetails = ({ party }: Props) => {
                   <Content>
                     {party.isClosed && party.target
                       ? (
-                        <div className="has-text-right">
-                          <p className="has-text-left" style={{ marginBottom: '0.5em' }}>
+                        <div className="text-right">
+                          <p className="text-left" style={{ marginBottom: '0.5em' }}>
                             &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
                           </p>
                           <SecretText label="&mdash; Yes, please! &#x1F929;">
                             <Confetti />
 
-                            <p className="has-text-right" style={{ marginBottom: '0.5em' }}>
+                            <p className="text-right" style={{ marginBottom: '0.5em' }}>
                               &mdash; Yes, please!
                             </p>
-                            <p className="has-text-left">
+                            <p className="text-left">
                               &mdash; This is <strong>{party.target.name}</strong>, but it's a secret...
                               Good luck with your gift ideas!
                             </p>
 
-                            <p className="has-text-left">
+                            <p className="text-left">
                               &mdash; If you enjoyed this experience, please consider supporting me by {" "}
                               <a href="https://www.buymeacoffee.com/uglyunicorn" target="_blank">buying me a coffee &#9749;</a>!
                             </p>
