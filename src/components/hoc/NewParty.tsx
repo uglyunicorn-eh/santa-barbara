@@ -115,8 +115,8 @@ export const NewParty = () => {
                 label="Secret phrase"
                 children={<Input placeholder="Optional" maxLength={MAX_PHRASE_LENGTH} />}
                 help="Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."
-                extra={<HaveQuestion />}
               />
+              <HaveQuestion />
             </>
           )
           : (

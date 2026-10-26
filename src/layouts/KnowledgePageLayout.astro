@@ -2,6 +2,7 @@
 import BaseLayout from "src/layouts/BaseLayout.astro";
 
 import { Columns, Container, Content, Section } from "src/components/bulma";
+import { ArrowLeft } from "react-feather";
 import { buttonVariants } from "@/components/ui/button";
 
 import { AstroFooter } from "src/components/hoc/AstroFooter";
@@ -46,6 +47,7 @@ const {
               class={buttonVariants({ variant: "secondary", fullWidth: true })}
               data-astro-prefetch
             >
+              <ArrowLeft size={18} aria-hidden="true" />
               Jeez, get me out of here
             </a>
           </div>

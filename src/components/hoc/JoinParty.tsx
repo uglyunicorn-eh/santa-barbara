@@ -70,8 +70,8 @@ export const JoinParty = () => {
           label="Secret code"
           children={<Input maxLength={MAX_PARTY_CODE_LENGTH} style={{ textTransform: "uppercase" }} />}
           help="Your friend probably told you a secret code. This is the right place to put it..."
-          extra={<HaveQuestion />}
         />
+        <HaveQuestion />
 
       </Content>
     </DialogBox>

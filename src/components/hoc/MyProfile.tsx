@@ -8,7 +8,7 @@ import { ClipLoader } from 'react-spinners';
 import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
 import * as Yup from 'yup';
 
-import { DialogBox } from "src/components/DialogBox";
+import { DialogBox, DialogFooterStart } from "src/components/DialogBox";
 import { Tab } from "src/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
@@ -411,7 +411,7 @@ const History = () => {
           first = false;
         },
         // The list scrolls inside the dialog, not the page.
-        { root: sentinel.closest('.modal-card-body'), rootMargin: "100px" },
+        { root: sentinel.closest('.dialog-body'), rootMargin: "100px" },
       );
       observer.observe(sentinel);
       return () => observer.disconnect();
@@ -452,13 +452,16 @@ const History = () => {
         {page.items.map(party => <HistoryItem key={party.code} party={party} />)}
       </ul>
 
+      {/* Once "Show more parties" was pressed, reaching the end of the list loads the next page. */}
       {hasMore && (
         <div className="history-more" ref={sentinelRef}>
-          {autoLoad && loadingMore
-            ? <ClipLoader size={20} />
-            : <Button variant="secondary" size="sm" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
-          }
+          {autoLoad && loadingMore && <ClipLoader size={20} />}
         </div>
+      )}
+      {hasMore && (
+        <DialogFooterStart>
+          <Button variant="ghost" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
+        </DialogFooterStart>
       )}
     </div>
   );
