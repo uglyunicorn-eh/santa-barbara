@@ -26,7 +26,9 @@ of both repos at fed0d99 / 061bacf)
   `/enter/` goes home; the garage door scrolls when its content is taller than the window,
   with the sign-in photo fixed on it; form fields keep one message line so an error
   doesn't push the form down; inputs on the dark cards focus in white; on phones the
-  footer keeps two links and puts the rest under a ☰ menu.
+  footer keeps two links and puts the rest under a ☰ menu; the host's "Delete this party"
+  sits in a ☰ menu beside the main button; the How it works quote is the elves' speech
+  bubble. The emails got the same look in uglyunicorn-eh/santa-monica#40.
 
 **Next:** Phase 4.2 (form fields; Formik → React Hook Form, Yup → Valibot).
 
