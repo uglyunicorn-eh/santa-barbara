@@ -66,6 +66,18 @@
     }
   }
 
+  // Errors on these dark cards in the light red (red-200), readable on black.
+  .help.is-danger {
+    color: #f6c6c7;
+  }
+
+  // Inputs on these dark cards focus in white, not Bulma's teal.
+  .input:focus,
+  .input:focus-visible {
+    border-color: rgba(#fff, 0.8);
+    box-shadow: 0 0 0 2px rgba(#fff, 0.25);
+  }
+
   .button {
     font-size: 1.5rem;
 

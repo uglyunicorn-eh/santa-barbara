@@ -41,7 +41,7 @@ export const ConfirmPartyDelete = () => {
       className="party-box confirm-party-delete"
       title="Delete this party? 😱"
       action={<Submit variant="destructive">&#x1F4A5; Yes, delete it</Submit>}
-      dismissLabel="🎁 Keep it"
+      dismissLabel="Keep it"
       dismissLocation={`/p/${party?.code}`}
       form={{
         validationSchema,

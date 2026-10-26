@@ -12,7 +12,6 @@ export const DeletePartyLink = () => {
   return (
     <>
       <Button variant="ghost-destructive" onClick={onClick}>
-        <span aria-hidden="true">💥</span>
         Delete this party
       </Button>
       <Routes>

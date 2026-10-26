@@ -179,7 +179,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                             ? <a href="#" class={cn(buttonVariants({ variant: "link", surface: toneOf(surface.id) }), forced(v.id, surface.id, state), state === "disabled" && "pointer-events-none opacity-50")} aria-disabled={state === "disabled" ? "true" : undefined}>Check out</a>
                             : (
                               <Button variant={v.id} surface={toneOf(surface.id)} className={forced(v.id, surface.id, state)} disabled={state === "disabled"} loading={state === "loading"}>
-                                {v.id === "brand" ? "Send me a magic link!" : v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "💥 Delete this party" : "Delete my account"}
+                                {v.id === "brand" ? "Send me a magic link!" : v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "Delete this party" : "Delete my account"}
                               </Button>
                             )}
                         </td>
@@ -344,7 +344,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
               <p>Changed your mind? You can restore it from this page within 24 hours. After that it's gone for good.</p>
             </div>
             <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
-              <Button variant="secondary" surface="light" className="max-tablet:w-full">🎁 Keep it</Button>
+              <Button variant="secondary" surface="light" className="max-tablet:w-full">Keep it</Button>
               <Button variant="destructive" surface="light" className="max-tablet:w-full">💥 Yes, delete it</Button>
             </div>
           </div>

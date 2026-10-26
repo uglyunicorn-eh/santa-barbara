@@ -79,8 +79,9 @@ export function input({ state = "default", size = "md", surface }: { state?: Fie
     "w-full min-w-0 rounded-lg border bg-white font-sans text-zinc-900 placeholder:text-zinc-500 outline-none transition-colors duration-150",
     size === "sm" ? "h-8 px-3 text-sm" : size === "lg" ? "h-12 px-4 text-lg" : "h-10 px-3 text-base",
     state === "error" ? "border-destructive" : "border-input",
-    state === "focus" && `border-primary ${focusRing(surface)}`,
-    state === "live" && `focus-visible:border-primary ${focusVisible(surface)}`,
+    // Focus: teal on paper; white on dark surfaces.
+    state === "focus" && `${dark(surface) ? "border-white" : "border-primary"} ${focusRing(surface)}`,
+    state === "live" && `${dark(surface) ? "focus-visible:border-white" : "focus-visible:border-primary"} ${focusVisible(surface)}`,
     state === "disabled" && "bg-zinc-50 text-zinc-500 pointer-events-none",
   );
 }

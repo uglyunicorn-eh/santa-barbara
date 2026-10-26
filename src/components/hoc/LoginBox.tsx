@@ -3,7 +3,7 @@ import React from "react";
 import { newKey } from "src/api/client";
 import { Container, Hero } from "src/components/bulma";
 import { Button } from "@/components/ui/button";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 
 import { GrinchBox } from "src/components/GrinchBox";
@@ -36,6 +36,8 @@ export const LoginBox = () => {
         <Routes>
           <Route path="/" Component={EnterActions} />
           <Route path="/enter/" Component={EnterForm} />
+          {/* Signed out, every other page (the profile, a new party…) is the front door. */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </LoginHero>
     </>
