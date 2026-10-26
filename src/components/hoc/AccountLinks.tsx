@@ -167,7 +167,7 @@ export const ConfirmAccountDeletion = () => {
         />
         <div className="actions flex flex-col items-center gap-3">
           <DeleteButton />
-          <Button type="button" variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Keep my account</Button>
+          <Button type="button" variant="ghost" surface="dark" pill onClick={() => navigate('/')}>Keep my account</Button>
         </div>
       </Form>
     </LinkPage>

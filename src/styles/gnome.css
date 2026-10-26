@@ -30,9 +30,9 @@
      */
     @media (min-width: 1024px) {
       --gnome-height: 550px;
-      --bubble-headroom: 16rem;
-      /* From the gnome's feet up to the tail's tip. */
-      --bubble-anchor: calc(var(--gnome-height) - 7.75rem);
+      --bubble-headroom: 10rem;
+      /* From the gnome's feet up to the tail's tip, beside the middle of the hat. */
+      --bubble-anchor: calc(var(--gnome-height) - 13rem);
 
       display: flex;
       flex-direction: column;
@@ -44,6 +44,12 @@
       padding-bottom: var(--bubble-anchor);
       background-position: 1em bottom !important;
       background-size: auto var(--gnome-height) !important;
+
+      /* With room to spare on the right, he stands further out from the text. */
+      @media (min-width: 1216px) {
+        position: relative;
+        left: 3rem;
+      }
 
       .message-body {
         max-width: calc(100% - 180px);

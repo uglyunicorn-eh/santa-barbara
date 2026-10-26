@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Columns, Container, Content, Hero } from "@/components/layout";
 import { SyncLoader } from 'react-spinners';
 
@@ -11,6 +12,7 @@ import GuestContent from "@/components/hoc/GuestContent";
 import HostContent from "@/components/hoc/HostContent";
 import { DeletedPartyContent } from "@/components/hoc/DeletedPartyContent";
 import { PartyIsClosedContent } from "@/components/hoc/PartyIsClosedContent";
+import { RolledDialog } from "@/components/hoc/RolledDialog";
 import { useToastSurface } from "@/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser } from "@/components/hooks";
 import type { Party } from "@/types";
@@ -27,9 +29,25 @@ export const PartyDetails = ({ party }: Props) => {
   // The user heard whom they give a gift to: no more reminders about this party.
   const onReveal = React.useCallback(() => { markRevealed(party.code); }, [markRevealed, party.code]);
 
+  // A guest watching the page as the host rolls the dice gets the news right away: the letter, with stars falling.
+  const navigate = useNavigate();
+  const wasClosed = React.useRef(party.isClosed);
+  React.useEffect(
+    () => {
+      if (party.isClosed && !wasClosed.current && party.isJoined && !party.isHost && party.target) {
+        navigate("rolled", { state: { name: party.name } });
+      }
+      wasClosed.current = party.isClosed;
+    },
+    [party.isClosed, party.isJoined, party.isHost, party.target, party.name, navigate],
+  );
+
   return (
     <>
       <title>{party.name}</title>
+      <Routes>
+        <Route path="rolled" element={<RolledDialog onParty />} />
+      </Routes>
       <Hero size={"fullheight"} className="party-details">
         <Hero.Body>
           <Container>

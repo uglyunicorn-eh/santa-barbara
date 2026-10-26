@@ -27,7 +27,8 @@ const getNumberOfPieces = () => {
   return width / 25;
 };
 
-export const SnowConfetti = () => {
+/** Stars falling over the page. `overDialogs`: in front of an open dialog too, without catching clicks. */
+export const SnowConfetti = ({ overDialogs = false }: { overDialogs?: boolean }) => {
   const [numberOfPieces, setNumberOfPieces] = React.useState(getNumberOfPieces());
 
   React.useEffect(
@@ -55,7 +56,7 @@ export const SnowConfetti = () => {
       initialVelocityY={-20}
 
       numberOfPieces={numberOfPieces}
-      style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0 }}
+      style={{ position: 'fixed', top: 0, right: 0, bottom: 0, left: 0, ...(overDialogs ? { zIndex: 45, pointerEvents: 'none' } : {}) }}
     />
   );
 };

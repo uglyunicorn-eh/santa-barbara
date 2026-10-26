@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
 import { Content } from "@/components/layout";
+import { SnowConfetti } from "@/components/SnowConfetti";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { useAppClient } from "@/components/hooks";
 
@@ -11,8 +12,11 @@ import { useAppClient } from "@/components/hooks";
  * "The dice are rolled": the message the party's email brings, opened from a reminder on the home screen. It reads
  * like the email itself (who it's from, the subject, a stamp), over a bed of envelopes that fills the page. Its button
  * goes to the party, where the gnome tells whom to give a gift to; the X closes it.
+ *
+ * `onParty`: opened on the party page itself, the moment the host rolled the dice (PartyDetails), with stars falling.
+ * Then closing it, or its button, just shows the party underneath.
  */
-export const RolledDialog = () => {
+export const RolledDialog = ({ onParty = false }: { onParty?: boolean }) => {
   const { code } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,13 +33,18 @@ export const RolledDialog = () => {
     [name, code, getParty],
   );
 
+  const partyPath = `/p/${code}/`;
+
   return (
-    <DialogBox
+    <>
+      {onParty && <SnowConfetti overDialogs />}
+      <DialogBox
       className="rolled-box"
       backdropClassName="rolled-backdrop"
       title="This is it! The message you've been waiting for!"
       noDismiss
-      action={<Button variant="primary" onClick={() => navigate(`/p/${code}/`)}>🦄 Get me to the Gnomik!</Button>}
+      dismissLocation={onParty ? partyPath : "/"}
+      action={<Button variant="primary" onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask the Gnomik!" : "🦄 Get me to the Gnomik!"}</Button>}
       size="sm"
     >
       <article className="rolled-mail">
@@ -58,6 +67,7 @@ export const RolledDialog = () => {
       <DialogFooterStart>
         <div className="text-xs text-zinc-600"><UnsplashCredit id="uGcDWKN91Fs" name="Joanna Kosinska" username="joannakosinska" /></div>
       </DialogFooterStart>
-    </DialogBox>
+      </DialogBox>
+    </>
   );
 };
