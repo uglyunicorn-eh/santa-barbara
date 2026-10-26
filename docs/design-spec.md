@@ -202,7 +202,8 @@ Long values (from `docs/layout-audit.md`): names, party names, codes and emails 
 - `pill` (fully rounded) only on hero screens: the main action (`brand` `lg`) and going home or back
   (`secondary` `md`). Nothing on a content screen is a pill.
 - `fullWidth` on phones for the main action in dialogs and the sign-in card.
-- Emoji stay where the copy has them; they sit in the icon slot so labels line up.
+- Emoji only on main actions (`brand`, `primary`, the final `destructive` confirm): "🎉 Rock'n'Roll!", "💥 Yes,
+  delete it". Dismiss, cancel and other quiet buttons have none. They sit in the icon slot so labels line up.
 
 ## 6. Form fields
 
@@ -213,11 +214,12 @@ Long values (from `docs/layout-audit.md`): names, party names, codes and emails 
 - **Label:** `text-sm`, weight 500, `zinc-700` on paper, `zinc-300` on glass.
 - **Help text:** `text-sm`, `text-muted`, directly under the input, 4px gap.
 - **Error:** `text-sm`, `destructive`, under the input (replacing help text while shown); the input border turns
-  `destructive`; `aria-invalid` and `aria-describedby` link them.
+  `destructive`; `aria-invalid` and `aria-describedby` link them. Every field keeps one message line: a field with no
+  help text reserves a blank one, so an error appearing doesn't push the form down.
 - **Inline field** (profile name and email): input and button side by side, same height (`sm`, 32px), 8px gap; the
   error below both.
 - **Glass forms** (sign-in card): the same white input, so it stays readable on the photo; labels and help in
-  `zinc-300`.
+  `zinc-300`. Focus is white (border and ring), never teal; errors are `red-200`.
 - Fields at their limit (`maxLength`) just stop typing; no counter.
 
 ## 7. Dialogs
