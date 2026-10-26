@@ -1,6 +1,13 @@
 .knowledge-page {
   background: #d3d4d8 url("/pagebg.jpg") center bottom no-repeat;
   background-size: contain;
+
+  /* On phones the photo is twice as wide, so the elves are twice as big, and they stay where they were: a
+     percentage position pins that point of the photo (the elves, about 73% across) to the same point of the page. */
+  @media (max-width: 768px) {
+    background-size: 200% auto;
+    background-position: 73% bottom;
+  }
   color: black;
   min-height: 100vh;
 
@@ -13,8 +20,13 @@
     text-shadow: 1px 2px 1px rgb(255 255 255 / 0.1);
   }
 
+  /* Room for the elves in the photo below the text (twice as big on phones). */
   .knowledge-page-section {
     padding-bottom: 35vw;
+
+    @media (max-width: 768px) {
+      padding-bottom: 60vw;
+    }
   }
 
   .knowledge-page-info {
@@ -105,7 +117,7 @@
     padding-bottom: 6em;
 
     @media screen and (max-width: 768px) {
-      padding-bottom: 1em;
+      padding-bottom: calc(2.5em + env(safe-area-inset-bottom, 0px));
     }
   }
 }

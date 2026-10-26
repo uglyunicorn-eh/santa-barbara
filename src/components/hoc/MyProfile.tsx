@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
+import { Calendar, ChevronRight, Gift, Lock, Star, X } from 'react-feather';
 import * as v from "valibot";
 
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
@@ -270,7 +270,10 @@ const EmailSetting = ({ email }: { email: string }) => {
             action={
               <>
                 <Submit>Send link</Submit>
-                <Button type="button" variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
+                {/* An X, so the field and both buttons fit on one line, phones included. */}
+                <Button type="button" variant="ghost" className="size-10 shrink-0 px-0" aria-label="Cancel" title="Cancel" onClick={() => setEditing(false)}>
+                  <X size={20} aria-hidden="true" />
+                </Button>
               </>
             }
           >
