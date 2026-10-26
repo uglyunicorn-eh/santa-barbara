@@ -1,69 +1,88 @@
-@import "bulma/sass/utilities/_all";
-@import "bulma/sass/base/_all";
-@import "bulma/sass/layout/_all";
-@import "bulma/sass/helpers/_all";
-@import "bulma/sass/grid/columns";
-@import "bulma/sass/elements/button";
-@import "bulma/sass/elements/content";
-@import "bulma/sass/elements/container";
-@import "bulma/sass/components/modal";
-@import "bulma/sass/components/card";
-@import "bulma/sass/components/tabs";
-@import "bulma/sass/form/_all";
+// Layer order: see src/styles/tailwind.css. Bulma and our styles sit in `bulma`, above Tailwind's reset and below
+// its utilities. The same statement is in every SCSS entry file, as whichever stylesheet loads first sets the order.
+@layer theme, base, bulma, components, utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap");
 
-@import "./forms.scss";
-@import "./dialog.scss";
-@import "./footer.scss";
-@import "./welcome.scss";
-@import "./party-details.scss";
-@import "./gnome.scss";
-@import "./enter.scss";
-@import "./grinch-box.scss";
-@import "./login.scss";
-@import "./profile.scss";
-@import "./404.scss";
+@layer bulma {
+  // Inside the layer too: besides mixins and variables it defines placeholders (`%control`, …) that Bulma's
+  // elements `@extend`, and Sass writes extended rules where the placeholder lives. Outside, they'd be unlayered and
+  // beat everything (e.g. `.button`'s 1rem over `.button.is-medium`).
+  @import "bulma/sass/utilities/_all";
 
-html {
-  // height: -webkit-fill-available;
-}
-
-body {
-  font-family: "Cuprum", sans-serif;
-
-  overflow: hidden;
-  overflow-y: auto;
-
-  // min-height: 100vh;
-  /* mobile viewport bug fix */
-  min-height: -webkit-fill-available;
-}
-
-.index-page {
-  background-color: #111217;
-}
-
-.button {
-  font-family: "Cuprum", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 500;
-
-  &.is-primary {
-    text-shadow: 1px 1px 1px rgba(#000, 0.2);
+  // Tailwind's reset makes media blocks; the pages were laid out with the browser's inline default (which leaves the
+  // baseline gap under an image). Restore it until Phase 6 turns the reset on for real. Bulma rules that set these
+  // on purpose (e.g. `.image img`) are more specific and still win.
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: revert;
+    vertical-align: revert;
   }
-}
 
-.app-spinner {
-  background: #141414 url("/party-garage-door-3.jpg") center center/cover;
+  @import "bulma/sass/base/_all";
+  @import "bulma/sass/layout/_all";
+  @import "bulma/sass/helpers/_all";
+  @import "bulma/sass/grid/columns";
+  @import "bulma/sass/elements/button";
+  @import "bulma/sass/elements/content";
+  @import "bulma/sass/elements/container";
+  @import "bulma/sass/components/modal";
+  @import "bulma/sass/components/card";
+  @import "bulma/sass/components/tabs";
+  @import "bulma/sass/form/_all";
+
+
+  @import "./forms.scss";
+  @import "./dialog.scss";
+  @import "./footer.scss";
+  @import "./welcome.scss";
+  @import "./party-details.scss";
+  @import "./gnome.scss";
+  @import "./enter.scss";
+  @import "./grinch-box.scss";
+  @import "./login.scss";
+  @import "./profile.scss";
+  @import "./404.scss";
+
+  html {
+    // height: -webkit-fill-available;
+  }
+
+  body {
+    font-family: "Cuprum", sans-serif;
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    // min-height: 100vh;
+    /* mobile viewport bug fix */
+    min-height: -webkit-fill-available;
+  }
+
+  .index-page {
+    background-color: #111217;
+  }
+
+  .button {
+    font-family: "Cuprum", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+
+    &.is-primary {
+      text-shadow: 1px 1px 1px rgba(#000, 0.2);
+    }
+  }
+
+  .app-spinner {
+    background: #141414 url("/party-garage-door-3.jpg") center center/cover;
+
+    .hero-body {
+      justify-content: center;
+    }
+  }
 
   .hero-body {
-    justify-content: center;
-  }
-}
-
-.hero-body {
-  @include mobile {
-    padding: 1em 0.5em;
+    @include mobile {
+      padding: 1em 0.5em;
+    }
   }
 }

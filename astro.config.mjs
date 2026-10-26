@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 
 import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 
 // The API the app calls: production by default, or a backend preview for local work (PUBLIC_API_ENDPOINT).
 const { apiEndpoint } = JSON.parse(readFileSync(new URL('./src/config.json', import.meta.url), 'utf8'));
@@ -59,5 +60,8 @@ export default defineConfig({
   ],
   devToolbar: {
     enabled: false,
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });

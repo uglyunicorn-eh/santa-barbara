@@ -1,8 +1,12 @@
-.garage-door {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  z-index: 9999;
+@layer theme, base, bulma, components, utilities;
+
+@layer bulma {
+  .garage-door {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 9999;
+  }
 }

@@ -10,14 +10,19 @@
     "build": "astro check && astro build && mv dist/404.html dist/_404.html",
     "preview": "astro preview",
     "astro": "astro",
-    "shots": "node scripts/shots/shots.mjs"
+    "shots": "node scripts/shots/shots.mjs",
+    "shots:compare": "node scripts/shots/compare.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
     "@astrojs/react": "^7",
+    "@base-ui/react": "^1.9.0",
+    "@tailwindcss/vite": "^4.3.3",
     "astro": "^7",
     "bulma": "<1",
     "bulma-divider": "^0.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "formik": "^2.4.9",
     "framer-motion": "^14",
     "jose": "^6",
@@ -30,13 +35,18 @@
     "react-router-dom": "^7",
     "react-spinners": "^0.17",
     "rxjs": "^7",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "@emnapi/runtime": "^1.7.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "pixelmatch": "^8.0.0",
     "playwright": "^1.64.1",
+    "pngjs": "^7.0.0",
     "prop-types": "^15.8.1",
     "sass": "^1.106.1",
     "typescript": "^6"

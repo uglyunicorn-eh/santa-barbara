@@ -18,8 +18,18 @@ Each run writes to `.shots/<label>/` (git-ignored):
 - `overflow.md` (and `overflow.json`): screens where something reaches past the page edge or text spills out of its
   box. Only things a person sees are listed (text, images, controls), each by its outermost element.
 
-To compare a branch with `main`, run it on both (`--label main`, then on the branch) and open the two `index.html`
-files side by side.
+To compare a branch with `main`, take both runs and diff them:
+
+```bash
+npm run shots -- --label main        # on main (or in a worktree of main, then copy its .shots/main here)
+npm run shots -- --label my-branch   # on the branch
+npm run shots:compare -- main my-branch
+npm run shots:compare -- main my-branch --only party,profile
+```
+
+`shots:compare` lists every screenshot that changed (changed pixels, or a different page size) in
+`.shots/compare-main-vs-my-branch/report.md`, with a diff image per changed screen: changed pixels in red over a
+faded copy. It exits with 1 when anything changed.
 
 ## How it works
 

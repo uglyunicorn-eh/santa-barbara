@@ -1,0 +1,226 @@
+/*
+ * Tailwind CSS, beside Bulma until the migration ends (docs/tailwind-migration-plan.md, Phase 3).
+ *
+ * Cascade layers, lowest first. Bulma and all of our SCSS live in `bulma`: above Tailwind's reset, so today's pages
+ * keep their look, and below the utilities, so a Tailwind class always wins. The same order is declared at the top of
+ * every SCSS entry file, since whichever stylesheet the browser sees first fixes it.
+ */
+@layer theme, base, bulma, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@import "tw-animate-css";
+
+/*
+ * Where Tailwind looks for class names: the app's code only. Not docs/ (the plan and spec are full of example
+ * classes) and not scripts/. And never Tailwind's own `container`: Bulma's <Container> renders class="container",
+ * and Tailwind's version (other max-widths) would win over Bulma's. Phase 5 replaces it with our own Container.
+ */
+@source "../components";
+@source "../layouts";
+@source "../pages";
+@source not inline("container");
+
+/*
+ * Design tokens: docs/design-spec.md. Tailwind's default palette and breakpoints are switched off, so only these
+ * exist; a class that isn't here (`bg-blue-500`, `md:`) doesn't build. `static`: every token is emitted as a CSS
+ * variable even before a class uses it, so plain CSS (artwork styles, the UI kit page) can use them too.
+ */
+@theme static {
+  --font-*: initial;
+  --font-sans: "Cuprum", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-red-50: #fdf3f3;
+  --color-red-100: #fbe3e3;
+  --color-red-200: #f6c6c7;
+  --color-red-500: #dc3a40;
+  --color-red-600: #c62a30;
+  --color-red-700: #a8222a;
+  --color-red-800: #8a1f25;
+  --color-red-900: #741a1f;
+
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-900: #18181b;
+  --color-night: #111217;
+
+  --color-cream: #f7f7c6;
+  --color-cream-50: #fff6d6;
+  --color-gold: #c99700;
+  --color-green-50: #effaf3;
+  --color-green-200: #acdcbf;
+  --color-green-700: #257942;
+
+  /* Seven steps; 18px body (Cuprum is narrow). */
+  --text-*: initial;
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.75rem;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 2.25rem;
+  --text-3xl: 2.5rem;
+  --text-3xl--line-height: 2.75rem;
+
+  /* Bulma's breakpoints, so layouts switch where they do today. */
+  --breakpoint-*: initial;
+  --breakpoint-tablet: 769px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-widescreen: 1216px;
+  --breakpoint-fullhd: 1408px;
+
+
+  --shadow-*: initial;
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.2);
+  --shadow-md: 0 8px 20px rgb(0 0 0 / 0.25);
+  --shadow-lg: 0 16px 40px rgb(0 0 0 / 0.45);
+
+  --text-shadow-photo: 0 1px 2px rgb(0 0 0 / 0.35);
+}
+
+/* The roles components use (shadcn's names, our values). On night and glass, components pick their own variants. */
+:root {
+  --radius: 8px;
+
+  --background: var(--color-white);
+  --foreground: var(--color-zinc-900);
+  --card: var(--color-white);
+  --card-foreground: var(--color-zinc-900);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-zinc-900);
+  --primary: var(--color-red-600);
+  --primary-hover: var(--color-red-700);
+  --primary-foreground: var(--color-white);
+  --secondary: var(--color-white);
+  --secondary-foreground: var(--color-zinc-900);
+  --muted: var(--color-zinc-100);
+  --muted-foreground: var(--color-zinc-500);
+  --accent: var(--color-zinc-100);
+  --accent-foreground: var(--color-zinc-900);
+  --destructive: var(--color-red-700);
+  --destructive-strong: var(--color-red-800);
+  --destructive-strong-hover: var(--color-red-900);
+  --success: var(--color-green-700);
+  --link: var(--color-red-700);
+  --border: var(--color-zinc-200);
+  --input: var(--color-zinc-300);
+  --ring: var(--color-red-600);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-strong: var(--destructive-strong);
+  --color-destructive-strong-hover: var(--destructive-strong-hover);
+  --color-success: var(--success);
+  --color-link: var(--link);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* One source, --radius (8px): controls use rounded-lg, cards rounded-card (16px). */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-card: var(--radius-2xl);
+}
+
+/*
+ * State variants for Base UI's data attributes (`data-open:`, `data-checked:` …), copied from shadcn's
+ * `shadcn/tailwind.css` (MIT, (c) 2023 shadcn) instead of installing the whole shadcn CLI package for them.
+ */
+@custom-variant data-open {
+  &:where([data-state="open"]),
+  &:where([data-open]:not([data-open="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-closed {
+  &:where([data-state="closed"]),
+  &:where([data-closed]:not([data-closed="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-checked {
+  &:where([data-state="checked"]),
+  &:where([data-checked]:not([data-checked="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-unchecked {
+  &:where([data-state="unchecked"]),
+  &:where([data-unchecked]:not([data-unchecked="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-selected {
+  &:where([data-selected="true"]) {
+    @slot;
+  }
+}
+
+@custom-variant data-disabled {
+  &:where([data-disabled="true"]),
+  &:where([data-disabled]:not([data-disabled="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-active {
+  &:where([data-state="active"]),
+  &:where([data-active]:not([data-active="false"])) {
+    @slot;
+  }
+}
+
+@custom-variant data-horizontal {
+  &:where([data-orientation="horizontal"]) {
+    @slot;
+  }
+}
+
+@custom-variant data-vertical {
+  &:where([data-orientation="vertical"]) {
+    @slot;
+  }
+}
