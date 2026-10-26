@@ -89,3 +89,17 @@
     }
   }
 }
+
+// Behind the garage door (/ and /enter/), the photo goes on the door rather than the page: the door is always one
+// window tall and scrolls its content, and a scrolling box's own background stays put, so the photo is the same on
+// every page however tall the content is.
+.garage-door:has(.login-container) {
+  background-color: #170505;
+  background-image: url("/login-garage-door.jpg");
+  background-size: cover;
+  background-position: center center;
+
+  .hero.login-container {
+    background: transparent;
+  }
+}
