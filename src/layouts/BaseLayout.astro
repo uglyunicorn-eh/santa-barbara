@@ -76,6 +76,19 @@ const imageUrl = new URL("/og-image.png", Astro.site);
       });
     </script>
 
+    <!-- The info pages and home load in the background while you hover a link to them (Chrome, Edge), so the click
+         shows them at once, with the sheet sliding in, instead of the old page waiting on the new one. -->
+    <script type="speculationrules" is:inline>
+      {
+        "prerender": [
+          {
+            "where": { "href_matches": ["/", "/how-it-works/", "/privacy/", "/terms/"] },
+            "eagerness": "moderate"
+          }
+        ]
+      }
+    </script>
+
     <slot name="head" />
   </head>
   <body>
