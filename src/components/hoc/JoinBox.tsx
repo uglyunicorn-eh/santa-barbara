@@ -12,7 +12,7 @@ import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required, validEmail } from "@/components/forms/messages";
 import { Footer } from "@/components/hoc/Footer";
-import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
+import { TINTS, useAppClient, useCurrentUser, usePageTint, useSignals } from "@/components/hooks";
 import type { Party, User } from "@/types";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import type { JoinPartyInput } from "@/components/hooks/useAppClient";
@@ -50,6 +50,7 @@ const signInSchema = v.object({
 
 export const JoinBox = ({ party }: Props) => {
   const navigate = useNavigate();
+  usePageTint(TINTS.partyDoor);
 
   const { profile } = useCurrentUser();
 

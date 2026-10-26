@@ -15,7 +15,7 @@ import { PartyIsClosedContent } from "@/components/hoc/PartyIsClosedContent";
 import { RolledDialog } from "@/components/hoc/RolledDialog";
 import { MyProfile } from "@/components/hoc/MyProfile";
 import { useToastSurface } from "@/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser, useUnrevealed } from "@/components/hooks";
+import { TINTS, useAppClient, useCurrentUser, usePageTint, useUnrevealed } from "@/components/hooks";
 import type { Party } from "@/types";
 
 type Props = {
@@ -26,6 +26,7 @@ export const PartyDetails = ({ party }: Props) => {
   const { profile } = useCurrentUser();
   // The party page is the light one: its toasts are white.
   useToastSurface("light");
+  usePageTint(TINTS.party);
   const { markRevealed } = useAppClient();
   const { revealed } = useUnrevealed();
   // The user heard whom they give a gift to: no more reminders (or profile dot) about this party.
@@ -119,7 +120,8 @@ export const PartyDetails = ({ party }: Props) => {
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          <Footer profileAsLink profileBase={`${partyPath}profile/`}>
+          {/* On phones, Home in the line instead of "How this works?" (the way back from a party). */}
+          <Footer profileAsLink profileBase={`${partyPath}profile/`} compactKeys={["home", "buy-me-coffee"]}>
             <UnsplashCredit id="78uNJt1kPw8" name="Joanna Kosinska" username="joannakosinska" />
           </Footer>
         </Hero.Footer>

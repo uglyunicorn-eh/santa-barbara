@@ -13,7 +13,7 @@ import { Form, FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required, validEmail } from "@/components/forms/messages";
 import { Footer } from "@/components/hoc/Footer";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
-import { useAppClient } from "@/components/hooks";
+import { TINTS, useAppClient, usePageTint } from "@/components/hooks";
 import type { EnterRequestInput } from "@/components/hooks/useAppClient";
 import { MAX_EMAIL_LENGTH } from "@/limits";
 
@@ -44,7 +44,12 @@ export const LoginBox = () => {
   );
 };
 
-export const LoginHero = ({ children }: { children: React.ReactNode }) => (
+export const LoginHero = ({ children }: { children: React.ReactNode }) => {
+  usePageTint(TINTS.loginDoor);
+  return <LoginHeroPage>{children}</LoginHeroPage>;
+};
+
+const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
   <Hero size={"fullheight"} className="login-container">
     <Hero.Body>
       <Container textAlign="centered">

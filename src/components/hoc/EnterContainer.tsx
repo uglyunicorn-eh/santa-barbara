@@ -9,7 +9,7 @@ import { Footer } from '@/components/hoc/Footer';
 import { LoginHero } from '@/components/hoc/LoginBox';
 import { useNotifications } from '@/components/hoc/NotificationsContainer';
 import { newKey } from '@/api/client';
-import { useAppClient, useCurrentUser, useJWT } from '@/components/hooks';
+import { TINTS, useAppClient, useCurrentUser, useJWT, usePageTint } from '@/components/hooks';
 import { useLinkToken } from '@/components/hooks/useLinkToken';
 
 import image from '@/images/enter.png';
@@ -20,6 +20,7 @@ type EnterRequestToken = {
 }
 
 export const EnterContainer = () => {
+  usePageTint(TINTS.enter);
   // The sign-in link's token (after "#" in new links, in the path in older ones), moved off the address bar.
   const linkToken = useLinkToken("/enter/link");
   const enterRequestToken = linkToken ?? undefined;
