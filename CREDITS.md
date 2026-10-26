@@ -33,3 +33,53 @@ These photos come from [Unsplash](https://unsplash.com) and are used under the [
 ## Public domain
 
 - `public/cupid.png`: Victorian die-cut scrap (chromolithograph, late 1800s), artist unknown.
+
+## Software and fonts
+
+The site is built on open-source software. Thank you to everyone who makes it. The API behind it lists its own
+libraries in [santa-monica's CREDITS.md](https://github.com/uglyunicorn-eh/santa-monica/blob/main/CREDITS.md).
+
+### In your browser
+
+These libraries are bundled into the site's JavaScript and CSS.
+
+| Library | What it does here | License | Copyright |
+| --- | --- | --- | --- |
+| [React](https://react.dev) and React DOM | The interface | MIT | © Meta Platforms, Inc. and affiliates |
+| [React Router](https://github.com/remix-run/react-router) | Pages and dialogs | MIT | © React Training LLC |
+| [Base UI](https://base-ui.com) | Dialogs, menus and other controls | MIT | © 2019 Material-UI SAS |
+| [Motion](https://github.com/motiondivision/motion) (`framer-motion`) | Animations | MIT | © 2018 Framer B.V. |
+| [React Hook Form](https://react-hook-form.com) and its resolvers | Forms | MIT | © 2019–present Beier (Bill) Luo |
+| [Valibot](https://valibot.dev) | Checking form input | MIT | © Fabian Hiller |
+| [jose](https://github.com/panva/jose) | Checking sign-in tokens | MIT | © 2018 Filip Skokan |
+| [Sonner](https://sonner.emilkowal.ski) | Toast notifications | MIT | © 2023 Emil Kowalski |
+| [React Confetti](https://github.com/alampros/react-confetti) | Confetti | MIT | © 2016 Aaron Lampros |
+| [React Spinners](https://www.davidhu.io/react-spinners/) | Loading spinners | MIT | © 2017 David Hu |
+| [React Feather](https://github.com/feathericons/react-feather) | Icons | MIT | © 2017 Carmelo Pullara |
+| [Tailwind CSS](https://tailwindcss.com) | Styles | MIT | © Tailwind Labs, Inc. |
+| [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css) | CSS animations | MIT | © 2025 Wombosvideo |
+| [class-variance-authority](https://github.com/joe-bell/cva) | Button and control variants | Apache-2.0 | © Joe Bell |
+| [clsx](https://github.com/lukeed/clsx) | Building class names | MIT | © Luke Edwards |
+| [tailwind-merge](https://github.com/dcastil/tailwind-merge) | Merging Tailwind classes | MIT | © 2021 Dany Castillo |
+
+### Font
+
+| Font | License | Copyright |
+| --- | --- | --- |
+| [Cuprum](https://fonts.google.com/specimen/Cuprum), served by Google Fonts | SIL Open Font License 1.1 | © Jovanny Lemonad |
+
+### For building the site
+
+Used to build and check the site. None of it ships to your browser.
+
+| Tool | What it does here | License | Copyright |
+| --- | --- | --- | --- |
+| [Astro](https://astro.build), with its React integration and `astro check` | Builds the site | MIT | © 2021 Fred K. Schott |
+| [Tailwind CSS for Vite](https://tailwindcss.com) | Builds the styles | MIT | © Tailwind Labs, Inc. |
+| [TypeScript](https://www.typescriptlang.org) | Type checking | Apache-2.0 | © Microsoft Corporation |
+| [React types](https://github.com/DefinitelyTyped/DefinitelyTyped) | TypeScript types for React | MIT | © Microsoft Corporation |
+| [Playwright](https://playwright.dev) | Screenshots of every screen | Apache-2.0 | © Microsoft Corporation |
+| [pixelmatch](https://github.com/mapbox/pixelmatch) | Comparing screenshots | ISC | © 2025 Mapbox |
+| [pngjs](https://github.com/lukeapage/pngjs) | Reading screenshots | MIT | © 2015 Luke Page and contributors |
+
+Their own dependencies are listed in `package-lock.json`, each with its license.

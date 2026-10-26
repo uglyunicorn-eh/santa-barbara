@@ -79,4 +79,8 @@ PUBLIC_API_ENDPOINT=https://<preview>.workers.dev PUBLIC_JWT_PUBLIC_KEY="$(cat p
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+The code is MIT, see [LICENSE](LICENSE).
+
+The MIT license covers the code only. Images and artwork (in `public/` and `src/images/`) are not covered: they belong
+to their authors and keep their own licenses. See [CREDITS.md](CREDITS.md) for who made what, and how to reach us about
+licensing.
