@@ -49,6 +49,7 @@ const SCREENS = [
   // Signed out
   { name: "login", path: "/" },
   { name: "login-email-form", path: "/enter/" },
+  { name: "login-closed-again", path: "/", act: openAndCloseSignIn },
   { name: "enter-link-expired", path: async ({ token }) => `/enter/link#${await token({ email: "$email" }, -3600)}` },
   { name: "enter-link-invalid", path: "/enter/not-a-real-link" },
   { name: "party-signed-out", path: `/p/${CODES.guestOpen}/`, signedIn: false, api: { partyFor: CODES.notJoined } },
@@ -118,6 +119,14 @@ async function typeInvalidCode(page) {
   await input.fill("AFGSDFG");
   await input.blur();
   await page.waitForTimeout(300);
+}
+
+/** Opens the sign-in dialog from the front door and closes it again: the button must be ready, not spinning. */
+async function openAndCloseSignIn(page) {
+  await page.getByRole("button", { name: "Enter with your email address" }).click();
+  await page.waitForTimeout(1200);
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(600);
 }
 
 /** Clicks the button whose name contains this text, and waits for what it opens. */

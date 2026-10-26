@@ -13,7 +13,7 @@ import { Tab, Tabs } from "@/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "@/components/forms";
 import { maxLen, required, validEmail } from "@/components/forms/messages";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
+import { useAppClient, useCurrentUser, useSignals, useTabletUp } from "@/components/hooks";
 import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
 import type { Party } from "@/types";
@@ -115,8 +115,8 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
     size="lg"
   >
     {/* Pinned to the dialog's very top edge (not inside the body's padding, where rows would show above it) while the
-        history scrolls under it. On a phone's sheet it leaves room for the grip. */}
-    <Tabs label="Profile" className="sticky -top-5 z-20 -mx-5 -mt-5 mb-4 rounded-t-card bg-white max-tablet:pt-4">
+        history scrolls under it. On a phone's sheet it leaves room for the grip and the X. */}
+    <Tabs label="Profile" className="sticky -top-5 z-20 -mx-5 -mt-5 mb-4 rounded-t-card bg-white max-tablet:pt-4 max-tablet:pr-12">
       <Tab to={base}>Profile</Tab>
       <Tab to={`${base}history/`}>Latest history</Tab>
     </Tabs>
@@ -400,6 +400,7 @@ const History = () => {
       loadMore,
     ],
   );
+  const tabletUp = useTabletUp();
 
   React.useEffect(
     () => {
@@ -452,6 +453,8 @@ const History = () => {
     );
   }
 
+  const showMore = <Button variant="ghost" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>;
+
   return (
     <div className="history">
       {title}
@@ -465,11 +468,10 @@ const History = () => {
           {autoLoad && loadingMore && <ClipLoader size={20} />}
         </div>
       )}
-      {hasMore && (
-        <DialogFooterStart>
-          <Button variant="ghost" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
-        </DialogFooterStart>
-      )}
+      {/* From tablet up on the footer's left; on a phone's sheet right under the list, above the stacked footer. */}
+      {hasMore && (tabletUp
+        ? <DialogFooterStart>{showMore}</DialogFooterStart>
+        : <div className="mt-2 flex justify-center">{showMore}</div>)}
     </div>
   );
 };
