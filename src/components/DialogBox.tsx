@@ -107,6 +107,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
         <Modal.Card.Body>
           {children}
         </Modal.Card.Body>
+        {/* Bulma spaced footer buttons with a margin on .button; the new Button needs the footer's own gap. */}
         <Modal.Card.Footer className="tablet:gap-2">
           {!noDismiss && <DismissButton dismissLocation={dismissLocation} label={dismissLabel} />}
           {action}

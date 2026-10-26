@@ -1,5 +1,4 @@
-import { Tabs } from "src/components/bulma";
-import { Link, Route, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useResolvedPath } from "react-router-dom";
 
 type Props = {
   children?: React.ReactNode;
@@ -7,7 +6,7 @@ type Props = {
   exact?: boolean;
 };
 
-export const Tab = ({ children, to, exact }: Props) => {
+export const Tab = ({ children, to }: Props) => {
   const x = useResolvedPath(to);
   const m = useMatch(to);
 

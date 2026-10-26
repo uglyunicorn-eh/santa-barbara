@@ -12,7 +12,7 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
 import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser } from "src/components/hooks";
+import { useAppClient } from "src/components/hooks";
 import type { EnterRequestInput } from "src/components/hooks/useAppClient";
 import { MAX_EMAIL_LENGTH } from "src/limits";
 

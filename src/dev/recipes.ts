@@ -1,5 +1,7 @@
 // Helpers for the UI kit page. Buttons are the real component now (src/components/ui/button.tsx); the field recipes
 // below are still prototypes from docs/design-spec.md until Phase 4.2 builds the real form fields.
+
+import type { ButtonProps } from "@/components/ui/button";
 //
 // A recipe takes a `state` so the kit can show hover and focus without a mouse; "live" leaves them to the browser.
 
@@ -19,8 +21,9 @@ const dark = (surface: Surface) => surface !== "paper";
 // ---------------------------------------------------------------------------------------------------------------
 // Buttons
 
-export type ButtonVariant = "brand" | "primary" | "secondary" | "ghost" | "ghost-destructive" | "destructive" | "link";
-export type ButtonSize = "sm" | "md" | "lg";
+/** Taken from the real Button, so the kit can't list a variant or size the component doesn't have. */
+export type ButtonVariant = NonNullable<ButtonProps["variant"]>;
+export type ButtonSize = NonNullable<ButtonProps["size"]>;
 
 export const BUTTON_VARIANTS: { id: ButtonVariant; name: string; use: string }[] = [
   { id: "brand", name: "brand", use: "A hero screen's main action" },

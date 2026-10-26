@@ -21,8 +21,12 @@ of both repos at fed0d99 / 061bacf)
   change (see Phase 3's "What it took").
 
 - Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev`.
+- Phase 4.1, the Button: every button in the app uses `src/components/ui/button.tsx`.
 
-**Next:** Phase 4, starting with 4.1 (Button).
+Open as a stack, to merge in order: #162 (design spec, on its own) and #163 (Tailwind
+setup) → #164 (UI kit) → #165 (Button).
+
+**Next:** Phase 4.2 (form fields; Formik → React Hook Form, Yup → Valibot).
 
 **Frontend (santa-barbara):** talks to the backend's plain JSON API (`src/api/client`);
 hosted on Cloudflare Pages, with a Content-Security-Policy from `public/_headers` that

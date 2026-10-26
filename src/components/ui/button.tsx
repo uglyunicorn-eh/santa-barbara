@@ -54,7 +54,7 @@ const buttonVariants = cva(
         light: "focus-visible:ring-ring focus-visible:ring-offset-white",
         dark: "focus-visible:ring-white focus-visible:ring-offset-night",
       },
-      /** Fully rounded: only for the main action on a hero screen. */
+      /** Fully rounded: only on hero screens (their main action, and going home or back). */
       pill: { true: "rounded-full", false: "" },
       fullWidth: { true: "w-full", false: "" },
     },
