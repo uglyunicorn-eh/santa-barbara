@@ -103,8 +103,9 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 
 - **Labels:** beside the input from tablet width in the new-party and join dialogs, above it elsewhere.
 - **Input:** 40px (48px on hero forms), white, 8px corners; focus border plus ring.
-- **Help and errors:** `text-sm` under the input. An error takes the help text's place, and a field with no help keeps
-  a blank line for it, so an error appearing doesn't move the form.
+- **Help and errors:** `text-sm` under the input. An error takes the help text's place, in a slot as tall as the
+  taller of the two (a field with no help keeps one blank line), so an error appearing or going away never resizes
+  the form or its dialog.
 - **Inline fields** (the profile's name and email): input and buttons on one line, all 40px; the error below. "Save"
   appears only once the name has changed.
 - **On glass** (the sign-in card): labels and help in `zinc-300`, white focus, errors in light red.

@@ -72,6 +72,7 @@ const SCREENS = [
   { name: "new-party-created", path: "/new/", signedIn: true, act: submitForm },
   { name: "new-party-code-copied", path: "/new/", signedIn: true, act: copyNewCode },
   { name: "join-by-code", path: "/join/", signedIn: true },
+  { name: "join-by-code-invalid", path: "/join/", signedIn: true, act: typeInvalidCode },
   { name: "party-host", path: `/p/${CODES.hostOpen}/`, signedIn: true },
   { name: "party-guest", path: `/p/${CODES.guestOpen}/`, signedIn: true },
   { name: "party-closed", path: `/p/${CODES.closed}/`, signedIn: true },
@@ -109,6 +110,14 @@ async function copyNewCode(page) {
   await submitForm(page);
   await page.locator(".code-sticker").click();
   await page.waitForTimeout(500);
+}
+
+/** Types a code that can't be one and leaves the field, so its error shows (in place of the help text). */
+async function typeInvalidCode(page) {
+  const input = page.locator("form input").first();
+  await input.fill("AFGSDFG");
+  await input.blur();
+  await page.waitForTimeout(300);
 }
 
 /** Clicks the button whose name contains this text, and waits for what it opens. */

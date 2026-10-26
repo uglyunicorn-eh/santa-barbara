@@ -3,8 +3,8 @@ import { useFormContext, useFormState } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
 
-// A form field (docs/ui-kit.md, "Form fields"): a label, the input, and one message line under it. The error takes the
-// help text's place, and a field with no help keeps the line blank, so an error showing up doesn't push the form down.
+// A form field (docs/ui-kit.md, "Form fields"): a label, the input, and a message under it. The error takes the help
+// text's place in a slot as tall as the taller of the two, so an error showing up or going away never resizes the form.
 
 type Surface = "light" | "dark";
 type Size = "md" | "lg";
@@ -60,16 +60,27 @@ export const FormField = ({ name, label, children, help, extra, horizontal = tru
         )}
         <div className="min-w-0 flex-1">
           {children}
-          <p
-            id={messageId}
-            aria-hidden={!error && !help ? true : undefined}
-            className={cn(
-              "mt-1 text-sm",
-              error ? (dark ? "text-red-200" : "text-destructive") : (dark ? "text-zinc-300" : "text-muted-foreground"),
-            )}
-          >
-            {error ?? help ?? <>&nbsp;</>}
-          </p>
+          {/*
+            The help text and the error share one slot, both laid out in it and only one shown, so the slot is as tall
+            as the taller of the two: an error replacing a two-line help text (or the other way round) doesn't change
+            the form's height. A field with no help keeps one blank line.
+          */}
+          <div className="mt-1 grid text-sm *:col-start-1 *:row-start-1">
+            <p
+              id={error ? undefined : messageId}
+              aria-hidden={error || !help ? true : undefined}
+              className={cn(dark ? "text-zinc-300" : "text-muted-foreground", error && "invisible")}
+            >
+              {help ?? <>&nbsp;</>}
+            </p>
+            <p
+              id={error ? messageId : undefined}
+              aria-hidden={error ? undefined : true}
+              className={cn(dark ? "text-red-200" : "text-destructive", !error && "invisible")}
+            >
+              {error ?? <>&nbsp;</>}
+            </p>
+          </div>
           {extra}
         </div>
       </div>
