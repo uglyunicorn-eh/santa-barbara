@@ -17,7 +17,7 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
         complex math and you know what? Each of you got one name. This is a person you have to get a gift to.
       </p>
       <p>
-        Just ask the elf but keep the name in secret, nobody should know what is it.
+        Just ask the Gnomik, but keep the name a secret: nobody else should know who it is.
       </p>
       <p>
         Have fun! And Happy Holidays!

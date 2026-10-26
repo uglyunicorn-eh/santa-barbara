@@ -70,16 +70,22 @@ const SCREENS = [
   { name: "rolled-dialog", path: `/rolled/${CODES.closed}`, signedIn: true },
   { name: "new-party", path: "/new/", signedIn: true },
   { name: "new-party-created", path: "/new/", signedIn: true, act: submitForm },
+  { name: "new-party-code-copied", path: "/new/", signedIn: true, act: copyNewCode },
   { name: "join-by-code", path: "/join/", signedIn: true },
+  { name: "join-by-code-invalid", path: "/join/", signedIn: true, act: typeInvalidCode },
   { name: "party-host", path: `/p/${CODES.hostOpen}/`, signedIn: true },
   { name: "party-guest", path: `/p/${CODES.guestOpen}/`, signedIn: true },
   { name: "party-closed", path: `/p/${CODES.closed}/`, signedIn: true },
+  { name: "party-rolled-letter", path: `/p/${CODES.closed}/rolled`, signedIn: true },
+  { name: "party-profile-history", path: `/p/${CODES.closed}/profile/history/`, signedIn: true, unrevealed: true },
+  { name: "party-closed-revealed", path: `/p/${CODES.closed}/`, signedIn: true, act: clickButton("Yes, please!") },
   { name: "party-deleted", path: `/p/${CODES.deleted}/`, signedIn: true },
   { name: "party-join", path: `/p/${CODES.notJoined}/`, signedIn: true },
   { name: "party-join-protected", path: `/p/${CODES.protectedNotJoined}/`, signedIn: true },
   { name: "party-not-found", path: `/p/${CODES.missing}/`, signedIn: true },
   { name: "party-loading", path: `/p/${CODES.slow}/`, signedIn: true, settle: 400 },
   { name: "dialog-close-party", path: `/p/${CODES.hostOpen}/confirm`, signedIn: true },
+  { name: "dialog-invite", path: `/p/${CODES.hostOpen}/invite`, signedIn: true, act: typeEmails },
   { name: "dialog-delete-party", path: `/p/${CODES.hostOpen}/delete`, signedIn: true },
   { name: "dialog-leave-party", path: `/p/${CODES.guestOpen}/leave`, signedIn: true },
   { name: "profile", path: "/profile/", signedIn: true },
@@ -97,6 +103,37 @@ function openMenu(label) {
       await page.waitForTimeout(400);
     }
   };
+}
+
+/** Creates the party, then clicks its code sticker (which copies the code, with a toast). */
+async function copyNewCode(page) {
+  await submitForm(page);
+  await page.locator(".code-sticker").click();
+  await page.waitForTimeout(500);
+}
+
+/** Types a code that can't be one and leaves the field, so its error shows (in place of the help text). */
+async function typeInvalidCode(page) {
+  const input = page.locator("form input").first();
+  await input.fill("AFGSDFG");
+  await input.blur();
+  await page.waitForTimeout(300);
+}
+
+/** Clicks the button whose name contains this text, and waits for what it opens. */
+function clickButton(label) {
+  return async (page) => {
+    await page.getByRole("button", { name: label }).first().click();
+    await page.waitForTimeout(600);
+  };
+}
+
+/** Types a few addresses (one of them wrong) into the invite dialog's email tags. */
+async function typeEmails(page) {
+  const input = page.locator('input[type="email"]');
+  await input.fill("bob@example.com, carol@example.com not-an-email dave.with.a.long.address@example.com");
+  await input.press("Enter");
+  await page.waitForTimeout(300);
 }
 
 /** Types "delete" and confirms, on the account deletion page. */
@@ -151,6 +188,8 @@ function answer(set, screen, method, url, body) {
     case "POST /parties/delete":
     case "POST /parties/restore":
       return ok(set.parties[body?.code] ?? set.parties[CODES.guestOpen]);
+    case "POST /parties/invite":
+      return ok({ invited: body?.emails ?? [], alreadyInvited: [], alreadyJoined: [], invitesLeft: 40 });
     case "POST /auth/magic-link":
     case "POST /me/deletion":
     case "POST /me/email-change":

@@ -16,7 +16,7 @@ import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
 import type { Party, User } from "@/types";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import type { JoinPartyInput } from "@/components/hooks/useAppClient";
-import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
+import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
 type Props = {
   party: Party;
@@ -33,7 +33,7 @@ const partyCode = v.pipe(
 
 const joinSchema = v.object({
   party: partyCode,
-  name: v.pipe(v.string(), v.nonEmpty(required("Name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Name", MAX_NAME_LENGTH))),
+  name: v.pipe(v.string(), v.nonEmpty(required("Name")), v.maxLength(MAX_PERSON_NAME_LENGTH, maxLen("Name", MAX_PERSON_NAME_LENGTH))),
   password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
 });
 
@@ -260,7 +260,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
         horizontal={false}
           surface="dark"
           size="lg"
-        children={<Input maxLength={MAX_NAME_LENGTH} />}
+        children={<Input maxLength={MAX_PERSON_NAME_LENGTH} />}
         help={profile?.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
       />
 

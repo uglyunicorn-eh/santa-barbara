@@ -8,12 +8,12 @@ import { DialogBox } from "@/components/DialogBox";
 import { HaveQuestion } from "@/components/HaveQuestion";
 import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
-import { useAppClient } from "@/components/hooks";
+import { useAppClient, useCopy } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
-import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
+import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
 const schema = v.object({
-  name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Party name", MAX_NAME_LENGTH))),
+  name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_PARTY_NAME_LENGTH, maxLen("Party name", MAX_PARTY_NAME_LENGTH))),
   password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
 });
 
@@ -57,6 +57,15 @@ export const NewParty = () => {
     ],
   );
 
+  const copy = useCopy();
+  const copyCode = React.useCallback(
+    () => party && copy(party.code, {
+      copied: `Code ${party.code} copied! Pass it on to your friends.`,
+      failed: `We couldn't copy the code. It's ${party.code}.`,
+    }),
+    [party, copy],
+  );
+
   const goToParty = React.useCallback(
     () => {
       if (!party) {
@@ -78,9 +87,12 @@ export const NewParty = () => {
         !party
           ? <Submit>&#x1F389; Rock'n'Roll!</Submit>
           // Still inside the form: without type="button" it would submit it again.
-          : <Button type="button" variant="primary" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
+          // The only button: big, round, centred, with a white ring to keep it clear of the monsters behind it.
+          : <Button type="button" variant="primary" size="lg" pill className="min-h-14 px-12 text-2xl ring-8 ring-white max-tablet:w-full" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
       }
       noDismiss={party !== undefined}
+      footerAlign={party ? "center" : "end"}
+      footerClassName={party ? "pb-9" : undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}
       form={{
         schema,
@@ -96,7 +108,7 @@ export const NewParty = () => {
               <FormField
                 name="name"
                 label="Party name"
-                children={<Input autofocus maxLength={MAX_NAME_LENGTH} />}
+                children={<Input autofocus maxLength={MAX_PARTY_NAME_LENGTH} />}
               />
 
               <FormField
@@ -118,7 +130,10 @@ export const NewParty = () => {
                 Here's your party's secret code:
               </p>
 
-              <h1>{party.code}</h1>
+              {/* A sticker with its corner lifting, as if you could peel the code off and hand it over: a click copies it. */}
+              <button type="button" className="code-sticker" onClick={copyCode} title="Copy the code" aria-label={`Copy the code ${party.code}`}>
+                <span className="code-sticker-text">{party.code}</span>
+              </button>
             </>
           )}
 

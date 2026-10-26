@@ -17,7 +17,7 @@ import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
 import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
 import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
 import type { Party } from "@/types";
-import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH } from "@/limits";
+import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
@@ -87,7 +87,7 @@ const usePartyHistory = () => {
 };
 
 const nameSchema = v.object({
-  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Name", MAX_NAME_LENGTH))),
+  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_PERSON_NAME_LENGTH, maxLen("Name", MAX_PERSON_NAME_LENGTH))),
 });
 
 /** Rejects the current address here, so the request (and its emailing rate limit) is never spent on it. */
@@ -102,17 +102,23 @@ const emailSchema = (currentEmail: string) => v.object({
   ),
 });
 
-export const MyProfile = () => (
+/**
+ * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
+ * party page (closing it goes back to `dismissLocation`).
+ */
+export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?: string; dismissLocation?: string }) => (
   <DialogBox
     className={"profile-box"}
     noHeader
     dismissLabel={"Okie Dokie!"}
+    dismissLocation={dismissLocation}
     size="lg"
   >
-    {/* Pinned to the top of the dialog while the history scrolls under it. */}
-    <Tabs label="Profile" className="sticky top-0 z-10 -mx-5 mb-4 bg-white">
-      <Tab to="/profile/">Profile</Tab>
-      <Tab to="/profile/history/">Latest history</Tab>
+    {/* Pinned to the dialog's very top edge (not inside the body's padding, where rows would show above it) while the
+        history scrolls under it. On a phone's sheet it leaves room for the grip. */}
+    <Tabs label="Profile" className="sticky -top-5 z-20 -mx-5 -mt-5 mb-4 rounded-t-card bg-white max-tablet:pt-4">
+      <Tab to={base}>Profile</Tab>
+      <Tab to={`${base}history/`}>Latest history</Tab>
     </Tabs>
     <Content>
       <Routes>
@@ -178,7 +184,7 @@ const Profile = () => {
           onSubmit={onSubmit}
         >
           <InlineField name="name" action={<SaveButton />}>
-            <Input placeholder="How should your friends call you?" maxLength={MAX_NAME_LENGTH} />
+            <Input placeholder="How should your friends call you?" maxLength={MAX_PERSON_NAME_LENGTH} />
           </InlineField>
         </Form>
       </Setting>

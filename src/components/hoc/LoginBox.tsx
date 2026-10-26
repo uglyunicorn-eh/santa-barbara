@@ -6,7 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
-import { GrinchBox } from "@/components/GrinchBox";
+import { GrinchDialog } from "@/components/GrinchBox";
 import { SnowConfetti } from "@/components/SnowConfetti";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "@/components/forms";
@@ -34,7 +34,8 @@ export const LoginBox = () => {
       <LoginHero>
         <Routes>
           <Route path="/" Component={EnterActions} />
-          <Route path="/enter/" Component={EnterForm} />
+          {/* The sign-in form opens over the front door, which stays as it was behind it. */}
+          <Route path="/enter/" element={<><EnterActions /><EnterForm /></>} />
           {/* Signed out, every other page (the profile, a new party…) is the front door. */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -119,7 +120,7 @@ const EnterForm = () => {
   const goHome = React.useCallback(() => navigate('/'), [navigate]);
 
   return (
-    <GrinchBox closeTo="/">
+    <GrinchDialog closeTo="/" className="login-dialog">
       {sentTo
         ? (
           <>
@@ -146,7 +147,7 @@ const EnterForm = () => {
               horizontal={false}
           surface="dark"
           size="lg"
-              children={<Input placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
+              children={<Input autofocus placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
             />
 
             <p>Enter your email address above and we'll send you a magic link to sign in.</p>
@@ -159,6 +160,6 @@ const EnterForm = () => {
           </Form>
         )
       }
-    </GrinchBox >
+    </GrinchDialog>
   )
 }

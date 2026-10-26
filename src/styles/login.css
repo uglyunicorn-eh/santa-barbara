@@ -21,24 +21,25 @@
       }
     }
   }
+}
 
-  .grinch-box {
-    font-size: 1.2rem;
+/* The sign-in card, in its dialog over the front door (portalled out of the door, so not under .login-container). */
+.login-dialog .grinch-box {
+  font-size: 1.2rem;
 
-    .card {
-      @media (max-width: 768px) {
-        padding: 0;
-        font-size: 1rem;
-      }
-
-      p {
-        text-align: left;
-      }
+  .card {
+    @media (max-width: 768px) {
+      padding: 0;
+      font-size: 1rem;
     }
 
-    .actions {
-      margin-top: 3em;
+    p {
+      text-align: left;
     }
+  }
+
+  .actions {
+    margin-top: 3em;
   }
 }
 

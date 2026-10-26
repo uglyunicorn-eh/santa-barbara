@@ -1,11 +1,15 @@
 import React from "react";
 import { Toaster, toast } from "sonner";
 
+import { useTabletUp } from "@/components/hooks/useTabletUp";
+
 // Toasts (docs/ui-kit.md, "Toasts"), on Sonner: one toaster for the whole app, mounted once in AppContainer, above the
-// garage door. Each toast has a title, maybe a description and an action, and a dismiss button. Errors go after
-// 2.5 s, other messages after 4 s; reminders (`remind`) stay until dismissed or opened.
+// garage door. Top centre on phones, bottom right from tablet up. Each toast has a title, maybe a description and an
+// action; its dismiss button shows on hover or focus (on touch, swipe it away). Errors go after 2.5 s, other messages
+// after 4 s; reminders (`remind`) stay until dismissed or opened.
 //
-// They follow the surface: dark on the night pages, light on the party page (which asks with useToastSurface).
+// Errors are red, info blue, success green, on any page. Reminders follow the surface: dark on the night pages, light
+// on the party page (which asks with useToastSurface). The look is in src/styles/base.css ("Toasts").
 
 type Surface = "dark" | "light";
 
@@ -35,24 +39,33 @@ export const useToastSurface = (next: Surface) => {
 const ERROR_MS = 2500;
 const MESSAGE_MS = 4000;
 
+/** Room left under bottom-right toasts for the footer (its links and credits). */
+const FOOTER_CLEARANCE = 112;
+
 export const NotificationsContainer = () => {
   const current = React.useSyncExternalStore(subscribe, () => surface, () => surface);
+  const tabletUp = useTabletUp();
 
   return (
     <Toaster
       theme={current}
-      position="top-center"
+      position={tabletUp ? "bottom-right" : "top-center"}
       closeButton
-      offset={16}
+      className="app-toaster"
+      // From tablet up, above the footer's links in the bottom-right corner.
+      offset={tabletUp ? { right: 16, bottom: FOOTER_CLEARANCE } : 16}
       mobileOffset={16}
       visibleToasts={4}
       style={{ zIndex: 10001, fontFamily: '"Cuprum", sans-serif' }}
       toastOptions={{
         classNames: {
           toast: "rounded-lg! text-base! shadow-md!",
-          title: "text-base! font-semibold!",
+          title: "text-base! font-normal!",
           description: "text-sm!",
           actionButton: "rounded-lg! px-3! text-sm! font-medium!",
+          error: "bg-red-600! border-red-700! text-white!",
+          info: "bg-blue-600! border-blue-600! text-white!",
+          success: "bg-green-700! border-green-700! text-white!",
         },
       }}
     />
@@ -62,6 +75,8 @@ export const NotificationsContainer = () => {
 export type Reminder = {
   /** Stable id: showing the same reminder again doesn't add another. */
   id: string;
+  /** An emoji shown beside the title, where the other toasts have their icon. */
+  icon?: string;
   title: string;
   description?: React.ReactNode;
   action: { label: string; onClick: () => void };
@@ -73,10 +88,11 @@ export type Reminder = {
 const forgotten = new Set<string>();
 
 /** A reminder toast: rich (title, description, action), and it stays until the user dismisses or opens it. */
-export const remind = ({ id, title, description, action, onDismiss }: Reminder) => {
+export const remind = ({ id, icon, title, description, action, onDismiss }: Reminder) => {
   forgotten.delete(id);
   toast(title, {
     id,
+    icon: icon && <span className="toast-emoji">{icon}</span>,
     description,
     action,
     duration: Infinity,
@@ -109,13 +125,22 @@ export const useNotifications = () => {
     []
   );
 
+  const info = React.useCallback(
+    (message: string) => {
+      toast.info(message, { duration: MESSAGE_MS });
+    },
+    []
+  );
+
   return React.useMemo(
     () => ({
       error,
+      info,
       success,
     }),
     [
       error,
+      info,
       success,
     ],
   );

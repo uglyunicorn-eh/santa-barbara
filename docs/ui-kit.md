@@ -95,30 +95,42 @@ exist. Components use the roles, not the colours:
 
 Base UI menus (`@base-ui/react/menu`) with the classes in `src/components/ui/menu.ts`: a white card that opens above
 its ☰ button, above everything else on the page. The footer uses one on phones for all but two of its links (on the
-static pages, a native `<details>` with the same look).
+static pages, a native `<details>` with the same look); when "My Profile" is in it with its red dot (rolled
+parties to reveal), the ☰ shows the dot too. The host's ☰ beside "Roll the dice" has Copy link, Invite by email…
+and, after a divider, Delete this party in red; items have a 16px icon.
 
 ## Form fields
 
 - **Labels:** beside the input from tablet width in the new-party and join dialogs, above it elsewhere.
 - **Input:** 40px (48px on hero forms), white, 8px corners; focus border plus ring.
-- **Help and errors:** `text-sm` under the input. An error takes the help text's place, and a field with no help keeps
-  a blank line for it, so an error appearing doesn't move the form.
+- **Help and errors:** `text-sm` under the input. An error takes the help text's place, in a slot as tall as the
+  taller of the two (a field with no help keeps one blank line), so an error appearing or going away never resizes
+  the form or its dialog.
 - **Inline fields** (the profile's name and email): input and buttons on one line, all 40px; the error below. "Save"
   appears only once the name has changed.
 - **On glass** (the sign-in card): labels and help in `zinc-300`, white focus, errors in light red.
+- **Email tags** (`EmailTags`, the invite dialog): addresses become teal pills as you type Enter, a comma, a space or
+  paste a list; one that doesn't look like an address stays, as a red pill, to fix or remove. Backspace in the empty
+  field takes the last one back. At most 10.
 - Fields at their limit just stop typing.
 
 ## Dialogs, tabs, toasts
 
-- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop. Widths 600 / 700 / 800px; on phones, full
-  width minus 16px. Focus moves in and Tab stays inside; Esc and a click on the backdrop close it, the page behind
-  doesn't scroll. The footer has the dismiss action, then the main one, with room on the left for a ghost action
-  ("Show more parties", "How this works?"); on phones they stack, main action first and full width. The profile
-  dialog keeps one height on both tabs.
+- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop (or a picture: the rolled letter's envelopes).
+  Widths 600 / 700 / 800px from tablet up. On phones a bottom sheet (Base UI Drawer): full width, rounded top, a grip,
+  an X in its header, and a swipe down closes it. Focus moves in and Tab stays inside; Esc and a click on the backdrop
+  close it, the page behind doesn't scroll. The footer has the dismiss action, then the main one, with room on the
+  left for a ghost action ("Show more parties", "How this works?"); a dialog with one big action centres it
+  (`footerAlign="center"`, the congratulations). On phones they stack, main action first and full width. The profile
+  dialog keeps one height on both tabs, its tabs pinned to the top edge.
+- **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
-- **Toasts** (Sonner, `NotificationsContainer`): top centre, stacked, each with a dismiss button. Errors go after
-  2.5 s, other messages after 4 s. Reminders (`remind`) have a title, a description and an action ("Open"), and stay
-  until dismissed or opened. They follow the surface: dark on night, light on the party page.
+- **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's
+  links. The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+  the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
+  (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
+  have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
+  surface: dark on night, light on the party page.
 
 ## Emails
 

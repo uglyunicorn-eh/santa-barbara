@@ -21,6 +21,42 @@
     &.is-silent .message-body {
       visibility: hidden;
     }
+
+    /*
+     * Side by side with the text (desktop): the gnome keeps its place whatever the bubble says. The bubble stands on a
+     * fixed point by its tail, beside the hat, and a longer message (the revealed name) grows it upward, into room kept
+     * above the gnome, so neither the gnome nor the text beside it moves. It stays in the flow: a bubble taller than
+     * that room makes the box taller rather than being cut off at the top of the page.
+     */
+    @media (min-width: 1024px) {
+      --gnome-height: 550px;
+      --bubble-headroom: 10rem;
+      /* From the gnome's feet up to the tail's tip, beside the middle of the hat. */
+      --bubble-anchor: calc(var(--gnome-height) - 13rem);
+
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      width: min(520px, 100%);
+      min-height: calc(var(--gnome-height) + var(--bubble-headroom));
+      margin-inline: auto;
+      padding-bottom: var(--bubble-anchor);
+      background-position: 1em bottom !important;
+      background-size: auto var(--gnome-height) !important;
+
+      /* With room to spare on the right, he stands further out from the text. */
+      @media (min-width: 1216px) {
+        position: relative;
+        left: 3rem;
+      }
+
+      .message-body {
+        max-width: calc(100% - 180px);
+        margin: 0 0 0 160px;
+        text-align: left;
+      }
+    }
   }
 
   .message-body {
