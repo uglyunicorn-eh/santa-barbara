@@ -12,7 +12,7 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
 import { maxLen, required, validEmail } from "src/components/forms/messages";
 import { Footer } from "src/components/hoc/Footer";
-import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient } from "src/components/hooks";
 import type { EnterRequestInput } from "src/components/hooks/useAppClient";
 import { MAX_EMAIL_LENGTH } from "src/limits";
@@ -31,8 +31,6 @@ const schema = v.object({
 export const LoginBox = () => {
   return (
     <>
-      <NotificationsContainer />
-
       <LoginHero>
         <Routes>
           <Route path="/" Component={EnterActions} />
@@ -100,13 +98,17 @@ const EnterForm = () => {
         if (!sent) {
           error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
         }
+        return sent;
       };
 
-      await Promise.all([
+      const [, sent] = await Promise.all([
         sleep(1000),
         submit(),
       ]);
-      setSentTo(input.email);
+      // Only a sent link turns the form into "check your inbox"; after an error the form stays, to try again.
+      if (sent) {
+        setSentTo(input.email);
+      }
     },
     [
       error,

@@ -14,7 +14,7 @@ import { maxLen, required, validEmail } from "src/components/forms/messages";
 import { Footer } from "src/components/hoc/Footer";
 import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import type { Party, User } from "src/types";
-import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
+import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import type { JoinPartyInput } from "src/components/hooks/useAppClient";
 import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
 
@@ -59,8 +59,6 @@ export const JoinBox = ({ party }: Props) => {
 
   return (
     <>
-      <NotificationsContainer />
-
       <Hero size={"fullheight"} className="join-container">
         <Hero.Body>
           <GrinchBox>
@@ -139,13 +137,17 @@ const SignInControls = ({ party }: SignInControlsProps) => {
         if (!sent) {
           error("Unable to send magic link. Please try again in a bit. If you still see this message, please contact support at info@gnomik.me");
         }
+        return sent;
       };
 
-      await Promise.all([
+      const [, sent] = await Promise.all([
         sleep(500),
         submit(),
       ]);
-      setSentTo(input.email);
+      // Only a sent link turns the form into "check your inbox"; after an error the form stays, to try again.
+      if (sent) {
+        setSentTo(input.email);
+      }
     },
     [
       enterRequest,

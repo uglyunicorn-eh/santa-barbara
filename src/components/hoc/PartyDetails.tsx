@@ -10,6 +10,7 @@ import GuestContent from "src/components/hoc/GuestContent";
 import HostContent from "src/components/hoc/HostContent";
 import { DeletedPartyContent } from "src/components/hoc/DeletedPartyContent";
 import { PartyIsClosedContent } from "src/components/hoc/PartyIsClosedContent";
+import { useToastSurface } from "src/components/hoc/NotificationsContainer";
 import { useCurrentUser } from "src/components/hooks";
 import type { Party } from "src/types";
 
@@ -19,6 +20,8 @@ type Props = {
 
 export const PartyDetails = ({ party }: Props) => {
   const { profile } = useCurrentUser();
+  // The party page is the light one: its toasts are white.
+  useToastSurface("light");
 
   return (
     <>
