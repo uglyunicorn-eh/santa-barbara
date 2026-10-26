@@ -50,6 +50,9 @@ export type RequestEmailChangeInput = {
 /** A rolled party waiting for the user to reveal whom they give a gift to. */
 export type RolledParty = { code: string; name: string; closedAt: string };
 
+/** What happened to each address in an invite (as typed). */
+export type InviteResult = { invited: string[]; alreadyInvited: string[]; alreadyJoined: string[]; invitesLeft: number };
+
 export type LinkResult<T = {}> =
   | ({ ok: true } & T)
   | { ok: false, message: string };
@@ -282,6 +285,22 @@ export const useAppClient = () => {
     ],
   );
 
+  /** Emails invites to the party (host only). Undefined, after an error toast, when it failed. */
+  const inviteToParty = React.useCallback(
+    async ({ code, emails, requestId }: { code: string; emails: string[]; requestId: string }): Promise<InviteResult | undefined> => {
+      const result = await call<InviteResult>("/parties/invite", { method: "POST", body: { code, emails }, key: requestId, retry: true });
+      if (!result.ok) {
+        error(result.error.message);
+        return undefined;
+      }
+      return result.data;
+    },
+    [
+      call,
+      error,
+    ],
+  );
+
   /** Which account a deletion link is for, or why it no longer works. Uses nothing up. */
   const checkAccountDeletion = React.useCallback(
     async (token: string): Promise<LinkResult<{ email: string }>> => {
@@ -334,6 +353,7 @@ export const useAppClient = () => {
       liveTicket,
       unrevealedParties,
       markRevealed,
+      inviteToParty,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,
@@ -357,6 +377,7 @@ export const useAppClient = () => {
       liveTicket,
       unrevealedParties,
       markRevealed,
+      inviteToParty,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,

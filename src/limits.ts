@@ -12,3 +12,5 @@ export const MAX_PHRASE_LENGTH = 100;
 export const MAX_EMAIL_LENGTH = 128;
 /** New parties have 8-letter codes; older ones keep their 5 letters. */
 export const MAX_PARTY_CODE_LENGTH = 8;
+/** Addresses in one invite (the API's MAX_INVITES_PER_REQUEST). */
+export const MAX_INVITES_PER_REQUEST = 10;

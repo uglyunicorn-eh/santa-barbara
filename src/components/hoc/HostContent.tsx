@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { DeletePartyLink } from '@/components/hoc/DeletePartyLink';
+import { PartyActionsMenu } from '@/components/hoc/PartyActionsMenu';
 import { ConfirmPartyClose } from '@/components/hoc/ConfirmPartyClose';
 
 import type { Party, User } from '@/types';
@@ -49,7 +49,7 @@ const HostContent = ({ party, user }: Props) => {
           <p style={{ margin: '2em 0' }} className="max-desktop:text-center">
             <Button variant="primary" onClick={onConfirm}>&#x1F643; OK, Let's roll the dice!</Button>
             {' '}
-            <DeletePartyLink />
+            <PartyActionsMenu />
           </p>
 
           <Routes>

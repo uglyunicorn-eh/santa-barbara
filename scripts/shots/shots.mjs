@@ -83,6 +83,7 @@ const SCREENS = [
   { name: "party-not-found", path: `/p/${CODES.missing}/`, signedIn: true },
   { name: "party-loading", path: `/p/${CODES.slow}/`, signedIn: true, settle: 400 },
   { name: "dialog-close-party", path: `/p/${CODES.hostOpen}/confirm`, signedIn: true },
+  { name: "dialog-invite", path: `/p/${CODES.hostOpen}/invite`, signedIn: true, act: typeEmails },
   { name: "dialog-delete-party", path: `/p/${CODES.hostOpen}/delete`, signedIn: true },
   { name: "dialog-leave-party", path: `/p/${CODES.guestOpen}/leave`, signedIn: true },
   { name: "profile", path: "/profile/", signedIn: true },
@@ -108,6 +109,14 @@ function clickButton(label) {
     await page.getByRole("button", { name: label }).first().click();
     await page.waitForTimeout(600);
   };
+}
+
+/** Types a few addresses (one of them wrong) into the invite dialog's email tags. */
+async function typeEmails(page) {
+  const input = page.locator('input[type="email"]');
+  await input.fill("bob@example.com, carol@example.com not-an-email dave.with.a.long.address@example.com");
+  await input.press("Enter");
+  await page.waitForTimeout(300);
 }
 
 /** Types "delete" and confirms, on the account deletion page. */
@@ -162,6 +171,8 @@ function answer(set, screen, method, url, body) {
     case "POST /parties/delete":
     case "POST /parties/restore":
       return ok(set.parties[body?.code] ?? set.parties[CODES.guestOpen]);
+    case "POST /parties/invite":
+      return ok({ invited: body?.emails ?? [], alreadyInvited: [], alreadyJoined: [], invitesLeft: 40 });
     case "POST /auth/magic-link":
     case "POST /me/deletion":
     case "POST /me/email-change":
