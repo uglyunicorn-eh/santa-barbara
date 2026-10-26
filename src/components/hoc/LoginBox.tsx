@@ -70,6 +70,8 @@ const EnterActions = () => {
       setBusy(true);
       await sleep(500);
       navigate("/enter/");
+      // The button stays on the page behind the sign-in dialog: when the dialog closes, it's ready again.
+      setBusy(false);
     },
     [
       navigate,

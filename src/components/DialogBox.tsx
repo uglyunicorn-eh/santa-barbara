@@ -30,6 +30,7 @@ type Props<Values extends FieldValues> = {
   form?: FormProps<Values>;
   /** The width from tablet up: sm 600px, md 700px (the default), lg 800px. On phones, a full-width bottom sheet. */
   size?: "sm" | "md" | "lg";
+  /** No title row (the profile, whose tabs take its place). It still has an X, as long as it can be dismissed. */
   noHeader?: boolean;
   /** "center": the footer's buttons centred (a dialog with one big action). Default: at the end. */
   footerAlign?: "end" | "center";
@@ -120,7 +121,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
 
   const dismiss = React.useCallback(() => navigate(dismissLocation), [navigate, dismissLocation]);
 
-  // Without a header (no X) and without a dismiss button, nothing closes the dialog but its own action.
+  // Without a header and without a dismiss button, nothing closes the dialog but its own action, so it has no X.
   const dismissible = !noHeader || !noDismiss;
 
   const onOpenChange = React.useCallback(
@@ -141,6 +142,17 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
       {/* The sheet's grip, a hint that it swipes away (only when it can be dismissed). */}
       {!tabletUp && dismissible && (
         <div aria-hidden="true" className="dialog-grip absolute top-2 left-1/2 z-30 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-300" />
+      )}
+      {/* A sheet without a header still gets its X, in the card's top-right corner. */}
+      {!tabletUp && noHeader && dismissible && (
+        <Button
+          variant="ghost"
+          className="absolute top-5.5 right-2 z-30 size-10 px-0 text-zinc-700"
+          aria-label="Close"
+          onClick={dismiss}
+        >
+          <X size={24} aria-hidden="true" />
+        </Button>
       )}
       {!noHeader && (
         <header className="dialog-head flex shrink-0 items-center p-5 text-xl text-black [text-shadow:0_1px_2px_white] max-tablet:pt-7 tablet:text-2xl">
@@ -197,7 +209,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
                   style={{ width: WIDTHS[size] }}
                 >
                   {/* In the page's top-right corner, but inside the popup so Tab reaches it in order. */}
-                  {!noHeader && (
+                  {dismissible && (
                     <Button
                       variant="ghost"
                       surface="dark"
