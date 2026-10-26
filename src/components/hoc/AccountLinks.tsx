@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useWatch } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as v from "valibot";
 import { ClipLoader } from 'react-spinners';
 
@@ -11,13 +11,16 @@ import { Form, FormField, Input, Submit } from "@/components/forms";
 import { LoginHero } from "@/components/hoc/LoginBox";
 import { useAppClient, useCurrentUser } from "@/components/hooks";
 import type { LinkResult } from "@/components/hooks/useAppClient";
+import { useLinkToken } from "@/components/hooks/useLinkToken";
+
+const INCOMPLETE = "This link is incomplete. Please open it from the email again.";
 
 /**
- * Runs a confirmation link once (`run` is called with the token from the URL) and shows the outcome. The links work in
- * any browser, signed in or not: the token alone identifies the account.
+ * Runs a confirmation link once (`run` is called with the link's token, see useLinkToken) and shows the outcome. The
+ * links work in any browser, signed in or not: the token alone identifies the account.
  */
-const useLinkResult = <T,>(run: (token: string) => Promise<LinkResult<T>>) => {
-  const { token } = useParams();
+const useLinkResult = <T,>(path: string, run: (token: string) => Promise<LinkResult<T>>) => {
+  const token = useLinkToken(path);
   const [result, setResult] = React.useState<LinkResult<T>>();
   const started = React.useRef(false);
 
@@ -36,7 +39,7 @@ const useLinkResult = <T,>(run: (token: string) => Promise<LinkResult<T>>) => {
     ],
   );
 
-  return result;
+  return token === null ? { ok: false as const, message: INCOMPLETE } : result;
 };
 
 const LinkPage = ({ children }: { children: React.ReactNode }) => (
@@ -68,29 +71,6 @@ const LinkFailed = ({ message }: { message: string }) => {
   );
 };
 
-/**
- * The deletion link's token: after "#" in new links, in the path in older ones. It's moved into the page's history
- * state at once, so it leaves the address bar (and anything that records URLs) while a reload of this tab still has it.
- */
-const useDeletionToken = () => {
-  const { token: pathToken } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const fromUrl = location.hash.slice(1) || pathToken;
-  const token: string | undefined = fromUrl || (location.state as { linkToken?: string } | null)?.linkToken;
-
-  React.useEffect(
-    () => {
-      if (fromUrl) {
-        navigate("/profile/delete", { replace: true, state: { linkToken: fromUrl } });
-      }
-    },
-    [fromUrl, navigate],
-  );
-
-  return token;
-};
-
 const confirmSchema = v.object({
   confirm: v.pipe(v.string(), v.check(value => value.trim().toLowerCase() === "delete", 'Type "delete" to confirm.')),
 });
@@ -113,7 +93,7 @@ export const ConfirmAccountDeletion = () => {
   const { checkAccountDeletion, confirmAccountDeletion } = useAppClient();
   const { resetCredentials } = useCurrentUser();
   const navigate = useNavigate();
-  const token = useDeletionToken();
+  const token = useLinkToken("/profile/delete");
   const [checked, setChecked] = React.useState<LinkResult<{ email: string }>>();
   const [result, setResult] = React.useState<LinkResult>();
 
@@ -138,8 +118,8 @@ export const ConfirmAccountDeletion = () => {
     [token, confirmAccountDeletion, resetCredentials],
   );
 
-  if (!token) {
-    return <LinkFailed message="This link is incomplete. Please open it from the email again." />;
+  if (token === null) {
+    return <LinkFailed message={INCOMPLETE} />;
   }
 
   if (result?.ok) {
@@ -214,7 +194,7 @@ export const ConfirmEmailChange = () => {
     ],
   );
 
-  const result = useLinkResult(run);
+  const result = useLinkResult("/profile/email", run);
 
   if (!result) {
     return <Working title="Updating the elves' records..." />;
@@ -260,7 +240,7 @@ export const CancelEmailChange = () => {
     ],
   );
 
-  const result = useLinkResult(run);
+  const result = useLinkResult("/profile/email/cancel", run);
 
   if (!result) {
     return <Working title="Stopping the sleigh..." />;
