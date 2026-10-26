@@ -52,8 +52,10 @@ const SCREENS = [
   { name: "enter-link-expired", path: async ({ token }) => `/enter/${await token({ email: "$email" }, -3600)}` },
   { name: "enter-link-invalid", path: "/enter/not-a-real-link" },
   { name: "party-signed-out", path: `/p/${CODES.guestOpen}/`, signedIn: false, api: { partyFor: CODES.notJoined } },
-  { name: "link-delete-ok", path: "/profile/delete/some-token" },
-  { name: "link-delete-failed", path: "/profile/delete/some-token", api: { fail: "/me/deletion/confirm" } },
+  { name: "link-delete", path: "/profile/delete#some-token" },
+  { name: "link-delete-used", path: "/profile/delete#some-token", api: { fail: "/me/deletion/check" } },
+  { name: "link-delete-ok", path: "/profile/delete#some-token", act: confirmDeletion },
+  { name: "link-delete-failed", path: "/profile/delete/some-token", api: { fail: "/me/deletion/confirm" }, act: confirmDeletion },
   { name: "link-email-ok", path: "/profile/email/some-token" },
   { name: "link-email-failed", path: "/profile/email/some-token", api: { fail: "/me/email-change/confirm" } },
   { name: "link-email-cancel-ok", path: "/profile/email/cancel/some-token" },
@@ -93,6 +95,13 @@ function openMenu(label) {
       await page.waitForTimeout(400);
     }
   };
+}
+
+/** Types "delete" and confirms, on the account deletion page. */
+async function confirmDeletion(page) {
+  await page.locator("form input").fill("delete");
+  await page.getByRole("button", { name: "Delete my account" }).click();
+  await page.waitForTimeout(1200);
 }
 
 async function submitForm(page) {
@@ -143,6 +152,8 @@ function answer(set, screen, method, url, body) {
     case "POST /auth/magic-link":
     case "POST /me/deletion":
     case "POST /me/email-change":
+    case "POST /me/deletion/check":
+      return ok({ email: set.user.email });
     case "POST /me/deletion/confirm":
     case "POST /me/email-change/cancel":
       return ok({});

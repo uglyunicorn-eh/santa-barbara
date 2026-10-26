@@ -1,10 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useWatch } from "react-hook-form";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import * as v from "valibot";
 import { ClipLoader } from 'react-spinners';
 
 import { GrinchBox } from "@/components/GrinchBox";
 import { SnowConfetti } from "@/components/SnowConfetti";
+import { Form, FormField, Input, Submit } from "@/components/forms";
 import { LoginHero } from "@/components/hoc/LoginBox";
 import { useAppClient, useCurrentUser } from "@/components/hooks";
 import type { LinkResult } from "@/components/hooks/useAppClient";
@@ -65,43 +68,128 @@ const LinkFailed = ({ message }: { message: string }) => {
   );
 };
 
+/**
+ * The deletion link's token: after "#" in new links, in the path in older ones. It's moved into the page's history
+ * state at once, so it leaves the address bar (and anything that records URLs) while a reload of this tab still has it.
+ */
+const useDeletionToken = () => {
+  const { token: pathToken } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const fromUrl = location.hash.slice(1) || pathToken;
+  const token: string | undefined = fromUrl || (location.state as { linkToken?: string } | null)?.linkToken;
+
+  React.useEffect(
+    () => {
+      if (fromUrl) {
+        navigate("/profile/delete", { replace: true, state: { linkToken: fromUrl } });
+      }
+    },
+    [fromUrl, navigate],
+  );
+
+  return token;
+};
+
+const confirmSchema = v.object({
+  confirm: v.pipe(v.string(), v.check(value => value.trim().toLowerCase() === "delete", 'Type "delete" to confirm.')),
+});
+
+/** "Delete my account" works once the field says delete (any case, spaces around are fine). */
+const DeleteButton = () => {
+  const confirm = useWatch({ name: "confirm" }) as string;
+  return (
+    <Submit variant="destructive" size="lg" surface="dark" pill disabled={confirm.trim().toLowerCase() !== "delete"}>
+      Delete my account
+    </Submit>
+  );
+};
+
+/**
+ * The page the deletion email links to. Nothing happens on opening it (mail scanners open links too): the link is
+ * checked, then the account is deleted only once its owner types "delete" and confirms.
+ */
 export const ConfirmAccountDeletion = () => {
-  const { confirmAccountDeletion } = useAppClient();
+  const { checkAccountDeletion, confirmAccountDeletion } = useAppClient();
   const { resetCredentials } = useCurrentUser();
   const navigate = useNavigate();
+  const token = useDeletionToken();
+  const [checked, setChecked] = React.useState<LinkResult<{ email: string }>>();
+  const [result, setResult] = React.useState<LinkResult>();
 
-  const run = React.useCallback(
-    async (token: string) => {
-      const result = await confirmAccountDeletion(token);
-      if (result.ok) {
+  React.useEffect(
+    () => {
+      if (token) {
+        checkAccountDeletion(token).then(setChecked);
+      }
+    },
+    [token, checkAccountDeletion],
+  );
+
+  const onConfirm = React.useCallback(
+    async () => {
+      const outcome = await confirmAccountDeletion(token!);
+      if (outcome.ok) {
         // Whoever is signed in here, the account behind the link is gone; don't keep a session that may be its.
         resetCredentials();
       }
-      return result;
+      setResult(outcome);
     },
-    [
-      confirmAccountDeletion,
-      resetCredentials,
-    ],
+    [token, confirmAccountDeletion, resetCredentials],
   );
 
-  const result = useLinkResult(run);
-
-  if (!result) {
-    return <Working title="Packing up your things..." />;
+  if (!token) {
+    return <LinkFailed message="This link is incomplete. Please open it from the email again." />;
   }
 
-  if (!result.ok) {
+  if (result?.ok) {
+    return (
+      <LinkPage>
+        <h2>Farewell, friend!</h2>
+        <br />
+        <p>Your account is gone. The elves have shredded your file and the parties you were hosting.</p>
+        <p>If you ever miss us, just sign in again with your email. We'll keep the cocoa warm.</p>
+        <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Okay, bye-e-e!</Button>
+      </LinkPage>
+    );
+  }
+
+  if (result && !result.ok) {
     return <LinkFailed message={result.message} />;
+  }
+
+  if (!checked) {
+    return <Working title="Checking the link..." />;
+  }
+
+  if (!checked.ok) {
+    return <LinkFailed message={checked.message} />;
   }
 
   return (
     <LinkPage>
-      <h2>Farewell, friend!</h2>
+      <h2>Delete your account?</h2>
       <br />
-      <p>Your account is gone. The elves have shredded your file and the parties you were hosting.</p>
-      <p>If you ever miss us, just sign in again with your email. We'll keep the cocoa warm.</p>
-      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Okay, bye-e-e!</Button>
+      <p>This deletes the Anonymous Ded Morozes account for <strong className="text-white">{checked.email}</strong>.</p>
+      <p>
+        Parties you host that haven't rolled the dice are deleted, and you leave the open parties you joined. In parties
+        that already rolled, your Secret Santa keeps the name you joined with, and nothing else about you. This can't be
+        undone.
+      </p>
+      <Form defaultValues={{ confirm: "" }} schema={confirmSchema} mode="onSubmit" onSubmit={onConfirm}>
+        <FormField
+          name="confirm"
+          label='Type "delete" to confirm'
+          horizontal={false}
+          surface="dark"
+          size="lg"
+          children={<Input autoComplete="off" autoCapitalize="none" spellCheck={false} placeholder="delete" maxLength={20} />}
+        />
+        <div className="actions flex flex-col items-center gap-3">
+          <DeleteButton />
+          <Button type="button" variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Keep my account</Button>
+        </div>
+      </Form>
     </LinkPage>
   );
 };

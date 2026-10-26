@@ -253,6 +253,15 @@ export const useAppClient = () => {
     ],
   );
 
+  /** Which account a deletion link is for, or why it no longer works. Uses nothing up. */
+  const checkAccountDeletion = React.useCallback(
+    async (token: string): Promise<LinkResult<{ email: string }>> => {
+      const result = await apiCall<{ email: string }>("/me/deletion/check", { method: "POST", body: { token }, retry: true });
+      return result.ok ? { ok: true, email: result.data.email } : { ok: false, message: result.error.message || LINK_FAILED };
+    },
+    [],
+  );
+
   const confirmAccountDeletion = React.useCallback(
     async (token: string): Promise<LinkResult> => {
       const result = await apiCall("/me/deletion/confirm", { method: "POST", body: { token }, key: linkKey(token), retry: true });
@@ -293,6 +302,7 @@ export const useAppClient = () => {
       leaveParty,
       updateName,
       requestAccountDeletion,
+      checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,
       confirmEmailChange,
@@ -312,6 +322,7 @@ export const useAppClient = () => {
       leaveParty,
       updateName,
       requestAccountDeletion,
+      checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,
       confirmEmailChange,
