@@ -2,6 +2,8 @@
 
 > [!IMPORTANT]
 > Russia is waging a full-scale war against Ukraine. Please help Ukraine's defenders: donate to [Come Back Alive](https://savelife.in.ua/en/).
+>
+> **Be brave like Ukraine** 🇺🇦 [Stand with Ukraine](https://savelife.in.ua/en/)
 
 ![grinch](https://github.com/uglyunicorn-eh/santa-barbara/assets/137888/89dacf13-f6f2-49ea-b609-31572e66c4e7)
 
