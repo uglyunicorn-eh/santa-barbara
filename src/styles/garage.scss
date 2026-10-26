@@ -1,6 +1,6 @@
-@layer theme, base, bulma, components, utilities;
+@layer theme, base, app, components, utilities;
 
-@layer bulma {
+@layer app {
   .garage-door {
     position: fixed;
     left: 0;

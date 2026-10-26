@@ -1,5 +1,5 @@
 import React from "react";
-import { Columns, Content } from "src/components/bulma";
+import { Columns, Content } from "src/components/layout";
 import { useNavigate } from "react-router";
 import * as Yup from 'yup';
 
@@ -53,7 +53,7 @@ export const ConfirmPartyLeave = () => {
       }}
     >
       <Columns>
-        <Columns.Column narrow mobile={{ display: 'hidden' }} style={{ display: 'flex' }}>
+        <Columns.Column narrow mobile={{ display: 'hidden' }} className="tablet:flex">
           <img src={SantaImg.src} alt="Santa" width={200} />
         </Columns.Column>
         <Columns.Column>

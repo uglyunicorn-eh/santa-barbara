@@ -48,7 +48,7 @@ export const DeletedPartyContent = ({ party, user }: Props) => {
           ? <>You can bring it back, with everyone and everything in it, until <strong>{until}</strong>. After that it's gone for good.</>
           : <>You can bring it back, with everyone and everything in it, for a day after deleting it.</>}
       </p>
-      <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
+      <p style={{ margin: '2em 0' }} className="max-desktop:text-center">
         <Button variant="primary" onClick={onRestore} loading={busy}>&#x1FA84; Restore the party</Button>
       </p>
     </>

@@ -1,6 +1,6 @@
 import { useField, useFormikContext } from "formik";
 import React from "react";
-import { Content, Form as BulmaForm, Tabs } from "src/components/bulma";
+import { Content } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
@@ -9,7 +9,7 @@ import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
 import * as Yup from 'yup';
 
 import { DialogBox, DialogFooterStart } from "src/components/DialogBox";
-import { Tab } from "src/components/Tab";
+import { Tab, Tabs } from "src/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
@@ -115,8 +115,8 @@ export const MyProfile = () => (
       width: 800,
     }}
   >
-    <Tabs size={"large"} align={"center"} fullwidth>
-      <Tab to="/profile/" exact>Profile</Tab>
+    <Tabs label="Profile" className="-mx-5 mb-4">
+      <Tab to="/profile/">Profile</Tab>
       <Tab to="/profile/history/">Latest history</Tab>
     </Tabs>
     <Content>
@@ -204,25 +204,27 @@ const Setting = ({ label, hint, children }: { label: string, hint?: React.ReactN
   </div>
 );
 
-/** An input with its button on the same line, and the field's error (shown after a submit) underneath. */
+/** An input with its buttons on the same line, all one height, and the field's error (after a submit) underneath. */
 const InlineField = ({ name, action, children }: { name: string, action: React.ReactNode, children: React.ReactNode }) => {
   const [, meta] = useField(name);
+  const id = React.useId();
+  const error = meta.touched ? meta.error : undefined;
 
   return (
-    <FormFieldContext.Provider value={{ name }}>
+    <FormFieldContext.Provider value={{ name, id, messageId: `${id}-error`, invalid: !!error }}>
       <div className="setting-control">
         <div className="setting-input">{children}</div>
         {action}
       </div>
-      {meta.error && meta.touched && <BulmaForm.Help color="danger">{meta.error}</BulmaForm.Help>}
+      {error && <p id={`${id}-error`} className="mt-1 text-sm text-destructive">{error}</p>}
     </FormFieldContext.Provider>
   );
 };
 
-/** Saves the name; there is nothing to save until it is edited. */
+/** Saves the name: shown only once it's been edited. */
 const SaveButton = () => {
   const { dirty } = useFormikContext();
-  return <Submit size="sm" disabled={!dirty}>Save</Submit>;
+  return dirty ? <Submit>Save</Submit> : null;
 };
 
 /** Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). */
@@ -262,8 +264,8 @@ const EmailSetting = ({ email }: { email: string }) => {
             name="email"
             action={
               <>
-                <Submit size="sm">Send link</Submit>
-                <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(false)}>Cancel</Button>
+                <Submit>Send link</Submit>
+                <Button type="button" variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
               </>
             }
           >
@@ -281,7 +283,7 @@ const EmailSetting = ({ email }: { email: string }) => {
     >
       <div className="setting-control">
         <span className="setting-value">{email}</span>
-        <Button type="button" variant="ghost" size="sm" onClick={startEditing}>Change</Button>
+        <Button type="button" variant="ghost" onClick={startEditing}>Change</Button>
       </div>
     </Setting>
   );
@@ -325,7 +327,7 @@ const DeleteAccount = ({ email }: { email: string }) => {
           </p>
         </div>
         {stage === "idle" && (
-          <Button type="button" variant="ghost-destructive" size="sm" onClick={startConfirming}>
+          <Button type="button" variant="ghost-destructive" onClick={startConfirming}>
             Delete account
           </Button>
         )}
@@ -338,10 +340,10 @@ const DeleteAccount = ({ email }: { email: string }) => {
             gift for. We'll email you a link to finish.
           </p>
           <div className="setting-control">
-            <Button type="button" variant="destructive" size="sm" onClick={onConfirm} loading={stage === "sending"}>
+            <Button type="button" variant="destructive" onClick={onConfirm} loading={stage === "sending"}>
               Yes, email me the link
             </Button>
-            <Button type="button" variant="ghost" size="sm" onClick={() => setStage("idle")} disabled={stage === "sending"}>
+            <Button type="button" variant="ghost" onClick={() => setStage("idle")} disabled={stage === "sending"}>
               Keep my account
             </Button>
           </div>

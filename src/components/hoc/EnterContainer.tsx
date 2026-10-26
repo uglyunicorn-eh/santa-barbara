@@ -1,6 +1,6 @@
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Columns, Container, Content, Hero, Image } from "src/components/bulma";
+import { Columns, Container, Content, Hero, Image } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 

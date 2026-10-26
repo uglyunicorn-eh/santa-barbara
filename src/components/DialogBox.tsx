@@ -38,6 +38,27 @@ export const DialogFooterStart = ({ children }: { children: React.ReactNode }) =
   return slot ? createPortal(children, slot) : null;
 };
 
+const TABBABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/** Keeps Tab and Shift+Tab inside the dialog: from the last control back to the first, and the other way round. */
+const trapTab = (e: React.KeyboardEvent<HTMLElement>) => {
+  if (e.key !== "Tab") {
+    return;
+  }
+  const items = [...e.currentTarget.querySelectorAll<HTMLElement>(TABBABLE)]
+    .filter(el => !el.hasAttribute("data-base-ui-focus-guard") && el.getClientRects().length > 0);
+  if (!items.length) {
+    return;
+  }
+  const first = items[0];
+  const last = items[items.length - 1];
+  const active = document.activeElement;
+  if (e.shiftKey ? (active === first || !items.includes(active as HTMLElement)) : active === last) {
+    e.preventDefault();
+    (e.shiftKey ? last : first).focus();
+  }
+};
+
 /** Tells the dialog whether its form is submitting, so Esc and the backdrop don't close it mid-request. */
 const SubmittingWatcher = ({ onChange }: { onChange: (submitting: boolean) => void }) => {
   const { isSubmitting } = useFormikContext();
@@ -109,24 +130,28 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
       <Dialog.Root open modal onOpenChange={onOpenChange} disablePointerDismissal={!dismissible}>
         <Dialog.Portal>
           <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/60 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-          <Dialog.Viewport className={cn("dialog fixed inset-0 z-40 flex items-center justify-center overflow-hidden", className)}>
-            {!noHeader && (
-              <Button
-                variant="ghost"
-                surface="dark"
-                className="fixed top-4 right-4 z-10 size-10 px-0 max-tablet:hidden"
-                aria-label="Close"
-                onClick={dismiss}
-              >
-                <X size={28} aria-hidden="true" />
-              </Button>
-            )}
+          <Dialog.Viewport
+            className={cn("dialog fixed inset-0 z-40 flex items-center justify-center overflow-hidden", className)}
+            onKeyDown={trapTab}
+          >
             <Dialog.Popup
               ref={popupRef}
               initialFocus={popupRef}
               className="dialog-card relative mx-4 flex max-h-[calc(100vh-40px)] w-full max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-card bg-white shadow-lg outline-none transition-[opacity,scale] duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0 tablet:mx-auto tablet:w-160 tablet:max-w-[calc(100vw-60px)]"
               style={cardStyle}
             >
+              {/* In the page's top-right corner, but inside the popup so Tab reaches it in order. */}
+              {!noHeader && (
+                <Button
+                  variant="ghost"
+                  surface="dark"
+                  className="fixed top-4 right-4 z-10 size-10 px-0 max-tablet:hidden"
+                  aria-label="Close"
+                  onClick={dismiss}
+                >
+                  <X size={28} aria-hidden="true" />
+                </Button>
+              )}
               <FooterStartContext.Provider value={footerStart}>
                 {form
                   ? <Form {...form} className="flex min-h-0 grow flex-col">{card}</Form>

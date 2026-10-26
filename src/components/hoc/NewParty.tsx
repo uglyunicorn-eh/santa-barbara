@@ -1,5 +1,5 @@
 import React from "react";
-import { Content } from "src/components/bulma";
+import { Content } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import * as Yup from 'yup';
 

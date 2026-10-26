@@ -1,7 +1,7 @@
 import React from "react";
 
 import { newKey } from "src/api/client";
-import { Hero } from "src/components/bulma";
+import { Hero } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
@@ -180,6 +180,8 @@ const SignInControls = ({ party }: SignInControlsProps) => {
           name="email"
           label="Enter with your email address"
           horizontal={false}
+          surface="dark"
+          size="lg"
           children={<Input placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
         />
         <p>
@@ -255,6 +257,8 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
         name="name"
         label={profile?.name ? "Your name for this party" : "Let us know your name"}
         horizontal={false}
+          surface="dark"
+          size="lg"
         children={<Input maxLength={MAX_NAME_LENGTH} />}
         help={profile?.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
       />
@@ -270,6 +274,8 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
               name="password"
               label="Secret phrase"
               horizontal={false}
+          surface="dark"
+          size="lg"
               children={<Input maxLength={MAX_PHRASE_LENGTH} />}
               help="We beleave your friend didn't forget to tell it to you..."
             />

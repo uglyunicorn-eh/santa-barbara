@@ -32,37 +32,6 @@
     }
   }
 
-  .button {
-    font-size: 1.5rem;
-    text-shadow: 1px 1px 2px rgba(#fff, 0.3);
-
-    @include mobile {
-      font-size: 1.1rem;
-    }
-
-    &.is-primary {
-      background-color: rgba(#eb4f5e, 0.8);
-      border: 1px solid rgba(#fff, 0.7);
-      text-shadow: 1px 1px 2px rgba(#000, 0.3);
-      transition: all 0.1s ease-in-out;
-
-      &:hover {
-        background-color: #eb4f5e;
-        border: 1px solid #fff;
-        transition: all 0.1s ease-in-out;
-      }
-    }
-
-    &.is-outlined {
-      background-color: transparent;
-      border-color: rgba(#000, 0.3);
-
-      &:hover {
-        border-color: #000;
-      }
-    }
-  }
-
   .footer {
     color: #000;
     text-shadow: 0 1px 2px rgba(#fff, 0.2);

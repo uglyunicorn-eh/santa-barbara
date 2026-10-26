@@ -19,15 +19,12 @@
     "@base-ui/react": "^1.9.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7",
-    "bulma": "<1",
-    "bulma-divider": "^0.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "formik": "^2.4.9",
     "framer-motion": "^14",
     "jose": "^6",
     "react": "^19",
-    "react-bulma-components": "4.1.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^19",
     "react-feather": "^2.0.10",
@@ -47,7 +44,6 @@
     "pixelmatch": "^8.0.0",
     "playwright": "^1.64.1",
     "pngjs": "^7.0.0",
-    "prop-types": "^15.8.1",
     "sass": "^1.106.1",
     "typescript": "^6"
   }

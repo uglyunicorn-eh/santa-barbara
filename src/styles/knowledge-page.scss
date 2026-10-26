@@ -1,6 +1,6 @@
-@layer theme, base, bulma, components, utilities;
+@layer theme, base, app, components, utilities;
 
-@layer bulma {
+@layer app {
   .knowledge-page {
     background: #d3d4d8 url("/pagebg.jpg") center bottom no-repeat;
     background-size: contain;
@@ -35,15 +35,6 @@
         margin-bottom: 2em;
       }
 
-      .button {
-        background: transparent;
-        border-color: #aaa;
-        color: #000;
-
-        &:hover {
-          border-color: #000;
-        }
-      }
     }
 
     .knowledge-page-content {

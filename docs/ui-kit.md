@@ -10,8 +10,10 @@ npm run dev
 Then open <http://localhost:4321/ui-kit>. The page exists in `npm run dev` only (`src/dev/ui-kit.astro`, added by
 the `uiKit` integration in `astro.config.mjs`); builds leave it out.
 
-Buttons on the page are the real component (`src/components/ui/button.tsx`). Form fields, dialogs, tabs and toasts
-are prototypes (`src/dev/recipes.ts`) until they're built as components.
+The components: buttons (`src/components/ui/button.tsx`), inputs (`src/components/ui/input.tsx`), form fields
+(`src/components/forms/`), dialogs (`src/components/DialogBox.tsx`, on Base UI's Dialog), tabs (`src/components/Tab.tsx`),
+menus (`src/components/ui/menu.ts`) and the page layout pieces (`src/components/layout.tsx`, styled in
+`src/styles/layout.scss`). The kit's field, dialog and toast samples are still drawn from recipes (`src/dev/recipes.ts`).
 
 ## Surfaces
 
@@ -57,8 +59,8 @@ exist. Components use the roles, not the colours:
 - **Corners:** 8px on controls (buttons, inputs, toasts), 16px on cards (dialogs, panels, speech bubbles).
 - **Shadows:** `shadow-sm` for controls on photos, `shadow-md` for bubbles, glass panels and toasts, `shadow-lg` for
   dialogs.
-- **Breakpoints:** `tablet` 769px, `desktop` 1024px, `widescreen` 1216px, `fullhd` 1408px (Bulma's, so both agree).
-  Use `tablet:` / `max-tablet:`, never `md:` or `lg:`.
+- **Breakpoints:** `tablet` 769px, `desktop` 1024px, `widescreen` 1216px, `fullhd` 1408px. Use `tablet:` /
+  `max-tablet:`, never `md:` or `lg:`. The SCSS has the same ones as mixins (`src/styles/_media.scss`).
 
 ## Controls in general
 
@@ -81,11 +83,11 @@ exist. Components use the roles, not the colours:
 | `link` | links in a sentence, inline at its size |
 
 - **Hero screens:** the main action is `brand` `lg` `pill`; going home or back is `secondary` `pill`.
-- **Content screens:** the main action is `primary`, `md`, no pill (`sm` only in the profile's setting rows).
+- **Content screens:** the main action is `primary`, `md`, no pill.
 - **Deletes stay quiet** until the final confirm, which is the only filled red button. The host's "Delete this party"
   lives in the ☰ menu beside the main button.
 - **Emoji only on main actions** ("🎉 Rock'n'Roll!", "💥 Yes, delete it"); dismiss and quiet buttons have none. No
-  arrows on back buttons.
+  text arrows on back buttons; the knowledge pages' "Jeez, get me out of here" has a ← icon.
 - On phones, keep labels short where they'd wrap ("Get me home!" instead of "Take me home, country roads!").
 - `buttonVariants()` gives a link the same look: `<a className={buttonVariants({ variant: "secondary" })}>`.
 
@@ -101,16 +103,19 @@ static pages, a native `<details>` with the same look).
 - **Input:** 40px (48px on hero forms), white, 8px corners; focus border plus ring.
 - **Help and errors:** `text-sm` under the input. An error takes the help text's place, and a field with no help keeps
   a blank line for it, so an error appearing doesn't move the form.
-- **Inline fields** (the profile's name and email): input and button on one line, same height; the error below both.
+- **Inline fields** (the profile's name and email): input and buttons on one line, all 40px; the error below. "Save"
+  appears only once the name has changed.
 - **On glass** (the sign-in card): labels and help in `zinc-300`, white focus, errors in light red.
 - Fields at their limit just stop typing.
 
 ## Dialogs, tabs, toasts
 
-- **Dialogs:** white card, 16px corners, `shadow-lg`, 24px padding (16px on phones), on the night backdrop at 70%.
-  Widths 600 / 700 / 800px; on phones, full width minus 16px. The footer has the dismiss action, then the main one;
-  on phones they stack, main action first and full width.
-- **Tabs** (the profile): text tabs, the current one underlined in turquoise.
+- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop. Widths 600 / 700 / 800px; on phones, full
+  width minus 16px. Focus moves in and Tab stays inside; Esc and a click on the backdrop close it, the page behind
+  doesn't scroll. The footer has the dismiss action, then the main one, with room on the left for a ghost action
+  ("Show more parties", "How this works?"); on phones they stack, main action first and full width. The profile
+  dialog keeps one height on both tabs.
+- **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** follow the surface: dark with a light icon on night, white with a coloured icon on paper. Top centre, at
   most 560px wide so a 128-character email wraps.
 

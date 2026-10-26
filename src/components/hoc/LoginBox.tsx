@@ -1,7 +1,7 @@
 import React from "react";
 
 import { newKey } from "src/api/client";
-import { Container, Hero } from "src/components/bulma";
+import { Container, Hero } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
@@ -45,7 +45,7 @@ export const LoginBox = () => {
 };
 
 export const LoginHero = ({ children }: { children: React.ReactNode }) => (
-  <Hero size={"fullheight"} className="login-container has-dark-background">
+  <Hero size={"fullheight"} className="login-container">
     <Hero.Body>
       <Container textAlign="centered">
         {children}
@@ -141,6 +141,8 @@ const EnterForm = () => {
             <FormField
               name="email"
               horizontal={false}
+          surface="dark"
+          size="lg"
               children={<Input placeholder="Email address for a magic link" maxLength={MAX_EMAIL_LENGTH} />}
             />
 
