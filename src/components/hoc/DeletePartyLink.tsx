@@ -6,7 +6,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { menuItemClass, menuItemDestructiveClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
 import { cn } from "@/lib/utils";
-import { ConfirmPartyDelete } from 'src/components/hoc/ConfirmPartyDelete';
+import { ConfirmPartyDelete } from '@/components/hoc/ConfirmPartyDelete';
 
 /** The host's other actions, in a ☰ menu beside the roll-the-dice button: for now, deleting the party (confirmed at ./delete). */
 export const DeletePartyLink = () => {

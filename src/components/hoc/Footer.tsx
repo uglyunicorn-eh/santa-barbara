@@ -1,12 +1,12 @@
 import React from "react";
-import { PageFooter } from "src/components/layout";
+import { PageFooter } from "@/components/layout";
 import { Menu } from "@base-ui/react/menu";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 import { Link } from "react-router-dom";
 
 import { menuItemClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
-import { COMPACT_KEYS, moreTriggerClass } from "src/components/hoc/footerMenu";
-import { useCurrentUser } from "src/components/hooks";
+import { COMPACT_KEYS, moreTriggerClass } from "@/components/hoc/footerMenu";
+import { useCurrentUser } from "@/components/hooks";
 
 type Props = {
   children?: React.ReactNode;

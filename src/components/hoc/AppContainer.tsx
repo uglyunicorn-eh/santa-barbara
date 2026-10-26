@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router-dom";
 
-import { CancelEmailChange, ConfirmAccountDeletion, ConfirmEmailChange } from "src/components/hoc/AccountLinks";
-import { NotificationsContainer } from "src/components/hoc/NotificationsContainer";
-import { PartyContainer } from "src/components/hoc/PartyContainer";
-import { WelcomeBox } from "src/components/hoc/WelcomeBox";
+import { CancelEmailChange, ConfirmAccountDeletion, ConfirmEmailChange } from "@/components/hoc/AccountLinks";
+import { NotificationsContainer } from "@/components/hoc/NotificationsContainer";
+import { PartyContainer } from "@/components/hoc/PartyContainer";
+import { WelcomeBox } from "@/components/hoc/WelcomeBox";
 
 export const AppContainer = () => {
   const router = React.useMemo(

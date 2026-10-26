@@ -1,9 +1,9 @@
 import React from "react";
-import { PageFooter } from "src/components/layout";
+import { PageFooter } from "@/components/layout";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 
 import { menuItemClass, menuPopupClass } from "@/components/ui/menu";
-import { COMPACT_KEYS, moreTriggerClass } from "src/components/hoc/footerMenu";
+import { COMPACT_KEYS, moreTriggerClass } from "@/components/hoc/footerMenu";
 
 type Props = {
   children?: React.ReactNode;

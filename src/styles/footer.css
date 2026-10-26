@@ -4,7 +4,7 @@
   color: white;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 
-  @include mobile {
+  @media (max-width: 768px) {
     text-align: center;
   }
 
@@ -18,7 +18,7 @@
   }
 
   .footer-menu {
-    @include mobile {
+    @media (max-width: 768px) {
       flex-wrap: wrap;
       margin-bottom: 2rem;
       justify-content: center;

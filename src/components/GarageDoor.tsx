@@ -1,7 +1,6 @@
 import React from "react";
 import { AnimatePresence, motion, type ResolvedValues } from "framer-motion";
 
-import "src/styles/garage.scss";
 
 type Props = {
   locked?: boolean;

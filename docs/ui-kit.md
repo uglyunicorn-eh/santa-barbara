@@ -13,7 +13,7 @@ the `uiKit` integration in `astro.config.mjs`); builds leave it out.
 The components: buttons (`src/components/ui/button.tsx`), inputs (`src/components/ui/input.tsx`), form fields
 (`src/components/forms/`), dialogs (`src/components/DialogBox.tsx`, on Base UI's Dialog), tabs (`src/components/Tab.tsx`),
 menus (`src/components/ui/menu.ts`) and the page layout pieces (`src/components/layout.tsx`, styled in
-`src/styles/layout.scss`). The kit's field, dialog and toast samples are still drawn from recipes (`src/dev/recipes.ts`).
+`src/styles/layout.css`). The kit's field, dialog and toast samples are still drawn from recipes (`src/dev/recipes.ts`).
 
 ## Surfaces
 
@@ -60,7 +60,7 @@ exist. Components use the roles, not the colours:
 - **Shadows:** `shadow-sm` for controls on photos, `shadow-md` for bubbles, glass panels and toasts, `shadow-lg` for
   dialogs.
 - **Breakpoints:** `tablet` 769px, `desktop` 1024px, `widescreen` 1216px, `fullhd` 1408px. Use `tablet:` /
-  `max-tablet:`, never `md:` or `lg:`. The SCSS has the same ones as mixins (`src/styles/_media.scss`).
+  `max-tablet:`, never `md:` or `lg:`. Plain CSS in `src/styles/` uses the same widths in `@media` queries.
 
 ## Controls in general
 

@@ -1,17 +1,17 @@
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Columns, Container, Content, Hero, Image } from "src/components/layout";
+import { Columns, Container, Content, Hero, Image } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { UnsplashCredit } from 'src/components/UnsplashCredit';
-import { Footer } from 'src/components/hoc/Footer';
-import { LoginHero } from 'src/components/hoc/LoginBox';
-import { useNotifications } from 'src/components/hoc/NotificationsContainer';
-import { newKey } from 'src/api/client';
-import { useAppClient, useCurrentUser, useJWT } from 'src/components/hooks';
+import { UnsplashCredit } from '@/components/UnsplashCredit';
+import { Footer } from '@/components/hoc/Footer';
+import { LoginHero } from '@/components/hoc/LoginBox';
+import { useNotifications } from '@/components/hoc/NotificationsContainer';
+import { newKey } from '@/api/client';
+import { useAppClient, useCurrentUser, useJWT } from '@/components/hooks';
 
-import image from 'src/images/enter.png';
+import image from '@/images/enter.png';
 
 type EnterRequestToken = {
   email: string;

@@ -2,11 +2,11 @@ import React from "react";
 import { Route, Routes } from "react-router";
 import { Navigate } from "react-router-dom";
 
-import { GarageDoor } from "src/components/GarageDoor";
-import { EnterContainer } from "src/components/hoc/EnterContainer";
-import { LoginBox } from "src/components/hoc/LoginBox";
-import { StartPage } from "src/components/hoc/StartPage";
-import { useCurrentUser } from "src/components/hooks";
+import { GarageDoor } from "@/components/GarageDoor";
+import { EnterContainer } from "@/components/hoc/EnterContainer";
+import { LoginBox } from "@/components/hoc/LoginBox";
+import { StartPage } from "@/components/hoc/StartPage";
+import { useCurrentUser } from "@/components/hooks";
 
 export const WelcomeBox = () => {
   const { profile } = useCurrentUser();

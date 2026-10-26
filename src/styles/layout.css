@@ -1,8 +1,8 @@
-// The page layout pieces (src/components/layout.tsx): full-height panels, the centred container, columns, rich text
-// and the card. Same metrics the pages were built on (they came from Bulma), so layouts
-// stay put. Each screen's own styles come after these and adjust them.
+/* The page layout pieces (src/components/layout.tsx): full-height panels, the centred container, columns, rich text */
+/* and the card. Same metrics the pages were built on (they came from Bulma), so layouts */
+/* stay put. Each screen's own styles come after these and adjust them. */
 
-// Full-height panels: header, body (centred), footer.
+/* Full-height panels: header, body (centred), footer. */
 .hero {
   align-items: stretch;
   display: flex;
@@ -10,7 +10,9 @@
   justify-content: space-between;
 
   &.is-fullheight {
+    /* The visible height on phones (without the browser's bars); 100vh where dvh isn't known. */
     min-height: 100vh;
+    min-height: 100dvh;
 
     .hero-body {
       align-items: center;
@@ -35,27 +37,27 @@
   flex-shrink: 0;
   padding: 3rem 1.5rem;
 
-  @include tablet {
+  @media (min-width: 769px) {
     padding: 3rem;
   }
 }
 
-// The centred container: 960 / 1152 / 1344px from desktop, widescreen, full HD.
+/* The centred container: 960 / 1152 / 1344px from desktop, widescreen, full HD. */
 .container {
   flex-grow: 1;
   margin: 0 auto;
   position: relative;
   width: auto;
 
-  @include desktop {
+  @media (min-width: 1024px) {
     max-width: 960px;
   }
 
-  @include widescreen {
+  @media (min-width: 1216px) {
     max-width: 1152px;
   }
 
-  @include fullhd {
+  @media (min-width: 1408px) {
     max-width: 1344px;
   }
 }
@@ -63,7 +65,7 @@
 .section {
   padding: 3rem 1.5rem;
 
-  @include desktop {
+  @media (min-width: 1024px) {
     padding: 3rem;
   }
 }
@@ -73,7 +75,7 @@
   padding: 3rem 1.5rem 6rem;
 }
 
-// Columns: side by side from tablet (`is-desktop`: from desktop), 0.75rem gutters.
+/* Columns: side by side from tablet (`is-desktop`: from desktop), 0.75rem gutters. */
 .columns {
   margin-left: -0.75rem;
   margin-right: -0.75rem;
@@ -91,13 +93,13 @@
     align-items: center;
   }
 
-  @include tablet {
+  @media (min-width: 769px) {
     &:not(.is-desktop) {
       display: flex;
     }
   }
 
-  @include desktop {
+  @media (min-width: 1024px) {
     &.is-desktop {
       display: flex;
     }
@@ -106,14 +108,14 @@
 
 .column {
   display: block;
-  // Lets a column shrink below its content's width, so a long name wraps instead of widening the page.
+  /* Lets a column shrink below its content's width, so a long name wraps instead of widening the page. */
   min-width: 0;
   flex-basis: 0;
   flex-grow: 1;
   flex-shrink: 1;
   padding: 0.75rem;
 
-  @include tablet {
+  @media (min-width: 769px) {
     &.is-narrow {
       flex: none;
       width: unset;
@@ -135,7 +137,7 @@
     }
   }
 
-  @include desktop {
+  @media (min-width: 1024px) {
     &.is-5-desktop {
       flex: none;
       width: 41.66667%;
@@ -143,7 +145,7 @@
   }
 }
 
-// Rich text: paragraphs, headings and lists with their spacing. Long names, codes and emails wrap anywhere.
+/* Rich text: paragraphs, headings and lists with their spacing. Long names, codes and emails wrap anywhere. */
 .content {
   overflow-wrap: anywhere;
 
@@ -253,7 +255,7 @@
   margin-bottom: 1.5rem;
 }
 
-// A card (the Grinch's box, restyled by grinch-box.scss).
+/* A card (the Grinch's box, restyled by grinch-box.css). */
 .card {
   background-color: #fff;
   border-radius: 0.25rem;
@@ -266,4 +268,23 @@
 .card-content {
   background-color: transparent;
   padding: 1.5rem;
+}
+
+/* The app's loading screen and the start page's backdrop. */
+.app-spinner {
+  background: #141414 url("/party-garage-door-3.jpg") center center/cover;
+
+  .hero-body {
+    justify-content: center;
+  }
+}
+
+.index-page {
+  background-color: #111217;
+}
+
+@media (max-width: 768px) {
+  .hero-body {
+    padding: 1em 0.5em;
+  }
 }

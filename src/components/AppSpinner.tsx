@@ -1,4 +1,4 @@
-import { Hero } from "src/components/layout";
+import { Hero } from "@/components/layout";
 import { BarLoader } from 'react-spinners';
 
 

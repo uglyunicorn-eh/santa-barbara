@@ -1,15 +1,15 @@
 import { AnimatePresence } from "framer-motion";
-import { Columns, Container, Content, Hero } from "src/components/layout";
+import { Columns, Container, Content, Hero } from "@/components/layout";
 import { Link, Route, Routes } from "react-router-dom";
 
-import { Divider } from "src/components/Divider";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { Footer } from "src/components/hoc/Footer";
-import { JoinParty } from "src/components/hoc/JoinParty";
-import { MyProfile } from "src/components/hoc/MyProfile";
-import { NewParty } from "src/components/hoc/NewParty";
+import { Divider } from "@/components/Divider";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
+import { Footer } from "@/components/hoc/Footer";
+import { JoinParty } from "@/components/hoc/JoinParty";
+import { MyProfile } from "@/components/hoc/MyProfile";
+import { NewParty } from "@/components/hoc/NewParty";
 
-import grinchImg from "src/images/grinch.png";
+import grinchImg from "@/images/grinch.png";
 
 export const StartPage = () => {
 

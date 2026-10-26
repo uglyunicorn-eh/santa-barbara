@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'react-feather';
-import { Card, Container, Content } from "src/components/layout";
+import { Card, Container, Content } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
 
-import hiImg from "src/images/grinch.png";
+import hiImg from "@/images/grinch.png";
 
 type Props = {
   /** Where the X in the top-right corner (and Esc) goes. No X without it. */

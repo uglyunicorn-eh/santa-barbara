@@ -1,8 +1,8 @@
 import React from "react";
 
-import { useAppClient, useRefresher, useSignals } from "src/components/hooks";
+import { useAppClient, useRefresher, useSignals } from "@/components/hooks";
 
-import type { Party } from "src/types";
+import type { Party } from "@/types";
 
 export const useParty = (code: string) => {
   const { refresher, refresh } = useRefresher();

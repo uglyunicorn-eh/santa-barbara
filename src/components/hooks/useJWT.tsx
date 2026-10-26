@@ -1,8 +1,8 @@
 import * as jose from "jose";
 import React from "react";
 
-import { JWT_PUBLIC_KEY as PUBLIC_KEY } from 'src/api/client';
-import { issuer } from 'src/config.json';
+import { JWT_PUBLIC_KEY as PUBLIC_KEY } from '@/api/client';
+import { issuer } from '@/config.json';
 
 // Tokens from api.gnomik.me are ES256. The public key is not a secret, so it lives in config.json; it has to match
 // the API's JWT_PRIVATE_KEY. A backend preview signs with its own key, set with PUBLIC_JWT_PUBLIC_KEY.

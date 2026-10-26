@@ -6,7 +6,7 @@
     display: inline-flex;
     align-items: center;
 
-    @include mobile {
+    @media (max-width: 768px) {
       min-height: 450px;
     }
 
@@ -37,7 +37,7 @@
     margin-right: 20px;
     font-size: 1.2rem;
 
-    @include mobile {
+    @media (max-width: 768px) {
       margin-left: 110px;
     }
 
@@ -53,8 +53,8 @@
     }
 
     button {
-      border: 1px solid rgba(#fff, 0.7);
-      box-shadow: 1px 1px 4px rgba(#000, 0.2);
+      border: 1px solid rgb(255 255 255 / 0.7);
+      box-shadow: 1px 1px 4px rgb(0 0 0 / 0.2);
 
       &:hover {
         border: 1px solid #fff;

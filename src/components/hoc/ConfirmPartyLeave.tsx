@@ -1,13 +1,13 @@
 import React from "react";
-import { Columns, Content } from "src/components/layout";
+import { Columns, Content } from "@/components/layout";
 import { useNavigate } from "react-router";
 
-import { DialogBox } from "src/components/DialogBox";
-import { Submit } from "src/components/forms";
-import { usePartyContext } from "src/components/hoc/PartyContext";
-import { useAppClient } from "src/components/hooks";
+import { DialogBox } from "@/components/DialogBox";
+import { Submit } from "@/components/forms";
+import { usePartyContext } from "@/components/hoc/PartyContext";
+import { useAppClient } from "@/components/hooks";
 
-import SantaImg from "src/images/santa.png";
+import SantaImg from "@/images/santa.png";
 
 const defaultValues = {};
 

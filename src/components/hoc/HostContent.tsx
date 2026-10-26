@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { DeletePartyLink } from 'src/components/hoc/DeletePartyLink';
-import { ConfirmPartyClose } from 'src/components/hoc/ConfirmPartyClose';
+import { DeletePartyLink } from '@/components/hoc/DeletePartyLink';
+import { ConfirmPartyClose } from '@/components/hoc/ConfirmPartyClose';
 
-import type { Party, User } from 'src/types';
+import type { Party, User } from '@/types';
 
 type Props = {
   party: Party;

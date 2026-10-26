@@ -1,5 +1,5 @@
 import React from "react";
-import type { Party } from "src/types";
+import type { Party } from "@/types";
 
 type Context = {
   party?: Party,

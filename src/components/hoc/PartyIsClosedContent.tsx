@@ -1,4 +1,4 @@
-import type { Party, User } from 'src/types';
+import type { Party, User } from '@/types';
 
 type Props = {
   party: Party;

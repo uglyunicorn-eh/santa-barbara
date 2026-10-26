@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
 
-import { GrinchBox } from "src/components/GrinchBox";
-import { SnowConfetti } from "src/components/SnowConfetti";
-import { LoginHero } from "src/components/hoc/LoginBox";
-import { useAppClient, useCurrentUser } from "src/components/hooks";
-import type { LinkResult } from "src/components/hooks/useAppClient";
+import { GrinchBox } from "@/components/GrinchBox";
+import { SnowConfetti } from "@/components/SnowConfetti";
+import { LoginHero } from "@/components/hoc/LoginBox";
+import { useAppClient, useCurrentUser } from "@/components/hooks";
+import type { LinkResult } from "@/components/hooks/useAppClient";
 
 /**
  * Runs a confirmation link once (`run` is called with the token from the URL) and shows the outcome. The links work in

@@ -1,16 +1,16 @@
 import React from "react";
-import { Content } from "src/components/layout";
+import { Content } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import * as v from "valibot";
 
-import type { Party } from "src/types";
-import { DialogBox } from "src/components/DialogBox";
-import { HaveQuestion } from "src/components/HaveQuestion";
-import { FormField, Input, Submit } from "src/components/forms";
-import { maxLen, required } from "src/components/forms/messages";
-import { useAppClient } from "src/components/hooks";
+import type { Party } from "@/types";
+import { DialogBox } from "@/components/DialogBox";
+import { HaveQuestion } from "@/components/HaveQuestion";
+import { FormField, Input, Submit } from "@/components/forms";
+import { maxLen, required } from "@/components/forms/messages";
+import { useAppClient } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
-import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
+import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
 const schema = v.object({
   name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Party name", MAX_NAME_LENGTH))),

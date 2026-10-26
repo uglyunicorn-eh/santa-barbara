@@ -1,5 +1,5 @@
 .profile-box {
-  // One height for both tabs, so switching doesn't resize the dialog; the longer one scrolls inside.
+  /* One height for both tabs, so switching doesn't resize the dialog; the longer one scrolls inside. */
   .dialog-card {
     height: min(640px, calc(100vh - 40px));
   }
@@ -23,7 +23,7 @@
     padding: 1em 0;
     border-bottom: 1px solid #eee;
 
-    @include mobile {
+    @media (max-width: 768px) {
       grid-template-columns: 1fr;
     }
   }
@@ -32,7 +32,7 @@
     font-weight: 600;
     line-height: 2.5em;
 
-    @include mobile {
+    @media (max-width: 768px) {
       line-height: 1.5em;
     }
   }
@@ -57,7 +57,7 @@
   .setting-hint {
     margin: 0.35em 0 0;
     font-size: 0.9rem;
-    color: #71717a; // zinc-500
+    color: #71717a; /* zinc-500 */
   }
 
   .danger-zone {
@@ -73,7 +73,7 @@
       p {
         margin: 0;
         font-size: 0.9rem;
-        color: #52525b; // zinc-600
+        color: #52525b; /* zinc-600 */
       }
     }
   }
@@ -106,7 +106,7 @@
       border-radius: 12px;
       color: inherit;
 
-      @include mobile {
+      @media (max-width: 768px) {
         gap: 0.65em;
         padding: 0.55em 0.25em;
       }
@@ -123,12 +123,12 @@
     }
 
     .is-closed .history-name {
-      color: #52525b; // zinc-600
+      color: #52525b; /* zinc-600 */
     }
 
-    // Deleted parties stay in the host's history until they can no longer be restored.
+    /* Deleted parties stay in the host's history until they can no longer be restored. */
     .is-deleted .history-name {
-      color: #71717a; // zinc-500
+      color: #71717a; /* zinc-500 */
       text-decoration: line-through;
     }
   }
@@ -162,7 +162,7 @@
   }
 
   .history-name {
-    color: #18181b; // zinc-900
+    color: #18181b; /* zinc-900 */
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -171,7 +171,7 @@
 
   .history-meta {
     font-size: 0.85rem;
-    color: #52525b; // zinc-600
+    color: #52525b; /* zinc-600 */
 
     code {
       padding: 0;
@@ -188,7 +188,7 @@
 
   .history-dates {
     font-size: 0.8rem;
-    color: #71717a; // zinc-500
+    color: #71717a; /* zinc-500 */
 
     svg {
       vertical-align: -1px;
@@ -208,8 +208,8 @@
     }
 
     &.is-closed {
-      color: #52525b; // zinc-600
-      background: #f4f4f5; // zinc-100
+      color: #52525b; /* zinc-600 */
+      background: #f4f4f5; /* zinc-100 */
     }
 
     &.is-deleted {
@@ -217,27 +217,27 @@
       background: #fdeaea;
     }
 
-    @include mobile {
+    @media (max-width: 768px) {
       display: none;
     }
   }
 
-  // On phones the status moves into the subtitle, so the name keeps the width.
+  /* On phones the status moves into the subtitle, so the name keeps the width. */
   .history-meta-status {
     display: none;
 
-    @include mobile {
+    @media (max-width: 768px) {
       display: inline;
     }
   }
 
   .history-chevron {
     flex: none;
-    color: #a1a1aa; // zinc-400
+    color: #a1a1aa; /* zinc-400 */
     opacity: 0.8;
     transition: all 0.15s ease-in-out;
 
-    @include mobile {
+    @media (max-width: 768px) {
       display: none;
     }
   }
@@ -248,7 +248,7 @@
     align-items: center;
     gap: 0.5em;
     padding: 2em 1em;
-    color: #52525b; // zinc-600
+    color: #52525b; /* zinc-600 */
     text-align: center;
   }
 
