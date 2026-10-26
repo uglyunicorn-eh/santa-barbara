@@ -8,6 +8,8 @@
 
     @media (max-width: 768px) {
       min-height: 450px;
+      /* About a third across the screen rather than against its left edge. */
+      background-position: 25% center !important;
     }
 
     &.cupignome {

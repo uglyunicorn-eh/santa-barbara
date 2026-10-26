@@ -51,7 +51,9 @@
   }
 
   .setting-input {
-    flex: 1 1 14em;
+    /* Narrow enough that the input and its buttons share one line on a phone. */
+    flex: 1 1 8em;
+    min-width: 0;
   }
 
   .setting-value {
