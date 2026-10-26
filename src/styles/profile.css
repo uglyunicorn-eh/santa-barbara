@@ -4,6 +4,11 @@
     height: min(640px, calc(100vh - 40px));
   }
 
+  /* On a phone's sheet, nearly the whole screen: a strip of the page stays visible above it. */
+  &.is-sheet .dialog-card {
+    height: calc(100dvh - 3rem);
+  }
+
   .dialog-body {
     padding-top: 10px;
   }
