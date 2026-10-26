@@ -84,6 +84,15 @@ export const useAppClient = () => {
     ],
   );
 
+  /** A one-minute ticket for opening a live-updates socket (see useLiveParty), or null without a working session. */
+  const liveTicket = React.useCallback(
+    async (): Promise<string | null> => {
+      const result = await call<{ ticket: string }>("/live/ticket", { method: "POST" });
+      return result.ok ? result.data.ticket : null;
+    },
+    [call],
+  );
+
   /** Runs a party action; shows the API's message and returns undefined when it refuses. */
   const partyAction = React.useCallback(
     async (route: string, options: CallOptions): Promise<Party | undefined> => {
@@ -302,6 +311,7 @@ export const useAppClient = () => {
       leaveParty,
       updateName,
       requestAccountDeletion,
+      liveTicket,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,
@@ -322,6 +332,7 @@ export const useAppClient = () => {
       leaveParty,
       updateName,
       requestAccountDeletion,
+      liveTicket,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,

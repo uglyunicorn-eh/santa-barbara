@@ -152,6 +152,8 @@ function answer(set, screen, method, url, body) {
     case "POST /auth/magic-link":
     case "POST /me/deletion":
     case "POST /me/email-change":
+    case "POST /live/ticket":
+      return ok({ ticket: "shots-live-ticket" });
     case "POST /me/deletion/check":
       return ok({ email: set.user.email });
     case "POST /me/deletion/confirm":
@@ -284,6 +286,9 @@ async function main() {
             if (reply === null) return; // leave it hanging
             await route.fulfill({ status: reply.status, contentType: "application/json", headers: cors, body: JSON.stringify(reply.body) });
           });
+
+          // Live-updates sockets connect and stay quiet, unless the screen plays a server (`live`).
+          await context.routeWebSocket(/\/v1\/parties\/live/, ws => screen.live?.(ws));
 
           const page = await context.newPage();
           await page.goto(site + path, { waitUntil: screen.settle ? "domcontentloaded" : "networkidle" });
