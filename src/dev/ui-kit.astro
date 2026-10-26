@@ -1,0 +1,408 @@
+---
+// The UI kit: every control from docs/design-spec.md in every state, on the app's three surfaces. Dev only (see the
+// ui-kit integration in astro.config.mjs): open http://localhost:4321/ui-kit while `npm run dev` runs.
+import BaseLayout from "src/layouts/BaseLayout.astro";
+import { cn } from "@/lib/utils";
+import "./ui-kit.css";
+
+import {
+  BUTTON_VARIANTS, SURFACES, button, error, help, input, label, muted, onPhoto, spinner, surfaceCard, surfacePanel,
+  surfacePhoto, type State, type Surface,
+} from "./recipes";
+
+const STATES: State[] = ["default", "hover", "focus", "disabled", "loading", "live"];
+const STATE_NOTES: Record<State, string> = {
+  default: "resting",
+  hover: "hovered",
+  focus: "keyboard focus",
+  disabled: "disabled",
+  loading: "busy",
+  live: "try it: hover, Tab",
+};
+
+const LONG_PARTY = "TheVeryLongestSecretSantaPartyNameEver".repeat(3).slice(0, 100);
+const LONG_NAME = "Maximiliana Wilhelmina Bartholomew-Featherstonehaugh Maximiliana Wilhelmina Bartholomew-Featherst".slice(0, 100);
+const LONG_EMAIL = `${"santa.helper.".repeat(10).slice(0, 115)}@example.com`.slice(0, 128);
+
+const COLOR_GROUPS: { name: string; tokens: [string, string][] }[] = [
+  { name: "Red (primary)", tokens: [["red-50", "#fdf3f3"], ["red-100", "#fbe3e3"], ["red-200", "#f6c6c7"], ["red-500", "#dc3a40"], ["red-600", "#c62a30"], ["red-700", "#a8222a"], ["red-800", "#8a1f25"], ["red-900", "#741a1f"]] },
+  { name: "Zinc (neutrals)", tokens: [["zinc-50", "#fafafa"], ["zinc-100", "#f4f4f5"], ["zinc-200", "#e4e4e7"], ["zinc-300", "#d4d4d8"], ["zinc-400", "#a1a1aa"], ["zinc-500", "#71717a"], ["zinc-600", "#52525b"], ["zinc-700", "#3f3f46"], ["zinc-900", "#18181b"], ["night", "#111217"]] },
+  { name: "Accents and success", tokens: [["cream", "#f7f7c6"], ["cream-50", "#fff6d6"], ["gold", "#c99700"], ["green-50", "#effaf3"], ["green-200", "#acdcbf"], ["green-700", "#257942"]] },
+];
+const ROLES: [string, string][] = [
+  ["primary", "bg-primary"], ["primary-hover", "bg-primary-hover"], ["destructive", "bg-destructive"],
+  ["destructive-strong", "bg-destructive-strong"], ["link", "bg-link"], ["success", "bg-success"],
+  ["border", "bg-border"], ["input", "bg-input"], ["ring", "bg-ring"], ["muted-foreground", "bg-muted-foreground"],
+];
+const TYPE: [string, string, string][] = [
+  ["text-xs", "13 / 18", "Made with ❤ in Canada by Ugly Unicorn"],
+  ["text-sm", "15 / 22", "Everyone must know this phrase for entry."],
+  ["text-base", "18 / 28", "Hey, Alice! That's so awesome you're gathering the Office Secret Santa 2026!"],
+  ["text-lg", "20 / 28", "Currently 6 nice people are participating in this."],
+  ["text-xl", "24 / 32", "Let's start a new party!"],
+  ["text-2xl", "30 / 36", "Office Secret Santa 2026"],
+  ["text-3xl", "40 / 44", "Welcome to the Anonymous Ded Morozes!"],
+];
+
+const iconX = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
+const iconAlert = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>`;
+const iconCheck = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>`;
+
+const sectionTitle = "text-2xl font-semibold";
+const kicker = "text-xs font-medium uppercase tracking-wider";
+const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
+---
+
+<BaseLayout title="UI kit">
+  <div class="min-h-dvh bg-zinc-100 font-sans text-base text-zinc-900">
+    <header class="border-b border-border bg-white px-4 py-6 tablet:px-8">
+      <p class={`${kicker} text-muted-foreground`}>Dev only · not in production builds</p>
+      <h1 class="mt-1 text-3xl font-semibold">UI kit</h1>
+      <p class="mt-2 max-w-200 text-muted-foreground">
+        Every control from <code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">docs/design-spec.md</code>, in every state, on the app's three
+        surfaces. These are prototypes built from the spec's tokens; Phase 4 replaces them with the real components, and
+        this page then shows those.
+      </p>
+      <nav class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm" aria-label="Sections">
+        <a class="text-link underline underline-offset-4" href="#tokens">Tokens</a>
+        {SURFACES.map(s => <a class="text-link underline underline-offset-4" href={`#${s.id}`}>{s.name}</a>)}
+        <a class="text-link underline underline-offset-4" href="#dialogs">Dialogs</a>
+        <a class="text-link underline underline-offset-4" href="#tabs">Tabs</a>
+        <a class="text-link underline underline-offset-4" href="#toasts">Toasts</a>
+        <a class="text-link underline underline-offset-4" href="#long-values">Long values</a>
+      </nav>
+    </header>
+
+    <!-- Tokens -->
+    <section id="tokens" class="space-y-8 px-4 py-8 tablet:px-8">
+      <h2 class={sectionTitle}>Tokens</h2>
+
+      {COLOR_GROUPS.map(group => (
+        <div>
+          <h3 class="text-lg font-semibold">{group.name}</h3>
+          <div class="mt-3 grid grid-cols-2 gap-3 tablet:grid-cols-5 desktop:grid-cols-10">
+            {group.tokens.map(([name, hex]) => (
+              <div class="overflow-hidden rounded-lg border border-border bg-white">
+                <div class="h-12 border-b border-border" style={`background: var(--color-${name})`}></div>
+                <div class="px-2 py-1.5">
+                  <div class="text-sm font-medium">{name}</div>
+                  <div class="font-mono text-xs text-muted-foreground">{hex}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div>
+        <h3 class="text-lg font-semibold">Roles</h3>
+        <div class="mt-3 grid grid-cols-2 gap-3 tablet:grid-cols-5">
+          {ROLES.map(([name, bg]) => (
+            <div class="flex items-center gap-3 rounded-lg border border-border bg-white p-2">
+              <span class={`size-8 shrink-0 rounded-md ${bg}`}></span>
+              <span class="text-sm font-medium wrap-anywhere">{name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold">Type (Cuprum)</h3>
+        <div class="mt-3 divide-y divide-border rounded-card border border-border bg-white">
+          {TYPE.map(([cls, size, sample]) => (
+            <div class="flex flex-col gap-1 px-4 py-3 tablet:flex-row tablet:items-baseline tablet:gap-6">
+              <span class="w-40 shrink-0 font-mono text-xs text-muted-foreground">{cls} · {size}</span>
+              <span class={`${cls} ${cls === "text-xl" || cls === "text-2xl" || cls === "text-3xl" ? "font-semibold" : ""}`}>{sample}</span>
+            </div>
+          ))}
+          <div class="flex flex-wrap gap-6 px-4 py-3">
+            <span class="font-normal">400 body</span><span class="font-medium">500 buttons, labels</span><span class="font-semibold">600 headings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-6 tablet:grid-cols-2">
+        <div>
+          <h3 class="text-lg font-semibold">Corners</h3>
+          <div class="mt-3 flex flex-wrap items-end gap-4">
+            <div class="text-center"><div class="h-12 w-24 rounded-lg border-2 border-primary bg-white"></div><div class="mt-1 text-sm text-muted-foreground">controls 8px</div></div>
+            <div class="text-center"><div class="h-20 w-28 rounded-card border-2 border-primary bg-white"></div><div class="mt-1 text-sm text-muted-foreground">cards 16px</div></div>
+            <div class="text-center"><div class="h-12 w-28 rounded-full border-2 border-primary bg-white"></div><div class="mt-1 text-sm text-muted-foreground">pill: hero action</div></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold">Shadows</h3>
+          <div class="mt-3 flex flex-wrap gap-6">
+            {["shadow-sm", "shadow-md", "shadow-lg"].map(s => (
+              <div class="text-center"><div class={`h-16 w-24 rounded-lg bg-white ${s}`}></div><div class="mt-2 text-sm text-muted-foreground">{s}</div></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Surfaces -->
+    {SURFACES.map(surface => (
+      <section id={surface.id} class={`px-4 py-8 tablet:px-8 ${surfacePanel[surface.id]}`} style={photo(surface.id)}>
+        <div class={surface.id === "paper" ? "rounded-card bg-white/80 p-4" : ""}>
+          <p class={`${kicker} ${muted(surface.id)} ${onPhoto(surface.id)}`}>Surface</p>
+          <h2 class={`${sectionTitle} ${onPhoto(surface.id)}`}>{surface.name}</h2>
+          <p class={`mt-1 ${surface.id === "paper" ? "text-zinc-700" : "text-zinc-300"} ${onPhoto(surface.id)}`}>{surface.note}</p>
+        </div>
+
+        <div class={`mt-6 space-y-10 ${surfaceCard[surface.id] ? `${surfaceCard[surface.id]} p-4 tablet:p-6` : ""}`}>
+          <!-- Buttons by state -->
+          <div>
+            <h3 class={`text-lg font-semibold ${onPhoto(surface.id)}`}>Buttons</h3>
+            <p class={`mt-1 text-sm tablet:hidden ${muted(surface.id)} ${onPhoto(surface.id)}`}>Scroll the table sideways for every state.</p>
+            <div class="mt-3 overflow-x-auto">
+              <table class="min-w-180 border-separate border-spacing-x-2 border-spacing-y-3 text-left">
+                <thead>
+                  <tr>
+                    <th class={`text-sm font-medium ${muted(surface.id)}`}>Variant</th>
+                    {STATES.map(state => <th class={`text-sm font-medium ${muted(surface.id)}`}>{STATE_NOTES[state]}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {BUTTON_VARIANTS.map(v => (
+                    <tr>
+                      <td class="align-middle">
+                        <div class={`text-sm font-medium ${onPhoto(surface.id)}`}>{v.name}</div>
+                        <div class={`text-xs ${muted(surface.id)} ${onPhoto(surface.id)}`}>{v.use}</div>
+                      </td>
+                      {STATES.map(state => (
+                        <td class="align-middle">
+                          {v.id === "link"
+                            ? <a href="#" class={button({ variant: v.id, surface: surface.id, state: state === "loading" ? "default" : state })} aria-disabled={state === "disabled" ? "true" : undefined}>Check out</a>
+                            : (
+                              <button type="button" class={button({ variant: v.id, surface: surface.id, state })} disabled={state === "disabled"} aria-busy={state === "loading" ? "true" : undefined}>
+                                {state === "loading" && <span class={spinner} aria-hidden="true"></span>}
+                                {v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "💥 Delete this party" : "Delete my account"}
+                              </button>
+                            )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Sizes and shapes -->
+          <div>
+            <h3 class={`text-lg font-semibold ${onPhoto(surface.id)}`}>Sizes and shapes</h3>
+            <div class="mt-3 flex flex-wrap items-center gap-3">
+              <button type="button" class={button({ variant: "primary", size: "sm", surface: surface.id, state: "live" })}>Save</button>
+              <button type="button" class={button({ variant: "primary", size: "md", surface: surface.id, state: "live" })}>🎉 Rock'n'Roll!</button>
+              <button type="button" class={button({ variant: "primary", size: "lg", surface: surface.id, state: "live" })}>OK, let's roll the dice!</button>
+              <button type="button" class={button({ variant: "secondary", size: "sm", surface: surface.id, state: "live" })}>Show more parties</button>
+              <button type="button" class={button({ variant: "ghost", size: "sm", surface: surface.id, state: "live" })}>Cancel</button>
+              {surface.id !== "paper" && (
+                <button type="button" class={button({ variant: "primary", size: "lg", surface: surface.id, state: "live", pill: true })}>Enter with your email address</button>
+              )}
+            </div>
+            <div class={`mt-2 text-sm ${muted(surface.id)} ${onPhoto(surface.id)}`}>
+              sm 32px · md 40px · lg 48px{surface.id !== "paper" && " · pill only for a hero screen's main action"}
+            </div>
+            <div class="mt-4 max-w-sm">
+              <button type="button" class={button({ variant: "primary", surface: surface.id, state: "live", fullWidth: true })}>Send me a magic link!</button>
+              <div class={`mt-1 text-sm ${muted(surface.id)} ${onPhoto(surface.id)}`}>fullWidth: the main action in dialogs and the sign-in card on phones</div>
+            </div>
+          </div>
+
+          <!-- Form fields -->
+          {surface.id !== "night" && (
+            <div>
+              <h3 class="text-lg font-semibold">Form fields</h3>
+              <div class="mt-3 grid gap-6 tablet:grid-cols-2 desktop:grid-cols-3">
+                {([
+                  ["default", "Party name", "", "Optional", "Leave it blank to allow access via a shared link."],
+                  ["focus", "Party name", "Office Secret Santa 2026", "", ""],
+                  ["filled", "Party name", "Office Secret Santa 2026", "", ""],
+                  ["error", "Secret phrase", "x".repeat(101), "", ""],
+                  ["disabled", "Party name", "Office Secret Santa 2026", "", "Sending…"],
+                  ["live", "Email", "", "Email address for a magic link", "We'll send you a magic link to sign in."],
+                ] as const).map(([state, text, value, placeholder, hint]) => (
+                  <div>
+                    <div class={`mb-2 text-xs ${muted(surface.id)}`}>{state}</div>
+                    <label class={`mb-1 block ${label(surface.id)}`} for={`${surface.id}-${state}`}>{text}</label>
+                    <input
+                      id={`${surface.id}-${state}`}
+                      class={input({ state, surface: surface.id, size: surface.id === "glass" ? "lg" : "md" })}
+                      value={value}
+                      placeholder={placeholder}
+                      disabled={state === "disabled"}
+                      aria-invalid={state === "error" ? "true" : undefined}
+                      aria-describedby={`${surface.id}-${state}-note`}
+                      maxlength={state === "error" ? undefined : 100}
+                    />
+                    {state === "error"
+                      ? <p id={`${surface.id}-${state}-note`} class={`mt-1 ${error(surface.id)}`}>Secret phrase must be at most 100 characters</p>
+                      : hint && <p id={`${surface.id}-${state}-note`} class={`mt-1 ${help(surface.id)}`}>{hint}</p>}
+                  </div>
+                ))}
+              </div>
+              {surface.id === "glass" && <p class="mt-3 text-sm text-zinc-400">Glass forms use the same white input, 48px tall, so it reads on the photo.</p>}
+            </div>
+          )}
+
+          {surface.id === "paper" && (
+            <div class="grid gap-8 desktop:grid-cols-2">
+              <div>
+                <h3 class="text-lg font-semibold">Label beside the input</h3>
+                <p class="mt-1 text-sm text-muted-foreground">NewParty and JoinParty dialogs: from tablet width up; stacked below.</p>
+                <div class="mt-4 space-y-4">
+                  {[["Party name", "Office Secret Santa 2026", ""], ["Secret phrase", "", "Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."]].map(([text, value, hint]) => (
+                    <div class="tablet:flex tablet:gap-4">
+                      <label class="mb-1 block text-sm font-medium text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`beside-${text}`}>{text}</label>
+                      <div class="min-w-0 flex-1">
+                        <input id={`beside-${text}`} class={input({ surface: "paper", state: "live" })} value={value} placeholder={value ? "" : "Optional"} />
+                        {hint && <p class="mt-1 text-sm text-muted-foreground">{hint}</p>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold">Inline field</h3>
+                <p class="mt-1 text-sm text-muted-foreground">Profile settings: input and button on one line, same height; the error below both.</p>
+                <div class="mt-4 space-y-5">
+                  <div>
+                    <div class="text-sm font-medium text-zinc-700">Name</div>
+                    <div class="mt-1 flex items-start gap-2">
+                      <input class={input({ surface: "paper", size: "sm", state: "live" })} value="Alice" aria-label="Name" />
+                      <button type="button" class={button({ variant: "primary", size: "sm", surface: "paper", state: "disabled" })} disabled>Save</button>
+                    </div>
+                    <p class="mt-1 text-sm text-muted-foreground">Save turns on once the name changes.</p>
+                  </div>
+                  <div>
+                    <div class="text-sm font-medium text-zinc-700">Email</div>
+                    <div class="mt-1 flex items-start gap-2">
+                      <input class={input({ surface: "paper", size: "sm", state: "error" })} value="alice@example.com" aria-label="New email" aria-invalid="true" />
+                      <button type="button" class={button({ variant: "primary", size: "sm", surface: "paper", state: "live" })}>Send link</button>
+                      <button type="button" class={button({ variant: "ghost", size: "sm", surface: "paper", state: "live" })}>Cancel</button>
+                    </div>
+                    <p class="mt-1 text-sm text-destructive">That's already your email.</p>
+                  </div>
+                  <div class="rounded-lg border border-red-200 bg-red-50 p-3">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <div class="text-sm font-medium text-zinc-900">Delete account</div>
+                        <div class="text-sm text-zinc-600">Removes your account and the parties you host that haven't rolled the dice yet.</div>
+                      </div>
+                      <button type="button" class={button({ variant: "ghost-destructive", size: "sm", surface: "paper", state: "live" })}>Delete account</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    ))}
+
+    <!-- Dialogs -->
+    <section id="dialogs" class="relative bg-night bg-cover bg-center px-4 py-8 tablet:px-8" style={photo("night")}>
+      <div class="absolute inset-0 bg-night/70" aria-hidden="true"></div>
+      <div class="relative">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class={`${sectionTitle} text-white`}>Dialogs</h2>
+            <p class="mt-1 text-zinc-300">On the night backdrop at 70%. Widths: sm 600px, md 700px, lg 800px; on phones, full width minus 16px.</p>
+          </div>
+          <button type="button" class={cn(button({ variant: "ghost", surface: "night", state: "live" }), "size-10 shrink-0 px-0")} aria-label="Close" set:html={iconX}></button>
+        </div>
+
+        <div class="mt-6 flex flex-col items-center gap-8">
+          <div class="w-full max-w-150 rounded-card bg-white p-4 text-zinc-900 shadow-lg tablet:p-6" role="dialog" aria-labelledby="kit-dialog-1">
+            <h3 id="kit-dialog-1" class="text-xl font-semibold">Let's start a new party!</h3>
+            <div class="mt-5 space-y-4">
+              {[["Party name", "Very funny secret party!", ""], ["Secret phrase", "", "Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."]].map(([text, value, hint]) => (
+                <div class="tablet:flex tablet:gap-4">
+                  <label class="mb-1 block text-sm font-medium text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`dlg-${text}`}>{text}</label>
+                  <div class="min-w-0 flex-1">
+                    <input id={`dlg-${text}`} class={input({ surface: "paper", state: "live" })} value={value} placeholder={value ? "" : "Optional"} />
+                    {hint && <p class="mt-1 text-sm text-muted-foreground">{hint}</p>}
+                  </div>
+                </div>
+              ))}
+              <p class="text-sm text-muted-foreground tablet:pl-41.5">Have a question? <a href="#" class={button({ variant: "link", surface: "paper", state: "live" })}>Check out</a> how this works.</p>
+            </div>
+            <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
+              <button type="button" class={cn(button({ variant: "secondary", surface: "paper", state: "live" }), "max-tablet:w-full")}>Nah, never mind</button>
+              <button type="button" class={cn(button({ variant: "primary", surface: "paper", state: "live" }), "max-tablet:w-full")}>🎉 Rock'n'Roll!</button>
+            </div>
+          </div>
+
+          <div class="w-full max-w-175 rounded-card bg-white p-4 text-zinc-900 shadow-lg tablet:p-6" role="dialog" aria-labelledby="kit-dialog-2">
+            <h3 id="kit-dialog-2" class="text-xl font-semibold">Delete this party?</h3>
+            <div class="mt-4 space-y-4">
+              <p>Everybody in it loses the party. You can bring it back, with everyone and their names, for a day.</p>
+              <p class="text-muted-foreground">After that, it's gone for good.</p>
+            </div>
+            <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
+              <button type="button" class={cn(button({ variant: "secondary", surface: "paper", state: "live" }), "max-tablet:w-full")}>Not ready yet…</button>
+              <button type="button" class={cn(button({ variant: "destructive", surface: "paper", state: "live" }), "max-tablet:w-full")}>Delete this party</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section id="tabs" class="bg-zinc-100 px-4 py-8 tablet:px-8">
+      <h2 class={sectionTitle}>Tabs</h2>
+      <p class="mt-1 text-muted-foreground">Profile dialog: route links in a nav, the current one marked with aria-current.</p>
+      <div class="mt-4 max-w-200 overflow-hidden rounded-card bg-white shadow-lg">
+        <nav class="flex border-b border-border" aria-label="Profile">
+          <a href="#tabs" aria-current="page" class="flex-1 border-b-2 border-primary py-3 text-center text-lg font-medium text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">Profile</a>
+          <a href="#tabs" class="flex-1 border-b-2 border-transparent py-3 text-center text-lg font-medium text-muted-foreground transition-colors duration-150 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">Latest history</a>
+        </nav>
+        <div class="p-4 text-muted-foreground tablet:p-6">The current tab: 2px red underline. Others: muted, darker on hover.</div>
+      </div>
+    </section>
+
+    <!-- Toasts -->
+    <section id="toasts" class="grid gap-0 tablet:grid-cols-2">
+      {(["night", "paper"] as const).map(s => (
+        <div class={`px-4 py-8 tablet:px-8 ${surfacePanel[s]}`} style={photo(s)}>
+          <h2 class={`${sectionTitle} ${s === "night" ? "text-white text-shadow-photo" : ""}`}>Toasts on {s}</h2>
+          <div class="mt-4 flex flex-col items-center gap-3">
+            {[
+              ["error", "Party is already packed. Sorry, we cannot accept a new participant..."],
+              ["success", "Done! We've sent a magic link to your inbox."],
+              ["error", `We couldn't send a link to ${LONG_EMAIL}. Please try again in a bit.`],
+            ].map(([kind, text]) => (
+              <div role="status" class="flex w-full max-w-140 items-start gap-3 rounded-lg border border-white/15 bg-zinc-900 px-4 py-3 text-base text-white shadow-md">
+                <span class={`mt-0.5 shrink-0 ${kind === "error" ? "text-red-200" : "text-green-200"}`} set:html={kind === "error" ? iconAlert : iconCheck}></span>
+                <span class="min-w-0 wrap-anywhere">{text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- Long values -->
+    <section id="long-values" class="space-y-6 px-4 py-8 tablet:px-8">
+      <h2 class={sectionTitle}>Long values</h2>
+      <p class="text-muted-foreground">The longest the API allows. Running text wraps anywhere; one-line slots truncate with the full value on hover.</p>
+      <div class="rounded-card bg-white p-4 shadow-lg tablet:p-6">
+        <h3 class="text-2xl font-semibold wrap-anywhere">{LONG_PARTY}</h3>
+        <p class="mt-3 wrap-anywhere">Hey, {LONG_NAME}! From now on, we know you as <strong>{LONG_EMAIL}</strong>.</p>
+        <div class="mt-4 flex min-w-0 items-center gap-3 rounded-lg border border-border p-3">
+          <span class="size-10 shrink-0 rounded-full bg-cream-50"></span>
+          <div class="min-w-0">
+            <div class="truncate font-semibold" title={LONG_PARTY}>{LONG_PARTY}</div>
+            <div class="truncate text-sm text-muted-foreground" title={LONG_NAME}>You host · {LONG_NAME}</div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <label class="mb-1 block text-sm font-medium text-zinc-700" for="long-input">Your name for this party</label>
+          <input id="long-input" class={input({ surface: "paper", state: "live" })} value={LONG_NAME} maxlength="100" />
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
