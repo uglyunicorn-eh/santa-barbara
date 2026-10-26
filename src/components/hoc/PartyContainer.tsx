@@ -7,7 +7,7 @@ import { JoinBox } from "@/components/hoc/JoinBox";
 import { PartyContext } from "@/components/hoc/PartyContext";
 import { PartyDetails } from "@/components/hoc/PartyDetails";
 import { PartyNotFound } from "@/components/hoc/PartyNotFound";
-import { useCurrentUser, useParty } from "@/components/hooks";
+import { useCurrentUser, useLiveParty, useParty } from "@/components/hooks";
 
 export const PartyContainer = () => {
   const { profile } = useCurrentUser();
@@ -21,6 +21,9 @@ export const PartyContainer = () => {
       party?.isJoined,
     ],
   );
+
+  // Live updates while the user is in the party (or hosts it, even deleted): joins, leaves and the roll show up at once.
+  useLiveParty(code, Boolean(profile && party && (party.isJoined || party.isHost)));
 
   const renderLoginContainer = React.useCallback(() => (party && <JoinBox party={party} />), [party]);
 

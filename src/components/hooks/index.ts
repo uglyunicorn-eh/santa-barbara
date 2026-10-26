@@ -5,3 +5,4 @@ export { useAppClient } from './useAppClient';
 export { useJWT } from './useJWT';
 export { useRefresher } from './useRefresher';
 export { useSignals } from './useSignals';
+export { useLiveParty } from './useLiveParty';
