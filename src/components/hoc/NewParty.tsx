@@ -4,12 +4,11 @@ import { Button } from "@/components/ui/button";
 import * as v from "valibot";
 
 import type { Party } from "@/types";
-import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
-import { Link2 } from "react-feather";
+import { DialogBox } from "@/components/DialogBox";
 import { HaveQuestion } from "@/components/HaveQuestion";
 import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
-import { useAppClient, useCopyPartyLink } from "@/components/hooks";
+import { useAppClient } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
 import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
@@ -58,8 +57,6 @@ export const NewParty = () => {
     ],
   );
 
-  const copyLink = useCopyPartyLink(party ?? { code: "", isProtected: false });
-
   const goToParty = React.useCallback(
     () => {
       if (!party) {
@@ -81,10 +78,11 @@ export const NewParty = () => {
         !party
           ? <Submit>&#x1F389; Rock'n'Roll!</Submit>
           // Still inside the form: without type="button" it would submit it again.
-          // A white ring keeps it clear of the monsters behind it.
-          : <Button type="button" variant="primary" className="ring-8 ring-white" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
+          // The only button: big, round, centred, with a white ring to keep it clear of the monsters behind it.
+          : <Button type="button" variant="primary" size="lg" pill className="min-h-14 px-12 text-2xl ring-8 ring-white max-tablet:w-full" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
       }
       noDismiss={party !== undefined}
+      footerAlign={party ? "center" : "end"}
       dismissLocation={party ? `/p/${party.code}` : "/"}
       form={{
         schema,
@@ -126,12 +124,6 @@ export const NewParty = () => {
               <div className="code-sticker">
                 <span className="code-sticker-text">{party.code}</span>
               </div>
-
-              <DialogFooterStart>
-                <Button type="button" variant="ghost" className="bg-white/90 ring-8 ring-white/90" onClick={copyLink}>
-                  <Link2 size={18} aria-hidden="true" /> Copy link
-                </Button>
-              </DialogFooterStart>
             </>
           )}
 

@@ -110,11 +110,14 @@ static pages, a native `<details>` with the same look).
 
 ## Dialogs, tabs, toasts
 
-- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop. Widths 600 / 700 / 800px; on phones, full
-  width minus 16px. Focus moves in and Tab stays inside; Esc and a click on the backdrop close it, the page behind
-  doesn't scroll. The footer has the dismiss action, then the main one, with room on the left for a ghost action
-  ("Show more parties", "How this works?"); on phones they stack, main action first and full width. The profile
-  dialog keeps one height on both tabs.
+- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop (or a picture: the rolled letter's envelopes).
+  Widths 600 / 700 / 800px from tablet up. On phones a bottom sheet (Base UI Drawer): full width, rounded top, a grip,
+  an X in its header, and a swipe down closes it. Focus moves in and Tab stays inside; Esc and a click on the backdrop
+  close it, the page behind doesn't scroll. The footer has the dismiss action, then the main one, with room on the
+  left for a ghost action ("Show more parties", "How this works?"); a dialog with one big action centres it
+  (`footerAlign="center"`, the congratulations). On phones they stack, main action first and full width. The profile
+  dialog keeps one height on both tabs, its tabs pinned to the top edge.
+- **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's links. Stacked. The
   dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight, the icon

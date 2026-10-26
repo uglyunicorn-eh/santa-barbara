@@ -124,11 +124,6 @@
       }
     }
   }
-
-  .dialog-foot {
-    justify-content: center;
-
-  }
 }
 
 /* "The dice are rolled": the email's message as a letter (sender, subject, a stamp), over a bed of envelopes that fills
