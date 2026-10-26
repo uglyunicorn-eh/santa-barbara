@@ -1,3 +1,4 @@
+import React from "react";
 import { Columns, Container, Content, Hero } from "@/components/layout";
 import { SyncLoader } from 'react-spinners';
 
@@ -11,7 +12,7 @@ import HostContent from "@/components/hoc/HostContent";
 import { DeletedPartyContent } from "@/components/hoc/DeletedPartyContent";
 import { PartyIsClosedContent } from "@/components/hoc/PartyIsClosedContent";
 import { useToastSurface } from "@/components/hoc/NotificationsContainer";
-import { useCurrentUser } from "@/components/hooks";
+import { useAppClient, useCurrentUser } from "@/components/hooks";
 import type { Party } from "@/types";
 
 type Props = {
@@ -22,6 +23,9 @@ export const PartyDetails = ({ party }: Props) => {
   const { profile } = useCurrentUser();
   // The party page is the light one: its toasts are white.
   useToastSurface("light");
+  const { markRevealed } = useAppClient();
+  // The user heard whom they give a gift to: no more reminders about this party.
+  const onReveal = React.useCallback(() => { markRevealed(party.code); }, [markRevealed, party.code]);
 
   return (
     <>
@@ -57,7 +61,7 @@ export const PartyDetails = ({ party }: Props) => {
                           <p className="text-left" style={{ marginBottom: '0.5em' }}>
                             &mdash; Pssss, kid... Are you alone?.. Wanna hear whom you should get a gift?
                           </p>
-                          <SecretText label="&mdash; Yes, please! &#x1F929;">
+                          <SecretText label="&mdash; Yes, please! &#x1F929;" onReveal={onReveal}>
                             <Confetti />
 
                             <p className="text-right" style={{ marginBottom: '0.5em' }}>

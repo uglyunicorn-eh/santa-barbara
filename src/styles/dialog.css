@@ -92,3 +92,17 @@
 
   }
 }
+
+/* "The dice are rolled": the email's message on a bed of envelopes, the text on a light panel so it reads. */
+.rolled-box {
+  .dialog-card {
+    background: #fff url("/rolled-envelopes.jpg") center / cover no-repeat;
+  }
+
+  .rolled-message {
+    padding: 1em 1.25em;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.88);
+    color: #18181b;
+  }
+}

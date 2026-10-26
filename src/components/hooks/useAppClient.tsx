@@ -47,6 +47,9 @@ export type RequestEmailChangeInput = {
 }
 
 /** What a confirmation link did: ok, or the reason it didn't work. */
+/** A rolled party waiting for the user to reveal whom they give a gift to. */
+export type RolledParty = { code: string; name: string; closedAt: string };
+
 export type LinkResult<T = {}> =
   | ({ ok: true } & T)
   | { ok: false, message: string };
@@ -82,6 +85,23 @@ export const useAppClient = () => {
       userTokenValue,
       signOut,
     ],
+  );
+
+  /** Rolled parties the user hasn't revealed their name in yet (the home screen reminds them), or [] on failure. */
+  const unrevealedParties = React.useCallback(
+    async (): Promise<RolledParty[]> => {
+      const result = await call<{ items: RolledParty[] }>("/me/parties/unrevealed", { retry: true });
+      return result.ok ? result.data.items : [];
+    },
+    [call],
+  );
+
+  /** Records that the user revealed their name in a rolled party. Quiet: nothing to tell the user if it fails. */
+  const markRevealed = React.useCallback(
+    async (code: string) => {
+      await call("/me/parties/revealed", { method: "POST", body: { code }, retry: true });
+    },
+    [call],
   );
 
   /** A one-minute ticket for opening a live-updates socket (see useLiveParty), or null without a working session. */
@@ -312,6 +332,8 @@ export const useAppClient = () => {
       updateName,
       requestAccountDeletion,
       liveTicket,
+      unrevealedParties,
+      markRevealed,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,
@@ -333,6 +355,8 @@ export const useAppClient = () => {
       updateName,
       requestAccountDeletion,
       liveTicket,
+      unrevealedParties,
+      markRevealed,
       checkAccountDeletion,
       confirmAccountDeletion,
       requestEmailChange,

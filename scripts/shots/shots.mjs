@@ -66,6 +66,8 @@ const SCREENS = [
 
   // Signed in
   { name: "start", path: "/", signedIn: true },
+  { name: "start-rolled", path: "/", signedIn: true, unrevealed: true },
+  { name: "rolled-dialog", path: `/rolled/${CODES.closed}`, signedIn: true },
   { name: "new-party", path: "/new/", signedIn: true },
   { name: "new-party-created", path: "/new/", signedIn: true, act: submitForm },
   { name: "join-by-code", path: "/join/", signedIn: true },
@@ -152,6 +154,10 @@ function answer(set, screen, method, url, body) {
     case "POST /auth/magic-link":
     case "POST /me/deletion":
     case "POST /me/email-change":
+    case "GET /me/parties/unrevealed":
+      return ok({ items: screen.unrevealed ? [{ code: CODES.closed, name: set.closedName ?? "Office Secret Santa 2026", closedAt: new Date().toISOString() }] : [] });
+    case "POST /me/parties/revealed":
+      return ok({ ok: true });
     case "POST /live/ticket":
       return ok({ ticket: "shots-live-ticket" });
     case "POST /me/deletion/check":
@@ -288,7 +294,7 @@ async function main() {
           });
 
           // Live-updates sockets connect and stay quiet, unless the screen plays a server (`live`).
-          await context.routeWebSocket(/\/v1\/parties\/live/, ws => screen.live?.(ws));
+          await context.routeWebSocket(/\/v1\/(parties|me)\/live/, ws => screen.live?.(ws));
 
           const page = await context.newPage();
           await page.goto(site + path, { waitUntil: screen.settle ? "domcontentloaded" : "networkidle" });

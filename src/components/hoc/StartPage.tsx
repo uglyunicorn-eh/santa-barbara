@@ -8,10 +8,14 @@ import { Footer } from "@/components/hoc/Footer";
 import { JoinParty } from "@/components/hoc/JoinParty";
 import { MyProfile } from "@/components/hoc/MyProfile";
 import { NewParty } from "@/components/hoc/NewParty";
+import { RolledDialog } from "@/components/hoc/RolledDialog";
+import { useRevealReminders } from "@/components/hooks";
 
 import grinchImg from "@/images/grinch.png";
 
 export const StartPage = () => {
+  // Rolled parties waiting for the user to reveal whom they give a gift to (live, too).
+  useRevealReminders();
 
   return (
     <Hero size={"fullheight"} className="welcome-page">
@@ -65,6 +69,7 @@ export const StartPage = () => {
               <Route path="/new/" Component={NewParty} />
               <Route path="/join/" Component={JoinParty} />
               <Route path="/profile/*" Component={MyProfile} />
+              <Route path="/rolled/:code" Component={RolledDialog} />
             </Routes>
           </AnimatePresence>
 
