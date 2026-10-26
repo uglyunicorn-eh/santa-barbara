@@ -20,7 +20,7 @@ No marketing emails, and no sharing your data with anyone.
 This repository is the website. The API lives in [santa-monica](https://github.com/uglyunicorn-eh/santa-monica).
 
 - **[Astro](https://astro.build)** builds a static site: the knowledge pages (how it works, privacy, terms) and a
-  React app for everything else (React Router, Formik and Yup for forms).
+  React app for everything else (React Router; forms on React Hook Form, validated with Valibot).
 - **[Tailwind CSS](https://tailwindcss.com)** v4 and **[Base UI](https://base-ui.com)** components, in the
   [shadcn](https://ui.shadcn.com) style: buttons, inputs, dialogs and menus in `src/components/ui/`. The rules they
   follow (colours, which button where, focus, forms) are in [`docs/ui-kit.md`](docs/ui-kit.md).
