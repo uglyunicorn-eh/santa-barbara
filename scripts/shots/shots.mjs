@@ -106,7 +106,7 @@ function openMenu(label) {
   };
 }
 
-/** Creates the party, then clicks its code sticker (which copies the code, with a toast). */
+/** Creates the party, then clicks its code sticker (which copies the party's link, with a toast). */
 async function copyNewCode(page) {
   await submitForm(page);
   await page.locator(".code-sticker").click();
