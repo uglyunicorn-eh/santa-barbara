@@ -33,6 +33,8 @@ type Props<Values extends FieldValues> = {
   noHeader?: boolean;
   /** "center": the footer's buttons centred (a dialog with one big action). Default: at the end. */
   footerAlign?: "end" | "center";
+  /** Extra classes for the footer (e.g. more room under a big button). */
+  footerClassName?: string;
   /** Extra classes for the backdrop behind the card, e.g. a picture instead of the plain dimmed page. */
   backdropClassName?: string;
 };
@@ -107,6 +109,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
   noHeader = false,
   backdropClassName,
   footerAlign = "end",
+  footerClassName,
 }: Props<Values>) => {
   const navigate = useNavigate();
   const submitting = React.useRef(false);
@@ -158,7 +161,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
       <div className="dialog-body min-h-0 grow overflow-auto p-5 text-lg">
         {children}
       </div>
-      <footer className={cn("dialog-foot flex shrink-0 flex-col-reverse items-stretch gap-4 rounded-b-card p-5 tablet:flex-row tablet:items-center tablet:gap-2", footerAlign === "center" ? "tablet:justify-center" : "tablet:justify-end")}>
+      <footer className={cn("dialog-foot flex shrink-0 flex-col-reverse items-stretch gap-4 rounded-b-card p-5 tablet:flex-row tablet:items-center tablet:gap-2", footerAlign === "center" ? "tablet:justify-center" : "tablet:justify-end", footerClassName)}>
         <div ref={setFooterStart} className="contents empty:hidden tablet:mr-auto tablet:flex tablet:items-center" />
         {!noDismiss && <DismissButton onDismiss={dismiss} label={dismissLabel} />}
         {action}

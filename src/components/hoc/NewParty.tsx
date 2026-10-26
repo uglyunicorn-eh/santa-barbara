@@ -83,6 +83,7 @@ export const NewParty = () => {
       }
       noDismiss={party !== undefined}
       footerAlign={party ? "center" : "end"}
+      footerClassName={party ? "pb-9" : undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}
       form={{
         schema,
