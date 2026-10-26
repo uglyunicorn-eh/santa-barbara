@@ -45,7 +45,7 @@ export const RolledDialog = ({ onParty = false }: { onParty?: boolean }) => {
         title="This is it! The message you've been waiting for!"
         noDismiss
         dismissLocation={onParty ? partyPath : "/"}
-        action={<Button variant="primary" onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask the Gnomik!" : "🦄 Get me to the Gnomik!"}</Button>}
+        action={<Button variant="primary" pill onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask the Gnomik!" : "🦄 Get me to the Gnomik!"}</Button>}
         size="lg"
       >
         <article className="rolled-mail">
