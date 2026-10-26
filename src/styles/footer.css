@@ -28,6 +28,12 @@
       border-radius: 999px;
       background: rgb(0 0 0 / 0.45);
       backdrop-filter: blur(3px);
+      color: white;
+
+      /* White on the pill, over the pages' own grey link colours. */
+      a {
+        color: white !important;
+      }
     }
 
     display: inline-flex;

@@ -472,7 +472,8 @@ const History = () => {
         </div>
       )}
       {/* From tablet up on the footer's left; on a phone's sheet right under the list, above the stacked footer. */}
-      {hasMore && (tabletUp
+      {/* Once pressed, reaching the end loads the rest (with the spinner above), so the button goes away. */}
+      {hasMore && !autoLoad && (tabletUp
         ? <DialogFooterStart>{showMore}</DialogFooterStart>
         : <div className="mt-2 flex justify-center">{showMore}</div>)}
     </div>

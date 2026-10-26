@@ -22,7 +22,7 @@ export const StartPage = () => {
       <Hero.Header>
         <Container>
           {/* On phones: the title on the left, the Grinch on the right, as on wider screens. */}
-          <div className="welcome-head-phone flex items-center gap-3 px-4 tablet:hidden">
+          <div className="welcome-head-phone mb-8 flex items-center gap-3 px-4 tablet:hidden">
             <h1 className="flex-1 text-left">Welcome to the Anonymous Ded Morozes!</h1>
             <img src={grinchImg.src} alt="Grinch" width={112} height={112} className="shrink-0" />
           </div>

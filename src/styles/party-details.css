@@ -50,6 +50,11 @@
     .footer-menu {
       background: none;
       backdrop-filter: none;
+      color: black;
+
+      a {
+        color: #000 !important;
+      }
     }
     text-shadow: 0 2px 4px white;
 
