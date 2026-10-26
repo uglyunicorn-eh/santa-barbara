@@ -1,6 +1,6 @@
 # Design spec: controls and type
 
-Status: **settled** (2026-10-25) · Phase 2 step 3 of `docs/tailwind-migration-plan.md`
+Status: **settled** (2026-10-25; primary colour revised the same day, see Decision 1) · Phase 2 step 3 of `docs/tailwind-migration-plan.md`
 
 This spec covers what the migration restyles: colours, type, spacing, corners, shadows, buttons, form fields,
 dialogs and toasts. **Page layouts stay as they are** (the plan's "same layout, exacting controls"). The artwork, the
@@ -35,11 +35,34 @@ Measured from today's SCSS and the "before" screenshots (`npm run shots`):
 
 ## 1. Colour
 
-### Primary: holiday red
+### Two main-action colours: brand red on hero screens, turquoise on content screens
 
-The primary colour fills the one main action on each screen and marks focus and selection. It's the site's own red:
-the browser theme colour `#b3202c`, the neon "HOHOHO", and the sign-in screens already use red. One primary
-everywhere. (Considered: evergreen `#1d6b45`; teal `#0f7a6c`, today's dialog colour made readable.)
+The main action on a screen gets a filled button. Which colour depends on the screen:
+
+- **Hero screens** (sign-in, join, the sign-in link page, account links, party not found, 404): **brand red**. It's
+  the site's own red: the browser theme colour `#b3202c`, the neon "HOHOHO", and these screens already used red.
+- **Content screens** (party pages, dialogs, the profile, knowledge pages): **turquoise**, the colour these screens
+  have always had (Bulma's `#00d1b2`), now with a dark teal label instead of white (7.0:1 instead of 1.95:1).
+
+Red everywhere was tried first. On content screens it put "Let's roll the dice!" (go) beside "Delete this party"
+(danger) in the same colour; with turquoise there, red on a content screen means danger only. (Considered: evergreen
+`#1d6b45`; a darker turquoise `#007a68` with white text, which keeps the white label but loses the old minty tone.)
+
+Turquoise, the old tone at 500:
+
+| Token | Value | Use | Contrast |
+|---|---|---|---|
+| `teal-50` | `#eefcfa` | light tints | `teal-900` text on it 7.4:1 |
+| `teal-300` | `#93ecde` | soft accents, illustrations | |
+| `teal-500` | `#00d1b2` | **primary** fill | `teal-900` label on it 7.0:1 |
+| `teal-600` | `#00b89c` | primary hover | `teal-900` label on it 5.4:1 |
+| `teal-700` | `#007a68` | links, focus rings, teal text on paper | 5.3:1 on white |
+| `teal-900` | `#04342c` | the label on primary buttons | |
+
+The turquoise fill itself is light against white (1.95:1) and the cream bubble (1.77:1); the dark label is what marks
+the button, which is enough for a labelled control. Focus rings use `teal-700`, never the 500.
+
+Red, for brand and danger:
 
 | Token | Value | White text on it | Use |
 |---|---|---|---|
@@ -47,23 +70,23 @@ everywhere. (Considered: evergreen `#1d6b45`; teal `#0f7a6c`, today's dialog col
 | `red-100` | `#fbe3e3` | | |
 | `red-200` | `#f6c6c7` | | destructive text on night (12.3:1) |
 | `red-500` | `#dc3a40` | 4.4:1 (too low for text) | icons, illustrations only |
-| `red-600` | `#c62a30` | 5.6:1 | **primary** fill |
-| `red-700` | `#a8222a` | 7.2:1 | primary hover; links and destructive text on paper (7.2:1 on white) |
+| `red-600` | `#c62a30` | 5.6:1 | **brand** fill (hero main actions) |
+| `red-700` | `#a8222a` | 7.2:1 | brand hover; destructive text on paper (7.2:1 on white) |
 | `red-800` | `#8a1f25` | 9.1:1 | the final destructive confirm fill |
 
 ### Destructive actions: never filled until the last step
 
-A red primary means "Delete this party" can't look like "Let's roll the dice!". Delete buttons are `ghost` or
+Delete actions stay quiet so they never compete with the main action. Delete buttons are `ghost` or
 `secondary` with `red-700` text and an icon (today's "💥 Delete this party" already has one). Only the final button in
-a confirm dialog ("Delete my account", "Delete this party" in its confirm) is filled, in `red-800`, so it reads
-darker than the primary. (Considered: a dark neutral fill with red text, which reads as "important" rather than
+a confirm dialog ("Delete my account", "Delete this party" in its confirm) is filled, in `red-800`, darker than the
+brand red. (Considered: a dark neutral fill with red text, which reads as "important" rather than
 "dangerous".)
 
-### Links: red-700, underlined
+### Links: teal-700, underlined
 
-One accent colour; the underline tells links apart from text. On night, links are `zinc-100`, underlined. Links and
-destructive text share `red-700`; they stay distinct because links are underlined inline text and destructive actions
-are buttons with an icon. (Considered: keeping a blue, `#3b5bdb`, as a third colour.)
+Links take the content screens' accent, `teal-700` (5.3:1 on white), underlined. On night, links are `zinc-100`,
+underlined. Red stays for brand and danger. (Considered: `red-700` links, when red was the only primary; keeping
+a blue, `#3b5bdb`, as a third colour.)
 
 ### Neutrals
 
@@ -100,17 +123,19 @@ Components use these roles, not the colours directly:
 
 | Role | On paper | On night / glass |
 |---|---|---|
-| `primary` / `primary-foreground` | `red-600` / white | `red-600` / white |
-| `primary-hover` | `red-700` | `red-700` |
+| `primary` / `primary-foreground` | `teal-500` / `teal-900` | `teal-500` / `teal-900` |
+| `primary-hover` | `teal-600` | `teal-600` |
+| `brand` / `brand-foreground` | `red-600` / white | `red-600` / white |
+| `brand-hover` | `red-700` | `red-700` |
 | `destructive` (text, borders) | `red-700` | `red-200` |
 | `destructive-strong` (final confirm fill) | `red-800` / white text | `red-800` / white text |
 | `text` / `text-muted` | `zinc-900` / `zinc-500` | white / `zinc-400` |
 | `border` / `input-border` | `zinc-200` / `zinc-300` | white at 20% / white at 30% |
-| `ring` (focus) | `red-600` | white |
-| `link` | `red-700` | `zinc-100` |
+| `ring` (focus) | `teal-700` | white |
+| `link` | `teal-700` | `zinc-100` |
 | `success` | `green-700` on `green-50` | `green-200` |
 
-Button contrast is between the label and the fill, so the same `red-600` works on every surface.
+Button contrast is between the label and the fill, so the same fills work on every surface.
 
 ## 2. Type
 
@@ -164,14 +189,16 @@ Long values (from `docs/layout-audit.md`): names, party names, codes and emails 
 
 | Variant | On paper | On night / glass | Today's buttons that become it |
 |---|---|---|---|
-| `primary` | `red-600` fill, white text, hover `red-700` | same | "Rock'n'Roll!", "Let's roll the dice!", "Yes, please!", "Send me a magic link!", "Can't wait any longer!", Save, Submit |
+| `brand` | `red-600` fill, white text, hover `red-700` | same, with `shadow-sm` | hero main actions: "Enter with your email address", "Send me a magic link!", "Sign in to join the party!", "Join the party!", "Send me that magic again" |
+| `primary` | `teal-500` fill, `teal-900` text, hover `teal-600` | same | content main actions: "Rock'n'Roll!", "Let's roll the dice!", "Yes, please!", "Can't wait any longer!", "Restore the party", Save, Submit |
 | `secondary` | white fill, `zinc-300` border, `zinc-900` text, hover `zinc-50` | transparent, white 40% border, white text, hover white 10% | "Nah, never mind", "Not ready yet…", "Okie Dokie!", "Show more parties", "Take me home…", the white outlined links on 404 / party not found |
 | `ghost` | no fill, `zinc-700` text, hover `zinc-100` | white text, hover white 10% | "Change", "Cancel"; "💥 Delete this party" and "Delete account" with `destructive` text |
 | `destructive` | `red-800` fill, white text, hover `#741a1f` | same | only the final confirm: "Delete my account", the delete-party confirm |
-| `link` | `red-700`, underline, no padding | `zinc-100`, underline | inline "Check out", text links in copy |
+| `link` | `teal-700`, underline, no padding | `zinc-100`, underline | inline "Check out", text links in copy |
 
 - Sizes: `md` by default; `sm` in the profile settings rows; `lg` for each hero screen's main action.
-- `pill` (fully rounded) only for the main action on hero screens: sign-in, "send me a magic link", join.
+- `pill` (fully rounded) only on hero screens: the main action (`brand` `lg`) and going home or back
+  (`secondary` `md`). Nothing on a content screen is a pill.
 - `fullWidth` on phones for the main action in dialogs and the sign-in card.
 - Emoji stay where the copy has them; they sit in the icon slot so labels line up.
 
@@ -180,7 +207,7 @@ Long values (from `docs/layout-audit.md`): names, party names, codes and emails 
 - **Label placement stays per form:** beside the input from tablet width up in the NewParty and JoinParty dialogs
   (label column 150px, right-aligned, stacked below tablet); above the input everywhere else.
 - **Input:** 40px tall (48px on hero forms), white fill, 1px `input-border`, `text-base`, 8px radius, placeholder
-  `zinc-500` (4.8:1). Focus: border `red-600` plus the focus ring. Disabled while submitting: `zinc-50` fill.
+  `zinc-500` (4.8:1). Focus: border `teal-700` plus the focus ring. Disabled while submitting: `zinc-50` fill.
 - **Label:** `text-sm`, weight 500, `zinc-700` on paper, `zinc-300` on glass.
 - **Help text:** `text-sm`, `text-muted`, directly under the input, 4px gap.
 - **Error:** `text-sm`, `destructive`, under the input (replacing help text while shown); the input border turns
@@ -203,7 +230,7 @@ Long values (from `docs/layout-audit.md`): names, party names, codes and emails 
 - **Footer:** the dismiss action (`secondary`) then the main action (`primary`, or `destructive` on a delete
   confirm), right-aligned with 8px between them; on phones they wrap, main action first and full width.
 - **Backdrop:** `night` at 70%.
-- **Tabs** (profile dialog): text tabs with a 2px underline in `red-600` for the current one; `text-muted` for the
+- **Tabs** (profile dialog): text tabs with a 2px underline in `teal-700` for the current one; `text-muted` for the
   others; full width as today.
 
 ## 8. Toasts
@@ -223,9 +250,9 @@ Top centre, `max-width: min(560px, 100% - 32px)` so a 128-character email wraps 
 
 | # | Decision | Chosen | Considered |
 |---|---|---|---|
-| 1 | Primary colour | Holiday red `#c62a30` | Evergreen `#1d6b45` · teal `#0f7a6c` |
+| 1 | Main-action colour | Brand red `#c62a30` on hero screens; the old turquoise `#00d1b2` with a `#04342c` label on content screens | Red everywhere (tried first) · evergreen `#1d6b45` · darker turquoise `#007a68` with white text |
 | 2 | Destructive actions | Never filled until the final confirm (`#8a1f25`) | Dark neutral fill, red text |
-| 3 | Link colour | `red-700`, underlined | Blue `#3b5bdb` |
+| 3 | Link colour | `teal-700` `#007a68`, underlined | `red-700` · blue `#3b5bdb` |
 | 4 | Base text size | 18px | 16px |
 | 5 | Corners | 8px controls, 16px cards | Pills and 24px · 6px and 12px |
 | 6 | Toasts | Dark with a coloured icon | Coloured fill |
