@@ -22,6 +22,12 @@
       flex-wrap: wrap;
       margin-bottom: 2rem;
       justify-content: center;
+      /* On the dark photos a bright star can sit right behind the links: a dark pill keeps them readable. The light
+         pages (party, knowledge pages) take it off. */
+      padding: 0.25em 0.9em;
+      border-radius: 999px;
+      background: rgb(0 0 0 / 0.45);
+      backdrop-filter: blur(3px);
     }
 
     display: inline-flex;

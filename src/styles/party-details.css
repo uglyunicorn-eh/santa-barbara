@@ -9,6 +9,11 @@
     font-size: 1.5rem;
     margin-bottom: 2em;
 
+    /* On phones the gnome's bubble follows right after the text: half the gap. */
+    @media (max-width: 768px) {
+      margin-bottom: 0;
+    }
+
     h1 {
       font-size: 2rem;
     }
@@ -41,6 +46,11 @@
 
   .footer {
     color: black;
+
+    .footer-menu {
+      background: none;
+      backdrop-filter: none;
+    }
     text-shadow: 0 2px 4px white;
 
     a {

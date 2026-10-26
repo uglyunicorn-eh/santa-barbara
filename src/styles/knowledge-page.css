@@ -116,6 +116,11 @@
   .footer {
     padding-bottom: 6em;
 
+    .footer-menu {
+      background: none;
+      backdrop-filter: none;
+    }
+
     @media screen and (max-width: 768px) {
       padding-bottom: calc(2.5em + env(safe-area-inset-bottom, 0px));
     }

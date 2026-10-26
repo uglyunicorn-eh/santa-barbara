@@ -16,8 +16,7 @@
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 
       @media (max-width: 769px) {
-        font-size: 32px;
-        padding: 0 1em;
+        font-size: 30px;
       }
     }
 
@@ -27,6 +26,7 @@
 
       @media (max-width: 768px) {
         padding-bottom: 200px;
+        font-size: 1.2em;
       }
 
       a {
@@ -41,6 +41,16 @@
           border: 1px solid white;
           background: rgba(255, 255, 255, 0.025);
           box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        /* On phones there's no hover to discover them: the two choices look like what they are, two big buttons. */
+        @media (max-width: 768px) {
+          text-align: center;
+          padding: 0.9em 1.1em;
+          border-color: rgb(255 255 255 / 0.35);
+          background: rgb(17 18 23 / 0.6);
+          backdrop-filter: blur(4px);
+          box-shadow: 0 4px 20px rgb(0 0 0 / 0.35);
         }
       }
     }

@@ -7,8 +7,8 @@
     align-items: center;
 
     /*
-     * On phones the gnome stands at the bottom of his box, about a third across, and the bubble sits above his hat:
-     * its tail is just over the hat, and a longer message (the revealed name) grows it upward, never over his face.
+     * On phones the gnome stands at the bottom of his box, about a third across, and the bubble sits beside his hat:
+     * its bottom halfway down the hat, and a longer message (the revealed name) grows it upward, never over his face.
      */
     @media (max-width: 768px) {
       --gnome-height: 450px;
@@ -16,8 +16,9 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      min-height: calc(var(--gnome-height) + 8rem);
-      padding-bottom: calc(var(--gnome-height) - 2.5rem);
+      min-height: calc(var(--gnome-height) + 4rem);
+      /* The bubble's bottom halfway down the hat. */
+      padding-bottom: calc(var(--gnome-height) - 7.5rem);
       background-position: 25% bottom !important;
       background-size: auto var(--gnome-height) !important;
 
