@@ -93,4 +93,4 @@ not agree, please stop using the Service.
 
 ## Contact Us
 
-Questions about these Terms? Write to us at [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca).
+Questions about these Terms? Write to us at [info@gnomik.me](mailto:info@gnomik.me).

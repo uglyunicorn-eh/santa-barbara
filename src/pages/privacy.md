@@ -57,7 +57,7 @@ treated securely and in line with this policy.
 * **Delete your account yourself** from your profile page. Deleting removes your account and the parties you host that
   have not yet rolled the dice.
 * **Deleted parties** are hidden from everyone and kept for one day so the host can restore them, then removed.
-* **Request deletion by email**: write to [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca) and we will delete your
+* **Request deletion by email**: write to [info@gnomik.me](mailto:info@gnomik.me) and we will delete your
   personal data, and ask our service providers to do the same, within 30 days.
 * We keep data only as long as needed for the purposes above, or as long as the law requires.
 
@@ -65,7 +65,7 @@ treated securely and in line with this policy.
 
 You can ask us to access, correct, export or delete the personal data we hold about you, and to withdraw consent where
 we rely on it. You can change your name and email on your profile page. For anything else, contact
-[info@uglyunicorn.ca](mailto:info@uglyunicorn.ca). If you are unhappy with our response, you may complain to your
+[info@gnomik.me](mailto:info@gnomik.me). If you are unhappy with our response, you may complain to your
 privacy regulator, such as the Office of the Privacy Commissioner of Canada.
 
 ## Security
@@ -90,4 +90,4 @@ material changes we will also notify you by email or with a notice on the Servic
 
 ## Contact Us
 
-Privacy questions or requests: [info@uglyunicorn.ca](mailto:info@uglyunicorn.ca).
+Privacy questions or requests: [info@gnomik.me](mailto:info@gnomik.me).
