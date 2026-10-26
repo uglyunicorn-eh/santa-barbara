@@ -3,10 +3,10 @@
   background-size: 50%;
 }
 
-/* On a phone's sheet, as from tablet up, the flags hang from the top-right corner, touching both edges (narrow enough
-   to clear the grip in the middle); the title and its X keep their places. */
+/* On a phone's sheet, as from tablet up, the flags hang from the top-right corner, touching both edges; the title and
+   its X keep their places. */
 .party-box.is-sheet .dialog-card .dialog-head {
-  background-size: 45%;
+  background-size: 68%;
 }
 
 .confirm-party-close {
