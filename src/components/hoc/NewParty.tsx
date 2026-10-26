@@ -87,7 +87,7 @@ export const NewParty = () => {
         !party
           ? <Submit>&#x1F389; Rock'n'Roll!</Submit>
           // Still inside the form: without type="button" it would submit it again.
-          : <Button type="button" variant="primary" size="lg" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
+          : <Button type="button" variant="primary" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
       }
       noDismiss={party !== undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}

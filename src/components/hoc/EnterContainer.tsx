@@ -182,7 +182,7 @@ export const EnterContainer = () => {
                       </Button>
                     )
                     : (
-                      <Button variant="secondary" size="lg" onClick={goHome}>
+                      <Button variant="secondary" pill onClick={goHome}>
                         &larr; Take me home, country roads!
                       </Button>
                     )}

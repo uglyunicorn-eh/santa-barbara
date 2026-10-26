@@ -103,7 +103,7 @@ export const ConfirmAccountDeletion = () => {
       <br />
       <p>Your account is gone. The elves have shredded your file and the parties you were hosting.</p>
       <p>If you ever miss us, just sign in again with your email. We'll keep the cocoa warm.</p>
-      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Bye-e-e!</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Okay, bye-e-e!</Button>
     </LinkPage>
   );
 };

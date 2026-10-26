@@ -8,6 +8,12 @@ import { cn } from "@/lib/utils";
 //
 // `surface` is what the button sits on: "light" (white cards, the light party page) or "dark" (night photos and
 // glass panels). Only secondary, ghost and link look different on dark.
+//
+// Which shape and size where, so the same kind of button looks the same everywhere:
+// - Hero screens (sign-in, join, the sign-in link page, the account links, party not found, 404): the main action is
+//   `primary` `lg` `pill`; going home or back is `secondary` `pill` (md).
+// - Content screens (party pages, dialogs, the profile, knowledge pages): no pill, `md`; `sm` only in the profile's
+//   setting rows. Delete actions are `ghost-destructive` until the final confirm, which is `destructive`.
 
 const buttonVariants = cva(
   [

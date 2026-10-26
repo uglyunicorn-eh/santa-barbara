@@ -461,6 +461,12 @@ spec's variants: `primary`, `secondary`, `ghost`, `ghost-destructive`, `destruct
 - Surfaces per screen: dark on sign-in, join, the account-link pages and the two "not
   found" pages; light everywhere else, including the sign-in link page (its photo is
   light) and every dialog.
+- One rule for shape and size, so the same kind of button looks the same everywhere
+  (also in the comment at the top of `button.tsx`): on hero screens (sign-in, join, the
+  sign-in link page, account links, party not found, 404) the main action is `primary`
+  `lg` `pill` and going home or back is `secondary` `pill` (md); on content screens
+  (party pages, dialogs, the profile, knowledge pages) no pill and `md`, with `sm` only in
+  the profile's setting rows.
 - SCSS that styled `.button` (sizes, colours, `.login-button`) no longer applies; the
   dialog footer gets its own `gap` (Bulma spaced footer buttons with a margin on `.button`).
 - The UI kit renders the real Button now.

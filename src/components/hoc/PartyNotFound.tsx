@@ -13,7 +13,7 @@ export const PartyNotFound = () => (
             repeat, code FOUR-OH-FOUR... FOXTROT-UNIFORM-CHARLIE-KILO...
           </h1>
           <p>
-            <a href="/" className={buttonVariants({ variant: "secondary", size: "lg", surface: "dark" })}>Go back to the Earth</a>
+            <a href="/" className={buttonVariants({ variant: "secondary", surface: "dark", pill: true })}>Go back to the Earth</a>
           </p>
         </Content>
       </Container>

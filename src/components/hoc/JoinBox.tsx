@@ -77,7 +77,7 @@ export const JoinBox = ({ party }: Props) => {
                     but {party.name.replace(/!+$/, '')} is over!
                   </h3>
 
-                  <Button variant="secondary" size="lg" surface="dark" onClick={onGoHomeClick}>
+                  <Button variant="secondary" surface="dark" pill onClick={onGoHomeClick}>
                     &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country roads!</span>
                   </Button>
                 </>
