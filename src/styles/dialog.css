@@ -168,7 +168,7 @@
     color: #18181b;
   }
 
-  /* The email's postcard, laid over the letter's corner (hanging past its edges) and a little askew; across the top
+  /* The email's postcard, laid over the letter's top edge near its right corner and a little askew; across the top
      on phones. */
   .rolled-postcard {
     position: relative;
@@ -176,7 +176,7 @@
     float: right;
     width: min(54%, 400px);
     height: auto;
-    margin: -1.75em -1.75em 0.75em 1.25em;
+    margin: -1.75em 0 0.75em 1.25em;
     transform: rotate(3deg);
     filter: drop-shadow(0 4px 8px rgb(0 0 0 / 0.25));
 
