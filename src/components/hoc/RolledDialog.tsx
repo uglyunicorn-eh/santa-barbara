@@ -10,7 +10,8 @@ import { useAppClient } from "@/components/hooks";
 
 /**
  * "The dice are rolled": the message the party's email brings, opened from a reminder on the home screen. It reads
- * like the email itself (who it's from, the subject, a stamp), over a bed of envelopes that fills the page. Its button
+ * like the email itself (who it's from, the subject, the email's postcard pinned on), over a bed of envelopes that
+ * fills the page. Its button
  * goes to the party, where the gnome tells whom to give a gift to; the X closes it.
  *
  * `onParty`: opened on the party page itself, the moment the host rolled the dice (PartyDetails), with stars falling.
@@ -45,12 +46,19 @@ export const RolledDialog = ({ onParty = false }: { onParty?: boolean }) => {
         noDismiss
         dismissLocation={onParty ? partyPath : "/"}
         action={<Button variant="primary" onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask the Gnomik!" : "🦄 Get me to the Gnomik!"}</Button>}
-        size="sm"
+        size="lg"
       >
         <article className="rolled-mail">
-          <span className="rolled-stamp" aria-hidden="true">🎲</span>
+          {/* The postcard from the party's email (santa-monica's public/email/party.gif). */}
+          <img
+            className="rolled-postcard"
+            src="/rolled-postcard.gif"
+            width={750}
+            height={498}
+            alt="A postcard: a girl in a beret and a mask holds a garden gnome among lavender fields."
+          />
           <dl className="rolled-mail-head">
-            <div><dt>From</dt><dd>The elves of Gnomik</dd></div>
+            <div><dt>From</dt><dd>Gnomik and his elves</dd></div>
             <div><dt>To</dt><dd>You, beautiful person</dd></div>
             <div><dt>Subject</dt><dd className="wrap-anywhere">{name ?? "It's time!"}</dd></div>
           </dl>
