@@ -4,12 +4,13 @@ import { newKey } from "src/api/client";
 import { Container, Hero } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import * as Yup from 'yup';
+import * as v from "valibot";
 
 import { GrinchBox } from "src/components/GrinchBox";
 import { SnowConfetti } from "src/components/SnowConfetti";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
+import { maxLen, required, validEmail } from "src/components/forms/messages";
 import { Footer } from "src/components/hoc/Footer";
 import { NotificationsContainer, useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient } from "src/components/hooks";
@@ -18,13 +19,13 @@ import { MAX_EMAIL_LENGTH } from "src/limits";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .label("Email")
-    .max(MAX_EMAIL_LENGTH)
-    .required()
-    .ensure()
-    .email(),
+const schema = v.object({
+  email: v.pipe(
+    v.string(),
+    v.nonEmpty(required("Email")),
+    v.maxLength(MAX_EMAIL_LENGTH, maxLen("Email", MAX_EMAIL_LENGTH)),
+    v.email(validEmail("Email")),
+  ),
 });
 
 export const LoginBox = () => {
@@ -132,8 +133,8 @@ const EnterForm = () => {
         )
         : (
           <Form
-            initialValues={{ email: "" }}
-            validationSchema={validationSchema}
+            defaultValues={{ email: "" }}
+            schema={schema}
             onSubmit={onSubmit}
           >
             <h2>Enter with your email address</h2>

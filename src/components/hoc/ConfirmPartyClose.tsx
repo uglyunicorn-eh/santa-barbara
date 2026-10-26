@@ -1,16 +1,13 @@
 import React from "react";
 import { Content } from "src/components/layout";
 import { useParams } from "react-router-dom";
-import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
 import { useAppClient, useSignals } from "src/components/hooks";
 import { usePartyContext } from "src/components/hoc/PartyContext";
 
-const validationSchema = Yup.object();
-
-const initialValues = {};
+const defaultValues = {};
 
 export const ConfirmPartyClose = () => {
   const { code } = useParams();
@@ -42,8 +39,7 @@ export const ConfirmPartyClose = () => {
       dismissLabel="Not ready yet..."
       dismissLocation={`/p/${code}`}
       form={{
-        validationSchema,
-        initialValues,
+        defaultValues,
         onSubmit,
       }}
       cardStyle={{

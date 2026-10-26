@@ -1,30 +1,29 @@
 import React from "react";
 import { Content } from "src/components/layout";
-import * as Yup from 'yup';
+import * as v from "valibot";
 
 import { DialogBox } from "src/components/DialogBox";
 import { FormField, Input, Submit } from "src/components/forms";
+import { maxLen, required } from "src/components/forms/messages";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { useAppClient } from "src/components/hooks";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useNavigate } from "react-router";
 import { MAX_PARTY_CODE_LENGTH } from "src/limits";
 
-type FormValues = {
-  code: string;
-};
-
-const validationSchema = Yup.object().shape({
-  code: Yup.string()
-    .label("Secret code")
-    .max(MAX_PARTY_CODE_LENGTH)
-    .required()
+const schema = v.object({
+  code: v.pipe(
+    v.string(),
+    v.nonEmpty(required("Secret code")),
+    v.maxLength(MAX_PARTY_CODE_LENGTH, maxLen("Secret code", MAX_PARTY_CODE_LENGTH)),
     // New parties have 8-letter codes; older ones keep their 5 letters.
-    .matches(/^(?:[QWERTYUIPASDFGHJKLZXCVBNMO]{5}|[QWERTYUIPASDFGHJKLZXCVBNMO]{8})$/i, "Invalid secret code")
-    .ensure(),
+    v.regex(/^(?:[QWERTYUIPASDFGHJKLZXCVBNMO]{5}|[QWERTYUIPASDFGHJKLZXCVBNMO]{8})$/i, "Invalid secret code"),
+  ),
 });
 
-const initialValues = {
+type FormValues = v.InferOutput<typeof schema>;
+
+const defaultValues: FormValues = {
   code: "",
 };
 
@@ -56,8 +55,8 @@ export const JoinParty = () => {
       title="Join a party!"
       action={<Submit>&#x1F973; Here I come!</Submit>}
       form={{
-        validationSchema,
-        initialValues,
+        schema,
+        defaultValues,
         onSubmit,
       }}
       cardStyle={{

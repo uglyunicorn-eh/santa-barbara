@@ -1,13 +1,13 @@
 import { Dialog } from "@base-ui/react/dialog";
-import { Formik, useFormikContext, type FormikConfig, type FormikValues } from "formik";
 import React from "react";
 import { createPortal } from "react-dom";
 import { X } from 'react-feather';
+import { FormProvider, useForm, useFormState, type FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Form } from "src/components/forms";
+import { Form, type FormProps } from "src/components/forms/Form";
 
 // The app's dialogs (docs/ui-kit.md, "Dialogs"), on Base UI's Dialog: focus moves into the dialog and Tab stays there,
 // Esc and a click on the backdrop close it (going to `dismissLocation`, as the buttons do), the page behind doesn't
@@ -16,7 +16,7 @@ import { Form } from "src/components/forms";
 // The parts carry `dialog-card`, `dialog-head`, `dialog-body` and `dialog-foot`, which each dialog's own artwork styles
 // (src/styles/dialog.scss) use.
 
-type Props<Values extends FormikValues> = {
+type Props<Values extends FieldValues> = {
   title?: string;
   dismissLocation?: string;
   dismissLabel?: string;
@@ -24,7 +24,7 @@ type Props<Values extends FormikValues> = {
   action?: React.ReactNode,
   className?: string;
   children?: React.ReactNode;
-  form?: FormikConfig<Values>;
+  form?: FormProps<Values>;
   cardStyle?: React.CSSProperties;
   noHeader?: boolean;
 };
@@ -59,19 +59,32 @@ const trapTab = (e: React.KeyboardEvent<HTMLElement>) => {
   }
 };
 
+/**
+ * A dialog without a form of its own still gives its footer a form state to read (never submitting), but no <form>
+ * element: the content may have forms of its own (the profile), and forms can't nest.
+ */
+const NoForm = ({ children }: { children: React.ReactNode }) => {
+  const methods = useForm();
+  return (
+    <FormProvider {...methods}>
+      <div className="flex min-h-0 grow flex-col">{children}</div>
+    </FormProvider>
+  );
+};
+
 /** Tells the dialog whether its form is submitting, so Esc and the backdrop don't close it mid-request. */
 const SubmittingWatcher = ({ onChange }: { onChange: (submitting: boolean) => void }) => {
-  const { isSubmitting } = useFormikContext();
+  const { isSubmitting } = useFormState();
   React.useEffect(() => onChange(isSubmitting), [isSubmitting, onChange]);
   return null;
 };
 
 const DismissButton = ({ onDismiss, label = 'Nah, never mind' }: { onDismiss: () => void, label?: string }) => {
-  const { isSubmitting } = useFormikContext();
-  return <Button type="reset" variant="secondary" onClick={onDismiss} disabled={isSubmitting}>{label}</Button>;
+  const { isSubmitting } = useFormState();
+  return <Button type="button" variant="secondary" onClick={onDismiss} disabled={isSubmitting}>{label}</Button>;
 };
 
-export const DialogBox = <Values extends FormikValues = FormikValues>({
+export const DialogBox = <Values extends FieldValues = FieldValues>({
   title,
   dismissLabel,
   dismissLocation = "/",
@@ -155,7 +168,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
               <FooterStartContext.Provider value={footerStart}>
                 {form
                   ? <Form {...form} className="flex min-h-0 grow flex-col">{card}</Form>
-                  : <Formik onSubmit={() => undefined} initialValues={{}}><div className="flex min-h-0 grow flex-col">{card}</div></Formik>}
+                  : <NoForm>{card}</NoForm>}
               </FooterStartContext.Provider>
             </Dialog.Popup>
           </Dialog.Viewport>

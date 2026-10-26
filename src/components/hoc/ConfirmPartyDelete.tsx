@@ -1,16 +1,13 @@
 import React from "react";
 import { Content } from "src/components/layout";
 import { useNavigate } from "react-router-dom";
-import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
 import { usePartyContext } from "src/components/hoc/PartyContext";
 import { useAppClient, useSignals } from "src/components/hooks";
 
-const validationSchema = Yup.object();
-
-const initialValues = {};
+const defaultValues = {};
 
 export const ConfirmPartyDelete = () => {
   const { party } = usePartyContext();
@@ -44,8 +41,7 @@ export const ConfirmPartyDelete = () => {
       dismissLabel="Keep it"
       dismissLocation={`/p/${party?.code}`}
       form={{
-        validationSchema,
-        initialValues,
+        defaultValues,
         onSubmit,
       }}
       cardStyle={{
