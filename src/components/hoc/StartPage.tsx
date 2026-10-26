@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { Columns, Container, Content, Hero } from "src/components/bulma";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 import { Divider } from "src/components/Divider";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
@@ -12,7 +12,6 @@ import { NewParty } from "src/components/hoc/NewParty";
 import grinchImg from "src/images/grinch.png";
 
 export const StartPage = () => {
-  const location = useLocation();
 
   return (
     <Hero size={"fullheight"} className="welcome-page">
@@ -62,7 +61,7 @@ export const StartPage = () => {
           </Columns>
 
           <AnimatePresence>
-            <Routes /*location={location} key={location.pathname}*/>
+            <Routes>
               <Route path="/new/" Component={NewParty} />
               <Route path="/join/" Component={JoinParty} />
               <Route path="/profile/*" Component={MyProfile} />

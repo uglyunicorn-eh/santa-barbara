@@ -48,7 +48,6 @@ const wrap = <T,>(component: T): T => {
 // Don't rely on function names here: they are minified in production builds.
 const wrapStatic = (value: any) => (typeof value === "function" && (value.defaultProps || Object.keys(value).length) ? wrap(value) : value);
 
-export const Button = wrap(Bulma.Button);
 export const Card = wrap(Bulma.Card);
 export const Columns = wrap(Bulma.Columns);
 export const Container = wrap(Bulma.Container);

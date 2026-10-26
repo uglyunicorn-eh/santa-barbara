@@ -1,4 +1,5 @@
 import { Container, Content, Hero } from "src/components/bulma";
+import { buttonVariants } from "@/components/ui/button";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Footer } from "src/components/hoc/Footer";
 
@@ -12,7 +13,7 @@ export const PartyNotFound = () => (
             repeat, code FOUR-OH-FOUR... FOXTROT-UNIFORM-CHARLIE-KILO...
           </h1>
           <p>
-            <a href="/" className={"button is-medium is-white is-outlined"}>Go back to the Earth</a>
+            <a href="/" className={buttonVariants({ variant: "secondary", surface: "dark", pill: true })}>Go back to the Earth</a>
           </p>
         </Content>
       </Container>

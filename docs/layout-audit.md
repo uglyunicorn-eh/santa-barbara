@@ -5,7 +5,8 @@ the longest values the API allows (100-character names, a party name with no spa
 participants). Found with `npm run shots` on `main` at a1c36c7 (label `before`); the full list is in
 `.shots/before/overflow.md` after a run.
 
-Each problem is fixed by the PR that rebuilds its screen, as the plan says; none are fixed yet. Widths are how far
+Each problem is fixed by the PR that rebuilds its screen, as the plan says. Phase 4.1 (the Button) fixed five of the
+six normal-data problems below: buttons now wrap instead of overflowing, and the widest element was often a button. Widths are how far
 the content reaches past the screen's edge.
 
 ## Problems with normal data (happening today)
@@ -13,11 +14,11 @@ the content reaches past the screen's edge.
 | Screen | Width | What happens | Fixed in |
 |---|---|---|---|
 | Party created ("Congratz!" with the secret code) | 320px (59px), 375px (4px) | The 8-letter code, in large letters spaced far apart, is cut off at the right. 5-letter codes fitted; 8-letter ones are new | 4.3 (dialogs) |
-| Closed party (the draw is done) | 320px (51px) | The page is wider than the screen: text is cut at the right, and the gnome's speech bubble with its "Yes, please!" button runs off the edge | 5c (party) |
-| Open party, guest view, and the leave dialog over it | 320px (12px) | The text column is a little wider than the screen | 5c |
-| Sign-in page ("Enter with your email address" button) | 320px (29px) | The button is wider than the screen | 5b (enter / login / join) |
-| Expired sign-in link | 320px (9px) | Heading, text and the "send me a new link" button are a little too wide | 5b |
-| Failed account links (delete account, change email) | 320px (11px) | Heading, text and the "take me home" button are a little too wide | 5e (misc) |
+| Closed party (the draw is done) | 320px (51px) | The page is wider than the screen: text is cut at the right, and the gnome's speech bubble with its "Yes, please!" button runs off the edge | **Fixed in 4.1:** the bubble's button wraps now |
+| Open party, guest view, and the leave dialog over it | 320px (12px) | The text column is a little wider than the screen | **Fixed in 4.1** (the "I changed my mind…" button was the widest thing) |
+| Sign-in page ("Enter with your email address" button) | 320px (29px) | The button is wider than the screen | **Fixed in 4.1** |
+| Expired sign-in link | 320px (9px) | Heading, text and the "send me a new link" button are a little too wide | **Fixed in 4.1** (the button wraps) |
+| Failed account links (delete account, change email) | 320px (11px) | Heading, text and the "take me home" button are a little too wide | **Fixed in 4.1** |
 
 ## Problems with the longest values
 

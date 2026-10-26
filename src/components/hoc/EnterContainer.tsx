@@ -1,6 +1,7 @@
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Button, Columns, Container, Content, Hero, Image } from "src/components/bulma";
+import { Columns, Container, Content, Hero, Image } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
@@ -146,12 +147,7 @@ export const EnterContainer = () => {
   if (tokenPayloadTrusted === undefined || tokenPayloadTrusted) {
     return (
       <LoginHero>
-        <Button
-          size="medium"
-          className="is-rounded is-link login-button"
-          loading
-          disabled
-        >
+        <Button variant="brand" size="lg" surface="dark" pill loading>
           Enter with your email address
         </Button>
       </LoginHero>
@@ -181,13 +177,13 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button onClick={resend} loading={resending} disabled={resending || sent} color={"primary"} rounded>
-                        &mdash; Send me that magic again, por favor!
+                      <Button variant="brand" size="lg" pill onClick={resend} loading={resending} disabled={sent}>
+                        &mdash; Send me that magic again<span className="max-tablet:hidden">, por favor</span>!
                       </Button>
                     )
                     : (
-                      <Button onClick={goHome} outlined>
-                        &larr; Take me home, country roads!
+                      <Button variant="secondary" pill onClick={goHome}>
+                        <span className="tablet:hidden">Get me home!</span><span className="max-tablet:hidden">Take me home, country roads!</span>
                       </Button>
                     )}
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConfirmPartyLeave } from 'src/components/hoc/ConfirmPartyLeave';
@@ -70,7 +70,7 @@ export const GuestContent = ({ party, user }: Props) => {
       {!party.isClosed && (
         <>
           <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
-            <Button color="black" outlined onClick={onConfirm}>I changed my mind and wanna quit...</Button>
+            <Button variant="secondary" onClick={onConfirm}>I changed my mind and wanna quit...</Button>
           </p>
 
           <Routes>

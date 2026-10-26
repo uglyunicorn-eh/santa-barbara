@@ -45,7 +45,6 @@
   --color-red-600: #c62a30;
   --color-red-700: #a8222a;
   --color-red-800: #8a1f25;
-  --color-red-900: #741a1f;
 
   --color-zinc-50: #fafafa;
   --color-zinc-100: #f4f4f5;
@@ -64,6 +63,14 @@
   --color-green-50: #effaf3;
   --color-green-200: #acdcbf;
   --color-green-700: #257942;
+
+  /* Turquoise: the app's old primary (Bulma's #00d1b2) at 500; 400 is it with 20% white, the primary fill. */
+  --color-teal-50: #eefcfa;
+  --color-teal-300: #93ecde;
+  --color-teal-400: #33dac1;
+  --color-teal-500: #00d1b2;
+  --color-teal-700: #007a68;
+  --color-teal-900: #04342c;
 
   /* Seven steps; 18px body (Cuprum is narrow). */
   --text-*: initial;
@@ -108,9 +115,13 @@
   --card-foreground: var(--color-zinc-900);
   --popover: var(--color-white);
   --popover-foreground: var(--color-zinc-900);
-  --primary: var(--color-red-600);
-  --primary-hover: var(--color-red-700);
-  --primary-foreground: var(--color-white);
+  /* Primary: content screens' main action. Brand: hero screens' main action. Red otherwise means danger. */
+  --primary: var(--color-teal-400);
+  --primary-hover: var(--color-teal-500);
+  --primary-foreground: var(--color-teal-900);
+  --brand: var(--color-red-600);
+  --brand-hover: var(--color-red-700);
+  --brand-foreground: var(--color-white);
   --secondary: var(--color-white);
   --secondary-foreground: var(--color-zinc-900);
   --muted: var(--color-zinc-100);
@@ -118,13 +129,13 @@
   --accent: var(--color-zinc-100);
   --accent-foreground: var(--color-zinc-900);
   --destructive: var(--color-red-700);
-  --destructive-strong: var(--color-red-800);
-  --destructive-strong-hover: var(--color-red-900);
+  --destructive-strong: var(--color-red-700);
+  --destructive-strong-hover: var(--color-red-800);
   --success: var(--color-green-700);
-  --link: var(--color-red-700);
+  --link: var(--color-teal-700);
   --border: var(--color-zinc-200);
   --input: var(--color-zinc-300);
-  --ring: var(--color-red-600);
+  --ring: var(--color-teal-700);
 }
 
 @theme inline {
@@ -137,6 +148,9 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-foreground: var(--brand-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);

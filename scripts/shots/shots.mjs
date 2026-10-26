@@ -80,7 +80,20 @@ const SCREENS = [
   { name: "dialog-leave-party", path: `/p/${CODES.guestOpen}/leave`, signedIn: true },
   { name: "profile", path: "/profile/", signedIn: true },
   { name: "profile-history", path: "/profile/history/", signedIn: true },
+  { name: "party-host-menu", path: `/p/${CODES.hostOpen}/`, signedIn: true, act: openMenu("More actions") },
+  { name: "footer-menu", path: "/", act: openMenu("More links") },
 ];
+
+/** Opens the ☰ menu with this label, when it's on screen (the footer's shows on phones only). */
+function openMenu(label) {
+  return async (page) => {
+    const trigger = page.getByRole("button", { name: label });
+    if (await trigger.isVisible()) {
+      await trigger.click();
+      await page.waitForTimeout(400);
+    }
+  };
+}
 
 async function submitForm(page) {
   await page.locator('form [type="submit"]').first().click();

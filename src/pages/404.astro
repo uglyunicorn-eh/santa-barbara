@@ -2,6 +2,7 @@
 import Layout from "src/layouts/BaseLayout.astro";
 
 import { Container, Content, Hero } from "src/components/bulma";
+import { buttonVariants } from "@/components/ui/button";
 
 import { AstroFooter } from "src/components/hoc/AstroFooter";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
@@ -20,7 +21,7 @@ import { UnsplashCredit } from "src/components/UnsplashCredit";
           <p>
             <a
               href="/"
-              class:list={["button", "is-medium", "is-white", "is-outlined"]}
+              class={buttonVariants({ variant: "secondary", surface: "dark", pill: true })}
             >
               Go back to the Earth
             </a>

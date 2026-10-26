@@ -8,5 +8,8 @@
     top: 0;
     height: 100vh;
     z-index: 9999;
+    // The door is the page while it's shut: content taller than the window scrolls inside it.
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }

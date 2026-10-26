@@ -1,4 +1,12 @@
 .grinch-box {
+  // The picture hangs above the card (see the img rule below) without taking space: reserve it, so a tall card
+  // centred in a short window doesn't push the picture off the top (117px above the card; 55px on phones).
+  padding-top: 64px;
+
+  @include tablet {
+    padding-top: 120px;
+  }
+
   .card {
     display: inline-block;
     padding: 3em 2em;
@@ -58,6 +66,19 @@
         font-size: 1.2rem;
       }
     }
+  }
+
+  // Errors on these dark cards in the light red (red-200), readable on black.
+  .help.is-danger {
+    color: #f6c6c7;
+  }
+
+  // Inputs on these dark cards focus in white, not Bulma's teal: the same outline as the buttons on dark (a 2px
+  // white ring with a 2px gap in the card's colour).
+  .input:focus,
+  .input:focus-visible {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #040102, 0 0 0 4px #fff;
   }
 
   .button {

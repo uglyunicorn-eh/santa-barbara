@@ -17,6 +17,10 @@
     &.cupid {
       background-image: url("/cupid.png") !important;
     }
+
+    &.is-silent .message-body {
+      visibility: hidden;
+    }
   }
 
   .message-body {

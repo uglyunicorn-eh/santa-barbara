@@ -2,6 +2,7 @@
 import BaseLayout from "src/layouts/BaseLayout.astro";
 
 import { Columns, Container, Content, Section } from "src/components/bulma";
+import { buttonVariants } from "@/components/ui/button";
 
 import { AstroFooter } from "src/components/hoc/AstroFooter";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
@@ -42,10 +43,10 @@ const {
 
             <a
               href="/"
-              class:list={["button", "is-medium", "is-fullwidth"]}
+              class={buttonVariants({ variant: "secondary", fullWidth: true })}
               data-astro-prefetch
             >
-              &#8592; Jeez, get me out of here
+              Jeez, get me out of here
             </a>
           </div>
         </Columns.Column>

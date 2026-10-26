@@ -1,6 +1,7 @@
 import { useField, useFormikContext } from "formik";
 import React from "react";
-import { Button, Content, Form as BulmaForm, Tabs } from "src/components/bulma";
+import { Content, Form as BulmaForm, Tabs } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
@@ -221,7 +222,7 @@ const InlineField = ({ name, action, children }: { name: string, action: React.R
 /** Saves the name; there is nothing to save until it is edited. */
 const SaveButton = () => {
   const { dirty } = useFormikContext();
-  return <Submit size="small" disabled={!dirty}>Save</Submit>;
+  return <Submit size="sm" disabled={!dirty}>Save</Submit>;
 };
 
 /** Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). */
@@ -261,8 +262,8 @@ const EmailSetting = ({ email }: { email: string }) => {
             name="email"
             action={
               <>
-                <Submit size="small">Send link</Submit>
-                <Button type="button" size="small" text onClick={() => setEditing(false)}>Cancel</Button>
+                <Submit size="sm">Send link</Submit>
+                <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(false)}>Cancel</Button>
               </>
             }
           >
@@ -280,7 +281,7 @@ const EmailSetting = ({ email }: { email: string }) => {
     >
       <div className="setting-control">
         <span className="setting-value">{email}</span>
-        <Button type="button" size="small" text onClick={startEditing}>Change</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={startEditing}>Change</Button>
       </div>
     </Setting>
   );
@@ -324,7 +325,7 @@ const DeleteAccount = ({ email }: { email: string }) => {
           </p>
         </div>
         {stage === "idle" && (
-          <Button type="button" size="small" color="danger" outlined onClick={startConfirming}>
+          <Button type="button" variant="ghost-destructive" size="sm" onClick={startConfirming}>
             Delete account
           </Button>
         )}
@@ -337,10 +338,10 @@ const DeleteAccount = ({ email }: { email: string }) => {
             gift for. We'll email you a link to finish.
           </p>
           <div className="setting-control">
-            <Button type="button" size="small" color="danger" onClick={onConfirm} loading={stage === "sending"}>
+            <Button type="button" variant="destructive" size="sm" onClick={onConfirm} loading={stage === "sending"}>
               Yes, email me the link
             </Button>
-            <Button type="button" size="small" text onClick={() => setStage("idle")} disabled={stage === "sending"}>
+            <Button type="button" variant="ghost" size="sm" onClick={() => setStage("idle")} disabled={stage === "sending"}>
               Keep my account
             </Button>
           </div>
@@ -455,7 +456,7 @@ const History = () => {
         <div className="history-more" ref={sentinelRef}>
           {autoLoad && loadingMore
             ? <ClipLoader size={20} />
-            : <Button outlined size="small" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
+            : <Button variant="secondary" size="sm" onClick={onMoreClick} loading={loadingMore}>Show more parties</Button>
           }
         </div>
       )}

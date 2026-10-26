@@ -1,7 +1,8 @@
 import React from "react";
 
 import { newKey } from "src/api/client";
-import { Button, Hero } from "src/components/bulma";
+import { Hero } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 
@@ -76,13 +77,8 @@ export const JoinBox = ({ party }: Props) => {
                     but {party.name.replace(/!+$/, '')} is over!
                   </h3>
 
-                  <Button
-                    size="medium"
-                    outlined
-                    text
-                    onClick={onGoHomeClick}
-                  >
-                    &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country roads!</span>
+                  <Button variant="secondary" surface="dark" pill onClick={onGoHomeClick}>
+                    <span className="tablet:hidden">Get me home!</span><span className="max-tablet:hidden">Take me home, country roads!</span>
                   </Button>
                 </>
               )
@@ -166,7 +162,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
         <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
         <p>If you didn't receive anything from us, refresh this page and try again.</p>
 
-        <Button outlined text rounded onClick={goHome}>Return back to home</Button>
+        <Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>
 
         <SnowConfetti />
       </>
@@ -190,11 +186,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
           Enter your email address above and we'll send you a magic link to sign in.
         </p>
         <div className="actions">
-          <Submit
-            size="medium"
-            color={"primary"}
-            className="is-rounded is-link"
-          >
+          <Submit variant="brand" size="lg" surface="dark" pill>
             &#x1F973;&nbsp;Send me a magic link!
           </Submit>
         </div>
@@ -208,16 +200,9 @@ const SignInControls = ({ party }: SignInControlsProps) => {
         To join the party, please sign in with your email address. We promise not to send you any marketing materials or share your personal data with third parties.
       </p >
       <div className="actions">
-        <Button
-          size="medium"
-          color={"primary"}
-          className="is-rounded is-link"
-          loading={busy}
-          disabled={busy}
-          onClick={onActionClick}
-        >
+        <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onActionClick}>
           &#x1F973;&nbsp;Sign in to join the party!
-        </Button >
+        </Button>
       </div >
     </>
   )
@@ -293,12 +278,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
       }
 
       <div className="actions">
-        <Submit
-          size="medium"
-          color={"primary"}
-          className="is-rounded is-link"
-          loading={busy}
-        >
+        <Submit variant="brand" size="lg" surface="dark" pill loading={busy}>
           &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
         </Submit>
       </div>

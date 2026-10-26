@@ -35,16 +35,11 @@ export const FormField = ({ name, label, children, help, extra, horizontal = tru
           <Form.Control>
             {children}
           </Form.Control>
-          {meta.error && meta.touched && (
-            <Form.Help color="danger">
-              {meta.error}
-            </Form.Help>
-          )}
-          {help && (
-            <Form.Help>
-              {help}
-            </Form.Help>
-          )}
+          {/* One message line, always there: the error takes the help's place, or a blank line when there's no help,
+              so an error showing up doesn't push the rest of the form down. */}
+          {meta.error && meta.touched
+            ? <Form.Help color="danger">{meta.error}</Form.Help>
+            : <Form.Help aria-hidden={help ? undefined : true}>{help ?? <>&nbsp;</>}</Form.Help>}
           {extra}
         </Form.Field.Body>
       </Form.Field>

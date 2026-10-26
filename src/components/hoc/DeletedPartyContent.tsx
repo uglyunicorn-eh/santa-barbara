@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 
 import { useAppClient, useSignals } from "src/components/hooks";
 import type { Party, User } from 'src/types';
@@ -49,7 +49,7 @@ export const DeletedPartyContent = ({ party, user }: Props) => {
           : <>You can bring it back, with everyone and everything in it, for a day after deleting it.</>}
       </p>
       <p style={{ margin: '2em 0' }} className="has-text-centered-touch">
-        <Button color="primary" onClick={onRestore} loading={busy} disabled={busy}>&#x267B;&#xFE0F; Restore the party</Button>
+        <Button variant="primary" onClick={onRestore} loading={busy}>&#x1FA84; Restore the party</Button>
       </p>
     </>
   );

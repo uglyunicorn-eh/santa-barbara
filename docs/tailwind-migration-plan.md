@@ -18,11 +18,19 @@ of both repos at fed0d99 / 061bacf)
 
 - Phase 2 step 3, the design spec: `docs/design-spec.md`, settled (#162).
 - Phase 3, Tailwind and shadcn (Base UI) beside Bulma, with the spec's tokens: no visible
-  change (see Phase 3's "What it took").
+  change (see Phase 3's "What it took") (#163).
+- Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev` (#164).
+- Phase 4.1, the Button: every button in the app uses `src/components/ui/button.tsx`
+  (#165). Reviewed in the browser along the way, so #165 also has: the sign-in card keeps
+  the Grinch in view and has an X (Esc too) back home; signed out, any page but `/` and
+  `/enter/` goes home; the garage door scrolls when its content is taller than the window,
+  with the sign-in photo fixed on it; form fields keep one message line so an error
+  doesn't push the form down; inputs on the dark cards focus in white; on phones the
+  footer keeps two links and puts the rest under a ☰ menu; the host's "Delete this party"
+  sits in a ☰ menu beside the main button; the How it works quote is the elves' speech
+  bubble. The emails got the same look in uglyunicorn-eh/santa-monica#40.
 
-- Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev`.
-
-**Next:** Phase 4, starting with 4.1 (Button).
+**Next:** Phase 4.2 (form fields; Formik → React Hook Form, Yup → Valibot).
 
 **Frontend (santa-barbara):** talks to the backend's plain JSON API (`src/api/client`);
 hosted on Cloudflare Pages, with a Content-Security-Policy from `public/_headers` that
@@ -445,6 +453,37 @@ its own, and each is built to the Phase 2 spec and shown on the UI kit page firs
   red buttons.
 - `forms/Submit.tsx` and `src/types.ts`: drop the `react-bulma-components` `Color`/`Size`
   types and reuse `ButtonProps`. `Submit` keeps reading `isSubmitting` from Formik until 4.2.
+
+**Done** (`ui/button`). `src/components/ui/button.tsx` is shadcn's Base UI button with the
+spec's variants: `brand`, `primary`, `secondary`, `ghost`, `ghost-destructive`,
+`destructive`, `link`; sizes `sm` / `md` / `lg`; `surface` (`light` | `dark`, for night and glass);
+`pill`, `fullWidth`, `loading`. Every `<Button>`, `Submit` and `a.button` uses it, and
+`bulma.tsx` no longer exports `Button`. What came up:
+- `npx shadcn add` re-installs the `cn` package and imports it; uninstall it and point
+  the import at `@/lib/utils` after every `add`.
+- Buttons wrap instead of overflowing: sizes are minimum heights (one line is exactly
+  32 / 40 / 48px, borders included), and long labels on phones take a second line.
+  This fixed four of the audit's 320px overflows; see `docs/layout-audit.md`.
+- A busy button is disabled (no double submit) but keeps its colour; only disabled
+  fades.
+- Surfaces per screen: dark on sign-in, join, the account-link pages and the two "not
+  found" pages; light everywhere else, including the sign-in link page (its photo is
+  light) and every dialog.
+- One rule for shape and size, so the same kind of button looks the same everywhere
+  (also in the comment at the top of `button.tsx`): on hero screens (sign-in, join, the
+  sign-in link page, account links, party not found, 404) the main action is `brand`
+  `lg` `pill` and going home or back is `secondary` `pill` (md); on content screens
+  (party pages, dialogs, the profile, knowledge pages) the main action is `primary`, no
+  pill and `md`, with `sm` only in the profile's setting rows.
+- Two main-action colours, decided after seeing the red everywhere: `brand` is the red
+  (`#c62a30`) for hero screens; `primary` is the app's old turquoise (`#00d1b2`) with a
+  dark teal label (`#04342c`, 7:1) for content screens, so "go" and "delete" never share
+  a colour there. Links and focus rings on light backgrounds are teal-700 (`#007a68`,
+  5.3:1), and Bulma's `$primary` / `$link` follow. Red on a content screen now means
+  danger only.
+- SCSS that styled `.button` (sizes, colours, `.login-button`) no longer applies; the
+  dialog footer gets its own `gap` (Bulma spaced footer buttons with a margin on `.button`).
+- The UI kit renders the real Button now.
 
 ### 4.2 Form fields + Formik → React Hook Form + Yup → Valibot (one PR)
 
