@@ -29,6 +29,8 @@ function Root() {
         <Route path="/*" Component={WelcomeBox} />
         <Route path="/p/:code/*" Component={PartyContainer} />
         {/* Emailed links: they work signed in or not, so they sit outside the login door. */}
+        {/* Deletion links carry the token after "#" (older ones in the path); the page takes it off the URL. */}
+        <Route path="/profile/delete" Component={ConfirmAccountDeletion} />
         <Route path="/profile/delete/:token" Component={ConfirmAccountDeletion} />
         <Route path="/profile/email/cancel/:token" Component={CancelEmailChange} />
         <Route path="/profile/email/:token" Component={ConfirmEmailChange} />
