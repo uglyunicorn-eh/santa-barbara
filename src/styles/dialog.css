@@ -78,17 +78,49 @@
         padding: 0 20px;
       }
 
-      h1 {
-        color: #000;
-        text-align: center;
-        font-size: 3rem;
-        margin: 0.5em 0 1em;
-        letter-spacing: 0.2em;
-        text-align: center;
+      /*
+       * The code on a sticker: a glossy label, slightly askew, its bottom-right corner peeling up. The label is cut
+       * along the corner and the flap folds back over it; the shadow is on the wrapper, so the cut doesn't clip it.
+       */
+      .code-sticker {
+        width: fit-content;
+        margin: 0.5em auto 1em;
+        filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.3));
+        transform: rotate(-2deg);
+      }
+
+      .code-sticker-text {
+        --peel: 1.6rem;
+
+        position: relative;
+        display: block;
+        padding: 0.3em 0.9em 0.3em 1.1em;
         border-radius: 10px;
+        background: linear-gradient(160deg, #fffef5 0%, #fff6d6 55%, #f7ebb4 100%);
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--peel)), calc(100% - var(--peel)) 100%, 0 100%);
+        color: #18181b;
+        font-size: 2.25rem;
         font-weight: 500;
-        text-shadow: 1px 1px 1px rgb(255 255 255 / 1);
-        -webkit-text-stroke: #fff 1px;
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+        line-height: 1.2;
+        text-shadow: 0 1px 0 #fff;
+
+        /* The flap: the corner's underside, folded back, darker where it bends. */
+        &::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          width: var(--peel);
+          height: var(--peel);
+          background: linear-gradient(315deg, transparent 50%, #cdbd78 50%, #efe3ac 62%, #fffbe6 100%);
+        }
+
+        @media (max-width: 768px) {
+          font-size: 2rem;
+          letter-spacing: 0.15em;
+        }
       }
     }
   }
