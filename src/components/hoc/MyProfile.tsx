@@ -107,9 +107,7 @@ export const MyProfile = () => (
     className={"profile-box"}
     noHeader
     dismissLabel={"Okie Dokie!"}
-    cardStyle={{
-      width: 800,
-    }}
+    size="lg"
   >
     {/* Pinned to the top of the dialog while the history scrolls under it. */}
     <Tabs label="Profile" className="sticky top-0 z-10 -mx-5 mb-4 bg-white">

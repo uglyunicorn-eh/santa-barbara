@@ -59,9 +59,7 @@ export const JoinParty = () => {
         defaultValues,
         onSubmit,
       }}
-      cardStyle={{
-        width: 600,
-      }}
+      size="sm"
     >
       <Content>
         <FormField

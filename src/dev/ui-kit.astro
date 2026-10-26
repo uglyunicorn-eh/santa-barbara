@@ -3,11 +3,13 @@
 // ui-kit integration in astro.config.mjs): open http://localhost:4321/ui-kit while `npm run dev` runs.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ToastDemo } from "./ToastDemo";
 import { cn } from "@/lib/utils";
 import "./ui-kit.css";
 
 import {
-  BUTTON_VARIANTS, SURFACES, error, forced, help, input, label, muted, onPhoto, surfaceCard, surfacePanel, surfacePhoto,
+  BUTTON_VARIANTS, SURFACES, error, fieldFocus, forced, help, label, muted, onPhoto, surfaceCard, surfacePanel, surfacePhoto,
   toneOf, type State, type Surface,
 } from "./recipes";
 
@@ -47,8 +49,6 @@ const TYPE: [string, string, string][] = [
 ];
 
 const iconX = `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
-const iconAlert = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>`;
-const iconCheck = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>`;
 
 const sectionTitle = "text-2xl font-semibold";
 const kicker = "text-xs font-medium uppercase tracking-wider";
@@ -62,8 +62,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       <h1 class="mt-1 text-3xl font-semibold">UI kit</h1>
       <p class="mt-2 max-w-200 text-muted-foreground">
         Every control, in every state, on the app's three
-        surfaces. Buttons are the real component (<code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">src/components/ui/button.tsx</code>);
-        form fields, dialogs, tabs and toasts are still prototypes until they're built. The rules are in
+        surfaces. Buttons, inputs and toasts are the real components; the dialog and tab samples are drawn to match theirs. The rules are in
         <code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">docs/ui-kit.md</code>. Hover and focus
         are shown forced, side by side; the "try it" column is live.
       </p>
@@ -230,15 +229,17 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   <div>
                     <div class={`mb-2 text-xs ${muted(surface.id)}`}>{state}</div>
                     <label class={`mb-1 block ${label(surface.id)}`} for={`${surface.id}-${state}`}>{text}</label>
-                    <input
+                    <Input
                       id={`${surface.id}-${state}`}
-                      class={input({ state, surface: surface.id, size: surface.id === "glass" ? "lg" : "md" })}
-                      value={value}
+                      surface={toneOf(surface.id)}
+                      size={surface.id === "glass" ? "lg" : "md"}
+                      className={state === "focus" ? fieldFocus(surface.id) : undefined}
+                      defaultValue={value}
                       placeholder={placeholder}
                       disabled={state === "disabled"}
-                      aria-invalid={state === "error" ? "true" : undefined}
+                      aria-invalid={state === "error" ? true : undefined}
                       aria-describedby={`${surface.id}-${state}-note`}
-                      maxlength={state === "error" ? undefined : 100}
+                      maxLength={state === "error" ? undefined : 100}
                     />
                     {state === "error"
                       ? <p id={`${surface.id}-${state}-note`} class={`mt-1 ${error(surface.id)}`}>Secret phrase must be at most 100 characters</p>
@@ -246,7 +247,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   </div>
                 ))}
               </div>
-              {surface.id === "glass" && <p class="mt-3 text-sm text-zinc-400">Glass forms use the same white input, 48px tall, so it reads on the photo.</p>}
+              {surface.id === "glass" && <p class="mt-3 text-sm text-zinc-400">Glass forms use the dark input, 48px tall.</p>}
             </div>
           )}
 
@@ -258,9 +259,9 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                 <div class="mt-4 space-y-4">
                   {[["Party name", "Office Secret Santa 2026", ""], ["Secret phrase", "", "Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."]].map(([text, value, hint]) => (
                     <div class="tablet:flex tablet:gap-4">
-                      <label class="mb-1 block text-sm font-medium text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`beside-${text}`}>{text}</label>
+                      <label class="mb-1 block text-base font-semibold text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`beside-${text}`}>{text}</label>
                       <div class="min-w-0 flex-1">
-                        <input id={`beside-${text}`} class={input({ surface: "paper", state: "live" })} value={value} placeholder={value ? "" : "Optional"} />
+                        <Input id={`beside-${text}`} defaultValue={value} placeholder={value ? "" : "Optional"} />
                         {hint && <p class="mt-1 text-sm text-muted-foreground">{hint}</p>}
                       </div>
                     </div>
@@ -274,7 +275,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   <div>
                     <div class="text-sm font-medium text-zinc-700">Name</div>
                     <div class="mt-1 flex items-start gap-2">
-                      <input class={input({ surface: "paper", size: "sm", state: "live" })} value="Alice" aria-label="Name" />
+                      <Input size="sm" defaultValue="Alice" aria-label="Name" />
                       <Button variant="primary" size="sm" surface="light" disabled>Save</Button>
                     </div>
                     <p class="mt-1 text-sm text-muted-foreground">Save turns on once the name changes.</p>
@@ -282,7 +283,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   <div>
                     <div class="text-sm font-medium text-zinc-700">Email</div>
                     <div class="mt-1 flex items-start gap-2">
-                      <input class={input({ surface: "paper", size: "sm", state: "error" })} value="alice@example.com" aria-label="New email" aria-invalid="true" />
+                      <Input size="sm" defaultValue="alice@example.com" aria-label="New email" aria-invalid={true} />
                       <Button variant="primary" size="sm" surface="light">Send link</Button>
                       <Button variant="ghost" size="sm" surface="light">Cancel</Button>
                     </div>
@@ -323,9 +324,9 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
             <div class="mt-5 space-y-4">
               {[["Party name", "Very funny secret party!", ""], ["Secret phrase", "", "Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."]].map(([text, value, hint]) => (
                 <div class="tablet:flex tablet:gap-4">
-                  <label class="mb-1 block text-sm font-medium text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`dlg-${text}`}>{text}</label>
+                  <label class="mb-1 block text-base font-semibold text-zinc-700 tablet:mb-0 tablet:w-37.5 tablet:shrink-0 tablet:text-right tablet:leading-10" for={`dlg-${text}`}>{text}</label>
                   <div class="min-w-0 flex-1">
-                    <input id={`dlg-${text}`} class={input({ surface: "paper", state: "live" })} value={value} placeholder={value ? "" : "Optional"} />
+                    <Input id={`dlg-${text}`} defaultValue={value} placeholder={value ? "" : "Optional"} />
                     {hint && <p class="mt-1 text-sm text-muted-foreground">{hint}</p>}
                   </div>
                 </div>
@@ -371,17 +372,9 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       {(["night", "paper"] as const).map(s => (
         <div class={`px-4 py-8 tablet:px-8 ${surfacePanel[s]}`} style={photo(s)}>
           <h2 class={`${sectionTitle} ${s === "night" ? "text-white text-shadow-photo" : ""}`}>Toasts on {s}</h2>
-          <div class="mt-4 flex flex-col items-center gap-3">
-            {[
-              ["error", "Party is already packed. Sorry, we cannot accept a new participant..."],
-              ["success", "Done! We've sent a magic link to your inbox."],
-              ["error", `We couldn't send a link to ${LONG_EMAIL}. Please try again in a bit.`],
-            ].map(([kind, text]) => (
-              <div role="status" class={cn("flex w-full max-w-140 items-start gap-3 rounded-lg border px-4 py-3 text-base shadow-md", s === "night" ? "border-white/15 bg-zinc-900 text-white" : "border-border bg-white text-zinc-900")}>
-                <span class={cn("mt-0.5 shrink-0", s === "night" ? (kind === "error" ? "text-red-200" : "text-green-200") : (kind === "error" ? "text-destructive" : "text-success"))} set:html={kind === "error" ? iconAlert : iconCheck}></span>
-                <span class="min-w-0 wrap-anywhere">{text}</span>
-              </div>
-            ))}
+          <p class={`mt-1 text-sm ${s === "night" ? "text-zinc-300 text-shadow-photo" : "text-muted-foreground"}`}>The app's toaster: errors go after 2.5 s, messages after 4 s, reminders stay until dismissed or opened.</p>
+          <div class="mt-4">
+            <ToastDemo client:load tone={s === "night" ? "dark" : "light"} longEmail={LONG_EMAIL} />
           </div>
         </div>
       ))}
@@ -403,7 +396,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
         </div>
         <div class="mt-4">
           <label class="mb-1 block text-sm font-medium text-zinc-700" for="long-input">Your name for this party</label>
-          <input id="long-input" class={input({ surface: "paper", state: "live" })} value={LONG_NAME} maxlength="100" />
+          <Input id="long-input" defaultValue={LONG_NAME} maxLength={100} />
         </div>
       </div>
     </section>

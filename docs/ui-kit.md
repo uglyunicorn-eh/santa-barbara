@@ -13,7 +13,7 @@ the `uiKit` integration in `astro.config.mjs`); builds leave it out.
 The components: buttons (`src/components/ui/button.tsx`), inputs (`src/components/ui/input.tsx`), form fields
 (`src/components/forms/`), dialogs (`src/components/DialogBox.tsx`, on Base UI's Dialog), tabs (`src/components/Tab.tsx`),
 menus (`src/components/ui/menu.ts`) and the page layout pieces (`src/components/layout.tsx`, styled in
-`src/styles/layout.css`). The kit's field, dialog and toast samples are still drawn from recipes (`src/dev/recipes.ts`).
+`src/styles/layout.css`). The kit shows the real buttons, inputs and toaster; its dialog and tab samples are drawn to match.
 
 ## Surfaces
 
