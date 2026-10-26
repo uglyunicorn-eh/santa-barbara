@@ -4,3 +4,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      # `astro check` (run by `npm run build`) doesn't support TypeScript 7, so the build fails on it. Remove this once
+      # Astro's type-checking supports it (its experimental replacement needs TypeScript 7.1+). See #177.
+      - dependency-name: "typescript"
+        versions: [">=7.0.0"]
