@@ -1,18 +1,18 @@
-import { Columns, Container, Content, Hero } from "src/components/layout";
+import { Columns, Container, Content, Hero } from "@/components/layout";
 import { SyncLoader } from 'react-spinners';
 
-import { Confetti } from "src/components/Confetti";
-import { GnomeSays } from "src/components/GnomeSays";
-import { SecretText } from "src/components/SecretText";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { Footer } from "src/components/hoc/Footer";
-import GuestContent from "src/components/hoc/GuestContent";
-import HostContent from "src/components/hoc/HostContent";
-import { DeletedPartyContent } from "src/components/hoc/DeletedPartyContent";
-import { PartyIsClosedContent } from "src/components/hoc/PartyIsClosedContent";
-import { useToastSurface } from "src/components/hoc/NotificationsContainer";
-import { useCurrentUser } from "src/components/hooks";
-import type { Party } from "src/types";
+import { Confetti } from "@/components/Confetti";
+import { GnomeSays } from "@/components/GnomeSays";
+import { SecretText } from "@/components/SecretText";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
+import { Footer } from "@/components/hoc/Footer";
+import GuestContent from "@/components/hoc/GuestContent";
+import HostContent from "@/components/hoc/HostContent";
+import { DeletedPartyContent } from "@/components/hoc/DeletedPartyContent";
+import { PartyIsClosedContent } from "@/components/hoc/PartyIsClosedContent";
+import { useToastSurface } from "@/components/hoc/NotificationsContainer";
+import { useCurrentUser } from "@/components/hooks";
+import type { Party } from "@/types";
 
 type Props = {
   party: Party;

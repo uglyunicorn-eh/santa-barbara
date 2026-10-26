@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
-import { ConfirmPartyLeave } from 'src/components/hoc/ConfirmPartyLeave';
-import type { Party, User } from 'src/types';
+import { ConfirmPartyLeave } from '@/components/hoc/ConfirmPartyLeave';
+import type { Party, User } from '@/types';
 
 type Props = {
   party: Party;

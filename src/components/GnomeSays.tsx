@@ -1,4 +1,4 @@
-import { Message } from "src/components/layout";
+import { Message } from "@/components/layout";
 
 type Props = {
   variant?: "gnome" | "cupid" | "cupignome";

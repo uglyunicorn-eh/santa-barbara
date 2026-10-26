@@ -1,22 +1,22 @@
 import React from "react";
 
-import { newKey } from "src/api/client";
-import { Hero } from "src/components/layout";
+import { newKey } from "@/api/client";
+import { Hero } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
-import { GrinchBox } from "src/components/GrinchBox";
-import { SnowConfetti } from "src/components/SnowConfetti";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { Form, FormField, Input, Submit } from "src/components/forms";
-import { maxLen, required, validEmail } from "src/components/forms/messages";
-import { Footer } from "src/components/hoc/Footer";
-import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
-import type { Party, User } from "src/types";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import type { JoinPartyInput } from "src/components/hooks/useAppClient";
-import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
+import { GrinchBox } from "@/components/GrinchBox";
+import { SnowConfetti } from "@/components/SnowConfetti";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
+import { Form, FormField, Input, Submit } from "@/components/forms";
+import { maxLen, required, validEmail } from "@/components/forms/messages";
+import { Footer } from "@/components/hoc/Footer";
+import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
+import type { Party, User } from "@/types";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import type { JoinPartyInput } from "@/components/hooks/useAppClient";
+import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
 type Props = {
   party: Party;

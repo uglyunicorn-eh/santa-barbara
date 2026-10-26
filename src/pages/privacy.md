@@ -1,5 +1,5 @@
 ---
-layout: src/layouts/KnowledgePageLayout.astro
+layout: "@/layouts/KnowledgePageLayout.astro"
 title: "Privacy Policy"
 image: "/privacy.png"
 description: "What we collect, who sees it, and how to delete it. Short version: your email, your name, and no tracking."

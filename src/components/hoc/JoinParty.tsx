@@ -1,15 +1,15 @@
 import React from "react";
-import { Content } from "src/components/layout";
+import { Content } from "@/components/layout";
 import * as v from "valibot";
 
-import { DialogBox } from "src/components/DialogBox";
-import { FormField, Input, Submit } from "src/components/forms";
-import { maxLen, required } from "src/components/forms/messages";
-import { HaveQuestion } from "src/components/HaveQuestion";
-import { useAppClient } from "src/components/hooks";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
+import { DialogBox } from "@/components/DialogBox";
+import { FormField, Input, Submit } from "@/components/forms";
+import { maxLen, required } from "@/components/forms/messages";
+import { HaveQuestion } from "@/components/HaveQuestion";
+import { useAppClient } from "@/components/hooks";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import { useNavigate } from "react-router";
-import { MAX_PARTY_CODE_LENGTH } from "src/limits";
+import { MAX_PARTY_CODE_LENGTH } from "@/limits";
 
 const schema = v.object({
   code: v.pipe(

@@ -1,13 +1,13 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 
-import { AppSpinner } from "src/components/AppSpinner";
-import { GarageDoor } from "src/components/GarageDoor";
-import { JoinBox } from "src/components/hoc/JoinBox";
-import { PartyContext } from "src/components/hoc/PartyContext";
-import { PartyDetails } from "src/components/hoc/PartyDetails";
-import { PartyNotFound } from "src/components/hoc/PartyNotFound";
-import { useCurrentUser, useParty } from "src/components/hooks";
+import { AppSpinner } from "@/components/AppSpinner";
+import { GarageDoor } from "@/components/GarageDoor";
+import { JoinBox } from "@/components/hoc/JoinBox";
+import { PartyContext } from "@/components/hoc/PartyContext";
+import { PartyDetails } from "@/components/hoc/PartyDetails";
+import { PartyNotFound } from "@/components/hoc/PartyNotFound";
+import { useCurrentUser, useParty } from "@/components/hooks";
 
 export const PartyContainer = () => {
   const { profile } = useCurrentUser();

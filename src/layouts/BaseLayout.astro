@@ -1,6 +1,5 @@
 ---
-import "src/styles/global.scss";
-import "src/styles/tailwind.css";
+import "@/styles/tailwind.css";
 
 interface Props {
   title?: string;
@@ -28,6 +27,9 @@ const imageUrl = new URL("/og-image.png", Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#b3202c" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalUrl} />
 

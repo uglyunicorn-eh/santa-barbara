@@ -1,7 +1,7 @@
-import { Container, Content, Hero } from "src/components/layout";
+import { Container, Content, Hero } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { Footer } from "src/components/hoc/Footer";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
+import { Footer } from "@/components/hoc/Footer";
 
 export const PartyNotFound = () => (
   <Hero size={"fullheight"} className="party-not-found">

@@ -1,0 +1,12 @@
+.garage-door {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 9999;
+  /* The door is the page while it's shut: content taller than the window scrolls inside it. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

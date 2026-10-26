@@ -1,4 +1,4 @@
-import { apiEndpoint, publicKey } from "src/config.json";
+import { apiEndpoint, publicKey } from "@/config.json";
 
 /** The API to talk to: production by default, or a backend preview for local work (PUBLIC_API_ENDPOINT). */
 export const API_ENDPOINT: string = import.meta.env.PUBLIC_API_ENDPOINT || apiEndpoint;

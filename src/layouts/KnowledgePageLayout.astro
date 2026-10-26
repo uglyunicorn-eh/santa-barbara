@@ -1,15 +1,14 @@
 ---
-import BaseLayout from "src/layouts/BaseLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-import { Columns, Container, Content, Section } from "src/components/layout";
+import { Columns, Container, Content, Section } from "@/components/layout";
 import { ArrowLeft } from "react-feather";
 import { buttonVariants } from "@/components/ui/button";
 
-import { AstroFooter } from "src/components/hoc/AstroFooter";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
+import { AstroFooter } from "@/components/hoc/AstroFooter";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
 
-import "src/styles/knowledge-page.scss";
-import DefaultImage from "public/screw_you.png";
+import DefaultImage from "../../public/screw_you.png";
 
 interface Props {
   title?: string;

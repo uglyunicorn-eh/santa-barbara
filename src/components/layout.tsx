@@ -2,7 +2,7 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-// The page layout pieces. Their base styles are in src/styles/layout.scss (so each screen's SCSS can adjust them);
+// The page layout pieces. Their base styles are in src/styles/layout.css (so each screen's styles can adjust them);
 // responsive visibility and text alignment are Tailwind utilities.
 
 type Div = React.HTMLAttributes<HTMLDivElement>;

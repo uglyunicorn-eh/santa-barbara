@@ -1,9 +1,9 @@
 .grinch-box {
-  // The picture hangs above the card (see the img rule below) without taking space: reserve it, so a tall card
-  // centred in a short window doesn't push the picture off the top (117px above the card; 55px on phones).
+  /* The picture hangs above the card (see the img rule below) without taking space: reserve it, so a tall card */
+  /* centred in a short window doesn't push the picture off the top (117px above the card; 55px on phones). */
   padding-top: 64px;
 
-  @include tablet {
+  @media (min-width: 769px) {
     padding-top: 120px;
   }
 
@@ -11,14 +11,14 @@
     display: inline-block;
     padding: 3em 2em;
     border-radius: 20px;
-    background-color: rgba(#040102, 0.9);
+    background-color: rgb(4 1 2 / 0.9);
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
     position: relative;
     transition: all 0.25s ease-in-out;
     max-width: 600px;
-    border: 1px solid rgba(#fff, 0.2);
+    border: 1px solid rgb(255 255 255 / 0.2);
 
-    @include mobile {
+    @media (max-width: 768px) {
       padding: 2em 1.5em;
     }
 
@@ -28,7 +28,7 @@
       margin-top: -200px;
       transition: all 0.25s ease-in-out;
 
-      @include mobile {
+      @media (max-width: 768px) {
         position: relative;
         margin: 0;
         width: 160px;
@@ -47,7 +47,7 @@
       text-shadow: 0 0 40px black;
       font-size: 2rem;
 
-      @include mobile {
+      @media (max-width: 768px) {
         margin-top: 0;
         font-size: 1.5rem;
       }
@@ -62,7 +62,7 @@
       line-height: 1em;
       margin-block: 0 2em;
 
-      @include mobile {
+      @media (max-width: 768px) {
         font-size: 1.2rem;
       }
     }

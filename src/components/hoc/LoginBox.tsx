@@ -1,21 +1,21 @@
 import React from "react";
 
-import { newKey } from "src/api/client";
-import { Container, Hero } from "src/components/layout";
-import { Button } from "@/components/ui/button";
+import { newKey } from "@/api/client";
+import { Container, Hero } from "@/components/layout";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
-import { GrinchBox } from "src/components/GrinchBox";
-import { SnowConfetti } from "src/components/SnowConfetti";
-import { UnsplashCredit } from "src/components/UnsplashCredit";
-import { Form, FormField, Input, Submit } from "src/components/forms";
-import { maxLen, required, validEmail } from "src/components/forms/messages";
-import { Footer } from "src/components/hoc/Footer";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useAppClient } from "src/components/hooks";
-import type { EnterRequestInput } from "src/components/hooks/useAppClient";
-import { MAX_EMAIL_LENGTH } from "src/limits";
+import { GrinchBox } from "@/components/GrinchBox";
+import { SnowConfetti } from "@/components/SnowConfetti";
+import { UnsplashCredit } from "@/components/UnsplashCredit";
+import { Form, FormField, Input, Submit } from "@/components/forms";
+import { maxLen, required, validEmail } from "@/components/forms/messages";
+import { Footer } from "@/components/hoc/Footer";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import { useAppClient } from "@/components/hooks";
+import type { EnterRequestInput } from "@/components/hooks/useAppClient";
+import { MAX_EMAIL_LENGTH } from "@/limits";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -152,8 +152,9 @@ const EnterForm = () => {
             <p>Enter your email address above and we'll send you a magic link to sign in.</p>
             <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
 
-            <div className="actions">
+            <div className="actions flex flex-col items-center gap-3">
               <Submit variant="brand" size="lg" surface="dark" pill>Send me a magic link!</Submit>
+              <a href="/how-it-works/" target="_blank" className={buttonVariants({ variant: "ghost", surface: "dark", pill: true })}>How this works?</a>
             </div>
           </Form>
         )

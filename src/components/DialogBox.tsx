@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Form, type FormProps } from "src/components/forms/Form";
+import { Form, type FormProps } from "@/components/forms/Form";
 
 // The app's dialogs (docs/ui-kit.md, "Dialogs"), on Base UI's Dialog: focus moves into the dialog and Tab stays there,
 // Esc and a click on the backdrop close it (going to `dismissLocation`, as the buttons do), the page behind doesn't
 // scroll, and focus goes back where it was. Dialogs are routes: open while rendered, closed by navigating away.
 //
 // The parts carry `dialog-card`, `dialog-head`, `dialog-body` and `dialog-foot`, which each dialog's own artwork styles
-// (src/styles/dialog.scss) use.
+// (src/styles/dialog.css) use.
 
 type Props<Values extends FieldValues> = {
   title?: string;

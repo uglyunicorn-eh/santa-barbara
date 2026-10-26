@@ -1,12 +1,12 @@
 import React from "react";
 
-import { apiCall, linkKey } from "src/api/client";
-import type { ApiResult, CallOptions } from "src/api/client";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useCurrentUser } from "src/components/hooks/useCurrentUser";
-import { useSignals } from "src/components/hooks/useSignals";
+import { apiCall, linkKey } from "@/api/client";
+import type { ApiResult, CallOptions } from "@/api/client";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import { useCurrentUser } from "@/components/hooks/useCurrentUser";
+import { useSignals } from "@/components/hooks/useSignals";
 
-import type { Party, User } from "src/types";
+import type { Party, User } from "@/types";
 
 export type EnterRequestInput = {
   email: string;

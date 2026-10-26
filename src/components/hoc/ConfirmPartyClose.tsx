@@ -1,11 +1,11 @@
 import React from "react";
-import { Content } from "src/components/layout";
+import { Content } from "@/components/layout";
 import { useParams } from "react-router-dom";
 
-import { DialogBox } from "src/components/DialogBox";
-import { Submit } from "src/components/forms";
-import { useAppClient, useSignals } from "src/components/hooks";
-import { usePartyContext } from "src/components/hoc/PartyContext";
+import { DialogBox } from "@/components/DialogBox";
+import { Submit } from "@/components/forms";
+import { useAppClient, useSignals } from "@/components/hooks";
+import { usePartyContext } from "@/components/hoc/PartyContext";
 
 const defaultValues = {};
 

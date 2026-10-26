@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-import { useJWT } from "src/components/hooks";
-import { useLocalStorage } from "src/components/hooks/useLocalStorage";
-import type { User } from "src/types";
+import { useJWT } from "@/components/hooks";
+import { useLocalStorage } from "@/components/hooks/useLocalStorage";
+import type { User } from "@/types";
 
 type SignInParams = {
   profile: User;

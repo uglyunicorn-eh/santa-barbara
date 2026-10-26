@@ -2,7 +2,7 @@ import React from "react";
 import { useFormContext, useFormState } from "react-hook-form";
 
 import { Input as BaseInput, type InputProps as BaseInputProps } from "@/components/ui/input";
-import { FormFieldContext } from "src/components/forms/FormField";
+import { FormFieldContext } from "@/components/forms/FormField";
 
 type Props = Omit<BaseInputProps, "name" | "value" | "defaultValue" | "onChange" | "onBlur"> & {
   /** Focus (and select) the input once it's shown. */

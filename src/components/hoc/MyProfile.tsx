@@ -1,6 +1,6 @@
 import { useFormContext, useFormState } from "react-hook-form";
 import React from "react";
-import { Content } from "src/components/layout";
+import { Content } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
@@ -8,16 +8,16 @@ import { ClipLoader } from 'react-spinners';
 import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
 import * as v from "valibot";
 
-import { DialogBox, DialogFooterStart } from "src/components/DialogBox";
-import { Tab, Tabs } from "src/components/Tab";
-import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
-import { maxLen, required, validEmail } from "src/components/forms/messages";
-import { useNotifications } from "src/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
-import { PARTIES_CHANGED } from "src/components/hooks/useAppClient";
-import type { RequestEmailChangeInput, UpdateNameInput } from "src/components/hooks/useAppClient";
-import type { Party } from "src/types";
-import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH } from "src/limits";
+import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
+import { Tab, Tabs } from "@/components/Tab";
+import { Form, FormFieldContext, Input, Submit } from "@/components/forms";
+import { maxLen, required, validEmail } from "@/components/forms/messages";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import { useAppClient, useCurrentUser, useSignals } from "@/components/hooks";
+import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
+import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
+import type { Party } from "@/types";
+import { MAX_EMAIL_LENGTH, MAX_NAME_LENGTH } from "@/limits";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
@@ -111,7 +111,8 @@ export const MyProfile = () => (
       width: 800,
     }}
   >
-    <Tabs label="Profile" className="-mx-5 mb-4">
+    {/* Pinned to the top of the dialog while the history scrolls under it. */}
+    <Tabs label="Profile" className="sticky top-0 z-10 -mx-5 mb-4 bg-white">
       <Tab to="/profile/">Profile</Tab>
       <Tab to="/profile/history/">Latest history</Tab>
     </Tabs>

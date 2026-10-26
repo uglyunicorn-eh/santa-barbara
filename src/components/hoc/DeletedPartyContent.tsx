@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 
-import { useAppClient, useSignals } from "src/components/hooks";
-import type { Party, User } from 'src/types';
+import { useAppClient, useSignals } from "@/components/hooks";
+import type { Party, User } from '@/types';
 
 type Props = {
   party: Party;

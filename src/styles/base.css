@@ -1,5 +1,5 @@
-// The page basics on top of Tailwind's reset: the text colour and size, links, and a few elements' defaults. These are
-// what the pages were laid out with (they came from Bulma), so they stay until each screen is restyled.
+/* The page basics on top of Tailwind's reset: the text colour and size, links, and a few elements' defaults. These are */
+/* what the pages were laid out with (they came from Bulma), so they stay until each screen is restyled. */
 
 html {
   background-color: #fff;
@@ -19,17 +19,19 @@ body {
   font-size: 1em;
   font-weight: 400;
   line-height: 1.5;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
-// Tailwind's reset makes media blocks; the pages were laid out with the browser's inline default (which leaves the
-// baseline gap under an image). Rules that set these on purpose (e.g. `.image img`) are more specific and still win.
+/* Tailwind's reset makes media blocks; the pages were laid out with the browser's inline default (which leaves the */
+/* baseline gap under an image). Rules that set these on purpose (e.g. `.image img`) are more specific and still win. */
 img, svg, video, canvas, audio, iframe, embed, object {
   display: revert;
   vertical-align: revert;
 }
 
 a {
-  color: #007a68; // teal-700, the link colour
+  color: #007a68; /* teal-700, the link colour */
   cursor: pointer;
   text-decoration: none;
 
