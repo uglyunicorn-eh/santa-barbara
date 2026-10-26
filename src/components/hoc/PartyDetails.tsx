@@ -13,8 +13,9 @@ import HostContent from "@/components/hoc/HostContent";
 import { DeletedPartyContent } from "@/components/hoc/DeletedPartyContent";
 import { PartyIsClosedContent } from "@/components/hoc/PartyIsClosedContent";
 import { RolledDialog } from "@/components/hoc/RolledDialog";
+import { MyProfile } from "@/components/hoc/MyProfile";
 import { useToastSurface } from "@/components/hoc/NotificationsContainer";
-import { useAppClient, useCurrentUser } from "@/components/hooks";
+import { useAppClient, useCurrentUser, useUnrevealed } from "@/components/hooks";
 import type { Party } from "@/types";
 
 type Props = {
@@ -26,8 +27,16 @@ export const PartyDetails = ({ party }: Props) => {
   // The party page is the light one: its toasts are white.
   useToastSurface("light");
   const { markRevealed } = useAppClient();
-  // The user heard whom they give a gift to: no more reminders about this party.
-  const onReveal = React.useCallback(() => { markRevealed(party.code); }, [markRevealed, party.code]);
+  const { revealed } = useUnrevealed();
+  // The user heard whom they give a gift to: no more reminders (or profile dot) about this party.
+  const onReveal = React.useCallback(
+    () => {
+      revealed(party.code);
+      markRevealed(party.code);
+    },
+    [revealed, markRevealed, party.code],
+  );
+  const partyPath = `/p/${party.code}/`;
 
   // A guest watching the page as the host rolls the dice gets the news right away: the letter, with stars falling.
   const navigate = useNavigate();
@@ -47,6 +56,8 @@ export const PartyDetails = ({ party }: Props) => {
       <title>{party.name}</title>
       <Routes>
         <Route path="rolled" element={<RolledDialog onParty />} />
+        {/* The profile opens over the party, and closes back to it. */}
+        <Route path="profile/*" element={<MyProfile base={`${partyPath}profile/`} dismissLocation={partyPath} />} />
       </Routes>
       <Hero size={"fullheight"} className="party-details">
         <Hero.Body>
@@ -108,7 +119,7 @@ export const PartyDetails = ({ party }: Props) => {
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          <Footer>
+          <Footer profileAsLink profileBase={`${partyPath}profile/`}>
             <UnsplashCredit id="78uNJt1kPw8" name="Joanna Kosinska" username="joannakosinska" />
           </Footer>
         </Hero.Footer>

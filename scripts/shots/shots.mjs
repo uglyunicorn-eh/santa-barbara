@@ -74,6 +74,8 @@ const SCREENS = [
   { name: "party-host", path: `/p/${CODES.hostOpen}/`, signedIn: true },
   { name: "party-guest", path: `/p/${CODES.guestOpen}/`, signedIn: true },
   { name: "party-closed", path: `/p/${CODES.closed}/`, signedIn: true },
+  { name: "party-rolled-letter", path: `/p/${CODES.closed}/rolled`, signedIn: true },
+  { name: "party-profile-history", path: `/p/${CODES.closed}/profile/history/`, signedIn: true, unrevealed: true },
   { name: "party-closed-revealed", path: `/p/${CODES.closed}/`, signedIn: true, act: clickButton("Yes, please!") },
   { name: "party-deleted", path: `/p/${CODES.deleted}/`, signedIn: true },
   { name: "party-join", path: `/p/${CODES.notJoined}/`, signedIn: true },

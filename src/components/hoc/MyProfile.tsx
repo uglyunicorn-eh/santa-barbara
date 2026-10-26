@@ -102,17 +102,23 @@ const emailSchema = (currentEmail: string) => v.object({
   ),
 });
 
-export const MyProfile = () => (
+/**
+ * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
+ * party page (closing it goes back to `dismissLocation`).
+ */
+export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?: string; dismissLocation?: string }) => (
   <DialogBox
     className={"profile-box"}
     noHeader
     dismissLabel={"Okie Dokie!"}
+    dismissLocation={dismissLocation}
     size="lg"
   >
-    {/* Pinned to the top of the dialog while the history scrolls under it. */}
-    <Tabs label="Profile" className="sticky top-0 z-10 -mx-5 mb-4 bg-white">
-      <Tab to="/profile/">Profile</Tab>
-      <Tab to="/profile/history/">Latest history</Tab>
+    {/* Pinned to the dialog's very top edge (not inside the body's padding, where rows would show above it) while the
+        history scrolls under it. On a phone's sheet it leaves room for the grip. */}
+    <Tabs label="Profile" className="sticky -top-5 z-20 -mx-5 -mt-5 mb-4 rounded-t-card bg-white max-tablet:pt-4">
+      <Tab to={base}>Profile</Tab>
+      <Tab to={`${base}history/`}>Latest history</Tab>
     </Tabs>
     <Content>
       <Routes>

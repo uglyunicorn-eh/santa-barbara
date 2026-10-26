@@ -9,3 +9,4 @@ export { useLiveParty } from './useLiveParty';
 export { useLiveSocket } from './useLiveSocket';
 export { useRevealReminders } from './useRevealReminders';
 export { useTabletUp } from './useTabletUp';
+export { UnrevealedProvider, useUnrevealed } from './useUnrevealed';

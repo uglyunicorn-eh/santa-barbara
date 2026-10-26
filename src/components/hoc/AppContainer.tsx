@@ -5,6 +5,7 @@ import { CancelEmailChange, ConfirmAccountDeletion, ConfirmEmailChange } from "@
 import { NotificationsContainer } from "@/components/hoc/NotificationsContainer";
 import { PartyContainer } from "@/components/hoc/PartyContainer";
 import { WelcomeBox } from "@/components/hoc/WelcomeBox";
+import { UnrevealedProvider } from "@/components/hooks/useUnrevealed";
 
 export const AppContainer = () => {
   const router = React.useMemo(
@@ -21,7 +22,7 @@ export const AppContainer = () => {
 
 function Root() {
   return (
-    <>
+    <UnrevealedProvider>
       <title>Anonymous Ded Morozes</title>
       <NotificationsContainer />
 
@@ -37,6 +38,6 @@ function Root() {
         <Route path="/profile/email" Component={ConfirmEmailChange} />
         <Route path="/profile/email/:token" Component={ConfirmEmailChange} />
       </Routes>
-    </>
+    </UnrevealedProvider>
   );
 }

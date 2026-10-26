@@ -3,6 +3,12 @@
   background-size: 50%;
 }
 
+/* On a phone's sheet the X sits at the header's right end: the flags hang just left of it. */
+.party-box.is-sheet .dialog-card .dialog-head {
+  background-position: top right 3.5rem;
+  background-size: 42%;
+}
+
 .confirm-party-close {
   .dialog-card {
     background: white right bottom url("/rockenroll.png") no-repeat;

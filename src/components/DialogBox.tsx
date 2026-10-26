@@ -134,7 +134,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
       <SubmittingWatcher onChange={onSubmittingChange} />
       {/* The sheet's grip, a hint that it swipes away (only when it can be dismissed). */}
       {!tabletUp && dismissible && (
-        <div aria-hidden="true" className="dialog-grip absolute top-2 left-1/2 z-10 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-300" />
+        <div aria-hidden="true" className="dialog-grip absolute top-2 left-1/2 z-30 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-300" />
       )}
       {!noHeader && (
         <header className="dialog-head flex shrink-0 items-center p-5 text-xl text-black [text-shadow:0_1px_2px_white] max-tablet:pt-7 tablet:text-2xl">
