@@ -114,7 +114,7 @@ const EnterForm = () => {
   const goHome = React.useCallback(() => navigate('/'), [navigate]);
 
   return (
-    <GrinchBox>
+    <GrinchBox closeTo="/">
       {sentTo
         ? (
           <>

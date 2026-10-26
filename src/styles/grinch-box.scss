@@ -1,4 +1,10 @@
 .grinch-box {
+  // The picture hangs above the card (see the img rule below) without taking space: reserve it, so a tall card
+  // centred in a short window doesn't push the picture off the top. On phones the picture sits in the card.
+  @include tablet {
+    padding-top: 120px;
+  }
+
   .card {
     display: inline-block;
     padding: 3em 2em;
