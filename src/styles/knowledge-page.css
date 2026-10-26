@@ -13,6 +13,9 @@
 
   body {
     overflow: unset;
+    /* Clear of a phone's status bar and home indicator; the page's background fills them (viewport-fit=cover). */
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   h1,

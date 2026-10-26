@@ -54,7 +54,7 @@ export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-10000 bg-black/55 backdrop-blur-[2px] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
         <Dialog.Viewport className={cn("fixed inset-0 z-10000 overflow-y-auto overscroll-contain", className)}>
-          <div className="flex min-h-full items-center justify-center px-4 pb-8">
+          <div className="flex min-h-full items-center justify-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[calc(2rem+env(safe-area-inset-bottom,0px))]">
             <Dialog.Popup ref={popupRef} initialFocus={popupRef} className="outline-none">
               <GrinchBox closeTo={closeTo} inDialog>{children}</GrinchBox>
             </Dialog.Popup>

@@ -54,7 +54,8 @@ export const NotificationsContainer = () => {
       className="app-toaster"
       // From tablet up, above the footer's links in the bottom-right corner.
       offset={tabletUp ? { right: 16, bottom: FOOTER_CLEARANCE } : 16}
-      mobileOffset={16}
+      // On phones, below the status bar (the page draws under it: viewport-fit=cover).
+      mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: 16, right: 16, bottom: 16 }}
       visibleToasts={4}
       style={{ zIndex: 10001, fontFamily: '"Cuprum", sans-serif' }}
       toastOptions={{

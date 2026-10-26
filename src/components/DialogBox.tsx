@@ -238,7 +238,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
                 <Drawer.Popup
                   ref={popupRef}
                   initialFocus={popupRef}
-                  className="dialog-card relative flex max-h-[calc(100dvh-24px)] w-full flex-col overflow-hidden rounded-t-card bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-lg outline-none [transform:translateY(var(--drawer-swipe-movement-y,0px))] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:select-none data-swiping:duration-0 data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]"
+                  className="dialog-card relative flex max-h-[calc(100dvh-24px-env(safe-area-inset-top,0px))] w-full flex-col overflow-hidden rounded-t-card bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-lg outline-none [transform:translateY(var(--drawer-swipe-movement-y,0px))] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:select-none data-swiping:duration-0 data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]"
                 >
                   {content}
                 </Drawer.Popup>

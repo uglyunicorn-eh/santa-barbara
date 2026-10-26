@@ -6,7 +6,7 @@
 
   /* On a phone's sheet, nearly the whole screen: a strip of the page stays visible above it. */
   &.is-sheet .dialog-card {
-    height: calc(100dvh - 3rem);
+    height: calc(100dvh - 3rem - env(safe-area-inset-top, 0px));
   }
 
   .dialog-body {
