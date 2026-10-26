@@ -192,6 +192,10 @@ const Profile = () => {
       <EmailSetting email={profile?.email ?? ""} />
 
       <DeleteAccount email={profile?.email ?? ""} />
+
+      <DialogFooterStart>
+        <Button type="button" variant="ghost" onClick={signOut}>Sign Out</Button>
+      </DialogFooterStart>
     </div>
   );
 };

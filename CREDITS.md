@@ -1,8 +1,10 @@
 # Credits
 
-Gnomik is a free, non-commercial project. Thank you to the artists and photographers whose work it uses.
+Gnomik is a free, non-commercial project made just for fun. It is free to use and has no ads. The "Buy me a coffee" link is an optional tip jar: nothing in the service requires it or depends on it. Thank you to the artists and photographers whose work it uses.
 
 The MIT license in [LICENSE](LICENSE) covers this project's code only. It does not cover the artwork and photos, which belong to their authors and keep their own licenses.
+
+If you are an author or copyright holder and have any concerns about how your work is used here, please write to [info@gnomik.me](mailto:info@gnomik.me). We'll credit it the way you'd like or take it down.
 
 ## Photos (Unsplash)
 
