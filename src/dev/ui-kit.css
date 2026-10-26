@@ -1,0 +1,7 @@
+/*
+ * The UI kit's own Tailwind build: the app's tokens and layers (tailwind.css), plus the classes used in src/dev/.
+ * Only this dev-only page loads it, so the kit's classes never reach the production CSS.
+ */
+@import "../styles/tailwind.css";
+
+@source "./";

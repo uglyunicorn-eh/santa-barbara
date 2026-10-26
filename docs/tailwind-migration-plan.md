@@ -20,7 +20,9 @@ of both repos at fed0d99 / 061bacf)
 - Phase 3, Tailwind and shadcn (Base UI) beside Bulma, with the spec's tokens: no visible
   change (see Phase 3's "What it took").
 
-**Next:** the UI kit page (Phase 2 step 4), then Phase 4.
+- Phase 2 step 4, the UI kit page: `/ui-kit` in `npm run dev`.
+
+**Next:** Phase 4, starting with 4.1 (Button).
 
 **Frontend (santa-barbara):** talks to the backend's plain JSON API (`src/api/client`);
 hosted on Cloudflare Pages, with a Content-Security-Policy from `public/_headers` that
@@ -291,6 +293,20 @@ rebuilds that screen; Phase 6 confirms none are left.
    in `astro.config.mjs` only in dev:
    `'astro:config:setup': ({ command, injectRoute }) => { if (command === 'dev')
    injectRoute({ pattern: '/ui-kit', entrypoint: './src/dev/ui-kit.astro' }); }`.
+
+   **Done:** `src/dev/ui-kit.astro`, open `http://localhost:4321/ui-kit` while
+   `npm run dev` runs (or start a second server with `npx astro dev --port 4400
+   --ignore-lock` when another one already runs in the folder). It shows the tokens
+   (colours, roles, type, corners, shadows), then on night, paper and glass every button
+   variant in every state (resting, hovered, keyboard focus, disabled, busy, and a live
+   one to try), the sizes and pill, form fields in each state, the label-beside and inline
+   layouts, two dialogs, the profile tabs, toasts on night and paper, and the longest
+   values. Hover and focus are shown forced, so they can be compared without a mouse.
+   - The controls are prototypes: class recipes in `src/dev/recipes.ts`, written from the
+     spec. Phase 4 builds the real components from them (4.1 takes the button recipe as
+     its variants), and the kit then renders those components instead.
+   - The kit has its own stylesheet (`src/dev/ui-kit.css`: `tailwind.css` plus
+     `@source "./"`), so its classes never reach the production CSS.
 5. Check that `npm run build` passes and nothing is broken before starting.
 
 ## Phase 3: Tooling, run both side by side (½–1 day, 1 PR)

@@ -51,12 +51,28 @@ const contentSecurityPolicy = {
   },
 };
 
+/**
+ * The UI kit (docs/tailwind-migration-plan.md, Phase 2 step 4): every control in every state on the app's surfaces,
+ * at /ui-kit. Only in `npm run dev`: the page lives outside src/pages/, so a production build never emits it.
+ */
+const uiKit = {
+  name: 'ui-kit',
+  hooks: {
+    'astro:config:setup': ({ command, injectRoute }) => {
+      if (command === 'dev') {
+        injectRoute({ pattern: '/ui-kit', entrypoint: './src/dev/ui-kit.astro' });
+      }
+    },
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://gnomik.me",
   integrations: [
     react(),
     contentSecurityPolicy,
+    uiKit,
   ],
   devToolbar: {
     enabled: false,
