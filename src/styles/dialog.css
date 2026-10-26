@@ -83,10 +83,32 @@
        * along the corner and the flap folds back over it; the shadow is on the wrapper, so the cut doesn't clip it.
        */
       .code-sticker {
+        display: block;
         width: fit-content;
         margin: 0.5em auto 1em;
+        padding: 0;
+        border: 0;
+        background: none;
+        font: inherit;
+        cursor: copy;
         filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.3));
         transform: rotate(-2deg);
+        transition: transform 150ms, filter 150ms;
+
+        &:hover {
+          filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.3));
+          transform: rotate(-2deg) translateY(-1px);
+        }
+
+        &:active {
+          transform: rotate(-2deg) scale(0.97);
+        }
+
+        &:focus-visible {
+          outline: 2px solid #007a68;
+          outline-offset: 4px;
+          border-radius: 10px;
+        }
       }
 
       .code-sticker-text {

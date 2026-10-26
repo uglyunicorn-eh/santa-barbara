@@ -9,6 +9,7 @@ import { HaveQuestion } from "@/components/HaveQuestion";
 import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
 import { useAppClient } from "@/components/hooks";
+import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import { useNavigate } from "react-router-dom";
 import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
 
@@ -55,6 +56,22 @@ export const NewParty = () => {
       createParty,
       party,
     ],
+  );
+
+  const { info, error } = useNotifications();
+  const copyCode = React.useCallback(
+    async () => {
+      if (!party) {
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(party.code);
+        info(`Code ${party.code} copied! Pass it on to your friends.`);
+      } catch {
+        error(`We couldn't copy the code. It's ${party.code}.`);
+      }
+    },
+    [party, info, error],
   );
 
   const goToParty = React.useCallback(
@@ -121,10 +138,10 @@ export const NewParty = () => {
                 Here's your party's secret code:
               </p>
 
-              {/* A sticker with its corner lifting, as if you could peel the code off and hand it over. */}
-              <div className="code-sticker">
+              {/* A sticker with its corner lifting, as if you could peel the code off and hand it over: a click copies it. */}
+              <button type="button" className="code-sticker" onClick={copyCode} title="Copy the code" aria-label={`Copy the code ${party.code}`}>
                 <span className="code-sticker-text">{party.code}</span>
-              </div>
+              </button>
             </>
           )}
 
