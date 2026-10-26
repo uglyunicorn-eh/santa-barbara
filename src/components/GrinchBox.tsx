@@ -1,3 +1,4 @@
+import { Dialog } from '@base-ui/react/dialog';
 import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +34,33 @@ export const GrinchBox = ({ closeTo, children }: Props) => (
     </motion.div>
   </Container>
 );
+
+/**
+ * The Grinch's card as a dialog over the page (the sign-in form): the page behind stays exactly as it was and doesn't
+ * scroll; focus stays inside; Esc, a click on the backdrop and the X go to `closeTo`. A card taller than the window
+ * scrolls inside the dialog. Above the garage door (z-index 9999), like the menus.
+ */
+export const GrinchDialog = ({ closeTo, className, children }: { closeTo: string; className?: string; children?: React.ReactNode }) => {
+  const navigate = useNavigate();
+  const onOpenChange = React.useCallback((open: boolean) => { if (!open) navigate(closeTo); }, [navigate, closeTo]);
+  // Focus starts on the card, not the X; a field marked `autofocus` takes it next.
+  const popupRef = React.useRef<HTMLDivElement>(null);
+
+  return (
+    <Dialog.Root open modal onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Backdrop className="fixed inset-0 z-10000 bg-black/55 backdrop-blur-[2px] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+        <Dialog.Viewport className={`grinch-dialog fixed inset-0 z-10000 overflow-y-auto overscroll-contain ${className ?? ""}`}>
+          <div className="flex min-h-full items-center justify-center px-4 pb-8">
+            <Dialog.Popup ref={popupRef} initialFocus={popupRef} className="outline-none">
+              <GrinchBox closeTo={closeTo}>{children}</GrinchBox>
+            </Dialog.Popup>
+          </div>
+        </Dialog.Viewport>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+};
 
 const CloseX = ({ to }: { to: string }) => {
   const navigate = useNavigate();
