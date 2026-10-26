@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
 
@@ -62,7 +62,7 @@ const LinkFailed = ({ message }: { message: string }) => {
     <LinkPage>
       <h2>Hmm... the magic fizzled</h2>
       <p>{message}</p>
-      <Button outlined text rounded onClick={() => navigate('/')}>&larr; Take me home, country roads!</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>&larr; Take me home, country roads!</Button>
     </LinkPage>
   );
 };
@@ -103,7 +103,7 @@ export const ConfirmAccountDeletion = () => {
       <br />
       <p>Your account is gone. The elves have shredded your file and the parties you were hosting.</p>
       <p>If you ever miss us, just sign in again with your email. We'll keep the cocoa warm.</p>
-      <Button outlined text rounded onClick={() => navigate('/')}>Bye-e-e!</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Bye-e-e!</Button>
     </LinkPage>
   );
 };
@@ -144,7 +144,7 @@ export const ConfirmEmailChange = () => {
       <br />
       <p>From now on, we know you as {result.user.email}. Use it next time you sign in.</p>
       <p>Your other devices were signed out, just in case.</p>
-      <Button outlined text rounded onClick={() => navigate('/profile/')}>Show me my profile</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/profile/')}>Show me my profile</Button>
       <SnowConfetti />
     </LinkPage>
   );
@@ -190,7 +190,7 @@ export const CancelEmailChange = () => {
       <br />
       <p>Your email stays the same, and every device was signed out, including whoever asked for the change.</p>
       <p>Sign in again with your email to carry on.</p>
-      <Button outlined text rounded onClick={() => navigate('/')}>Sign me in</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Sign me in</Button>
     </LinkPage>
   );
 };

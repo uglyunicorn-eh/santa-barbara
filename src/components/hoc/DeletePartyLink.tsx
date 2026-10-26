@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { ConfirmPartyDelete } from 'src/components/hoc/ConfirmPartyDelete';
@@ -11,8 +11,8 @@ export const DeletePartyLink = () => {
 
   return (
     <>
-      <Button className="is-ghost has-text-danger" onClick={onClick}>
-        <span aria-hidden="true" style={{ marginRight: '0.5em' }}>💥</span>
+      <Button variant="ghost-destructive" onClick={onClick}>
+        <span aria-hidden="true">💥</span>
         Delete this party
       </Button>
       <Routes>

@@ -1,5 +1,5 @@
-// Class recipes for the controls in docs/design-spec.md, used by the UI kit page. They're prototypes: Phase 4 turns
-// them into the real components (shadcn on Base UI), and the kit then shows those instead.
+// Helpers for the UI kit page. Buttons are the real component now (src/components/ui/button.tsx); the field recipes
+// below are still prototypes from docs/design-spec.md until Phase 4.2 builds the real form fields.
 //
 // A recipe takes a `state` so the kit can show hover and focus without a mouse; "live" leaves them to the browser.
 
@@ -31,41 +31,20 @@ export const BUTTON_VARIANTS: { id: ButtonVariant; name: string; use: string }[]
   { id: "link", name: "link", use: "Links in copy" },
 ];
 
-const buttonBase =
-  "inline-flex items-center justify-center gap-2 font-sans font-medium whitespace-nowrap rounded-lg border border-transparent transition-colors duration-150 cursor-pointer outline-none select-none";
+/** The real Button's surface for a kit surface: glass and night are both "dark". */
+export const toneOf = (surface: Surface) => (surface === "paper" ? "light" : "dark");
 
-const buttonSizes: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-10 px-4 text-base",
-  lg: "h-12 px-5 text-lg",
-};
-
-/** Resting look, and the look while hovered, per variant and surface. */
-const buttonLooks: Record<ButtonVariant, Record<"light" | "dark", [string, string]>> = {
-  primary: {
-    light: ["bg-primary text-primary-foreground", "bg-primary-hover text-primary-foreground"],
-    dark: ["bg-primary text-primary-foreground shadow-sm", "bg-primary-hover text-primary-foreground shadow-sm"],
-  },
-  secondary: {
-    light: ["bg-white border-input text-zinc-900", "bg-zinc-50 border-input text-zinc-900"],
-    dark: ["bg-transparent border-white/40 text-white", "bg-white/10 border-white/40 text-white"],
-  },
-  ghost: {
-    light: ["bg-transparent text-zinc-700", "bg-zinc-100 text-zinc-900"],
-    dark: ["bg-transparent text-white", "bg-white/10 text-white"],
-  },
-  "ghost-destructive": {
-    light: ["bg-transparent text-destructive", "bg-red-50 text-destructive"],
-    dark: ["bg-transparent text-red-200", "bg-white/10 text-red-200"],
-  },
-  destructive: {
-    light: ["bg-destructive-strong text-white", "bg-destructive-strong-hover text-white"],
-    dark: ["bg-destructive-strong text-white shadow-sm", "bg-destructive-strong-hover text-white shadow-sm"],
-  },
-  link: {
-    light: ["h-auto px-0 bg-transparent text-link underline underline-offset-4", "h-auto px-0 bg-transparent text-red-800 underline underline-offset-4"],
-    dark: ["h-auto px-0 bg-transparent text-zinc-100 underline underline-offset-4", "h-auto px-0 bg-transparent text-white underline underline-offset-4"],
-  },
+/**
+ * Classes that force a state the kit can't trigger without a mouse or keyboard: the hovered look (the same colours as
+ * the Button's `hover:` classes) or the focus ring (its `focus-visible:` ring).
+ */
+const hovered: Record<ButtonVariant, Record<"light" | "dark", string>> = {
+  primary: { light: "bg-primary-hover", dark: "bg-primary-hover" },
+  secondary: { light: "bg-zinc-50", dark: "bg-white/10" },
+  ghost: { light: "bg-zinc-100 text-zinc-900", dark: "bg-white/10" },
+  "ghost-destructive": { light: "bg-red-50", dark: "bg-white/10" },
+  destructive: { light: "bg-destructive-strong-hover", dark: "bg-destructive-strong-hover" },
+  link: { light: "text-red-800", dark: "text-white" },
 };
 
 /** The focus ring: 2px in the ring colour with a 2px gap in the surface colour. */
@@ -76,34 +55,8 @@ const focusVisible = (surface: Surface) =>
     ? "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     : "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-night";
 
-const liveHover: Record<ButtonVariant, Record<"light" | "dark", string>> = {
-  primary: { light: "hover:bg-primary-hover", dark: "hover:bg-primary-hover" },
-  secondary: { light: "hover:bg-zinc-50", dark: "hover:bg-white/10" },
-  ghost: { light: "hover:bg-zinc-100 hover:text-zinc-900", dark: "hover:bg-white/10" },
-  "ghost-destructive": { light: "hover:bg-red-50", dark: "hover:bg-white/10" },
-  destructive: { light: "hover:bg-destructive-strong-hover", dark: "hover:bg-destructive-strong-hover" },
-  link: { light: "hover:text-red-800", dark: "hover:text-white" },
-};
-
-export function button({ variant, size = "md", surface, state = "default", pill = false, fullWidth = false }: {
-  variant: ButtonVariant; size?: ButtonSize; surface: Surface; state?: State; pill?: boolean; fullWidth?: boolean;
-}) {
-  const tone = dark(surface) ? "dark" : "light";
-  const [rest, hovered] = buttonLooks[variant][tone];
-  return cn(
-    buttonBase,
-    buttonSizes[size],
-    state === "hover" ? hovered : rest,
-    state === "focus" && focusRing(surface),
-    state === "live" && `${liveHover[variant][tone]} ${focusVisible(surface)}`,
-    state === "disabled" && "opacity-50 pointer-events-none",
-    pill && "rounded-full",
-    fullWidth && "w-full",
-  );
-}
-
-/** Spinner for loading buttons: replaces the icon, the label stays. */
-export const spinner = "size-4 shrink-0 rounded-full border-2 border-current border-r-transparent animate-spin";
+export const forced = (variant: ButtonVariant, surface: Surface, state: State) =>
+  state === "hover" ? hovered[variant][toneOf(surface)] : state === "focus" ? focusRing(surface) : "";
 
 // ---------------------------------------------------------------------------------------------------------------
 // Form fields

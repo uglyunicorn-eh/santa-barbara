@@ -1,7 +1,8 @@
 import React from "react";
 
 import { newKey } from "src/api/client";
-import { Button, Container, Hero } from "src/components/bulma";
+import { Container, Hero } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
 
@@ -74,13 +75,7 @@ const EnterActions = () => {
   );
 
   return (
-    <Button
-      size="medium"
-      className="is-rounded is-link login-button"
-      loading={busy}
-      disabled={busy}
-      onClick={onLoginClick}
-    >
+    <Button variant="primary" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick}>
       Enter with your email address
     </Button>
   );
@@ -128,7 +123,7 @@ const EnterForm = () => {
             <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
             <p>If you didn't receive anything from us, refresh this page and try again.</p>
 
-            <Button outlined text rounded onClick={goHome}>Return back to home</Button>
+            <Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>
 
             <SnowConfetti />
           </>
@@ -151,7 +146,7 @@ const EnterForm = () => {
             <p>We promise not to send you any marketing materials or share your personal data with third parties.</p>
 
             <div className="actions">
-              <Submit rounded>Send me a magic link!</Submit>
+              <Submit size="lg" surface="dark" pill>Send me a magic link!</Submit>
             </div>
           </Form>
         )

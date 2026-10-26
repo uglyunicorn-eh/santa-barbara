@@ -2,12 +2,13 @@
 // The UI kit: every control from docs/design-spec.md in every state, on the app's three surfaces. Dev only (see the
 // ui-kit integration in astro.config.mjs): open http://localhost:4321/ui-kit while `npm run dev` runs.
 import BaseLayout from "src/layouts/BaseLayout.astro";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import "./ui-kit.css";
 
 import {
-  BUTTON_VARIANTS, SURFACES, button, error, help, input, label, muted, onPhoto, spinner, surfaceCard, surfacePanel,
-  surfacePhoto, type State, type Surface,
+  BUTTON_VARIANTS, SURFACES, error, forced, help, input, label, muted, onPhoto, surfaceCard, surfacePanel, surfacePhoto,
+  toneOf, type State, type Surface,
 } from "./recipes";
 
 const STATES: State[] = ["default", "hover", "focus", "disabled", "loading", "live"];
@@ -60,8 +61,9 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       <h1 class="mt-1 text-3xl font-semibold">UI kit</h1>
       <p class="mt-2 max-w-200 text-muted-foreground">
         Every control from <code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">docs/design-spec.md</code>, in every state, on the app's three
-        surfaces. These are prototypes built from the spec's tokens; Phase 4 replaces them with the real components, and
-        this page then shows those.
+        surfaces. Buttons are the real component (<code class="rounded-sm bg-zinc-100 px-1 font-mono text-sm text-zinc-900">src/components/ui/button.tsx</code>);
+        form fields, dialogs, tabs and toasts are still prototypes from the spec until Phase 4 builds them. Hover and focus
+        are shown forced, side by side; the "try it" column is live.
       </p>
       <nav class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm" aria-label="Sections">
         <a class="text-link underline underline-offset-4" href="#tokens">Tokens</a>
@@ -171,14 +173,13 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                         <div class={`text-xs ${muted(surface.id)} ${onPhoto(surface.id)}`}>{v.use}</div>
                       </td>
                       {STATES.map(state => (
-                        <td class="align-middle">
+                        <td class="align-middle whitespace-nowrap">
                           {v.id === "link"
-                            ? <a href="#" class={button({ variant: v.id, surface: surface.id, state: state === "loading" ? "default" : state })} aria-disabled={state === "disabled" ? "true" : undefined}>Check out</a>
+                            ? <a href="#" class={cn(buttonVariants({ variant: "link", surface: toneOf(surface.id) }), forced(v.id, surface.id, state), state === "disabled" && "pointer-events-none opacity-50")} aria-disabled={state === "disabled" ? "true" : undefined}>Check out</a>
                             : (
-                              <button type="button" class={button({ variant: v.id, surface: surface.id, state })} disabled={state === "disabled"} aria-busy={state === "loading" ? "true" : undefined}>
-                                {state === "loading" && <span class={spinner} aria-hidden="true"></span>}
+                              <Button variant={v.id} surface={toneOf(surface.id)} className={forced(v.id, surface.id, state)} disabled={state === "disabled"} loading={state === "loading"}>
                                 {v.id === "primary" ? "Rock'n'Roll!" : v.id === "secondary" ? "Nah, never mind" : v.id === "ghost" ? "Change" : v.id === "ghost-destructive" ? "💥 Delete this party" : "Delete my account"}
-                              </button>
+                              </Button>
                             )}
                         </td>
                       ))}
@@ -193,20 +194,20 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
           <div>
             <h3 class={`text-lg font-semibold ${onPhoto(surface.id)}`}>Sizes and shapes</h3>
             <div class="mt-3 flex flex-wrap items-center gap-3">
-              <button type="button" class={button({ variant: "primary", size: "sm", surface: surface.id, state: "live" })}>Save</button>
-              <button type="button" class={button({ variant: "primary", size: "md", surface: surface.id, state: "live" })}>🎉 Rock'n'Roll!</button>
-              <button type="button" class={button({ variant: "primary", size: "lg", surface: surface.id, state: "live" })}>OK, let's roll the dice!</button>
-              <button type="button" class={button({ variant: "secondary", size: "sm", surface: surface.id, state: "live" })}>Show more parties</button>
-              <button type="button" class={button({ variant: "ghost", size: "sm", surface: surface.id, state: "live" })}>Cancel</button>
+              <Button variant="primary" size="sm" surface={toneOf(surface.id)}>Save</Button>
+              <Button variant="primary" size="md" surface={toneOf(surface.id)}>🎉 Rock'n'Roll!</Button>
+              <Button variant="primary" size="lg" surface={toneOf(surface.id)}>OK, let's roll the dice!</Button>
+              <Button variant="secondary" size="sm" surface={toneOf(surface.id)}>Show more parties</Button>
+              <Button variant="ghost" size="sm" surface={toneOf(surface.id)}>Cancel</Button>
               {surface.id !== "paper" && (
-                <button type="button" class={button({ variant: "primary", size: "lg", surface: surface.id, state: "live", pill: true })}>Enter with your email address</button>
+                <Button variant="primary" size="lg" surface={toneOf(surface.id)} pill>Enter with your email address</Button>
               )}
             </div>
             <div class={`mt-2 text-sm ${muted(surface.id)} ${onPhoto(surface.id)}`}>
               sm 32px · md 40px · lg 48px{surface.id !== "paper" && " · pill only for a hero screen's main action"}
             </div>
             <div class="mt-4 max-w-sm">
-              <button type="button" class={button({ variant: "primary", surface: surface.id, state: "live", fullWidth: true })}>Send me a magic link!</button>
+              <Button variant="primary" surface={toneOf(surface.id)} fullWidth>Send me a magic link!</Button>
               <div class={`mt-1 text-sm ${muted(surface.id)} ${onPhoto(surface.id)}`}>fullWidth: the main action in dialogs and the sign-in card on phones</div>
             </div>
           </div>
@@ -272,7 +273,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                     <div class="text-sm font-medium text-zinc-700">Name</div>
                     <div class="mt-1 flex items-start gap-2">
                       <input class={input({ surface: "paper", size: "sm", state: "live" })} value="Alice" aria-label="Name" />
-                      <button type="button" class={button({ variant: "primary", size: "sm", surface: "paper", state: "disabled" })} disabled>Save</button>
+                      <Button variant="primary" size="sm" surface="light" disabled>Save</Button>
                     </div>
                     <p class="mt-1 text-sm text-muted-foreground">Save turns on once the name changes.</p>
                   </div>
@@ -280,8 +281,8 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                     <div class="text-sm font-medium text-zinc-700">Email</div>
                     <div class="mt-1 flex items-start gap-2">
                       <input class={input({ surface: "paper", size: "sm", state: "error" })} value="alice@example.com" aria-label="New email" aria-invalid="true" />
-                      <button type="button" class={button({ variant: "primary", size: "sm", surface: "paper", state: "live" })}>Send link</button>
-                      <button type="button" class={button({ variant: "ghost", size: "sm", surface: "paper", state: "live" })}>Cancel</button>
+                      <Button variant="primary" size="sm" surface="light">Send link</Button>
+                      <Button variant="ghost" size="sm" surface="light">Cancel</Button>
                     </div>
                     <p class="mt-1 text-sm text-destructive">That's already your email.</p>
                   </div>
@@ -291,7 +292,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                         <div class="text-sm font-medium text-zinc-900">Delete account</div>
                         <div class="text-sm text-zinc-600">Removes your account and the parties you host that haven't rolled the dice yet.</div>
                       </div>
-                      <button type="button" class={button({ variant: "ghost-destructive", size: "sm", surface: "paper", state: "live" })}>Delete account</button>
+                      <Button variant="ghost-destructive" size="sm" surface="light">Delete account</Button>
                     </div>
                   </div>
                 </div>
@@ -311,7 +312,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
             <h2 class={`${sectionTitle} text-white`}>Dialogs</h2>
             <p class="mt-1 text-zinc-300">On the night backdrop at 70%. Widths: sm 600px, md 700px, lg 800px; on phones, full width minus 16px.</p>
           </div>
-          <button type="button" class={cn(button({ variant: "ghost", surface: "night", state: "live" }), "size-10 shrink-0 px-0")} aria-label="Close" set:html={iconX}></button>
+          <Button variant="ghost" surface="dark" className="size-10 shrink-0 px-0" aria-label="Close"><Fragment set:html={iconX} /></Button>
         </div>
 
         <div class="mt-6 flex flex-col items-center gap-8">
@@ -327,11 +328,11 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
                   </div>
                 </div>
               ))}
-              <p class="text-sm text-muted-foreground tablet:pl-41.5">Have a question? <a href="#" class={button({ variant: "link", surface: "paper", state: "live" })}>Check out</a> how this works.</p>
+              <p class="text-sm text-muted-foreground tablet:pl-41.5">Have a question? <a href="#" class={buttonVariants({ variant: "link" })}>Check out</a> how this works.</p>
             </div>
             <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
-              <button type="button" class={cn(button({ variant: "secondary", surface: "paper", state: "live" }), "max-tablet:w-full")}>Nah, never mind</button>
-              <button type="button" class={cn(button({ variant: "primary", surface: "paper", state: "live" }), "max-tablet:w-full")}>🎉 Rock'n'Roll!</button>
+              <Button variant="secondary" surface="light" className="max-tablet:w-full">Nah, never mind</Button>
+              <Button variant="primary" surface="light" className="max-tablet:w-full">🎉 Rock'n'Roll!</Button>
             </div>
           </div>
 
@@ -342,8 +343,8 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
               <p class="text-muted-foreground">After that, it's gone for good.</p>
             </div>
             <div class="mt-6 flex flex-col-reverse gap-2 tablet:flex-row tablet:justify-end">
-              <button type="button" class={cn(button({ variant: "secondary", surface: "paper", state: "live" }), "max-tablet:w-full")}>Not ready yet…</button>
-              <button type="button" class={cn(button({ variant: "destructive", surface: "paper", state: "live" }), "max-tablet:w-full")}>Delete this party</button>
+              <Button variant="secondary" surface="light" className="max-tablet:w-full">Not ready yet…</Button>
+              <Button variant="destructive" surface="light" className="max-tablet:w-full">Delete this party</Button>
             </div>
           </div>
         </div>

@@ -4,6 +4,13 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Cuprum:wght@400;500;600&display=swap");
 
+// Bulma's colours, pointed at docs/design-spec.md, so what Bulma still styles until Phase 5 (text links, the profile
+// tabs, input focus, form errors) matches the new controls. Must come before Bulma's utilities.
+$primary: #c62a30; // red-600
+$link: #a8222a; // red-700, the spec's link colour
+$danger: #a8222a; // red-700, destructive text
+$success: #257942; // green-700
+
 @layer bulma {
   // Inside the layer too: besides mixins and variables it defines placeholders (`%control`, …) that Bulma's
   // elements `@extend`, and Sass writes extended rules where the placeholder lives. Outside, they'd be unlayered and

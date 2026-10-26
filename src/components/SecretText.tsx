@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   label: string;
@@ -15,6 +15,6 @@ export const SecretText = ({ label, children }: Props) => {
   );
 
   return (
-    revealed ? <>{children}</> : <Button color="primary" rounded onClick={reveal}>{label}</Button>
+    revealed ? <>{children}</> : <Button variant="primary" pill onClick={reveal}>{label}</Button>
   );
 };

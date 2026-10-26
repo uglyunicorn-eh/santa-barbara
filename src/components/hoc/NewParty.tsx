@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Content } from "src/components/bulma";
+import { Content } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import * as Yup from 'yup';
 
 import type { Party } from "src/types";
@@ -86,7 +87,7 @@ export const NewParty = () => {
         !party
           ? <Submit>&#x1F389; Rock'n'Roll!</Submit>
           // Still inside the form: without type="button" it would submit it again.
-          : <Button type="button" onClick={goToParty} color="warning" size="large" rounded>&#x1F973; Yahooooooo!</Button>
+          : <Button type="button" variant="primary" size="lg" onClick={goToParty}>&#x1F973; Yahooooooo!</Button>
       }
       noDismiss={party !== undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}

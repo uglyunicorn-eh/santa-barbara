@@ -1,6 +1,7 @@
 import type { JOSEError } from 'jose/errors';
 import React from "react";
-import { Button, Columns, Container, Content, Hero, Image } from "src/components/bulma";
+import { Columns, Container, Content, Hero, Image } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { UnsplashCredit } from 'src/components/UnsplashCredit';
@@ -146,12 +147,7 @@ export const EnterContainer = () => {
   if (tokenPayloadTrusted === undefined || tokenPayloadTrusted) {
     return (
       <LoginHero>
-        <Button
-          size="medium"
-          className="is-rounded is-link login-button"
-          loading
-          disabled
-        >
+        <Button variant="primary" size="lg" surface="dark" pill loading>
           Enter with your email address
         </Button>
       </LoginHero>
@@ -181,12 +177,12 @@ export const EnterContainer = () => {
                 <div className="actions">
                   {(expiredToken && !sent)
                     ? (
-                      <Button onClick={resend} loading={resending} disabled={resending || sent} color={"primary"} rounded>
+                      <Button variant="primary" size="lg" pill onClick={resend} loading={resending} disabled={sent}>
                         &mdash; Send me that magic again, por favor!
                       </Button>
                     )
                     : (
-                      <Button onClick={goHome} outlined>
+                      <Button variant="secondary" size="lg" onClick={goHome}>
                         &larr; Take me home, country roads!
                       </Button>
                     )}

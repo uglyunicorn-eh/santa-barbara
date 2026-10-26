@@ -1,7 +1,8 @@
 import { Formik, useFormikContext, type FormikConfig, type FormikValues } from "formik";
 import { motion } from "framer-motion";
 import React from "react";
-import { Button, Modal } from "src/components/bulma";
+import { Modal } from "src/components/bulma";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { X } from 'react-feather';
 
@@ -59,7 +60,7 @@ const DismissButton = ({
   );
 
   return (
-    <Button type="reset" onClick={onClose} disabled={isSubmitting}>{label}</Button>
+    <Button type="reset" variant="secondary" onClick={onClose} disabled={isSubmitting}>{label}</Button>
   );
 }
 
@@ -106,7 +107,7 @@ export const DialogBox = <Values extends FormikValues = FormikValues>({
         <Modal.Card.Body>
           {children}
         </Modal.Card.Body>
-        <Modal.Card.Footer>
+        <Modal.Card.Footer className="tablet:gap-2">
           {!noDismiss && <DismissButton dismissLocation={dismissLocation} label={dismissLabel} />}
           {action}
         </Modal.Card.Footer>

@@ -446,6 +446,25 @@ its own, and each is built to the Phase 2 spec and shown on the UI kit page firs
 - `forms/Submit.tsx` and `src/types.ts`: drop the `react-bulma-components` `Color`/`Size`
   types and reuse `ButtonProps`. `Submit` keeps reading `isSubmitting` from Formik until 4.2.
 
+**Done** (`ui/button`). `src/components/ui/button.tsx` is shadcn's Base UI button with the
+spec's variants: `primary`, `secondary`, `ghost`, `ghost-destructive`, `destructive`,
+`link`; sizes `sm` / `md` / `lg`; `surface` (`light` | `dark`, for night and glass);
+`pill`, `fullWidth`, `loading`. Every `<Button>`, `Submit` and `a.button` uses it, and
+`bulma.tsx` no longer exports `Button`. What came up:
+- `npx shadcn add` re-installs the `cn` package and imports it; uninstall it and point
+  the import at `@/lib/utils` after every `add`.
+- Buttons wrap instead of overflowing: sizes are minimum heights (one line is exactly
+  32 / 40 / 48px, borders included), and long labels on phones take a second line.
+  This fixed four of the audit's 320px overflows; see `docs/layout-audit.md`.
+- A busy button is disabled (no double submit) but keeps its colour; only disabled
+  fades.
+- Surfaces per screen: dark on sign-in, join, the account-link pages and the two "not
+  found" pages; light everywhere else, including the sign-in link page (its photo is
+  light) and every dialog.
+- SCSS that styled `.button` (sizes, colours, `.login-button`) no longer applies; the
+  dialog footer gets its own `gap` (Bulma spaced footer buttons with a margin on `.button`).
+- The UI kit renders the real Button now.
+
 ### 4.2 Form fields + Formik → React Hook Form + Yup → Valibot (one PR)
 
 The wrappers, `DialogBox` and `MyProfile` all read the same form context, so the library
