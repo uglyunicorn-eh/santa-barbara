@@ -1,4 +1,4 @@
-import { useField, useFormikContext } from "formik";
+import { useFormContext, useFormState } from "react-hook-form";
 import React from "react";
 import { Content } from "src/components/layout";
 import { Button } from "@/components/ui/button";
@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
 import { Calendar, ChevronRight, Gift, Lock, Star } from 'react-feather';
-import * as Yup from 'yup';
+import * as v from "valibot";
 
 import { DialogBox, DialogFooterStart } from "src/components/DialogBox";
 import { Tab, Tabs } from "src/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "src/components/forms";
+import { maxLen, required, validEmail } from "src/components/forms/messages";
 import { useNotifications } from "src/components/hoc/NotificationsContainer";
 import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import { PARTIES_CHANGED } from "src/components/hooks/useAppClient";
@@ -85,25 +86,20 @@ const usePartyHistory = () => {
   return { loading, page, fetchMore };
 };
 
-const nameValidationSchema = Yup.object().shape({
-  name: Yup.string()
-    .label("Name")
-    .trim()
-    .max(MAX_NAME_LENGTH)
-    .required()
-    .ensure(),
+const nameSchema = v.object({
+  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Name", MAX_NAME_LENGTH))),
 });
 
 /** Rejects the current address here, so the request (and its emailing rate limit) is never spent on it. */
-const emailValidationSchema = (currentEmail: string) => Yup.object().shape({
-  email: Yup.string()
-    .label("New email")
-    .trim()
-    .max(MAX_EMAIL_LENGTH)
-    .required()
-    .email()
-    .test("not-current", "That's already your email.", value => value?.toLowerCase() !== currentEmail.toLowerCase())
-    .ensure(),
+const emailSchema = (currentEmail: string) => v.object({
+  email: v.pipe(
+    v.string(),
+    v.trim(),
+    v.nonEmpty(required("New email")),
+    v.maxLength(MAX_EMAIL_LENGTH, maxLen("New email", MAX_EMAIL_LENGTH)),
+    v.email(validEmail("New email")),
+    v.check(value => value.toLowerCase() !== currentEmail.toLowerCase(), "That's already your email."),
+  ),
 });
 
 export const MyProfile = () => (
@@ -132,6 +128,8 @@ const Profile = () => {
   const { profile, updateProfile, signOut } = useCurrentUser();
   const { getProfile, updateName } = useAppClient();
   const { success } = useNotifications();
+  // The form follows the profile: when it reloads (or is saved), the field shows the new name.
+  const nameValues = React.useMemo(() => ({ name: profile?.name ?? "" }), [profile?.name]);
 
   // The cached profile may be stale (e.g. the first party joined set the name), so reload it once.
   React.useEffect(
@@ -174,10 +172,10 @@ const Profile = () => {
         hint="We'll suggest it when you join a new party. Parties you've already joined keep the name you joined with."
       >
         <Form
-          initialValues={{ name: profile?.name ?? "" }}
-          enableReinitialize
-          validateOnBlur={false}
-          validationSchema={nameValidationSchema}
+          defaultValues={{ name: profile?.name ?? "" }}
+          values={nameValues}
+          mode="onSubmit"
+          schema={nameSchema}
           onSubmit={onSubmit}
         >
           <InlineField name="name" action={<SaveButton />}>
@@ -206,9 +204,10 @@ const Setting = ({ label, hint, children }: { label: string, hint?: React.ReactN
 
 /** An input with its buttons on the same line, all one height, and the field's error (after a submit) underneath. */
 const InlineField = ({ name, action, children }: { name: string, action: React.ReactNode, children: React.ReactNode }) => {
-  const [, meta] = useField(name);
+  const { getFieldState } = useFormContext();
+  const formState = useFormState({ name });
   const id = React.useId();
-  const error = meta.touched ? meta.error : undefined;
+  const error: string | undefined = getFieldState(name, formState).error?.message;
 
   return (
     <FormFieldContext.Provider value={{ name, id, messageId: `${id}-error`, invalid: !!error }}>
@@ -223,8 +222,8 @@ const InlineField = ({ name, action, children }: { name: string, action: React.R
 
 /** Saves the name: shown only once it's been edited. */
 const SaveButton = () => {
-  const { dirty } = useFormikContext();
-  return dirty ? <Submit>Save</Submit> : null;
+  const { isDirty } = useFormState();
+  return isDirty ? <Submit>Save</Submit> : null;
 };
 
 /** Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). */
@@ -234,6 +233,7 @@ const EmailSetting = ({ email }: { email: string }) => {
   const [sentTo, setSentTo] = React.useState<string>();
   // One id per opened form: sending the same address again from it doesn't email twice; a new address is a new request.
   const requestId = React.useRef("");
+  const schema = React.useMemo(() => emailSchema(email), [email]);
 
   const startEditing = React.useCallback(
     () => {
@@ -259,7 +259,7 @@ const EmailSetting = ({ email }: { email: string }) => {
   if (editing) {
     return (
       <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {email}.</>}>
-        <Form initialValues={{ email: "" }} validateOnBlur={false} validationSchema={emailValidationSchema(email)} onSubmit={onSubmit}>
+        <Form defaultValues={{ email: "" }} mode="onSubmit" schema={schema} onSubmit={onSubmit}>
           <InlineField
             name="email"
             action={

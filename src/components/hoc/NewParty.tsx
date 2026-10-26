@@ -1,34 +1,25 @@
 import React from "react";
 import { Content } from "src/components/layout";
 import { Button } from "@/components/ui/button";
-import * as Yup from 'yup';
+import * as v from "valibot";
 
 import type { Party } from "src/types";
 import { DialogBox } from "src/components/DialogBox";
 import { HaveQuestion } from "src/components/HaveQuestion";
 import { FormField, Input, Submit } from "src/components/forms";
+import { maxLen, required } from "src/components/forms/messages";
 import { useAppClient } from "src/components/hooks";
 import { useNavigate } from "react-router-dom";
 import { MAX_NAME_LENGTH, MAX_PHRASE_LENGTH } from "src/limits";
 
-type FormValues = {
-  name: string;
-  password: string;
-};
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .label("Party name")
-    .max(MAX_NAME_LENGTH)
-    .required()
-    .ensure(),
-  password: Yup.string()
-    .label("Secret phrase")
-    .max(MAX_PHRASE_LENGTH)
-    .ensure(),
+const schema = v.object({
+  name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Party name", MAX_NAME_LENGTH))),
+  password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
 });
 
-const initialValues = {
+type FormValues = v.InferOutput<typeof schema>;
+
+const defaultValues: FormValues = {
   name: "Very funny secret party!",
   password: "",
 };
@@ -92,8 +83,8 @@ export const NewParty = () => {
       noDismiss={party !== undefined}
       dismissLocation={party ? `/p/${party.code}` : "/"}
       form={{
-        validationSchema,
-        initialValues,
+        schema,
+        defaultValues,
         onSubmit,
       }}
       cardStyle={{

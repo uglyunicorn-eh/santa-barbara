@@ -1,7 +1,6 @@
 import React from "react";
 import { Columns, Content } from "src/components/layout";
 import { useNavigate } from "react-router";
-import * as Yup from 'yup';
 
 import { DialogBox } from "src/components/DialogBox";
 import { Submit } from "src/components/forms";
@@ -10,9 +9,7 @@ import { useAppClient } from "src/components/hooks";
 
 import SantaImg from "src/images/santa.png";
 
-const validationSchema = Yup.object();
-
-const initialValues = {};
+const defaultValues = {};
 
 export const ConfirmPartyLeave = () => {
   const { party } = usePartyContext();
@@ -44,8 +41,7 @@ export const ConfirmPartyLeave = () => {
       dismissLabel="That was an accident..."
       dismissLocation={`/p/${party?.code}`}
       form={{
-        validationSchema,
-        initialValues,
+        defaultValues,
         onSubmit,
       }}
       cardStyle={{

@@ -4,12 +4,13 @@ import { newKey } from "src/api/client";
 import { Hero } from "src/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import * as Yup from 'yup';
+import * as v from "valibot";
 
 import { GrinchBox } from "src/components/GrinchBox";
 import { SnowConfetti } from "src/components/SnowConfetti";
 import { UnsplashCredit } from "src/components/UnsplashCredit";
 import { Form, FormField, Input, Submit } from "src/components/forms";
+import { maxLen, required, validEmail } from "src/components/forms/messages";
 import { Footer } from "src/components/hoc/Footer";
 import { useAppClient, useCurrentUser, useSignals } from "src/components/hooks";
 import type { Party, User } from "src/types";
@@ -23,29 +24,27 @@ type Props = {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const joinValidationSchema = Yup.object().shape({
-  name: Yup.string()
-    .label("Name")
-    .max(MAX_NAME_LENGTH)
-    .required()
-    .ensure(),
+/** The party's code rides along with both forms (not shown); a schema drops fields it doesn't declare, so it's here. */
+const partyCode = v.pipe(
+  v.string(),
+  v.nonEmpty(required("party")),
+  v.maxLength(MAX_PARTY_CODE_LENGTH, maxLen("party", MAX_PARTY_CODE_LENGTH)),
+);
 
-  password: Yup.string()
-    .label("Secret phrase")
-    .max(MAX_PHRASE_LENGTH),
+const joinSchema = v.object({
+  party: partyCode,
+  name: v.pipe(v.string(), v.nonEmpty(required("Name")), v.maxLength(MAX_NAME_LENGTH, maxLen("Name", MAX_NAME_LENGTH))),
+  password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
 });
 
-const signInValidationSchema = Yup.object().shape({
-  email: Yup.string()
-    .label("Email")
-    .max(MAX_EMAIL_LENGTH)
-    .required()
-    .ensure()
-    .email(),
-  party: Yup.string()
-    .max(MAX_PARTY_CODE_LENGTH)
-    .required()
-    .ensure(),
+const signInSchema = v.object({
+  email: v.pipe(
+    v.string(),
+    v.nonEmpty(required("Email")),
+    v.maxLength(MAX_EMAIL_LENGTH, maxLen("Email", MAX_EMAIL_LENGTH)),
+    v.email(validEmail("Email")),
+  ),
+  party: partyCode,
 });
 
 
@@ -132,7 +131,7 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   );
 
   const onSubmit = React.useCallback(
-    async (input: any) => {
+    async (input: v.InferOutput<typeof signInSchema>) => {
       const submit = async () => {
         // One key per submission: a retry or a double click sends one email; submitting again later sends another.
         const sent = await enterRequest(input, requestKey.current);
@@ -172,8 +171,8 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   if (displayForm) {
     return (
       <Form
-        initialValues={{ email: "", party: party.code }}
-        validationSchema={signInValidationSchema}
+        defaultValues={{ email: "", party: party.code }}
+        schema={signInSchema}
         onSubmit={onSubmit}
       >
         <FormField
@@ -245,12 +244,12 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
 
   return (
     <Form
-      initialValues={{
+      defaultValues={{
         party: party.code,
         name: profile?.name ?? "",
         password: "",
       }}
-      validationSchema={joinValidationSchema}
+      schema={joinSchema}
       onSubmit={onSubmit}
     >
       <FormField

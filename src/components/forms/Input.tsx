@@ -1,20 +1,21 @@
-import { useField, useFormikContext } from "formik";
 import React from "react";
+import { useFormContext, useFormState } from "react-hook-form";
 
 import { Input as BaseInput, type InputProps as BaseInputProps } from "@/components/ui/input";
 import { FormFieldContext } from "src/components/forms/FormField";
 
-type Props = Omit<BaseInputProps, "name" | "value" | "onChange" | "onBlur"> & {
+type Props = Omit<BaseInputProps, "name" | "value" | "defaultValue" | "onChange" | "onBlur"> & {
   /** Focus (and select) the input once it's shown. */
   autofocus?: boolean;
 };
 
-/** A text input bound to its FormField's Formik field; disabled while the form submits. */
+/** A text input registered with its FormField's field; disabled while the form submits. */
 export const Input = ({ autofocus, disabled, ...rest }: Props) => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
   const { name, id, messageId, invalid, surface, size } = React.useContext(FormFieldContext);
-  const [field] = useField({ name });
-  const { isSubmitting } = useFormikContext();
+  const { register } = useFormContext();
+  const { isSubmitting } = useFormState();
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const { ref, ...field } = register(name);
 
   React.useEffect(
     () => {
@@ -39,8 +40,12 @@ export const Input = ({ autofocus, disabled, ...rest }: Props) => {
       aria-invalid={invalid || undefined}
       aria-describedby={messageId}
       {...rest}
+      // The values are read when submitting starts, so disabling the field meanwhile doesn't drop it.
       disabled={disabled || isSubmitting}
-      ref={inputRef}
+      ref={element => {
+        ref(element);
+        inputRef.current = element;
+      }}
     />
   );
 };

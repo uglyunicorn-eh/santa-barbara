@@ -1,5 +1,5 @@
-import { useField } from "formik";
 import React from "react";
+import { useFormContext, useFormState } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
 
@@ -34,10 +34,12 @@ type FormFieldContextType = {
 export const FormFieldContext = React.createContext<FormFieldContextType>({ name: "" });
 
 export const FormField = ({ name, label, children, help, extra, horizontal = true, surface = "light", size = "md" }: Props) => {
-  const [, meta] = useField(name);
+  const { getFieldState } = useFormContext();
+  const formState = useFormState({ name });
   const id = React.useId();
   const messageId = `${id}-message`;
-  const error = meta.touched ? meta.error : undefined;
+  // Errors appear on the form's schedule (after leaving the field, or on submit), then update as you type.
+  const error: string | undefined = getFieldState(name, formState).error?.message;
   const dark = surface === "dark";
 
   return (
