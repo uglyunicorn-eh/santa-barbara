@@ -1,11 +1,11 @@
 // Shared by the app's Footer and the static AstroFooter: on phones the footer line keeps only these links, and the
-// rest go under "More…".
+// rest go under a ⋯ menu.
 
 export const COMPACT_KEYS = ["how-it-works", "buy-me-coffee"];
 
-/** The "More…" control, styled as one of the footer's links. */
+/** The "more links" control (a ⋯ icon), sized and coloured like the footer's links. */
 export const moreTriggerClass =
-  "cursor-pointer bg-transparent p-0 [font:inherit] text-inherit [text-shadow:inherit] hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none";
+  "inline-flex cursor-pointer items-center self-center bg-transparent p-0 [font:inherit] text-inherit [text-shadow:inherit] hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none";
 
 /** The menu card: white on any background. */
 export const morePopupClass =

@@ -1,6 +1,6 @@
 import React from "react";
 import { Footer as BulmaFooter } from "src/components/bulma";
-import { GitHub } from 'react-feather';
+import { GitHub, MoreHorizontal } from 'react-feather';
 
 import { COMPACT_KEYS, moreItemClass, morePopupClass, moreTriggerClass } from "src/components/hoc/footerMenu";
 
@@ -31,7 +31,7 @@ const Links = ({ list }: { list: Item[] }) => (
   </>
 );
 
-// Static HTML (no script on these pages), so "More…" is a native <details> rather than the app's menu.
+// Static HTML (no script on these pages), so a ⋯ menu is a native <details> rather than the app's menu.
 export const AstroFooter = ({ children }: Props) => (
   <BulmaFooter className="page-footer">
     <div className="footer-menu max-tablet:hidden">
@@ -41,7 +41,9 @@ export const AstroFooter = ({ children }: Props) => (
       <Links list={items.filter(({ key }) => COMPACT_KEYS.includes(key))} />
       <span> | </span>
       <details className="relative">
-        <summary className={`${moreTriggerClass} list-none [&::-webkit-details-marker]:hidden`}>More…</summary>
+        <summary className={`${moreTriggerClass} list-none [&::-webkit-details-marker]:hidden`} aria-label="More links" title="More links">
+          <MoreHorizontal size={20} aria-hidden="true" />
+        </summary>
         <div className={`${morePopupClass} absolute right-0 bottom-full z-10 mb-2`}>
           {(items as Item[]).filter(({ key }) => !COMPACT_KEYS.includes(key)).map(({ key, url, label, menuLabel, ...rest }) => (
             <a key={key} href={url} className={moreItemClass} {...rest}>{menuLabel ?? label}</a>

@@ -2,7 +2,7 @@ import React from "react";
 import { Footer as BulmaFooter } from "src/components/bulma";
 import { Menu } from "@base-ui/react/menu";
 import { cn } from "@/lib/utils";
-import { GitHub } from 'react-feather';
+import { GitHub, MoreHorizontal } from 'react-feather';
 import { Link } from "react-router-dom";
 
 import { COMPACT_KEYS, moreItemClass, morePopupClass, moreTriggerClass } from "src/components/hoc/footerMenu";
@@ -18,7 +18,7 @@ type Props = {
 type MenuItem = {
   key: string;
   label: React.ReactNode;
-  /** The label in the "More…" menu, when `label` isn't text (the GitHub icon). */
+  /** The label in the a ⋯ menu menu, when `label` isn't text (the GitHub icon). */
   menuLabel?: React.ReactNode;
   url: string;
   target?: string;
@@ -59,7 +59,7 @@ export const Footer = ({ children, noUser, noHome, profileAsLink }: Props) => {
     ],
   );
 
-  // On phones only these two stay in the line; the rest go under "More…".
+  // On phones only these two stay in the line; the rest go under a ⋯ menu.
   const inline = items.filter(({ key }) => COMPACT_KEYS.includes(key));
   const more = items.filter(({ key }) => !COMPACT_KEYS.includes(key));
 
@@ -98,8 +98,8 @@ const FooterLinks = ({ items }: { items: MenuItem[] }) => (
 /** The footer's other links in a small menu that opens upwards; above the garage door (z-index 9999). */
 const MoreMenu = ({ items }: { items: MenuItem[] }) => (
   <Menu.Root>
-    <Menu.Trigger className={moreTriggerClass}>
-      More…
+    <Menu.Trigger className={moreTriggerClass} aria-label="More links" title="More links">
+      <MoreHorizontal size={20} aria-hidden="true" />
     </Menu.Trigger>
     <Menu.Portal>
       <Menu.Positioner side="top" align="center" sideOffset={8} collisionPadding={16} className="z-10000">
