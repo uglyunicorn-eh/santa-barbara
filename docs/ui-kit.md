@@ -122,7 +122,7 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   close it, the page behind doesn't scroll. The footer has the dismiss action, then the main one, with room on the
   left for a ghost action ("Show more parties", "How this works?"); a dialog with one big action centres it
   (`footerAlign="center"`, the congratulations). On phones they stack, main action first and full width. The profile
-  dialog keeps one height on both tabs, its tabs pinned to the top edge.
+  dialog keeps one height on both tabs (nearly the whole screen on phones), its tabs pinned to the top edge.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, above the footer's
