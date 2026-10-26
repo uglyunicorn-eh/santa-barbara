@@ -2,7 +2,7 @@ import type { JOSEError } from 'jose/errors';
 import React from "react";
 import { Columns, Container, Content, Hero, Image } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { UnsplashCredit } from '@/components/UnsplashCredit';
 import { Footer } from '@/components/hoc/Footer';
@@ -10,6 +10,7 @@ import { LoginHero } from '@/components/hoc/LoginBox';
 import { useNotifications } from '@/components/hoc/NotificationsContainer';
 import { newKey } from '@/api/client';
 import { useAppClient, useCurrentUser, useJWT } from '@/components/hooks';
+import { useLinkToken } from '@/components/hooks/useLinkToken';
 
 import image from '@/images/enter.png';
 
@@ -19,7 +20,9 @@ type EnterRequestToken = {
 }
 
 export const EnterContainer = () => {
-  const { token: enterRequestToken } = useParams();
+  // The sign-in link's token (after "#" in new links, in the path in older ones), moved off the address bar.
+  const linkToken = useLinkToken("/enter/link");
+  const enterRequestToken = linkToken ?? undefined;
   const { error, success } = useNotifications();
   const navigate = useNavigate();
   const { signIn } = useCurrentUser();
@@ -37,6 +40,12 @@ export const EnterContainer = () => {
 
   React.useEffect(
     () => {
+      if (linkToken === null) {
+        // No token at all (say, the page was opened in another tab): show the "not valid" screen.
+        setTokenPayloadUntrusted(null);
+        setTokenPayloadTrusted(null);
+        return;
+      }
       if (!enterRequestToken) {
         return;
       }
@@ -48,6 +57,7 @@ export const EnterContainer = () => {
       }
     },
     [
+      linkToken,
       enterRequestToken,
       decode,
     ],

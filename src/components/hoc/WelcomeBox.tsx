@@ -15,6 +15,8 @@ export const WelcomeBox = () => {
     () => (
       <Routes>
         <Route path="/*" Component={LoginBox} />
+        {/* Sign-in links: /enter/link#token (older ones /enter/:token). */}
+        <Route path="/enter/link" Component={EnterContainer} />
         <Route path="/enter/:token" Component={EnterContainer} />
       </Routes>
     ),
