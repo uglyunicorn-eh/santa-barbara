@@ -5,7 +5,9 @@
   /* The whole screen, under a phone's status bar and toolbar too (viewport-fit=cover); the pages inside keep their
      text clear of them with safe-area padding (src/styles/layout.css). */
   top: 0;
-  bottom: 0;
+  /* A fixed height, not a bottom edge: the door opens by moving its top, and pinned at both ends it would stretch
+     instead of sliding up (with the landing page in it, its lower sections would sweep across the screen). */
+  height: 100%;
   z-index: 9999;
   /* The door is the page while it's shut: content taller than the window scrolls inside it. */
   overflow-y: auto;
