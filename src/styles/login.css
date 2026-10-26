@@ -3,6 +3,10 @@
   background-image: url("/login-garage-door.jpg");
   background-size: cover;
   background-position: center center;
+
+  @media (max-width: 768px) and (orientation: portrait) {
+    background-image: url("/login-garage-door-portrait.jpg");
+  }
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 
   .container {
@@ -51,6 +55,12 @@
   background-image: url("/login-garage-door.jpg");
   background-size: cover;
   background-position: center center;
+
+  /* On a phone held upright, the sign turned on its side: HO HO HO reads top to bottom and fills the screen. Held
+     sideways, the original. */
+  @media (max-width: 768px) and (orientation: portrait) {
+    background-image: url("/login-garage-door-portrait.jpg");
+  }
 
   .hero.login-container {
     background: transparent;
