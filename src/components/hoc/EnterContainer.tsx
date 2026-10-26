@@ -178,12 +178,12 @@ export const EnterContainer = () => {
                   {(expiredToken && !sent)
                     ? (
                       <Button variant="brand" size="lg" pill onClick={resend} loading={resending} disabled={sent}>
-                        &mdash; Send me that magic again, por favor!
+                        &mdash; Send me that magic again<span className="max-tablet:hidden">, por favor</span>!
                       </Button>
                     )
                     : (
                       <Button variant="secondary" pill onClick={goHome}>
-                        &larr; Take me home, country roads!
+                        <span className="tablet:hidden">Get me home!</span><span className="max-tablet:hidden">Take me home, country roads!</span>
                       </Button>
                     )}
                 </div>

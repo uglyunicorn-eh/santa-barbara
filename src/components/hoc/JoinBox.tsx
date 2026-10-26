@@ -78,7 +78,7 @@ export const JoinBox = ({ party }: Props) => {
                   </h3>
 
                   <Button variant="secondary" surface="dark" pill onClick={onGoHomeClick}>
-                    &larr;&nbsp;<span className="is-hidden-tablet">Get me home!</span><span className="is-hidden-mobile">Take me home, country roads!</span>
+                    <span className="tablet:hidden">Get me home!</span><span className="max-tablet:hidden">Take me home, country roads!</span>
                   </Button>
                 </>
               )

@@ -62,7 +62,7 @@ const LinkFailed = ({ message }: { message: string }) => {
     <LinkPage>
       <h2>Hmm... the magic fizzled</h2>
       <p>{message}</p>
-      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>&larr; Take me home, country roads!</Button>
+      <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}><span className="tablet:hidden">Get me home!</span><span className="max-tablet:hidden">Take me home, country roads!</span></Button>
     </LinkPage>
   );
 };

@@ -73,11 +73,12 @@
     color: #f6c6c7;
   }
 
-  // Inputs on these dark cards focus in white, not Bulma's teal.
+  // Inputs on these dark cards focus in white, not Bulma's teal: the same outline as the buttons on dark (a 2px
+  // white ring with a 2px gap in the card's colour).
   .input:focus,
   .input:focus-visible {
-    border-color: rgba(#fff, 0.8);
-    box-shadow: 0 0 0 2px rgba(#fff, 0.25);
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #040102, 0 0 0 4px #fff;
   }
 
   .button {
