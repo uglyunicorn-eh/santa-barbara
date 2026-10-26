@@ -21,10 +21,12 @@ export const StartPage = () => {
     <Hero size={"fullheight"} className="welcome-page">
       <Hero.Header>
         <Container>
-          <Columns vCentered>
-            <Columns.Column tablet={{ display: "hidden" }} textAlign="centered">
-              <img src={grinchImg.src} alt="Grinch" width={128} height={128} />
-            </Columns.Column>
+          {/* On phones: the title on the left, the Grinch on the right, as on wider screens. */}
+          <div className="welcome-head-phone mb-8 flex items-center gap-3 px-4 tablet:hidden">
+            <h1 className="flex-1 text-left">Welcome to the Anonymous Ded Morozes!</h1>
+            <img src={grinchImg.src} alt="Grinch" width={112} height={112} className="shrink-0" />
+          </div>
+          <Columns vCentered className="max-tablet:hidden">
             <Columns.Column mobile={{ display: "hidden" }}>&nbsp;</Columns.Column>
             <Columns.Column size="one-third" className="tablet:text-right max-tablet:text-center">
               <h1>
@@ -55,6 +57,14 @@ export const StartPage = () => {
             </Columns.Column>
             <Columns.Column narrow textAlign="centered" mobile={{ display: "hidden" }}>
               <Divider label="OR" />
+            </Columns.Column>
+            {/* On phones the two choices stack, with the divider lying flat between them: — OR —, close to both. */}
+            <Columns.Column tablet={{ display: "hidden" }} className="-my-1 py-0" aria-hidden="true">
+              <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
+                <span className="w-10 border-t-[0.1rem] border-zinc-300" />
+                OR
+                <span className="w-10 border-t-[0.1rem] border-zinc-300" />
+              </div>
             </Columns.Column>
             <Columns.Column>
               <Link to="/join/">
