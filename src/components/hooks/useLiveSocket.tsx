@@ -1,6 +1,7 @@
 import React from "react";
 
 import { API_ENDPOINT } from "@/api/client";
+import { dropTicket, keepTicket, keptTicket, ticketName } from "@/api/liveTickets";
 import { useAppClient } from "@/components/hooks/useAppClient";
 
 /** The API's live-updates address: its own host, over wss (ws for a local http preview). */
@@ -8,6 +9,17 @@ const LIVE_ENDPOINT = API_ENDPOINT.replace(/^http/, "ws");
 
 /** Keep-alive interval. The API answers "ping" without waking anything. */
 const PING_MS = 30_000;
+
+/** Reconnects wait about this long at first, doubling up to the most, with jitter (deploys drop every socket at once). */
+const FIRST_RETRY_MS = 1000;
+const MOST_RETRY_MS = 30_000;
+
+/**
+ * Which socket: its path under the API, and how it's opened. `ticket: "me"` trades the session for the account's
+ * ticket, `ticket: { code }` for that party's (the code travels inside the ticket, never in the URL), and no ticket
+ * opens a public socket.
+ */
+export type LiveTarget = { path: string; ticket?: "me" | { code: string } };
 
 type Options = {
   /** Called with each event the server sends (parsed JSON). */
@@ -20,54 +32,92 @@ type Options = {
 };
 
 /**
- * A live-updates WebSocket to the API (`path`, e.g. "/v1/parties/live?code=…") while `enabled`: trades the session for
- * a ticket, connects, and passes on what the server sends. Reconnects with backoff (1 s to 30 s), and at once when the
- * tab is shown again or the network comes back (deploys drop every socket, so reconnecting is routine).
+ * A live-updates WebSocket to the API while `enabled` and the tab is visible: a hidden tab closes it, and showing the
+ * tab again reopens it (with `onReconnect`, since changes may have been missed).
+ *
+ * Tickets are kept for the tab (src/api/liveTickets.ts) and reused until they expire. A socket that's refused before
+ * it opens drops its ticket: a kept one is tried again later with a new ticket, but a refused new one isn't retried
+ * until the tab is shown again or the network comes back. A socket that drops after opening (a deploy, a network blip)
+ * reconnects with jittered backoff, from 1 s up to 30 s.
  */
-export const useLiveSocket = (path: string | null, enabled: boolean, options: Options) => {
+export const useLiveSocket = (target: LiveTarget | null, enabled: boolean, options: Options) => {
   const { liveTicket } = useAppClient();
 
   // The latest, without reconnecting when they change identity.
   const latest = React.useRef({ liveTicket, options });
   latest.current = { liveTicket, options };
 
+  const path = target?.path;
+  const code = typeof target?.ticket === "object" ? target.ticket.code : undefined;
+  const withTicket = Boolean(target?.ticket);
+
   React.useEffect(
     () => {
       if (!path || !enabled) {
         return;
       }
+      const name = withTicket ? ticketName(code) : undefined;
       let socket: WebSocket | undefined;
+      let connecting = false;
       let stopped = false;
       let attempts = 0;
-      let opened = false;
+      // Opened once already: later opens are reconnects, which may have missed changes.
+      let openedBefore = false;
       let retry: ReturnType<typeof setTimeout> | undefined;
       let ping: ReturnType<typeof setInterval> | undefined;
 
+      const visible = () => document.visibilityState === "visible";
+      const idle = () => !stopped && !socket && !connecting && visible();
+
       const scheduleRetry = () => {
-        const delay = Math.min(30_000, 1000 * 2 ** attempts++) * (0.5 + Math.random() / 2);
-        retry = setTimeout(connect, delay);
+        const most = Math.min(MOST_RETRY_MS, FIRST_RETRY_MS * 2 ** attempts++);
+        retry = setTimeout(connect, Math.max(FIRST_RETRY_MS, most * (0.5 + Math.random() / 2)));
       };
+
+      /** The ticket to open the socket with (null: none needed), and whether it was just made. Undefined: none to be had. */
+      async function ticketFor(name: string | undefined): Promise<{ ticket: string | null; fresh: boolean } | undefined> {
+        if (!name) {
+          return { ticket: null, fresh: false };
+        }
+        const kept = keptTicket(name);
+        if (kept) {
+          return { ticket: kept, fresh: false };
+        }
+        const ticket = await latest.current.liveTicket(code);
+        if (!ticket) {
+          return undefined;
+        }
+        keepTicket(name, ticket);
+        return { ticket, fresh: true };
+      }
 
       async function connect() {
         retry = undefined;
-        const ticket = await latest.current.liveTicket();
-        if (stopped) {
+        if (!idle()) {
           return;
         }
-        if (!ticket) {
+        connecting = true;
+        const got = await ticketFor(name);
+        connecting = false;
+        if (!idle()) {
+          return;
+        }
+        if (!got) {
+          // No session (signed out meanwhile), or the API couldn't be reached: try again later.
           scheduleRetry();
           return;
         }
-        const separator = path!.includes("?") ? "&" : "?";
-        const ws = new WebSocket(`${LIVE_ENDPOINT}${path}${separator}ticket=${encodeURIComponent(ticket)}`);
+        const { ticket, fresh } = got;
+        const ws = new WebSocket(`${LIVE_ENDPOINT}${path}${ticket ? `?ticket=${encodeURIComponent(ticket)}` : ""}`);
+        let opened = false;
         socket = ws;
         ws.onopen = () => {
+          opened = true;
           attempts = 0;
-          // The first connection follows the page's own load; a reconnect may have missed changes.
-          if (opened) {
+          if (openedBefore) {
             latest.current.options.onReconnect?.();
           }
-          opened = true;
+          openedBefore = true;
           ping = setInterval(() => ws.readyState === WebSocket.OPEN && ws.send("ping"), PING_MS);
         };
         ws.onmessage = event => {
@@ -82,10 +132,21 @@ export const useLiveSocket = (path: string | null, enabled: boolean, options: Op
         };
         ws.onclose = event => {
           clearInterval(ping);
-          if (stopped || socket !== ws) {
-            return;
+          if (socket !== ws) {
+            return; // closed here (hidden tab, unmount)
           }
           socket = undefined;
+          if (!opened) {
+            // Refused (or unreachable): the browser can't tell which, so the ticket goes either way.
+            if (name) {
+              dropTicket(name);
+              if (fresh) {
+                return;
+              }
+            }
+            scheduleRetry();
+            return;
+          }
           if (latest.current.options.endCodes?.includes(event.code)) {
             latest.current.options.onEnd?.(event.code);
             return;
@@ -94,9 +155,17 @@ export const useLiveSocket = (path: string | null, enabled: boolean, options: Op
         };
       }
 
-      /** Back to the tab, or back online: reconnect now rather than at the end of the backoff. */
+      /** Hidden: close the socket. Shown again, or back online: reconnect now rather than at the end of the backoff. */
       const wake = () => {
-        if (document.visibilityState === "visible" && !socket && retry) {
+        if (!visible()) {
+          clearTimeout(retry);
+          retry = undefined;
+          const closing = socket;
+          socket = undefined;
+          closing?.close(1000);
+          return;
+        }
+        if (idle()) {
           clearTimeout(retry);
           attempts = 0;
           connect();
@@ -111,11 +180,13 @@ export const useLiveSocket = (path: string | null, enabled: boolean, options: Op
         stopped = true;
         clearTimeout(retry);
         clearInterval(ping);
-        socket?.close(1000);
+        const closing = socket;
+        socket = undefined;
+        closing?.close(1000);
         document.removeEventListener("visibilitychange", wake);
         window.removeEventListener("online", wake);
       };
     },
-    [path, enabled],
+    [path, code, withTicket, enabled],
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 
 import { apiCall, linkKey } from "@/api/client";
 import type { ApiResult, CallOptions } from "@/api/client";
+import type { PublicJwk } from "@/api/dpop";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import { useCurrentUser } from "@/components/hooks/useCurrentUser";
 import { useSignals } from "@/components/hooks/useSignals";
@@ -55,31 +56,41 @@ export type InviteResult = { invited: string[]; alreadyInvited: string[]; alread
 
 export type LinkResult<T = {}> =
   | ({ ok: true } & T)
-  | { ok: false, message: string };
+  | { ok: false, message: string, code?: string };
 
-export type Session = { user: User, userToken: string };
+/**
+ * A new session. The token is opaque (encrypted); `expiresAt` is when it stops working, and `party` the code a
+ * sign-in link was for (null otherwise).
+ */
+export type Session = { user: User, userToken: string, expiresAt: string, party: string | null };
 
 /** Signal sent when the person's party list may have changed, so lists showing it load again. */
 export const PARTIES_CHANGED = "parties:changed";
 
 const LINK_FAILED = "Something went wrong on our side. Please try the link again in a few minutes.";
 
-/**
- * A party code lets anyone into a party without a secret phrase, and request logs record URLs, so it never goes in a
- * path: writes send it in the JSON body, and viewing a party sends it as `?code=`, which the API's logs leave out.
- */
-const partyQuery = (code: string) => `/parties?code=${encodeURIComponent(code)}`;
+/** The stored session token, as it is now (another tab may have signed in or out since this one rendered). */
+const storedToken = () => {
+  try {
+    return JSON.parse(localStorage.getItem("userToken") ?? "null");
+  } catch {
+    return null;
+  }
+};
 
 export const useAppClient = () => {
   const { error } = useNotifications();
   const { userTokenValue, signOut } = useCurrentUser();
   const { signal } = useSignals();
 
-  /** Calls the API with the session. A 401 means the session is gone (expired, revoked): sign out. */
+  /**
+   * Calls the API with the session. A 401 means the session is gone (expired, revoked, or its key is lost): sign out,
+   * unless a new sign-in has already replaced that token.
+   */
   const call = React.useCallback(
     async function <T>(route: string, options: CallOptions = {}): Promise<ApiResult<T>> {
       const result = await apiCall<T>(route, { token: userTokenValue, ...options });
-      if (!result.ok && result.error.status === 401 && userTokenValue) {
+      if (!result.ok && result.error.status === 401 && userTokenValue && storedToken() === userTokenValue) {
         signOut();
       }
       return result;
@@ -107,10 +118,13 @@ export const useAppClient = () => {
     [call],
   );
 
-  /** A one-minute ticket for opening a live-updates socket (see useLiveParty), or null without a working session. */
+  /**
+   * A ticket for opening a live-updates socket (useLiveSocket), valid 5 minutes: with a party's code for that party's,
+   * otherwise for the account's. Null without a working session.
+   */
   const liveTicket = React.useCallback(
-    async (): Promise<string | null> => {
-      const result = await call<{ ticket: string }>("/live/ticket", { method: "POST" });
+    async (code?: string): Promise<string | null> => {
+      const result = await call<{ ticket: string }>("/live/ticket", { method: "POST", body: code ? { code } : {} });
       return result.ok ? result.data.ticket : null;
     },
     [call],
@@ -137,7 +151,8 @@ export const useAppClient = () => {
   /** null means "not found"; undefined means the request failed. */
   const getParty = React.useCallback(
     async (code: string): Promise<Party | null | undefined> => {
-      const result = await call<Party>(partyQuery(code), { retry: true });
+      // The code goes in the body, so it stays out of URLs (browser history, proxy and request logs).
+      const result = await call<Party>("/parties/lookup", { method: "POST", body: { code }, retry: true });
       if (result.ok) {
         return result.data;
       }
@@ -174,13 +189,28 @@ export const useAppClient = () => {
     [],
   );
 
-  /** Signs in with a magic link. Repeating it from this tab (say, after a reload) signs in again. */
+  /**
+   * Signs in with a magic link, binding the session to `key` (src/api/dpop.ts). Repeating it from this tab (say, after
+   * a reload) signs in again. An expired link fails with the code `link_expired`.
+   */
   const enter = React.useCallback(
-    async (token: string): Promise<LinkResult<Session>> => {
-      const result = await apiCall<Session>("/auth/session", { method: "POST", body: { token }, key: linkKey(token), retry: true });
-      return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message };
+    async (token: string, key: PublicJwk): Promise<LinkResult<Session>> => {
+      const result = await apiCall<Session>("/auth/session", { method: "POST", body: { token, key }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message, code: result.error.code };
     },
     [],
+  );
+
+  /** Emails a fresh link for an expired one: the API reads the address and party from the old link. */
+  const enterAgain = React.useCallback(
+    async (token: string, key: string): Promise<boolean> => {
+      const result = await apiCall("/auth/magic-link/again", { method: "POST", body: { token }, key, retry: true });
+      if (!result.ok) {
+        error(result.error.message);
+      }
+      return result.ok;
+    },
+    [error],
   );
 
   const createParty = React.useCallback(
@@ -321,9 +351,10 @@ export const useAppClient = () => {
     [],
   );
 
+  /** Moves the account to the new address; the new session is bound to `key`, like a sign-in. */
   const confirmEmailChange = React.useCallback(
-    async (token: string): Promise<LinkResult<Session>> => {
-      const result = await apiCall<Session>("/me/email-change/confirm", { method: "POST", body: { token }, key: linkKey(token), retry: true });
+    async (token: string, key: PublicJwk): Promise<LinkResult<Session>> => {
+      const result = await apiCall<Session>("/me/email-change/confirm", { method: "POST", body: { token, key }, key: linkKey(token), retry: true });
       return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message || LINK_FAILED };
     },
     [],
@@ -342,6 +373,7 @@ export const useAppClient = () => {
     () => ({
       enterRequest,
       enter,
+      enterAgain,
       getParty,
       getProfile,
       getPartyHistory,
@@ -366,6 +398,7 @@ export const useAppClient = () => {
     [
       enterRequest,
       enter,
+      enterAgain,
       getParty,
       getProfile,
       getPartyHistory,

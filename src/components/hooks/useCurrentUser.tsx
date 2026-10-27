@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 
-import { useJWT } from "@/components/hooks";
+import { dropAllTickets } from "@/api/liveTickets";
 import { useLocalStorage } from "@/components/hooks/useLocalStorage";
 import type { User } from "@/types";
 
@@ -10,46 +10,20 @@ type SignInParams = {
   userToken: string;
 };
 
-type UserToken = {
-  sub: string;
-}
-
+/**
+ * The person signed in here. The session token is opaque (the API encrypts it), so signed in simply means a token is
+ * stored; the API answers 401 once it no longer works, and the app signs out then. Who it is comes from the stored
+ * profile (`profile.id`), never from the token.
+ */
 export const useCurrentUser = () => {
-  const { verify, isReady } = useJWT();
-
   const [userTokenValue, setUserTokenValue] = useLocalStorage<string>('userToken');
-  const [userToken, setUserToken] = React.useState<UserToken>();
-  const [profile, setProfile] = useLocalStorage<User>('profile');
+  const [storedProfile, setProfile] = useLocalStorage<User>('profile');
   const navigate = useNavigate();
-
-  React.useEffect(
-    () => {
-      if (!isReady) {
-        return;
-      }
-
-      if (!userTokenValue) {
-        setUserToken(undefined);
-        return;
-      }
-
-      (async function () {
-        try {
-          setUserToken((await verify<UserToken>(userTokenValue)).payload);
-        }
-        catch (e) {
-          setUserToken(undefined);
-        }
-      })();
-    },
-    [
-      userTokenValue,
-      isReady,
-    ],
-  );
+  const profile = userTokenValue ? storedProfile : undefined;
 
   const signIn = React.useCallback(
     ({ profile, userToken }: SignInParams) => {
+      dropAllTickets();
       setProfile(profile);
       setUserTokenValue(userToken);
     },
@@ -66,6 +40,7 @@ export const useCurrentUser = () => {
 
   const resetCredentials = React.useCallback(
     () => {
+      dropAllTickets();
       setProfile(undefined);
       setUserTokenValue(undefined);
     },
@@ -86,7 +61,6 @@ export const useCurrentUser = () => {
   return React.useMemo(
     () => ({
       profile,
-      userToken,
       userTokenValue,
       signIn,
       signOut,
@@ -95,7 +69,6 @@ export const useCurrentUser = () => {
     }),
     [
       profile,
-      userToken,
       userTokenValue,
       signIn,
       signOut,

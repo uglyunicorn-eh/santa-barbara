@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 import * as v from "valibot";
 import { ClipLoader } from 'react-spinners';
 
+import { NO_KEY_MESSAGE, newSessionKey } from "@/api/dpop";
 import { GrinchBox } from "@/components/GrinchBox";
 import { SnowConfetti } from "@/components/SnowConfetti";
 import { Form, FormField, Input, Submit } from "@/components/forms";
 import { LoginHero } from "@/components/hoc/LoginBox";
 import { useAppClient, useCurrentUser } from "@/components/hooks";
-import type { LinkResult } from "@/components/hooks/useAppClient";
+import type { LinkResult, Session } from "@/components/hooks/useAppClient";
 import { useLinkToken } from "@/components/hooks/useLinkToken";
 
 const INCOMPLETE = "This link is incomplete. Please open it from the email again.";
@@ -180,8 +181,15 @@ export const ConfirmEmailChange = () => {
   const navigate = useNavigate();
 
   const run = React.useCallback(
-    async (token: string) => {
-      const result = await confirmEmailChange(token);
+    async (token: string): Promise<LinkResult<Session>> => {
+      // The new session is bound to a key this browser keeps, like a sign-in. Without one, the link stays unused.
+      let key;
+      try {
+        key = await newSessionKey();
+      } catch {
+        return { ok: false, message: NO_KEY_MESSAGE };
+      }
+      const result = await confirmEmailChange(token, key);
       if (result.ok) {
         // The old session tokens stop working; this browser continues with the new address.
         signIn({ profile: result.user, userToken: result.userToken });
