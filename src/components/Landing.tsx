@@ -77,6 +77,17 @@ const untiltCard = (event: React.PointerEvent<HTMLElement>) => {
   event.currentTarget.style.removeProperty("--tilt-y");
 };
 
+/** "What's this all about?" glides down to the first section rather than jumping (in the app; the static page jumps). */
+const scrollToAbout = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const about = document.getElementById("about");
+  if (!about) {
+    return;
+  }
+  event.preventDefault();
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  about.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+};
+
 const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surface: "dark", pill: true });
 
 /**
@@ -120,7 +131,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          <a href="#about" className="landing-more">
+          <a href="#about" className="landing-more" onClick={scrollToAbout}>
             <ArrowDown size={18} aria-hidden="true" />
             What's this all about?
             <ArrowDown size={18} aria-hidden="true" />
