@@ -55,6 +55,28 @@ const lqip = (name: string) => ({ "--lqip": `var(--lqip-${name})` }) as React.CS
  */
 const markLoaded = (event: React.SyntheticEvent<HTMLImageElement>) => event.currentTarget.classList.add("is-loaded");
 
+/** The most a step card tilts under the mouse, at its edges (landing.css). */
+const TILT_DEGREES = 8;
+
+/** A step card under the mouse tilts as if pressed where the pointer is: that side dips away from the viewer. */
+const tiltCard = (event: React.PointerEvent<HTMLElement>) => {
+  if (event.pointerType !== "mouse") {
+    return;
+  }
+  const card = event.currentTarget;
+  const box = card.getBoundingClientRect();
+  // -0.5 at the left or top edge, 0.5 at the right or bottom.
+  const x = (event.clientX - box.left) / box.width - 0.5;
+  const y = (event.clientY - box.top) / box.height - 0.5;
+  card.style.setProperty("--tilt-x", `${(-y * 2 * TILT_DEGREES).toFixed(2)}deg`);
+  card.style.setProperty("--tilt-y", `${(x * 2 * TILT_DEGREES).toFixed(2)}deg`);
+};
+
+const untiltCard = (event: React.PointerEvent<HTMLElement>) => {
+  event.currentTarget.style.removeProperty("--tilt-x");
+  event.currentTarget.style.removeProperty("--tilt-y");
+};
+
 const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surface: "dark", pill: true });
 
 /**
@@ -111,7 +133,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           <h2>Three steps. Zero spreadsheets.</h2>
           <ol className="landing-steps">
             {STEPS.map(({ image, title, text }, index) => (
-              <li key={title}>
+              <li key={title} onPointerMove={tiltCard} onPointerLeave={untiltCard}>
                 <img
                   className="lqip"
                   style={lqip(image.slice(1, -".webp".length))}

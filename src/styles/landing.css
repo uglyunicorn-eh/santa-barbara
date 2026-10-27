@@ -324,19 +324,18 @@
   }
 }
 
-/* Hovering a step card shakes its Santa: a quick shake, a pause, again, while the pointer stays. */
+/* A step card under the mouse tilts like a card on a table pressed where the pointer is: that side dips away, the
+   other lifts (Landing.tsx sets --tilt-x and --tilt-y as the pointer moves). It follows quickly and settles back flat
+   when the pointer leaves. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .landing-steps li:hover img {
-    animation: landing-santa-shake 1.2s ease-in-out infinite;
-  }
-}
+  .landing-steps li {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 450ms ease-out;
 
-@keyframes landing-santa-shake {
-  0%, 45%, 100% { transform: rotate(0); }
-  9% { transform: rotate(-6deg) scale(1.04); }
-  18% { transform: rotate(5deg) scale(1.04); }
-  27% { transform: rotate(-3deg) scale(1.02); }
-  36% { transform: rotate(2deg); }
+    &:hover {
+      transition-duration: 120ms;
+    }
+  }
 }
 
 .landing-step-number {
@@ -385,7 +384,7 @@
     transition: transform 300ms ease-out, box-shadow 300ms ease-out;
 
     &:hover {
-      transform: translateY(-6px);
+      transform: translateY(-3px);
       box-shadow: 0 16px 32px rgb(0 0 0 / 0.35);
       animation: landing-feature-levitate 2.4s ease-in-out 300ms infinite;
     }
@@ -394,7 +393,42 @@
 
 @keyframes landing-feature-levitate {
   0%, 100% { translate: 0 0; }
-  50% { translate: 0 -3px; }
+  50% { translate: 0 -1.5px; }
+}
+
+/* The sections stretch a little as they scroll in: their headings start a bit low, their cards lower still, and both
+   catch up by the time they're about a third of the way up the screen, so the gaps open and close as you scroll.
+   Where the browser can tie an animation to scrolling; elsewhere, and with reduced motion, they simply sit still.
+   Longhands and the timeline in a rule of its own, as for the photo's parallax below (the minifier). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-main .landing-section :is(.landing-eyebrow, h2),
+    .landing-main .landing-section :is(.landing-steps, .landing-features) {
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+    }
+
+    .landing-main .landing-section :is(.landing-eyebrow, h2) {
+      animation-name: landing-stretch-near;
+    }
+
+    .landing-main .landing-section :is(.landing-steps, .landing-features) {
+      animation-name: landing-stretch-far;
+    }
+
+    .landing-main .landing-section :is(.landing-eyebrow, h2, .landing-steps, .landing-features) {
+      animation-timeline: view();
+      animation-range: entry 0% cover 35%;
+    }
+  }
+}
+
+@keyframes landing-stretch-near {
+  from { translate: 0 30px; }
+}
+
+@keyframes landing-stretch-far {
+  from { translate: 0 70px; }
 }
 
 .landing-section.landing-final {
