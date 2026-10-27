@@ -69,6 +69,10 @@ const variants = cva(
       { variant: "brand", surface: "light", class: "focus-visible:ring-brand" },
       { variant: ["destructive", "ghost-destructive"], surface: "light", class: "focus-visible:ring-destructive" },
       { variant: ["primary", "brand", "destructive"], surface: "dark", class: "shadow-sm" },
+      // The busy beam (src/styles/tailwind.css): white over a fill; teal on white, where a dark label's colour would
+      // look like a smudge rather than a glow. Elsewhere it's the label's colour.
+      { variant: ["primary", "brand", "destructive"], class: "[--busy-beam-color:var(--color-white)]" },
+      { variant: ["secondary", "ghost"], surface: "light", class: "[--busy-beam-color:var(--color-teal-500)]" },
       // Sits inside a sentence: inline, with the sentence's size and line height.
       { variant: "link", class: "inline min-h-0 rounded-sm p-0 text-[length:inherit] leading-[inherit] select-auto" },
       { variant: "link", surface: "light", class: "text-link hover:text-teal-900" },
@@ -88,7 +92,7 @@ const variants = cva(
 const buttonVariants = (props?: Parameters<typeof variants>[0]) => cn(variants(props));
 
 type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof variants> & {
-  /** Busy: a spinner before the label, the width stays, and it can't be pressed. */
+  /** Busy: the label dims and a glowing beam runs around the edge (src/styles/tailwind.css); same size, can't be pressed. */
   loading?: boolean;
 };
 
@@ -96,13 +100,18 @@ function Button({ className, variant, size, surface, pill, fullWidth, loading = 
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, surface, pill, fullWidth }), className)}
+      className={cn(buttonVariants({ variant, size, surface, pill, fullWidth }), loading && "relative", className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       {...props}
     >
-      {loading && <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-current border-r-transparent" aria-hidden="true" />}
-      {children}
+      {/* The label lays out as before (no box of its own until busy), so the button keeps its size either way. */}
+      <span className={loading ? "inline-flex items-center justify-center gap-2 opacity-40" : "contents"}>{children}</span>
+      {loading && (
+        <span className="busy-beam" aria-hidden="true">
+          <span className="busy-beam-ring" />
+        </span>
+      )}
     </ButtonPrimitive>
   );
 }
