@@ -33,7 +33,7 @@ const STEPS = [
 ];
 
 const FEATURES = [
-  { icon: Gift, title: "Free, with no ads", text: "No premium elves, no upsells, no banners. Just Secret Santa." },
+  { icon: Gift, title: "Free, no ads, no tracking cookies", text: "No premium elves, no upsells, no banners. Just Secret Santa." },
   { icon: Mail, title: "No passwords, no spam", text: "A magic link to sign in, and not a single newsletter. Ever. You can delete your stuff any time!" },
   { icon: Users, title: "Up to 100 people", text: "Three, seven or a whole office. Odd numbers work too: nobody needs a pair." },
   { icon: EyeOff, title: "Truly secret", text: "You see only your own name. Nobody can peek at who got whom, not even the host." },
