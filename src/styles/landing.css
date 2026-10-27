@@ -411,11 +411,25 @@
   50% { translate: 0 -5px; }
 }
 
-/* The two sections are cloths on a desk (the photo), pulled up by the hero like links of a chain: as one scrolls in
-   it trails a little behind, the next a little more, and both catch up by the time they're about a third of the way
-   up the screen. Everything on a cloth moves with it. Where the browser can tie an animation to scrolling; elsewhere,
-   and with reduced motion, they simply follow. Longhands and the timeline in a rule of its own, as for the photo's
-   parallax below (the minifier). */
+/* The two sections are cloths on a desk (the photo), linked to the hero like a chain: they start tucked a little under
+   the one above (the hero over the first, the first over the second), and stretch out into place as they scroll in,
+   by the time they're about a third of the way up the screen. Everything on a cloth moves with it. Where the browser
+   can tie an animation to scrolling; elsewhere, and with reduced motion, they simply lie in place. Longhands and the
+   timeline in a rule of its own, as for the photo's parallax below (the minifier). */
+.landing-main > .landing-hero {
+  position: relative;
+  z-index: 3;
+}
+
+.landing-main > .landing-section {
+  position: relative;
+  z-index: 2;
+
+  & + .landing-section {
+    z-index: 1;
+  }
+}
+
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .landing-main > .landing-section {
@@ -436,11 +450,11 @@
 }
 
 @keyframes landing-cloth-near {
-  from { translate: 0 40px; }
+  from { translate: 0 -40px; }
 }
 
 @keyframes landing-cloth-far {
-  from { translate: 0 80px; }
+  from { translate: 0 -80px; }
 }
 
 .landing-section.landing-final {
@@ -589,7 +603,7 @@
 }
 
 /* The closing section's button: a white rim with a soft glow, a ring pulsing out of it on each ring, and the button
-   ringing like an old phone (two bursts, a pause), the rim buzzing the other way; hovered, the red button zooms in
+   ringing like an old phone (driiing-driing, a long pause), the rim buzzing the other way; hovered, the red button zooms in
    and both keep ringing. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
    layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
@@ -609,7 +623,7 @@
       0 0 24px rgb(255 255 255 / 0.25),
       inset 0 0 12px rgb(255 255 255 / 0.12);
     pointer-events: none;
-    animation: landing-party-buzz 3.2s linear infinite;
+    animation: landing-party-buzz 3.6s ease-in-out infinite;
   }
 
   &::after {
@@ -619,12 +633,12 @@
     border-radius: inherit;
     border: 2px solid white;
     pointer-events: none;
-    animation: landing-party-pulse 3.2s ease-out infinite;
+    animation: landing-party-pulse 3.6s ease-out infinite;
   }
 
   > *,
   > astro-slot > * {
-    animation: landing-party-wiggle 3.2s linear infinite;
+    animation: landing-party-wiggle 3.6s ease-in-out infinite;
     transition: scale 250ms ease-out;
   }
 
@@ -650,62 +664,34 @@
   100% { opacity: 0; transform: scale(1.12, 1.45); }
 }
 
-/* The red button rings like an old phone: bzzzz-bzzzz, a pause, again. */
+/* The red button rings like an old phone: driiing-driing, a long pause, again. */
 @keyframes landing-party-wiggle {
-  0%, 13%, 17%, 30%, 100% { transform: rotate(0); }
+  0%, 13.5%, 18.5%, 32%, 100% { transform: rotate(0); }
   1% { transform: rotate(-1.20deg); }
-  2% { transform: rotate(1.16deg); }
-  3% { transform: rotate(-1.11deg); }
-  4% { transform: rotate(1.07deg); }
-  5% { transform: rotate(-1.03deg); }
-  6% { transform: rotate(0.98deg); }
-  7% { transform: rotate(-0.94deg); }
-  8% { transform: rotate(0.89deg); }
-  9% { transform: rotate(-0.85deg); }
-  10% { transform: rotate(0.81deg); }
-  11% { transform: rotate(-0.76deg); }
-  12% { transform: rotate(0.72deg); }
-  18% { transform: rotate(-1.20deg); }
-  19% { transform: rotate(1.16deg); }
-  20% { transform: rotate(-1.11deg); }
-  21% { transform: rotate(1.07deg); }
-  22% { transform: rotate(-1.03deg); }
-  23% { transform: rotate(0.98deg); }
-  24% { transform: rotate(-0.94deg); }
-  25% { transform: rotate(0.89deg); }
-  26% { transform: rotate(-0.85deg); }
-  27% { transform: rotate(0.81deg); }
-  28% { transform: rotate(-0.76deg); }
-  29% { transform: rotate(0.72deg); }
+  3.5% { transform: rotate(1.09deg); }
+  6% { transform: rotate(-0.99deg); }
+  8.5% { transform: rotate(0.89deg); }
+  11% { transform: rotate(-0.78deg); }
+  19.5% { transform: rotate(-1.20deg); }
+  22% { transform: rotate(1.09deg); }
+  24.5% { transform: rotate(-0.99deg); }
+  27% { transform: rotate(0.89deg); }
+  29.5% { transform: rotate(-0.78deg); }
 }
 
 /* The rim, with the button: the other way, half as far. */
 @keyframes landing-party-buzz {
-  0%, 13%, 17%, 30%, 100% { transform: rotate(0); }
+  0%, 13.5%, 18.5%, 32%, 100% { transform: rotate(0); }
   1% { transform: rotate(0.60deg); }
-  2% { transform: rotate(-0.58deg); }
-  3% { transform: rotate(0.56deg); }
-  4% { transform: rotate(-0.53deg); }
-  5% { transform: rotate(0.51deg); }
-  6% { transform: rotate(-0.49deg); }
-  7% { transform: rotate(0.47deg); }
-  8% { transform: rotate(-0.45deg); }
-  9% { transform: rotate(0.43deg); }
-  10% { transform: rotate(-0.40deg); }
-  11% { transform: rotate(0.38deg); }
-  12% { transform: rotate(-0.36deg); }
-  18% { transform: rotate(0.60deg); }
-  19% { transform: rotate(-0.58deg); }
-  20% { transform: rotate(0.56deg); }
-  21% { transform: rotate(-0.53deg); }
-  22% { transform: rotate(0.51deg); }
-  23% { transform: rotate(-0.49deg); }
-  24% { transform: rotate(0.47deg); }
-  25% { transform: rotate(-0.45deg); }
-  26% { transform: rotate(0.43deg); }
-  27% { transform: rotate(-0.40deg); }
-  28% { transform: rotate(0.38deg); }
-  29% { transform: rotate(-0.36deg); }
+  3.5% { transform: rotate(-0.55deg); }
+  6% { transform: rotate(0.49deg); }
+  8.5% { transform: rotate(-0.44deg); }
+  11% { transform: rotate(0.39deg); }
+  19.5% { transform: rotate(0.60deg); }
+  22% { transform: rotate(-0.55deg); }
+  24.5% { transform: rotate(0.49deg); }
+  27% { transform: rotate(-0.44deg); }
+  29.5% { transform: rotate(0.39deg); }
 }
 
 /* Smaller on phones, to stay inside the screen. */
