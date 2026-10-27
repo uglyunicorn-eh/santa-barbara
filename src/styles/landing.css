@@ -325,8 +325,8 @@
 }
 
 /* A step card under the mouse tilts like a card on a table pressed where the pointer is: that side dips away, the
-   other lifts (Landing.tsx sets --tilt-x and --tilt-y as the pointer moves). It follows quickly and settles back flat
-   when the pointer leaves. */
+   other lifts (Landing.tsx sets --tilt-x and --tilt-y as the pointer moves), and it keeps shaking a little while the
+   pointer stays (`rotate`, a property of its own). It settles back flat when the pointer leaves. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .landing-steps li {
     transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
@@ -334,8 +334,15 @@
 
     &:hover {
       transition-duration: 120ms;
+      animation: landing-step-jitter 0.5s ease-in-out infinite;
     }
   }
+}
+
+@keyframes landing-step-jitter {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -0.6deg; }
+  75% { rotate: 0.6deg; }
 }
 
 .landing-step-number {
@@ -577,8 +584,9 @@
 }
 
 /* The closing section's button: a white rim with a soft glow, a ring pulsing out of it, and a little wiggle now and
-   then, the rim buzzing the other way at the same moment. On the wrapper, not the button, so the button's own focus
-   ring stays as it is. The rim is a layer of its own (::before), so it turns without turning the button inside. */
+   then, the rim buzzing the other way at the same moment; hovered, the button zooms in and keeps ringing. On the
+   wrapper, not the button, so the button's own focus ring stays as it is. The rim is a layer of its own (::before),
+   so it turns without turning the button inside. */
 .landing-party-bezel {
   position: relative;
   display: inline-flex;
@@ -619,15 +627,15 @@
   > *,
   > astro-slot > * {
     animation: landing-party-wiggle 4s ease-in-out infinite;
+    transition: scale 250ms ease-out;
   }
 
-  &:hover::before,
+  /* Hovered, the red button zooms in a little, and keeps ringing. */
   &:hover > *,
   &:hover > astro-slot > *,
-  &:focus-within::before,
   &:focus-within > *,
   &:focus-within > astro-slot > * {
-    animation-play-state: paused;
+    scale: 1.06;
   }
 
   @media (max-width: 768px) {
@@ -646,19 +654,19 @@
 
 @keyframes landing-party-wiggle {
   0%, 84%, 100% { transform: rotate(0) scale(1); }
-  87% { transform: rotate(-3deg) scale(1.04); }
-  90% { transform: rotate(3deg) scale(1.04); }
-  93% { transform: rotate(-2deg) scale(1.02); }
-  96% { transform: rotate(1deg) scale(1); }
+  87% { transform: rotate(-1.5deg) scale(1.02); }
+  90% { transform: rotate(1.5deg) scale(1.02); }
+  93% { transform: rotate(-1deg) scale(1.01); }
+  96% { transform: rotate(0.5deg) scale(1); }
 }
 
 /* The rim, with the button's wiggle: the other way, about half as far. */
 @keyframes landing-party-buzz {
   0%, 84%, 100% { transform: rotate(0); }
-  87% { transform: rotate(1.5deg); }
-  90% { transform: rotate(-1.5deg); }
-  93% { transform: rotate(1deg); }
-  96% { transform: rotate(-0.5deg); }
+  87% { transform: rotate(0.75deg); }
+  90% { transform: rotate(-0.75deg); }
+  93% { transform: rotate(0.5deg); }
+  96% { transform: rotate(-0.25deg); }
 }
 
 /* Smaller on phones, to stay inside the screen. */
