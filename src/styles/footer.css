@@ -30,8 +30,9 @@
       backdrop-filter: blur(3px);
       color: white;
 
-      /* White on the pill, over the pages' own grey link colours. */
-      a {
+      /* White on the pill, over the pages' own grey link colours. Only the bar's own links: the ☰ menu's card is
+         white, and its dark items must win. */
+      > a {
         color: white !important;
       }
     }
