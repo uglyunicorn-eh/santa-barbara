@@ -21,7 +21,7 @@ export const TAGLINE =
 export const JEEZ = "Jeez!";
 export const JEEZ_POPUP =
   "OMG! It's FREE! No GMO! No antibiotics! Zero calories! Gluten-free, sugar-free, f-f-feelings-free! " +
-  "One hundred percent organic, free-range elves!";
+  "One hundred percent organic, free-range elves and Gnomik!";
 
 /** "Title | Anonymous Ded Morozes", or the name alone. */
 export const pageTitle = (title?: string) => [title, SITE_NAME].filter(Boolean).join(" | ");
