@@ -121,6 +121,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
         </Hero.Body>
         <Hero.Footer>
           <a href="#about" className="landing-more">
+            <ArrowDown size={18} aria-hidden="true" />
             What's this all about?
             <ArrowDown size={18} aria-hidden="true" />
           </a>

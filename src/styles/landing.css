@@ -228,24 +228,22 @@
   background: rgb(0 0 0 / 0.45);
   color: rgb(255 255 255 / 0.85);
   font-size: 1.05rem;
+  /* The whole pill floats, pointing down the page. */
+  animation: landing-nudge 1.8s ease-in-out infinite;
 
   &:hover {
     color: white;
     text-decoration: none;
   }
-
-  svg {
-    animation: landing-nudge 1.8s ease-in-out infinite;
-  }
 }
 
 @keyframes landing-nudge {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+  50% { transform: translateY(5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .landing-more svg {
+  .landing-more {
     animation: none;
   }
 }
