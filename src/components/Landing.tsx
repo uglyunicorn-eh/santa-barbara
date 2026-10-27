@@ -3,7 +3,7 @@ import { ArrowDown, BookOpen, EyeOff, Gift, Mail, Users } from "react-feather";
 
 import { Container, Hero } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
-import { SITE_NAME, TAGLINE } from "@/site";
+import { JEEZ, JEEZ_POPUP, SITE_NAME, TAGLINE } from "@/site";
 
 // Optional only for index.astro, whose named slots arrive as these props without TypeScript seeing them.
 type Props = {
@@ -55,6 +55,39 @@ const lqip = (name: string) => ({ "--lqip": `var(--lqip-${name})` }) as React.CS
  */
 const markLoaded = (event: React.SyntheticEvent<HTMLImageElement>) => event.currentTarget.classList.add("is-loaded");
 
+/** The most a step card tilts under the mouse, at its edges (landing.css). */
+const TILT_DEGREES = 8;
+
+/** A step card under the mouse tilts as if pressed where the pointer is: that side dips away from the viewer. */
+const tiltCard = (event: React.PointerEvent<HTMLElement>) => {
+  if (event.pointerType !== "mouse") {
+    return;
+  }
+  const card = event.currentTarget;
+  const box = card.getBoundingClientRect();
+  // -0.5 at the left or top edge, 0.5 at the right or bottom.
+  const x = (event.clientX - box.left) / box.width - 0.5;
+  const y = (event.clientY - box.top) / box.height - 0.5;
+  card.style.setProperty("--tilt-x", `${(-y * 2 * TILT_DEGREES).toFixed(2)}deg`);
+  card.style.setProperty("--tilt-y", `${(x * 2 * TILT_DEGREES).toFixed(2)}deg`);
+};
+
+const untiltCard = (event: React.PointerEvent<HTMLElement>) => {
+  event.currentTarget.style.removeProperty("--tilt-x");
+  event.currentTarget.style.removeProperty("--tilt-y");
+};
+
+/** "What's this all about?" glides down to the first section rather than jumping (in the app; the static page jumps). */
+const scrollToAbout = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const about = document.getElementById("about");
+  if (!about) {
+    return;
+  }
+  event.preventDefault();
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  about.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+};
+
 const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surface: "dark", pill: true });
 
 /**
@@ -85,7 +118,14 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
               />
               <div className="landing-card-text">
                 <h1>{SITE_NAME}</h1>
-                <p className="landing-tagline">{TAGLINE}</p>
+                <p className="landing-tagline">
+                  {TAGLINE}{" "}
+                  {/* Focusable, so a tap (or Tab) shows the popup too; the popup is the word's description. */}
+                  <span className="landing-jeez" tabIndex={0} aria-describedby="landing-jeez-popup">
+                    {JEEZ}
+                    <span id="landing-jeez-popup" className="landing-jeez-popup" role="tooltip">{JEEZ_POPUP}</span>
+                  </span>
+                </p>
                 <div className="landing-actions">
                   {enter}
                   <a href="/how-it-works/" className={howItWorksClass}>
@@ -98,7 +138,8 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          <a href="#about" className="landing-more">
+          <a href="#about" className="landing-more" onClick={scrollToAbout}>
+            <ArrowDown size={18} aria-hidden="true" />
             What's this all about?
             <ArrowDown size={18} aria-hidden="true" />
           </a>
@@ -111,7 +152,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           <h2>Three steps. Zero spreadsheets.</h2>
           <ol className="landing-steps">
             {STEPS.map(({ image, title, text }, index) => (
-              <li key={title}>
+              <li key={title} onPointerMove={tiltCard} onPointerLeave={untiltCard}>
                 <img
                   className="lqip"
                   style={lqip(image.slice(1, -".webp".length))}

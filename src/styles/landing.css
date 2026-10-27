@@ -160,23 +160,123 @@
 
 
 
+/* The cards show the plain arrow over their text, not a text cursor, which flickers as they tilt and float; their
+   buttons and links keep the pointing hand. */
+.landing-card,
+.landing-steps li,
+.landing-features li {
+  cursor: default;
+}
+
+/* "Jeez!" at the end of the tagline: underlined like with a red marker, and hovered (or tapped, or tabbed to) it pops
+   up a speech bubble of breathless enthusiasm (JEEZ_POPUP in src/site.ts). */
+.landing-jeez {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.12em;
+  color: white;
+  white-space: nowrap;
+  outline: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C18 4 30 12 46 7 S78 3 97 8 M8 12 C30 9 60 11 88 10' fill='none' stroke='%23ef4444' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
+    left bottom / 100% 0.42em no-repeat;
+
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+.landing-jeez-popup {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  width: max-content;
+  max-width: min(300px, 80vw);
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: #fef08a;
+  color: #1c1917;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 0.5);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
+  text-wrap: balance;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-50%) rotate(-6deg) scale(0.6);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s 250ms;
+
+  /* The bubble's tail, pointing at the word. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 9px solid transparent;
+    border-top-color: #fef08a;
+    transform: translateX(-50%);
+  }
+}
+
+.landing-jeez:hover .landing-jeez-popup,
+.landing-jeez:focus .landing-jeez-popup {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) rotate(-3deg) scale(1);
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s;
+}
+
+/* Phones: centred on the tagline, just above its last line (where "Jeez!" is), rather than on the word, which sits
+   near the screen's edge; no tail then, as it can't point at the word. */
+@media (max-width: 768px) {
+  .landing-tagline {
+    position: relative;
+  }
+
+  .landing-jeez {
+    position: static;
+  }
+
+  .landing-jeez-popup {
+    bottom: calc(1.3rem * 1.3 + 12px);
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-jeez-popup {
+    transition: opacity 150ms, visibility 0s 150ms;
+  }
+}
+
 .landing-card-text {
   position: relative;
 }
 
 .landing-tagline {
   margin-top: 20px;
-  font-size: 1.45rem;
-  line-height: 1.35;
-  text-wrap: pretty;
-
-  @media (max-width: 899px) {
-    text-wrap: balance;
-  }
+  font-size: 1.7rem;
+  line-height: 1.3;
+  text-wrap: balance;
 
   @media (max-width: 768px) {
     margin-top: 14px;
-    font-size: 1.15rem;
+    font-size: 1.3rem;
   }
 }
 
@@ -232,24 +332,22 @@
   background: rgb(0 0 0 / 0.45);
   color: rgb(255 255 255 / 0.85);
   font-size: 1.05rem;
+  /* The whole pill floats, pointing down the page. */
+  animation: landing-nudge 1.8s ease-in-out infinite;
 
   &:hover {
     color: white;
     text-decoration: none;
   }
-
-  svg {
-    animation: landing-nudge 1.8s ease-in-out infinite;
-  }
 }
 
 @keyframes landing-nudge {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+  50% { transform: translateY(5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .landing-more svg {
+  .landing-more {
     animation: none;
   }
 }
@@ -328,6 +426,33 @@
   }
 }
 
+/* A step card under the mouse tilts like a card on a table pressed where the pointer is: that side dips away, the
+   other lifts (Landing.tsx sets --tilt-x and --tilt-y as the pointer moves), and it keeps shaking a little while the
+   pointer stays (`rotate`, a property of its own). Hovered it also comes up a little (2%) with a deeper shadow, and it
+   moves like something heavy: following the pointer with a little lag, settling back slowly when the pointer leaves. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .landing-steps li {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition:
+      transform 700ms ease-out,
+      scale 500ms ease-out,
+      box-shadow 500ms ease-out;
+
+    &:hover {
+      scale: 1.02;
+      box-shadow: 0 22px 44px rgb(0 0 0 / 0.45);
+      transition-duration: 250ms;
+      animation: landing-step-jitter 0.5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes landing-step-jitter {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -0.6deg; }
+  75% { rotate: 0.6deg; }
+}
+
 .landing-step-number {
   position: absolute;
   top: 18px;
@@ -365,6 +490,68 @@
   @media (max-width: 560px) {
     grid-template-columns: 1fr;
   }
+}
+
+/* Hovering a feature card floats it up and comes closer (1%), a transition, so it also glides back when the pointer
+   leaves; it levitates (`translate`, a property of its own) while the pointer stays. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .landing-features li {
+    transition:
+      transform 300ms ease-out,
+      scale 300ms ease-out,
+      box-shadow 300ms ease-out;
+
+    &:hover {
+      transform: translateY(-6px);
+      scale: 1.01;
+      box-shadow: 0 20px 40px rgb(0 0 0 / 0.4);
+      animation: landing-feature-levitate 2.4s ease-in-out 300ms infinite;
+    }
+  }
+}
+
+@keyframes landing-feature-levitate {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+
+/* The two sections are cloths on a desk (the photo), linked like a chain: the second starts tucked a little under the
+   first and stretches out into place as it scrolls in, by the time it's about a third of the way up the screen.
+   Everything on a cloth moves with it. The first isn't tucked under the hero, which shows the photo through it, so
+   the photo reaches the bottom of the first screen. Where the browser can tie an animation to scrolling; elsewhere,
+   and with reduced motion, they simply lie in place. Longhands and the timeline in a rule of its own, as for the
+   photo's parallax below (the minifier). */
+.landing-main > .landing-hero {
+  position: relative;
+  z-index: 3;
+}
+
+.landing-main > .landing-section {
+  position: relative;
+  z-index: 2;
+
+  & + .landing-section {
+    z-index: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-main > .landing-section + .landing-section {
+      animation-name: landing-cloth-tucked;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+    }
+
+    .landing-main > .landing-section + .landing-section {
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+@keyframes landing-cloth-tucked {
+  from { translate: 0 -80px; }
 }
 
 .landing-section.landing-final {
@@ -453,6 +640,16 @@
       background-size: 145% auto;
       background-position: 36% center;
     }
+
+    /* Phones: the photo a little dimmer, so the card and its text stand out on the small screen. */
+    @media (max-width: 768px) {
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgb(0 0 0 / 0.25);
+      }
+    }
   }
 }
 
@@ -512,17 +709,29 @@
   background: linear-gradient(#090304 50%, #140a0b 50%);
 }
 
-/* The closing section's button: a white rim with a soft glow, a ring pulsing out of it, and a little wiggle now and
-   then. On the wrapper, not the button, so the button's own focus ring stays as it is. */
+/* The closing section's button: a white rim with a soft glow, a ring pulsing out of it on each ring, and the button
+   ringing like an old phone (driiing-driing, a long pause), the rim buzzing the other way; hovered, the red button grows
+   and both ring faster. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
+   layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
   position: relative;
   display: inline-flex;
   padding: 12px;
   border-radius: 999px;
-  border: 2px solid white;
-  box-shadow:
-    0 0 24px rgb(255 255 255 / 0.25),
-    inset 0 0 12px rgb(255 255 255 / 0.12);
+  border: 2px solid transparent;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    border: 2px solid white;
+    box-shadow:
+      0 0 24px rgb(255 255 255 / 0.25),
+      inset 0 0 12px rgb(255 255 255 / 0.12);
+    pointer-events: none;
+    animation: landing-party-buzz 3.6s ease-in-out infinite;
+  }
 
   &::after {
     content: "";
@@ -531,19 +740,44 @@
     border-radius: inherit;
     border: 2px solid white;
     pointer-events: none;
-    animation: landing-party-pulse 2.4s ease-out infinite;
+    animation: landing-party-pulse 3.6s ease-out infinite;
   }
 
   > *,
   > astro-slot > * {
-    animation: landing-party-wiggle 4s ease-in-out infinite;
+    animation: landing-party-wiggle 3.6s ease-in-out infinite;
   }
 
+  /* Hovered, only the red button grows, and both keep ringing. It grows by the same 4px on every side (a spread
+     shadow in its own red, following its round ends), not by scaling, which on a wide pill would eat the gap at its
+     sides and leave it at the top and bottom. !important: the button's Tailwind utilities (shadow-sm,
+     transition-colors) sit in a later layer, which wins over this one otherwise. */
+  > button,
+  > astro-slot > a {
+    transition:
+      background-color 150ms,
+      box-shadow 250ms ease-out !important;
+  }
+
+  &:hover > button,
+  &:hover > astro-slot > a,
+  &:focus-within > button,
+  &:focus-within > astro-slot > a {
+    box-shadow:
+      0 0 0 4px var(--color-brand-hover),
+      0 1px 3px rgb(0 0 0 / 0.2) !important;
+  }
+
+  /* Hovered, it rings faster: the red, the rim and the pulse together, so they stay in step. */
+  &:hover::before,
+  &:hover::after,
   &:hover > *,
   &:hover > astro-slot > *,
+  &:focus-within::before,
+  &:focus-within::after,
   &:focus-within > *,
   &:focus-within > astro-slot > * {
-    animation-play-state: paused;
+    animation-duration: 2.4s;
   }
 
   @media (max-width: 768px) {
@@ -560,12 +794,34 @@
   100% { opacity: 0; transform: scale(1.12, 1.45); }
 }
 
+/* The red button rings like an old phone: driiing-driing, a long pause, again. */
 @keyframes landing-party-wiggle {
-  0%, 84%, 100% { transform: rotate(0) scale(1); }
-  87% { transform: rotate(-3deg) scale(1.04); }
-  90% { transform: rotate(3deg) scale(1.04); }
-  93% { transform: rotate(-2deg) scale(1.02); }
-  96% { transform: rotate(1deg) scale(1); }
+  0%, 13.5%, 18.5%, 32%, 100% { transform: rotate(0); }
+  1% { transform: rotate(-1.20deg); }
+  3.5% { transform: rotate(1.09deg); }
+  6% { transform: rotate(-0.99deg); }
+  8.5% { transform: rotate(0.89deg); }
+  11% { transform: rotate(-0.78deg); }
+  19.5% { transform: rotate(-1.20deg); }
+  22% { transform: rotate(1.09deg); }
+  24.5% { transform: rotate(-0.99deg); }
+  27% { transform: rotate(0.89deg); }
+  29.5% { transform: rotate(-0.78deg); }
+}
+
+/* The rim, with the button: the other way, half as far. */
+@keyframes landing-party-buzz {
+  0%, 13.5%, 18.5%, 32%, 100% { transform: rotate(0); }
+  1% { transform: rotate(0.60deg); }
+  3.5% { transform: rotate(-0.55deg); }
+  6% { transform: rotate(0.49deg); }
+  8.5% { transform: rotate(-0.44deg); }
+  11% { transform: rotate(0.39deg); }
+  19.5% { transform: rotate(0.60deg); }
+  22% { transform: rotate(-0.55deg); }
+  24.5% { transform: rotate(0.49deg); }
+  27% { transform: rotate(-0.44deg); }
+  29.5% { transform: rotate(0.39deg); }
 }
 
 /* Smaller on phones, to stay inside the screen. */
@@ -575,6 +831,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landing-party-bezel::before,
   .landing-party-bezel::after,
   .landing-party-bezel > *,
   .landing-party-bezel > astro-slot > * {
