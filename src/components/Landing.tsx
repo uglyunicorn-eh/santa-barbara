@@ -39,6 +39,13 @@ const FEATURES = [
   { icon: EyeOff, title: "Truly secret", text: "You see only your own name. Nobody can peek at who got whom, not even the host." },
 ];
 
+/** The elf in two sizes; its slot (landing.css) is 500px wide, down to 230px on phones. index.astro preloads the same. */
+export const ELF_SRCSET = "/elf-2-410.webp 410w, /elf-2.webp 512w";
+export const ELF_SIZES = "(max-width: 768px) 230px, (max-width: 899px) 320px, (max-width: 1099px) 400px, 500px";
+
+/** The step stickers' slot (landing.css): 200px wide, 128px on phones. Each comes at 256 and 400px. */
+const STEP_SIZES = "(max-width: 768px) 128px, 200px";
+
 const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surface: "dark", pill: true });
 
 /**
@@ -55,7 +62,16 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
         <Hero.Body>
           <Container textAlign="centered">
             <div className="landing-card">
-              <img className="landing-logo" src="/elf-2.webp" alt="" width={512} height={512} fetchPriority="high" />
+              <img
+                className="landing-logo"
+                src="/elf-2.webp"
+                srcSet={ELF_SRCSET}
+                sizes={ELF_SIZES}
+                alt=""
+                width={512}
+                height={512}
+                fetchPriority="high"
+              />
               <div className="landing-card-text">
                 <h1>{SITE_NAME}</h1>
                 <p className="landing-tagline">{TAGLINE}</p>
@@ -85,7 +101,7 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           <ol className="landing-steps">
             {STEPS.map(({ image, title, text }, index) => (
               <li key={title}>
-                <img src={image} alt="" width={400} height={400} loading="lazy" />
+                <img src={image} srcSet={`${image.replace(".webp", "-256.webp")} 256w, ${image} 400w`} sizes={STEP_SIZES} alt="" width={400} height={400} loading="lazy" />
                 <span className="landing-step-number">{index + 1}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>

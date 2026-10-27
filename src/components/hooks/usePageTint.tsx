@@ -37,7 +37,7 @@ export const usePageTint = (color: string) => {
 export const TINTS = {
   /** The home screen's night sky with stars (welcome.jpg). */
   night: "#121520",
-  /** The sign-in garage door (login-garage-door.jpg). */
+  /** The sign-in garage door (login-garage-door.webp). */
   loginDoor: "#090304",
   /** A party's garage door, to join it (party-garage-door-3.jpg). */
   partyDoor: "#161616",
