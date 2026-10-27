@@ -326,14 +326,20 @@
 
 /* A step card under the mouse tilts like a card on a table pressed where the pointer is: that side dips away, the
    other lifts (Landing.tsx sets --tilt-x and --tilt-y as the pointer moves), and it keeps shaking a little while the
-   pointer stays (`rotate`, a property of its own). It settles back flat when the pointer leaves. */
+   pointer stays (`rotate`, a property of its own). Hovered it also comes up a little (2%) with a deeper shadow, and it
+   moves like something heavy: following the pointer with a little lag, settling back slowly when the pointer leaves. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .landing-steps li {
     transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-    transition: transform 450ms ease-out;
+    transition:
+      transform 700ms ease-out,
+      scale 500ms ease-out,
+      box-shadow 500ms ease-out;
 
     &:hover {
-      transition-duration: 120ms;
+      scale: 1.02;
+      box-shadow: 0 22px 44px rgb(0 0 0 / 0.45);
+      transition-duration: 250ms;
       animation: landing-step-jitter 0.5s ease-in-out infinite;
     }
   }
@@ -384,15 +390,19 @@
   }
 }
 
-/* Hovering a feature card floats it up a little (a transition, so it also glides back down when the pointer leaves),
-   where it levitates (`translate`, a property of its own) while the pointer stays. */
+/* Hovering a feature card floats it up and comes closer (2%), a transition, so it also glides back when the pointer
+   leaves; it levitates (`translate`, a property of its own) while the pointer stays. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .landing-features li {
-    transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+    transition:
+      transform 300ms ease-out,
+      scale 300ms ease-out,
+      box-shadow 300ms ease-out;
 
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 32px rgb(0 0 0 / 0.35);
+      transform: translateY(-6px);
+      scale: 1.02;
+      box-shadow: 0 20px 40px rgb(0 0 0 / 0.4);
       animation: landing-feature-levitate 2.4s ease-in-out 300ms infinite;
     }
   }
@@ -400,42 +410,39 @@
 
 @keyframes landing-feature-levitate {
   0%, 100% { translate: 0 0; }
-  50% { translate: 0 -1.5px; }
+  50% { translate: 0 -5px; }
 }
 
-/* The sections stretch a little as they scroll in: their headings start a bit low, their cards lower still, and both
-   catch up by the time they're about a third of the way up the screen, so the gaps open and close as you scroll.
-   Where the browser can tie an animation to scrolling; elsewhere, and with reduced motion, they simply sit still.
-   Longhands and the timeline in a rule of its own, as for the photo's parallax below (the minifier). */
+/* The two sections are cloths on a desk (the photo), pulled up by the hero like links of a chain: as one scrolls in
+   it trails a little behind, the next a little more, and both catch up by the time they're about a third of the way
+   up the screen. Everything on a cloth moves with it. Where the browser can tie an animation to scrolling; elsewhere,
+   and with reduced motion, they simply follow. Longhands and the timeline in a rule of its own, as for the photo's
+   parallax below (the minifier). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .landing-main .landing-section :is(.landing-eyebrow, h2),
-    .landing-main .landing-section :is(.landing-steps, .landing-features) {
+    .landing-main > .landing-section {
+      animation-name: landing-cloth-near;
       animation-timing-function: ease-out;
       animation-fill-mode: both;
     }
 
-    .landing-main .landing-section :is(.landing-eyebrow, h2) {
-      animation-name: landing-stretch-near;
+    .landing-main > .landing-section + .landing-section {
+      animation-name: landing-cloth-far;
     }
 
-    .landing-main .landing-section :is(.landing-steps, .landing-features) {
-      animation-name: landing-stretch-far;
-    }
-
-    .landing-main .landing-section :is(.landing-eyebrow, h2, .landing-steps, .landing-features) {
+    .landing-main > .landing-section {
       animation-timeline: view();
-      animation-range: entry 0% cover 35%;
+      animation-range: entry 0% cover 30%;
     }
   }
 }
 
-@keyframes landing-stretch-near {
-  from { translate: 0 30px; }
+@keyframes landing-cloth-near {
+  from { translate: 0 40px; }
 }
 
-@keyframes landing-stretch-far {
-  from { translate: 0 70px; }
+@keyframes landing-cloth-far {
+  from { translate: 0 80px; }
 }
 
 .landing-section.landing-final {
@@ -583,10 +590,10 @@
   background: linear-gradient(#090304 50%, #140a0b 50%);
 }
 
-/* The closing section's button: a white rim with a soft glow, a ring pulsing out of it, and a little wiggle now and
-   then, the rim buzzing the other way at the same moment; hovered, the button zooms in and keeps ringing. On the
-   wrapper, not the button, so the button's own focus ring stays as it is. The rim is a layer of its own (::before),
-   so it turns without turning the button inside. */
+/* The closing section's button: a white rim with a soft glow, a ring pulsing out of it on each ring, and the button
+   ringing like an old phone (two bursts, a pause), the rim buzzing the other way; hovered, the red button zooms in
+   and both keep ringing. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
+   layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
   position: relative;
   display: inline-flex;
@@ -604,14 +611,7 @@
       0 0 24px rgb(255 255 255 / 0.25),
       inset 0 0 12px rgb(255 255 255 / 0.12);
     pointer-events: none;
-    animation: landing-party-buzz 4s ease-in-out infinite;
-    transition: inset 250ms ease-out;
-  }
-
-  /* Hovered, the rim stands out from the button a little. */
-  &:hover::before,
-  &:focus-within::before {
-    inset: -7px;
+    animation: landing-party-buzz 3.2s linear infinite;
   }
 
   &::after {
@@ -621,16 +621,16 @@
     border-radius: inherit;
     border: 2px solid white;
     pointer-events: none;
-    animation: landing-party-pulse 2.4s ease-out infinite;
+    animation: landing-party-pulse 3.2s ease-out infinite;
   }
 
   > *,
   > astro-slot > * {
-    animation: landing-party-wiggle 4s ease-in-out infinite;
+    animation: landing-party-wiggle 3.2s linear infinite;
     transition: scale 250ms ease-out;
   }
 
-  /* Hovered, the red button zooms in a little, and keeps ringing. */
+  /* Hovered, only the red button zooms in, and both keep ringing. */
   &:hover > *,
   &:hover > astro-slot > *,
   &:focus-within > *,
@@ -652,21 +652,62 @@
   100% { opacity: 0; transform: scale(1.12, 1.45); }
 }
 
+/* The red button rings like an old phone: bzzzz-bzzzz, a pause, again. */
 @keyframes landing-party-wiggle {
-  0%, 84%, 100% { transform: rotate(0) scale(1); }
-  87% { transform: rotate(-1.5deg) scale(1.02); }
-  90% { transform: rotate(1.5deg) scale(1.02); }
-  93% { transform: rotate(-1deg) scale(1.01); }
-  96% { transform: rotate(0.5deg) scale(1); }
+  0%, 13%, 17%, 30%, 100% { transform: rotate(0); }
+  1% { transform: rotate(-1.20deg); }
+  2% { transform: rotate(1.16deg); }
+  3% { transform: rotate(-1.11deg); }
+  4% { transform: rotate(1.07deg); }
+  5% { transform: rotate(-1.03deg); }
+  6% { transform: rotate(0.98deg); }
+  7% { transform: rotate(-0.94deg); }
+  8% { transform: rotate(0.89deg); }
+  9% { transform: rotate(-0.85deg); }
+  10% { transform: rotate(0.81deg); }
+  11% { transform: rotate(-0.76deg); }
+  12% { transform: rotate(0.72deg); }
+  18% { transform: rotate(-1.20deg); }
+  19% { transform: rotate(1.16deg); }
+  20% { transform: rotate(-1.11deg); }
+  21% { transform: rotate(1.07deg); }
+  22% { transform: rotate(-1.03deg); }
+  23% { transform: rotate(0.98deg); }
+  24% { transform: rotate(-0.94deg); }
+  25% { transform: rotate(0.89deg); }
+  26% { transform: rotate(-0.85deg); }
+  27% { transform: rotate(0.81deg); }
+  28% { transform: rotate(-0.76deg); }
+  29% { transform: rotate(0.72deg); }
 }
 
-/* The rim, with the button's wiggle: the other way, about half as far. */
+/* The rim, with the button: the other way, half as far. */
 @keyframes landing-party-buzz {
-  0%, 84%, 100% { transform: rotate(0); }
-  87% { transform: rotate(0.75deg); }
-  90% { transform: rotate(-0.75deg); }
-  93% { transform: rotate(0.5deg); }
-  96% { transform: rotate(-0.25deg); }
+  0%, 13%, 17%, 30%, 100% { transform: rotate(0); }
+  1% { transform: rotate(0.60deg); }
+  2% { transform: rotate(-0.58deg); }
+  3% { transform: rotate(0.56deg); }
+  4% { transform: rotate(-0.53deg); }
+  5% { transform: rotate(0.51deg); }
+  6% { transform: rotate(-0.49deg); }
+  7% { transform: rotate(0.47deg); }
+  8% { transform: rotate(-0.45deg); }
+  9% { transform: rotate(0.43deg); }
+  10% { transform: rotate(-0.40deg); }
+  11% { transform: rotate(0.38deg); }
+  12% { transform: rotate(-0.36deg); }
+  18% { transform: rotate(0.60deg); }
+  19% { transform: rotate(-0.58deg); }
+  20% { transform: rotate(0.56deg); }
+  21% { transform: rotate(-0.53deg); }
+  22% { transform: rotate(0.51deg); }
+  23% { transform: rotate(-0.49deg); }
+  24% { transform: rotate(0.47deg); }
+  25% { transform: rotate(-0.45deg); }
+  26% { transform: rotate(0.43deg); }
+  27% { transform: rotate(-0.40deg); }
+  28% { transform: rotate(0.38deg); }
+  29% { transform: rotate(-0.36deg); }
 }
 
 /* Smaller on phones, to stay inside the screen. */
