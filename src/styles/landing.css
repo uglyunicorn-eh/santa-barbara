@@ -169,7 +169,7 @@
 }
 
 /* "Jeez!" at the end of the tagline: underlined like with a red marker, and hovered (or tapped, or tabbed to) it pops
-   up a speech bubble of breathless, burping enthusiasm (JEEZ_POPUP in src/site.ts). */
+   up a speech bubble of breathless enthusiasm (JEEZ_POPUP in src/site.ts). */
 .landing-jeez {
   position: relative;
   display: inline-block;
@@ -711,7 +711,7 @@
 
 /* The closing section's button: a white rim with a soft glow, a ring pulsing out of it on each ring, and the button
    ringing like an old phone (driiing-driing, a long pause), the rim buzzing the other way; hovered, the red button grows
-   and both keep ringing. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
+   and both ring faster. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
    layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
   position: relative;
@@ -766,6 +766,18 @@
     box-shadow:
       0 0 0 4px var(--color-brand-hover),
       0 1px 3px rgb(0 0 0 / 0.2) !important;
+  }
+
+  /* Hovered, it rings faster: the red, the rim and the pulse together, so they stay in step. */
+  &:hover::before,
+  &:hover::after,
+  &:hover > *,
+  &:hover > astro-slot > *,
+  &:focus-within::before,
+  &:focus-within::after,
+  &:focus-within > *,
+  &:focus-within > astro-slot > * {
+    animation-duration: 2.4s;
   }
 
   @media (max-width: 768px) {

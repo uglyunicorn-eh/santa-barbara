@@ -20,8 +20,8 @@ export const TAGLINE =
 /** The tagline's last word, underlined like with a pen; hovered or tapped, it pops up JEEZ_POPUP. */
 export const JEEZ = "Jeez!";
 export const JEEZ_POPUP =
-  "OMG! It's FREE! *burp* No GMO! No antibiotics! Zero calories! Gluten-free, sugar-free, f-f-feelings-free! " +
-  "One hundred percent organic, free-range elves! *buuurp*";
+  "OMG! It's FREE! No GMO! No antibiotics! Zero calories! Gluten-free, sugar-free, f-f-feelings-free! " +
+  "One hundred percent organic, free-range elves!";
 
 /** "Title | Anonymous Ded Morozes", or the name alone. */
 export const pageTitle = (title?: string) => [title, SITE_NAME].filter(Boolean).join(" | ");
