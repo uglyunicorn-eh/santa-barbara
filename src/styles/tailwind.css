@@ -259,3 +259,45 @@
     @slot;
   }
 }
+
+/*
+ * A busy button (src/components/ui/button.tsx): a glowing beam runs around its edge, in --busy-beam-color (the
+ * button sets it per variant; the label's colour otherwise).
+ * `busy-beam` goes on a span over the whole button (the glow); `busy-beam-ring` inside it is the beam itself: a
+ * turning conic gradient, cut down to a thin ring along the button's rounded edge. With reduced motion the ring
+ * stays still: a soft outline all the way round.
+ */
+@property --busy-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes busy-beam {
+  to { --busy-beam-angle: 360deg; }
+}
+
+@utility busy-beam {
+  position: absolute;
+  /* Over the 1px border, so the beam runs along the button's outer edge. */
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px var(--busy-beam-color, currentColor));
+}
+
+@utility busy-beam-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* The beam's thickness. */
+  padding: 2px;
+  background: conic-gradient(from var(--busy-beam-angle), transparent 0 55%, var(--busy-beam-color, currentColor) 92%, transparent);
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: busy-beam 1.6s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    background: color-mix(in oklab, var(--busy-beam-color, currentColor) 55%, transparent);
+  }
+}

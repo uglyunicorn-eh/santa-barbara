@@ -67,7 +67,7 @@ exist. Components use the roles, not the colours:
 - **Sizes:** `sm` 32px, `md` 40px (default), `lg` 48px tall. Long labels wrap rather than overflow.
 - **Focus:** keyboard only (`:focus-visible`), a 2px ring with a 2px gap in the surface colour. Teal on paper, white
   on dark; red buttons on paper ring in red. Inputs on dark cards use the same white outline.
-- **Disabled:** 50% opacity. **Loading:** a spinner before the label; the width stays and it can't be pressed twice.
+- **Disabled:** 50% opacity. **Loading:** the label dims and a glowing beam runs around the button's edge (white on filled buttons, teal on white ones, otherwise the label's colour) (a still outline, with reduced motion); the button keeps its size and can't be pressed twice.
 - **Motion:** 150ms colour transitions.
 
 ## Buttons

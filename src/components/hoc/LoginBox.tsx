@@ -24,13 +24,17 @@ export const LoginBox = () => {
   return (
     <Landing
       enter={
-        <Routes>
-          <Route path="/" Component={EnterActions} />
-          {/* The sign-in form opens over the front door, which stays as it was behind it. */}
-          <Route path="/enter/" element={<><EnterActions /><React.Suspense fallback={null}><EnterForm /></React.Suspense></>} />
-          {/* Signed out, every other page (the profile, a new party…) is the front door. */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <>
+          {/* Outside the routes, so the button stays the same one (and stays busy) as the form opens over it. */}
+          <EnterActions />
+          <Routes>
+            <Route path="/" element={null} />
+            {/* The sign-in form opens over the front door, which stays as it was behind it. */}
+            <Route path="/enter/" element={<React.Suspense fallback={null}><EnterForm /></React.Suspense>} />
+            {/* Signed out, every other page (the profile, a new party…) is the front door. */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </>
       }
       enterAgain={<EnterActions label="Let's get this party started!" />}
       footer={<DoorFooter />}
@@ -63,14 +67,26 @@ const LoginHeroPage = ({ children }: { children: React.ReactNode }) => (
   </Hero>
 );
 
+/** How long the Enter button stays busy after a press: until the dialog has opened over it. */
+const ENTER_BUSY_MS = 1000;
+
 const EnterActions = ({ label = "Enter with your email address" }: { label?: string }) => {
   const navigate = useNavigate();
+  const [busy, setBusy] = React.useState(false);
+  const release = React.useRef<ReturnType<typeof setTimeout>>(undefined);
+  React.useEffect(() => () => clearTimeout(release.current), []);
 
-  // The dialog opens on the click, and the page steps back behind it at the same moment (GrinchDialog).
-  const onLoginClick = React.useCallback(() => navigate("/enter/"), [navigate]);
+  // The dialog opens on the click, and the page steps back behind it at the same moment (GrinchDialog). Until it shows
+  // (its code may still be loading), the button is busy at once, so the press shows and a second one does nothing.
+  const onLoginClick = React.useCallback(() => {
+    setBusy(true);
+    clearTimeout(release.current);
+    release.current = setTimeout(() => setBusy(false), ENTER_BUSY_MS);
+    navigate("/enter/");
+  }, [navigate]);
 
   return (
-    <Button variant="brand" size="lg" surface="dark" pill onClick={onLoginClick} onPointerEnter={loadEnterForm} onFocus={loadEnterForm}>
+    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick} onPointerEnter={loadEnterForm} onFocus={loadEnterForm}>
       {label}
     </Button>
   );
