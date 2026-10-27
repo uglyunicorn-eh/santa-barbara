@@ -160,6 +160,110 @@
 
 
 
+/* The cards show the plain arrow over their text, not a text cursor, which flickers as they tilt and float; their
+   buttons and links keep the pointing hand. */
+.landing-card,
+.landing-steps li,
+.landing-features li {
+  cursor: default;
+}
+
+/* "Jeez!" at the end of the tagline: underlined like with a red marker, and hovered (or tapped, or tabbed to) it pops
+   up a speech bubble of breathless, burping enthusiasm (JEEZ_POPUP in src/site.ts). */
+.landing-jeez {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.12em;
+  color: white;
+  white-space: nowrap;
+  outline: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C18 4 30 12 46 7 S78 3 97 8 M8 12 C30 9 60 11 88 10' fill='none' stroke='%23ef4444' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
+    left bottom / 100% 0.42em no-repeat;
+
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+.landing-jeez-popup {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  width: max-content;
+  max-width: min(300px, 80vw);
+  padding: 12px 16px;
+  border-radius: 18px;
+  background: #fef08a;
+  color: #1c1917;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 0.5);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
+  text-wrap: balance;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-50%) rotate(-6deg) scale(0.6);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s 250ms;
+
+  /* The bubble's tail, pointing at the word. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 9px solid transparent;
+    border-top-color: #fef08a;
+    transform: translateX(-50%);
+  }
+}
+
+.landing-jeez:hover .landing-jeez-popup,
+.landing-jeez:focus .landing-jeez-popup {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) rotate(-3deg) scale(1);
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s;
+}
+
+/* Phones: centred on the tagline, just above its last line (where "Jeez!" is), rather than on the word, which sits
+   near the screen's edge; no tail then, as it can't point at the word. */
+@media (max-width: 768px) {
+  .landing-tagline {
+    position: relative;
+  }
+
+  .landing-jeez {
+    position: static;
+  }
+
+  .landing-jeez-popup {
+    bottom: calc(1.3rem * 1.3 + 12px);
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-jeez-popup {
+    transition: opacity 150ms, visibility 0s 150ms;
+  }
+}
+
 .landing-card-text {
   position: relative;
 }
@@ -606,7 +710,7 @@
 }
 
 /* The closing section's button: a white rim with a soft glow, a ring pulsing out of it on each ring, and the button
-   ringing like an old phone (driiing-driing, a long pause), the rim buzzing the other way; hovered, the red button zooms in
+   ringing like an old phone (driiing-driing, a long pause), the rim buzzing the other way; hovered, the red button grows
    and both keep ringing. On the wrapper, not the button, so the button's own focus ring stays as it is. The rim is a
    layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
@@ -642,15 +746,26 @@
   > *,
   > astro-slot > * {
     animation: landing-party-wiggle 3.6s ease-in-out infinite;
-    transition: scale 250ms ease-out;
   }
 
-  /* Hovered, only the red button zooms in, and both keep ringing. */
-  &:hover > *,
-  &:hover > astro-slot > *,
-  &:focus-within > *,
-  &:focus-within > astro-slot > * {
-    scale: 1.06;
+  /* Hovered, only the red button grows, and both keep ringing. It grows by the same 4px on every side (a spread
+     shadow in its own red, following its round ends), not by scaling, which on a wide pill would eat the gap at its
+     sides and leave it at the top and bottom. !important: the button's Tailwind utilities (shadow-sm,
+     transition-colors) sit in a later layer, which wins over this one otherwise. */
+  > button,
+  > astro-slot > a {
+    transition:
+      background-color 150ms,
+      box-shadow 250ms ease-out !important;
+  }
+
+  &:hover > button,
+  &:hover > astro-slot > a,
+  &:focus-within > button,
+  &:focus-within > astro-slot > a {
+    box-shadow:
+      0 0 0 4px var(--color-brand-hover),
+      0 1px 3px rgb(0 0 0 / 0.2) !important;
   }
 
   @media (max-width: 768px) {

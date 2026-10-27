@@ -3,7 +3,7 @@ import { ArrowDown, BookOpen, EyeOff, Gift, Mail, Users } from "react-feather";
 
 import { Container, Hero } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
-import { SITE_NAME, TAGLINE } from "@/site";
+import { JEEZ, JEEZ_POPUP, SITE_NAME, TAGLINE } from "@/site";
 
 // Optional only for index.astro, whose named slots arrive as these props without TypeScript seeing them.
 type Props = {
@@ -118,7 +118,14 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
               />
               <div className="landing-card-text">
                 <h1>{SITE_NAME}</h1>
-                <p className="landing-tagline">{TAGLINE}</p>
+                <p className="landing-tagline">
+                  {TAGLINE}{" "}
+                  {/* Focusable, so a tap (or Tab) shows the popup too; the popup is the word's description. */}
+                  <span className="landing-jeez" tabIndex={0} aria-describedby="landing-jeez-popup">
+                    {JEEZ}
+                    <span id="landing-jeez-popup" className="landing-jeez-popup" role="tooltip">{JEEZ_POPUP}</span>
+                  </span>
+                </p>
                 <div className="landing-actions">
                   {enter}
                   <a href="/how-it-works/" className={howItWorksClass}>

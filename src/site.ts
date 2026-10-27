@@ -13,9 +13,15 @@ export const HOME_DESCRIPTION =
 export const INVITE_DESCRIPTION =
   "You're invited to a secret gift exchange. Join the party, wait for the dice roll, and find out who you're getting a gift for. No passwords, no spam.";
 
-/** Under the title on the front door. */
+/** Under the title on the front door, followed by JEEZ. */
 export const TAGLINE =
-  "Free Secret Santa for friends, families and offices. No ads, no shady business, just pure fun. Free and open source! Jeez!";
+  "Free Secret Santa for friends, families and offices. No ads, no shady business, just pure fun. Free and open source!";
+
+/** The tagline's last word, underlined like with a pen; hovered or tapped, it pops up JEEZ_POPUP. */
+export const JEEZ = "Jeez!";
+export const JEEZ_POPUP =
+  "OMG! It's FREE! *burp* No GMO! No antibiotics! Zero calories! Gluten-free, sugar-free, f-f-feelings-free! " +
+  "One hundred percent organic, free-range elves! *buuurp*";
 
 /** "Title | Anonymous Ded Morozes", or the name alone. */
 export const pageTitle = (title?: string) => [title, SITE_NAME].filter(Boolean).join(" | ");
