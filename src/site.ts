@@ -14,7 +14,8 @@ export const INVITE_DESCRIPTION =
   "You're invited to a secret gift exchange. Join the party, wait for the dice roll, and find out who you're getting a gift for. No passwords, no spam.";
 
 /** Under the title on the front door. */
-export const TAGLINE = "Free Secret Santa for friends, families and offices. No ads, no shady business, just pure fun.";
+export const TAGLINE =
+  "Free Secret Santa for friends, families and offices. No ads, no shady business, just pure fun. Free and open source! Jeez!";
 
 /** "Title | Anonymous Ded Morozes", or the name alone. */
 export const pageTitle = (title?: string) => [title, SITE_NAME].filter(Boolean).join(" | ");
