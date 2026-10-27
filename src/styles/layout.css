@@ -277,6 +277,7 @@
 /* The app's loading screen and the start page's backdrop. */
 .app-spinner {
   background: #141414 url("/party-garage-door-3.jpg") center center/cover;
+  background-image: url("/party-garage-door-3.jpg"), var(--lqip-party-garage-door-3);
 
   .hero-body {
     justify-content: center;

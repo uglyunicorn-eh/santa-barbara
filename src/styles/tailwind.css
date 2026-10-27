@@ -13,6 +13,8 @@
 
 /* The app's own styles, in `app`: page basics, the layout pieces, then each screen's artwork and adjustments. */
 @import "./fonts.css";
+@import "./placeholders.css";
+@import "./placeholders-use.css" layer(app);
 @import "./base.css" layer(app);
 @import "./layout.css" layer(app);
 @import "./dialog.css" layer(app);

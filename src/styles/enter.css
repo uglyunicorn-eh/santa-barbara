@@ -1,6 +1,6 @@
 .hero.enter-container {
   background-color: #c7c7d2;
-  background-image: url("/enter-background.jpg");
+  background-image: url("/enter-background.jpg"), var(--lqip-enter-background);
   background-size: cover;
   background-position: center center;
 

@@ -31,6 +31,45 @@ const webApplication = {
     {/* The elf is the largest thing on the first screen: fetched first, before the inlined styles have been read. */}
     <link rel="preload" as="image" href="/elf-2.webp" imagesrcset={ELF_SRCSET} imagesizes={ELF_SIZES} fetchpriority="high" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(webApplication)} />
+    {/* Images with a blurred placeholder (placeholders-use.css): marked .is-loaded once they arrive, and .is-fresh
+        (blur into focus) when they came over the network rather than from the cache, as the app's copy of the page
+        does. Watches the page as it's parsed and as the app adds to it. */}
+    <script is:inline>
+      (() => {
+        const settle = (el, fresh) => {
+          el.classList.add("is-loaded");
+          if (fresh) {
+            el.classList.add("is-fresh");
+            setTimeout(() => el.classList.remove("is-fresh"), 1000);
+          }
+        };
+        const watchImg = img => {
+          if (img.complete && img.naturalWidth) return settle(img, false);
+          img.addEventListener("load", () => settle(img, true), { once: true });
+          img.addEventListener("error", () => settle(img, false), { once: true });
+        };
+        const watchBg = el => {
+          const url = getComputedStyle(el).backgroundImage.match(/url\("?(?!data:)([^")]+)"?\)/)?.[1];
+          if (!url) return settle(el, false);
+          const image = new Image();
+          image.src = url;
+          if (image.complete) return settle(el, false);
+          image.onload = image.onerror = () => settle(el, image.naturalWidth > 0);
+        };
+        const watch = el => (el.matches("img.lqip") ? watchImg : watchBg)(el);
+        const scan = node => {
+          if (node.nodeType !== 1) return;
+          if (node.matches("img.lqip, [data-lqip-bg]")) watch(node);
+          node.querySelectorAll("img.lqip, [data-lqip-bg]").forEach(watch);
+        };
+        new MutationObserver(records => records.forEach(r => r.addedNodes.forEach(scan)))
+          .observe(document.documentElement, { childList: true, subtree: true });
+      })();
+    </script>
+
+    {/* Without JavaScript nothing marks the images loaded: no placeholders, so they don't stay blurred. */}
+    <noscript><style>img.lqip { filter: none !important; background: none !important; }</style></noscript>
+
     {/* Someone signed in goes straight past the door, so the static copy below would only flash at them. */}
     <script is:inline>
       try { if (localStorage.getItem("profile")) document.documentElement.classList.add("signed-in"); } catch {}
