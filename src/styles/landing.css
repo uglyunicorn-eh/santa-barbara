@@ -536,6 +536,16 @@
       background-size: 145% auto;
       background-position: 36% center;
     }
+
+    /* Phones: the photo a little dimmer, so the card and its text stand out on the small screen. */
+    @media (max-width: 768px) {
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgb(0 0 0 / 0.25);
+      }
+    }
   }
 }
 
