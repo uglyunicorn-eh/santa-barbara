@@ -52,7 +52,7 @@ That's it! Six steps, one dice roll and zero awkward "who got whom" spreadsheets
 
 People often think Secret Santa needs pairs. It doesn't, because nobody is matched *with* anybody. Everyone simply gets one person to give a gift to, never themselves. The gifts go round the group in a loop (or a few loops), so every person gives one gift and gets one gift, however many of you there are.
 
-Three people? Fine. Seven? Fine. Forty-one colleagues and a dog? Fine, but the dog needs an email address. You need at least two people, and with exactly two you'll be giving gifts to each other, so try to act surprised.
+Three people? Fine. Seven? Fine. Forty-one colleagues and a dog? Fine, but the dog needs an email address. You need at least two people, and with exactly two you'll be giving gifts to each other, so try to act surprised. At the other end, a party fits up to 100 people. Beyond that, the elves suggest splitting into a few parties.
 
 In bigger groups, two people can sometimes end up giving gifts to each other too. That's not a glitch: every draw is equally likely, which is exactly why nobody can guess who got whom.
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowDown, BookOpen, EyeOff, Gift, Mail, Users } from "react-feather";
+import { ArrowDown, BookOpen, EyeOff, Gift, Mail, UserX, Users } from "react-feather";
 
 import { Container, Hero } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
@@ -35,8 +35,9 @@ const STEPS = [
 const FEATURES = [
   { icon: Gift, title: "Free, with no ads", text: "No premium elves, no upsells, no banners. Just Secret Santa." },
   { icon: Mail, title: "No passwords, no spam", text: "A magic link to sign in, and not a single newsletter. Ever." },
-  { icon: Users, title: "Any number of people", text: "Three, seven or forty-one. Odd numbers work too: nobody needs a pair." },
+  { icon: Users, title: "Up to 100 people", text: "Three, seven or a whole office. Odd numbers work too: nobody needs a pair." },
   { icon: EyeOff, title: "Truly secret", text: "You see only your own name. Nobody can peek at who got whom, not even the host." },
+  { icon: UserX, title: "Leave any time", text: "Delete your account whenever you like. No exit survey, no guilt trip, no hard feelings." },
 ];
 
 /** The elf in two sizes; its slot (landing.css) is 500px wide, down to 230px on phones. index.astro preloads the same. */

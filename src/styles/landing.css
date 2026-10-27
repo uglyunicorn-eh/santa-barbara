@@ -467,12 +467,16 @@
   font-weight: 600;
 }
 
+/* Cards wrap three to a row (two on tablets, one on phones), and a short last row sits centred. */
 .landing-features {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  --columns: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 
   li {
+    flex: 0 1 calc((100% - (var(--columns) - 1) * 20px) / var(--columns));
     padding: 24px;
     border-radius: 20px;
     background: rgb(255 255 255 / 0.04);
@@ -484,11 +488,11 @@
   }
 
   @media (max-width: 1023px) {
-    grid-template-columns: repeat(2, 1fr);
+    --columns: 2;
   }
 
   @media (max-width: 560px) {
-    grid-template-columns: 1fr;
+    --columns: 1;
   }
 }
 
