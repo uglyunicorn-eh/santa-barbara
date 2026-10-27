@@ -46,6 +46,15 @@ export const ELF_SIZES = "(max-width: 768px) 230px, (max-width: 899px) 320px, (m
 /** The step stickers' slot (landing.css): 200px wide, 128px on phones. Each comes at 256 and 400px. */
 const STEP_SIZES = "(max-width: 768px) 128px, 200px";
 
+/** An image's blurred placeholder (src/styles/placeholders.css), shown until it loads (placeholders-use.css). */
+const lqip = (name: string) => ({ "--lqip": `var(--lqip-${name})` }) as React.CSSProperties;
+
+/**
+ * In the app, an image marks itself loaded. The static page has no React handlers: the script in index.astro does it
+ * there, and also tells a freshly downloaded image from one in the cache, which this doesn't (so no blur-up here).
+ */
+const markLoaded = (event: React.SyntheticEvent<HTMLImageElement>) => event.currentTarget.classList.add("is-loaded");
+
 const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surface: "dark", pill: true });
 
 /**
@@ -57,13 +66,15 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
   <div className="landing">
     <div className="landing-main">
       {/* The HO HO HO photo, holding still while the hero scrolls off it and the sections slide over it. */}
-      <div className="landing-backdrop" aria-hidden="true"><div /></div>
+      <div className="landing-backdrop" aria-hidden="true"><div data-lqip-bg="" /></div>
       <Hero size="fullheight" className="login-container landing-hero">
         <Hero.Body>
           <Container textAlign="centered">
             <div className="landing-card">
               <img
-                className="landing-logo"
+                className="landing-logo lqip"
+                style={lqip("elf-2")}
+                onLoad={markLoaded}
                 src="/elf-2.webp"
                 srcSet={ELF_SRCSET}
                 sizes={ELF_SIZES}
@@ -101,7 +112,18 @@ export const Landing = ({ enter, enterAgain, footer }: Props) => (
           <ol className="landing-steps">
             {STEPS.map(({ image, title, text }, index) => (
               <li key={title}>
-                <img src={image} srcSet={`${image.replace(".webp", "-256.webp")} 256w, ${image} 400w`} sizes={STEP_SIZES} alt="" width={400} height={400} loading="lazy" />
+                <img
+                  className="lqip"
+                  style={lqip(image.slice(1, -".webp".length))}
+                  onLoad={markLoaded}
+                  src={image}
+                  srcSet={`${image.replace(".webp", "-256.webp")} 256w, ${image} 400w`}
+                  sizes={STEP_SIZES}
+                  alt=""
+                  width={400}
+                  height={400}
+                  loading="lazy"
+                />
                 <span className="landing-step-number">{index + 1}</span>
                 <h3>{title}</h3>
                 <p>{text}</p>

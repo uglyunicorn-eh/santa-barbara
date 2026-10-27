@@ -1,5 +1,6 @@
 .party-not-found {
   background: black center center url("/not-found.jpg") no-repeat;
+  background-image: url("/not-found.jpg"), var(--lqip-not-found);
   background-size: cover;
 
   .content {

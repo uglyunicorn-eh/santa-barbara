@@ -1,0 +1,25 @@
+/* Images that show a tiny blurred copy of themselves (placeholders.css) until they load, then blur into focus.
+   `img.lqip` takes its copy from --lqip; the script in index.astro (or the img's onLoad in the app) marks it
+   .is-loaded, and .is-fresh when it has just arrived over the network: one already in the cache shows at once. */
+
+/* The copy comes blurred already: a CSS filter here would blur the elf's first paint too (see below). */
+img.lqip:not(.is-loaded) {
+  background: var(--lqip) center / contain no-repeat;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Not the elf: it's the page's largest paint (LCP), and painted under the blur Chrome measures it too small, so the
+     app's copy drawn later would count instead. It swaps from its placeholder at once. */
+  .lqip.is-fresh:not(.landing-logo),
+  .landing-backdrop:has(> .is-fresh) {
+    animation: lqip-in 500ms ease-out;
+  }
+}
+
+/* From blurred to the element as it is. */
+@keyframes lqip-in {
+  from {
+    filter: blur(10px);
+    opacity: 0.7;
+  }
+}

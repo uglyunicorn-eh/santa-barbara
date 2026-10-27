@@ -67,6 +67,7 @@
 
 .join-container {
   background: #141414 url("/party-garage-door-3.jpg") center center/cover;
+  background-image: url("/party-garage-door-3.jpg"), var(--lqip-party-garage-door-3);
 
   h2 {
     padding-top: 2em;
