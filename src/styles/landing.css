@@ -517,8 +517,9 @@
 
 /* The two sections are cloths on a desk (the photo), linked like a chain: the second starts tucked a little under the
    first and stretches out into place as it scrolls in, by the time it's about a third of the way up the screen.
-   Everything on a cloth moves with it. The first isn't tucked under the hero, which shows the photo through it, so
-   the photo reaches the bottom of the first screen. Where the browser can tie an animation to scrolling; elsewhere,
+   Everything on a cloth moves with it. The first comes out from under the hero the same way, but the hero shows the
+   photo through it, so the tucked part is clipped away rather than hidden under it: its top edge holds still at the
+   bottom of the first screen while the cloth slides out of it. Where the browser can tie an animation to scrolling; elsewhere,
    and with reduced motion, they simply lie in place. Longhands and the timeline in a rule of its own, as for the
    photo's parallax below (the minifier). */
 .landing-main > .landing-hero {
@@ -543,7 +544,13 @@
       animation-fill-mode: both;
     }
 
-    .landing-main > .landing-section + .landing-section {
+    .landing-main > .landing-hero + .landing-section {
+      animation-name: landing-cloth-tucked-under-hero;
+      animation-timing-function: ease-out;
+      animation-fill-mode: both;
+    }
+
+    .landing-main > .landing-section {
       animation-timeline: view();
       animation-range: entry 0% cover 30%;
     }
@@ -552,6 +559,13 @@
 
 @keyframes landing-cloth-tucked {
   from { translate: 0 -80px; }
+}
+
+/* Clipped by as much as it's tucked, so its visible top edge stays put. Only the top is clipped: the sides and bottom
+   reach far out, so nothing on the cloth gets cut off once it's in place. */
+@keyframes landing-cloth-tucked-under-hero {
+  from { translate: 0 -80px; clip-path: inset(80px -100vw -100vh); }
+  to { translate: 0 0; clip-path: inset(0 -100vw -100vh); }
 }
 
 .landing-section.landing-final {
