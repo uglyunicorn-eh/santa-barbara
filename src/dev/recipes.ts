@@ -86,7 +86,7 @@ export const surfacePanel: Record<Surface, string> = {
 export const surfacePhoto: Record<Surface, string> = {
   night: "/welcome.jpg",
   paper: "/party-background.jpg",
-  glass: "/login-garage-door.jpg",
+  glass: "/login-garage-door.webp",
 };
 
 /** The card each surface puts its controls on. Night has none: controls sit straight on the photo. */

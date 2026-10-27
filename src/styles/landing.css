@@ -442,12 +442,12 @@
     height: 100vh;
     height: 100dvh;
     background-color: #170505;
-    background-image: url("/login-garage-door.jpg");
+    background-image: url("/login-garage-door.webp");
     background-size: cover;
     background-position: center center;
 
     @media (max-width: 768px) and (orientation: portrait) {
-      background-image: url("/login-garage-door-portrait.jpg");
+      background-image: url("/login-garage-door-portrait.webp");
       /* As on the sign-in door (login.css): HO HO HO turned on its side, filling the screen. */
       background-size: 145% auto;
       background-position: 36% center;

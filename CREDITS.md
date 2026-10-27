@@ -13,7 +13,7 @@ These photos come from [Unsplash](https://unsplash.com) and are used under the [
 | File | Photo | Photographer |
 | --- | --- | --- |
 | `public/party-garage-door-3.jpg` | [Wonderland neon signage at night](https://unsplash.com/photos/wonderland-neon-signage-at-night-24JJStvqFLs) | [Nicole Baster](https://unsplash.com/@nicolebaster) |
-| `public/login-garage-door.jpg`, `public/login-garage-door-portrait.jpg` | [HOHOHO LED sign](https://unsplash.com/photos/hohoho-led-sign-k0nfntv2Dgs) | [Call Me Fred](https://unsplash.com/@callmefred) |
+| `public/login-garage-door.webp`, `public/login-garage-door-portrait.webp` | [HOHOHO LED sign](https://unsplash.com/photos/hohoho-led-sign-k0nfntv2Dgs) | [Call Me Fred](https://unsplash.com/@callmefred) |
 | `public/welcome.jpg` | [White stars cutout on black surface with red string](https://unsplash.com/photos/white-stars-cutout-on-black-surface-with-red-string-h2O_jHvjfIM) | [Joanna Kosinska](https://unsplash.com/@joannakosinska) |
 | `public/party-background.jpg` | [Star sequins on white platform](https://unsplash.com/photos/78uNJt1kPw8) | [Joanna Kosinska](https://unsplash.com/@joannakosinska) |
 | `public/rolled-envelopes.jpg` | [Envelope paper lot](https://unsplash.com/photos/envelope-paper-lot-uGcDWKN91Fs) | [Joanna Kosinska](https://unsplash.com/@joannakosinska) |
