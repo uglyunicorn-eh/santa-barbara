@@ -1,4 +1,4 @@
-/* The Party'o'meter (src/components/PartyOMeter.tsx): an odometer of digit wheels, each a strip of digits sliding up
+/* The Party'o'meter (src/components/Odometer.tsx): an odometer of digit wheels, each a strip of digits sliding up
    behind a window one digit tall. */
 
 .party-o-meter {

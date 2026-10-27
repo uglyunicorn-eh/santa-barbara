@@ -12,7 +12,7 @@ the `uiKit` integration in `astro.config.mjs`); builds leave it out.
 
 The components: buttons (`src/components/ui/button.tsx`), inputs (`src/components/ui/input.tsx`), form fields
 (`src/components/forms/`), dialogs (`src/components/DialogBox.tsx`, on Base UI's Dialog), tabs (`src/components/Tab.tsx`),
-menus (`src/components/ui/menu.ts`) and the page layout pieces (`src/components/layout.tsx`, styled in
+menus (`src/components/ui/menu.ts`), the Party'o'meter (`src/components/Odometer.tsx`) and the page layout pieces (`src/components/layout.tsx`, styled in
 `src/styles/layout.css`). The kit shows the real buttons, inputs and toaster; its dialog and tab samples are drawn to match.
 
 ## Surfaces
@@ -131,6 +131,14 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
   surface: dark on night, light on the party page.
+
+## Party'o'meter
+
+The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
+`src/styles/odometer.css`): an odometer on the closing section, one wheel per digit and at least six, the last wheel
+red like a car's tenths. A changed digit rolls forward to its new value through the digits in between (1.4 s, easing
+out); with reduced motion it just shows it. Nothing shows until the first count arrives. On phones it's smaller, so
+nine digits still fit at 320px. The kit shows each state and a control to change the count.
 
 ## Emails
 

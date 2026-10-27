@@ -6,6 +6,7 @@ import { MAX_PARTY_NAME_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToastDemo } from "./ToastDemo";
+import { OdometerDemo, OdometerStates } from "./OdometerDemo";
 import { cn } from "@/lib/utils";
 import "./ui-kit.css";
 
@@ -79,6 +80,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
         <a class="text-link underline underline-offset-4" href="#dialogs">Dialogs</a>
         <a class="text-link underline underline-offset-4" href="#tabs">Tabs</a>
         <a class="text-link underline underline-offset-4" href="#toasts">Toasts</a>
+        <a class="text-link underline underline-offset-4" href="#party-o-meter">Party'o'meter</a>
         <a class="text-link underline underline-offset-4" href="#long-values">Long values</a>
       </nav>
     </header>
@@ -400,6 +402,24 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
           </div>
         </div>
       ))}
+    </section>
+
+    <!-- Party'o'meter -->
+    <section id="party-o-meter" class="landing bg-night px-4 py-8 tablet:px-8">
+      <h2 class={`${sectionTitle} text-white`}>Party'o'meter</h2>
+      <p class="mt-1 max-w-200 text-sm text-zinc-300">
+        The front door's count of parties that rolled the dice: one wheel per digit, at least six. A changed digit rolls
+        forward to its new value, through the digits in between; with reduced motion it just shows it. The samples
+        roll up from 000000 on load, like the real one when its first count arrives.
+      </p>
+      <div class="mt-6">
+        <OdometerStates client:load />
+      </div>
+      <h3 class="mt-10 text-xl font-semibold text-white">Try it</h3>
+      <p class="mt-1 text-sm text-zinc-300">Change the count and watch the wheels: one step, a few, a jump, a new digit, and back down (which rolls forward round to the lower digits, as an odometer would).</p>
+      <div class="mt-4 max-w-200">
+        <OdometerDemo client:load />
+      </div>
     </section>
 
     <!-- Long values -->

@@ -5,3 +5,14 @@
 @import "../styles/tailwind.css";
 
 @source "./";
+
+/* The Party'o'meter samples sit on the front door's closing section (landing.css). */
+.kit-meter {
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),
+    var(--landing-ember);
+
+  .party-o-meter {
+    margin-top: 0;
+  }
+}
