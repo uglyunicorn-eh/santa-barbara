@@ -378,6 +378,25 @@
   }
 }
 
+/* Hovering a feature card floats it up a little (a transition, so it also glides back down when the pointer leaves),
+   where it levitates (`translate`, a property of its own) while the pointer stays. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .landing-features li {
+    transition: transform 300ms ease-out, box-shadow 300ms ease-out;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgb(0 0 0 / 0.35);
+      animation: landing-feature-levitate 2.4s ease-in-out 300ms infinite;
+    }
+  }
+}
+
+@keyframes landing-feature-levitate {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+
 .landing-section.landing-final {
   background:
     radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),
@@ -524,16 +543,34 @@
 }
 
 /* The closing section's button: a white rim with a soft glow, a ring pulsing out of it, and a little wiggle now and
-   then. On the wrapper, not the button, so the button's own focus ring stays as it is. */
+   then, the rim buzzing the other way at the same moment. On the wrapper, not the button, so the button's own focus
+   ring stays as it is. The rim is a layer of its own (::before), so it turns without turning the button inside. */
 .landing-party-bezel {
   position: relative;
   display: inline-flex;
   padding: 12px;
   border-radius: 999px;
-  border: 2px solid white;
-  box-shadow:
-    0 0 24px rgb(255 255 255 / 0.25),
-    inset 0 0 12px rgb(255 255 255 / 0.12);
+  border: 2px solid transparent;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    border: 2px solid white;
+    box-shadow:
+      0 0 24px rgb(255 255 255 / 0.25),
+      inset 0 0 12px rgb(255 255 255 / 0.12);
+    pointer-events: none;
+    animation: landing-party-buzz 4s ease-in-out infinite;
+    transition: inset 250ms ease-out;
+  }
+
+  /* Hovered, the rim stands out from the button a little. */
+  &:hover::before,
+  &:focus-within::before {
+    inset: -7px;
+  }
 
   &::after {
     content: "";
@@ -550,8 +587,10 @@
     animation: landing-party-wiggle 4s ease-in-out infinite;
   }
 
+  &:hover::before,
   &:hover > *,
   &:hover > astro-slot > *,
+  &:focus-within::before,
   &:focus-within > *,
   &:focus-within > astro-slot > * {
     animation-play-state: paused;
@@ -579,6 +618,15 @@
   96% { transform: rotate(1deg) scale(1); }
 }
 
+/* The rim, with the button's wiggle: the other way, about half as far. */
+@keyframes landing-party-buzz {
+  0%, 84%, 100% { transform: rotate(0); }
+  87% { transform: rotate(1.5deg); }
+  90% { transform: rotate(-1.5deg); }
+  93% { transform: rotate(1deg); }
+  96% { transform: rotate(-0.5deg); }
+}
+
 /* Smaller on phones, to stay inside the screen. */
 @keyframes landing-party-pulse-small {
   0% { opacity: 0.7; transform: scale(1); }
@@ -586,6 +634,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landing-party-bezel::before,
   .landing-party-bezel::after,
   .landing-party-bezel > *,
   .landing-party-bezel > astro-slot > * {
