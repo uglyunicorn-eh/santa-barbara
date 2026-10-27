@@ -2,12 +2,12 @@
 layout: "@/layouts/KnowledgePageLayout.astro"
 title: "Privacy Policy"
 image: "/privacy.png"
-description: "What we collect, who sees it, and how to delete it. Short version: your email, your name, and no tracking."
+description: "What we collect, who sees it, and how to delete it. Short version: your email, your name, and no tracking cookies."
 ---
 
 # Privacy Policy
 
-*Effective date: October 24, 2026*
+*Effective date: October 26, 2026*
 
 **Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or "our"), operates [gnomik.me](https://gnomik.me)
 (the "Service"). This page explains what personal data we collect, how we use it, and the choices you have. Terms not
@@ -26,16 +26,20 @@ We do not ask for passwords or payment details, and we do not sell your data.
 
 ## Cookies and Browser Storage
 
-We do not use advertising, analytics or tracking cookies. To keep you signed in, the Service stores a sign-in token and
-a copy of your basic profile in your browser's local storage. This is strictly necessary for the Service to work, is
-never used to track you, and is removed when you sign out or clear your browser data. Because we use only what is
-strictly necessary, we do not show a cookie consent banner.
+We do not use cookies to track you, and we do not use advertising or analytics cookies. To keep you signed in, the
+Service stores a sign-in token and a copy of your basic profile in your browser's local storage. This is strictly
+necessary for the Service to work, is never used to track you, and is removed when you sign out or clear your browser
+data. Because we use only what is strictly necessary, we do not show a cookie consent banner.
+
+We use Cloudflare Web Analytics to count page views and see how fast pages load. It sets no cookies, does not collect
+your email address or name, and does not follow you across visits or other websites.
 
 ## How We Use Your Data
 
 * to provide and maintain the Service, including signing you in and assigning gift recipients;
 * to email you the links and notifications you ask for, and to tell you about changes to the Service;
 * to provide support;
+* to count visits and see how fast pages load, without cookies (see Cookies and Browser Storage);
 * to keep the Service secure and to detect, prevent and address technical issues.
 
 ## Who Can See Your Data
