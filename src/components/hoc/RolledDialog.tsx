@@ -12,7 +12,7 @@ import { useAppClient } from "@/components/hooks";
  * "The dice are rolled": the message the party's email brings, opened from a reminder on the home screen. It reads
  * like the email itself (who it's from, the subject, the email's postcard pinned on), over a bed of envelopes that
  * fills the page. Its button
- * goes to the party, where the gnome tells whom to give a gift to; the X closes it.
+ * goes to the party, where Gnomik tells whom to give a gift to; the X closes it.
  *
  * `onParty`: opened on the party page itself, the moment the host rolled the dice (PartyDetails), with stars falling.
  * Then closing it, or its button, just shows the party underneath.
@@ -45,7 +45,7 @@ export const RolledDialog = ({ onParty = false }: { onParty?: boolean }) => {
         title="This is it! The message you've been waiting for!"
         noDismiss
         dismissLocation={onParty ? partyPath : "/"}
-        action={<Button variant="primary" pill onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask the Gnomik!" : "🦄 Get me to the Gnomik!"}</Button>}
+        action={<Button variant="primary" pill onClick={() => navigate(partyPath)}>{onParty ? "🦄 Ask Gnomik!" : "🦄 Get me to Gnomik!"}</Button>}
         size="lg"
       >
         <article className="rolled-mail">
@@ -67,7 +67,7 @@ export const RolledDialog = ({ onParty = false }: { onParty?: boolean }) => {
             <p>We have some wonderful news to share... <strong>It's time!</strong> It's time to make someone happy!</p>
             <p>
               Our elves have just finished their complex calculations{name ? <> for <strong className="wrap-anywhere">{name}</strong></> : null},
-              and now they know your person of interest! Simply follow the link below and ask the gnome for the answer to
+              and now they know your person of interest! Simply follow the link below and ask Gnomik for the answer to
               the most mysterious question of the Universe...
             </p>
           </Content>

@@ -2,15 +2,15 @@
 layout: "@/layouts/KnowledgePageLayout.astro"
 title: "Terms and Conditions"
 image: "/terms.png"
-description: "The rules of the game: how accounts, parties and deleting things work on Anonymous Ded Morozes."
+description: "The rules of the game: how accounts, parties and deleting things work on Anonymous Santa Clauses."
 ---
 
 # Terms and Conditions
 
-*Effective date: October 24, 2026*
+*Effective date: October 28, 2026*
 
 Please read these Terms and Conditions ("Terms") carefully before using [gnomik.me](https://gnomik.me) (the "Service"),
-operated by **Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or "our").
+operated by **Anonymous Santa Clauses**, a project of Ugly Unicorn ("us", "we", or "our").
 
 By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of them, you may
 not use the Service.

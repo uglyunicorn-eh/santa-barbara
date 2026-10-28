@@ -1,6 +1,6 @@
 /** The site's name, titles and descriptions: what search engines and link previews show. */
 
-export const SITE_NAME = "Anonymous Ded Morozes";
+export const SITE_NAME = "Anonymous Santa Clauses";
 
 /** The home page's title, before " | SITE_NAME": the words people search for. */
 export const HOME_TITLE = "Free Secret Santa Generator";
@@ -23,5 +23,5 @@ export const JEEZ_POPUP =
   "OMG! It's FREE! No GMO! No antibiotics! Zero calories! No cookies! " +
   "Gluten-free, sugar-free, f-f-feelings-free! One hundred percent organic, free-range elves and Gnomik!";
 
-/** "Title | Anonymous Ded Morozes", or the name alone. */
+/** "Title | Anonymous Santa Clauses", or the name alone. */
 export const pageTitle = (title?: string) => [title, SITE_NAME].filter(Boolean).join(" | ");

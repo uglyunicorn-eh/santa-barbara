@@ -7,9 +7,9 @@ description: "What we collect, who sees it, and how to delete it. Short version:
 
 # Privacy Policy
 
-*Effective date: October 26, 2026*
+*Effective date: October 28, 2026*
 
-**Anonymous Ded Morozes**, a project of Ugly Unicorn ("us", "we", or "our"), operates [gnomik.me](https://gnomik.me)
+**Anonymous Santa Clauses**, a project of Ugly Unicorn ("us", "we", or "our"), operates [gnomik.me](https://gnomik.me)
 (the "Service"). This page explains what personal data we collect, how we use it, and the choices you have. Terms not
 defined here have the meaning given in our [Terms and Conditions](/terms).
 
