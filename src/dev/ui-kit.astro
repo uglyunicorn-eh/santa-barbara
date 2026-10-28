@@ -6,7 +6,7 @@ import { MAX_PARTY_NAME_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToastDemo } from "./ToastDemo";
-import { OdometerDemo, OdometerStates } from "./OdometerDemo";
+import { OdometerDemo, OdometerNowAndThen, OdometerStates } from "./OdometerDemo";
 import { cn } from "@/lib/utils";
 import "./ui-kit.css";
 
@@ -418,6 +418,15 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       <p class="mt-1 text-sm text-zinc-300">Change the count and watch the tickets: one flip, a few, a run of fast flips, a new digit, and back down (which flips forward round to the lower digits, as a counter would).</p>
       <div class="mt-4 max-w-200">
         <OdometerDemo client:load />
+      </div>
+      <h3 class="mt-10 text-xl font-semibold text-white">Now and then</h3>
+      <p class="mt-1 max-w-200 text-sm text-zinc-300">
+        On its own, rarely, the counter plays the click's show: on the front door after a random 1 to 3 minutes, here
+        every 3 to 6 seconds. Only while it's in view in a visible tab, not right after its digits changed, never over a
+        show already playing, and not at all with reduced motion.
+      </p>
+      <div class="mt-4 max-w-200">
+        <OdometerNowAndThen client:load />
       </div>
       <h3 class="mt-10 text-xl font-semibold text-white">States</h3>
       <div class="mt-3">
