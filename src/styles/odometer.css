@@ -1,6 +1,7 @@
 /* The Party'o'meter (src/components/Odometer.tsx): an odometer of digit wheels, each a strip of digits sliding up
-   behind a window one digit tall. Flat: monospace digits in the colour of the text around it, so white on a dark
-   section and black on a light one; only the window's top and bottom edges fade, so the digits slide in and out. */
+   behind a window one digit tall. Flat: monospace digits and their frames in the colour of the text around it, so white
+   on a dark section and black on a light one; only each window's top and bottom edges fade, so the digits slide in and
+   out. */
 
 .party-o-meter {
   margin: 36px auto 0;
@@ -20,7 +21,11 @@
   --digit: 1.2em;
 
   display: inline-flex;
-  gap: 0.06em;
+  gap: 0.1em;
+  padding: 0.1em;
+  /* A thicker frame round the whole counter, a thin one round each digit, both in the text colour. */
+  border: 3px solid currentColor;
+  border-radius: 10px;
   font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
   font-size: 3rem;
   font-weight: 500;
@@ -30,11 +35,20 @@
 
   /* Phones: nine wheels (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
-    font-size: 2.25rem;
+    font-size: 1.75rem;
+    border-width: 2px;
+    border-radius: 8px;
   }
 }
 
 .odometer-wheel {
+  padding: 0 0.12em;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+}
+
+.odometer-window {
+  display: block;
   height: var(--digit);
   width: 1ch;
   overflow: hidden;

@@ -16,7 +16,7 @@ const STATES: { label: string; rolled: number | null; note: string }[] = [
 
 type Tone = "dark" | "light";
 
-const panel = (tone: Tone) => `kit-meter kit-meter-${tone} rounded-card p-6 text-center`;
+const panel = (tone: Tone) => `kit-meter kit-meter-${tone} rounded-card px-3 py-6 text-center tablet:px-6`;
 
 /** Every state side by side, on one background. */
 export const OdometerStates = ({ tone }: { tone: Tone }) => (

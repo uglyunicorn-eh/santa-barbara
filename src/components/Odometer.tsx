@@ -40,12 +40,15 @@ const Wheel = ({ digit }: { digit: number }) => {
 
   return (
     <span className="odometer-wheel" aria-hidden="true">
-      <span
-        className={wheel.rolling ? "odometer-strip is-rolling" : "odometer-strip"}
-        style={{ "--at": wheel.at } as React.CSSProperties}
-        onTransitionEnd={settle}
-      >
-        {STRIP.map((n, i) => <span key={i}>{n}</span>)}
+      {/* The window the strip slides behind: inside the wheel's border, so the fade at its edges leaves the border. */}
+      <span className="odometer-window">
+        <span
+          className={wheel.rolling ? "odometer-strip is-rolling" : "odometer-strip"}
+          style={{ "--at": wheel.at } as React.CSSProperties}
+          onTransitionEnd={settle}
+        >
+          {STRIP.map((n, i) => <span key={i}>{n}</span>)}
+        </span>
       </span>
     </span>
   );
