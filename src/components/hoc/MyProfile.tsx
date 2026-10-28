@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Calendar, ChevronRight, Gift, Lock, LogOut, Star, X } from 'react-feather';
+import { Calendar, ChevronRight, Gift, Lock, Mail, Star, Trash2, X } from 'react-feather';
 import * as v from "valibot";
 
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
@@ -122,15 +122,19 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
       dismissLabel={"Okie Dokie!"}
       dismissLocation={dismissLocation}
       size="lg"
-      // On a phone's sheet a rule sets the footer apart, with Sign out small above Okie Dokie.
+      // On a phone's sheet a rule sets the footer apart, with Delete account small above Okie Dokie.
       footerClassName={tabletUp ? undefined : "mx-5 gap-3 border-t border-border px-0 pt-3"}
     >
       {/* From tablet up the greeting and the tabs stay at the top while the rest scrolls under them; on a phone's
           sheet the greeting scrolls away and only the tabs stick, to leave the small screen to the content. */}
       {/* (On phones the wrapper is `contents`, so the tabs stick to the sheet's body, not to this box.) */}
-      <div className="max-tablet:contents tablet:sticky tablet:-top-2.5 tablet:z-20 tablet:-mx-5 tablet:bg-white tablet:px-5">
+      {/* Both stick flush with the body's top edge (-top-5 takes back its p-5), so nothing scrolls by above them. From
+          tablet up the box takes the body's top padding in as white padding of its own, so it stays exactly where it
+          was when it sticks, the tilted sticker whole. On a phone the tabs stop 8px lower, under the sheet's grip, and a white shadow fills those 8px (over
+          the greeting's mb-2 before they stick). */}
+      <div className="max-tablet:contents tablet:sticky tablet:-top-5 tablet:z-20 tablet:-mx-5 tablet:-mt-5 tablet:bg-white tablet:px-5 tablet:pt-5">
         <Greeting />
-        <Tabs label="Profile" className="sticky -top-2.5 z-20 -mx-5 mb-4 bg-white">
+        <Tabs label="Profile" className="z-20 -mx-5 mb-4 bg-white max-tablet:sticky max-tablet:-top-3 max-tablet:shadow-[0_-8px_0_white]">
           <Tab to={base}>Profile</Tab>
           <Tab to={`${base}history/`}>Latest history</Tab>
         </Tabs>
@@ -146,11 +150,12 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
 };
 
 /**
- * The profile's header, on both tabs: a sticker, "Hey, <name>!" and Sign out, in the header from tablet up and above
- * Okie Dokie on a phone's sheet (in the footer's left slot, which stacks below the buttons; `order` lifts it above).
+ * The profile's header, on both tabs: a sticker, "Hey, <name>!" and Delete account, in the header from tablet up and
+ * above Okie Dokie on a phone's sheet (in the footer's left slot, which stacks below the buttons; `order` lifts it
+ * above). Signing out is in the page's footer.
  */
 const Greeting = () => {
-  const { profile, signOut } = useCurrentUser();
+  const { profile } = useCurrentUser();
   const tabletUp = useTabletUp();
   const name = profile?.name?.trim();
 
@@ -162,16 +167,10 @@ const Greeting = () => {
         {name ? `Hey, ${name}!` : "Hey there!"}
       </h2>
       {tabletUp
-        ? (
-          <Button type="button" variant="ghost" onClick={signOut}>
-            <LogOut size={18} aria-hidden="true" /> Sign out
-          </Button>
-        )
+        ? <DeleteAccount email={profile?.email ?? ""} />
         : (
           <DialogFooterStart>
-            <Button type="button" variant="ghost" size="sm" className="order-1 self-center text-zinc-600" onClick={signOut}>
-              <LogOut size={15} aria-hidden="true" /> Sign out
-            </Button>
+            <DeleteAccount email={profile?.email ?? ""} size="sm" className="order-1 self-center" />
           </DialogFooterStart>
         )}
     </div>
@@ -239,8 +238,6 @@ const Profile = () => {
       </Setting>
 
       <EmailSetting email={profile?.email ?? ""} />
-
-      <DeleteAccount email={profile?.email ?? ""} />
     </div>
   );
 };
@@ -349,14 +346,17 @@ const EmailSetting = ({ email }: { email: string }) => {
 const noValues = {};
 
 /**
- * Deleting the account takes two steps: confirm in a danger sheet on top of the profile, then click the emailed link
- * (handled by ConfirmAccountDeletion). The sheet isn't a route: /profile/delete is that link's page.
+ * Deleting the account takes two steps: this button opens a danger sheet on top of the profile, which asks to confirm,
+ * then the emailed link finishes it (handled by ConfirmAccountDeletion). The sheet isn't a route: /profile/delete is
+ * that link's page. Once the link is sent, the button says so (and a toast says where).
  */
-const DeleteAccount = ({ email }: { email: string }) => {
+const DeleteAccount = ({ email, size, className }: { email: string; size?: "sm"; className?: string }) => {
   const { requestAccountDeletion } = useAppClient();
+  const { success } = useNotifications();
   const [stage, setStage] = React.useState<"idle" | "confirming" | "sent">("idle");
   // One id per confirmation: retrying it after a failure is fine, it never emails twice.
   const requestId = React.useRef("");
+  const iconSize = size === "sm" ? 15 : 18;
 
   const startConfirming = React.useCallback(
     () => {
@@ -373,31 +373,29 @@ const DeleteAccount = ({ email }: { email: string }) => {
     async () => {
       if (await requestAccountDeletion(requestId.current)) {
         setStage("sent");
+        success(`Check ${email} for the link. Your account is deleted only once you click it.`);
       }
     },
     [
       requestAccountDeletion,
+      success,
+      email,
     ],
   );
 
   return (
-    <div className="danger-zone">
-      <div className="setting-control">
-        <div className="danger-text">
-          <strong>Delete account</strong>
-          <p>
-            {stage === "sent"
-              ? <>We've sent a confirmation link to {email}. Your account is deleted only once you click it.</>
-              : <>Removes your account and the parties you host that haven't rolled the dice yet.</>
-            }
-          </p>
-        </div>
-        {stage !== "sent" && (
-          <Button type="button" variant="ghost-destructive" onClick={startConfirming}>
-            Delete account
+    <>
+      {stage === "sent"
+        ? (
+          <Button type="button" variant="ghost" size={size} className={className} disabled title={`We've sent a link to ${email}`}>
+            <Mail size={iconSize} aria-hidden="true" /> Check your email
+          </Button>
+        )
+        : (
+          <Button type="button" variant="ghost-destructive" size={size} className={className} onClick={startConfirming}>
+            <Trash2 size={iconSize} aria-hidden="true" /> Delete account
           </Button>
         )}
-      </div>
 
       {stage === "confirming" && (
         <DialogBox
@@ -420,7 +418,7 @@ const DeleteAccount = ({ email }: { email: string }) => {
           </DialogCharacter>
         </DialogBox>
       )}
-    </div>
+    </>
   );
 };
 

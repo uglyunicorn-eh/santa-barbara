@@ -41,7 +41,7 @@ export type MenuItem = {
 };
 
 export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profileBase = "/profile/", compactKeys = COMPACT_KEYS }: Props) => {
-  const { profile } = useCurrentUser();
+  const { profile, signOut } = useCurrentUser();
   // Rolled parties whose name the user hasn't heard yet: a dot on "My Profile", which then opens on the history.
   const { parties: unrevealed } = useUnrevealed();
   const toReveal = unrevealed?.length ?? 0;
@@ -60,6 +60,18 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
           asLink: profileAsLink,
         }
         : null,
+      // A link to the front door, where signing out ends up anyway; the click signs out first.
+      (!noUser && profile)
+        ? {
+          key: "sign-out",
+          label: "Sign out",
+          url: "/",
+          onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            signOut();
+          },
+        }
+        : null,
       { key: "how-it-works", label: "How this works?", url: "/how-it-works/" },
       { key: "privacy", label: "Privacy Policy", url: "/privacy/" },
       { key: "terms", label: "Terms", url: "/terms/" },
@@ -73,6 +85,7 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
       profile,
       profileAsLink,
       profileBase,
+      signOut,
       toReveal,
     ],
   );
