@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import * as v from "valibot";
 
-import { PartyCountdown } from "@/components/PartyCountdown";
 import { GrinchBox } from "@/components/GrinchBox";
 import { SnowConfetti } from "@/components/SnowConfetti";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
@@ -84,9 +83,6 @@ export const JoinBox = ({ party }: Props) => {
               : (
                 <>
                   <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
-
-                  {/* Counting down to the party's due time, for whoever is thinking of joining. */}
-                  {party.dueAt && !party.deletedAt && <div className="join-due"><PartyCountdown dueAt={party.dueAt} /></div>}
 
                   {profile ? <SubmitRequestForm party={party} profile={profile} /> : <SignInControls party={party} />}
                 </>

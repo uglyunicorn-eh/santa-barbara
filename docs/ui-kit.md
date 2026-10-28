@@ -142,7 +142,7 @@ days unpadded and the rest two digits, with "days", "hours", "min" and "sec" und
 underlined with the front door's "Jeez!" pen stroke, with the date (in the browser's own format) in the same yellow
 bubble over it on hover, tap or keyboard focus. It ticks on each new second while the tab is visible and catches up
 when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens. With reduced motion
-the digits just change. Visitors who haven't joined see it too, in the join box under "Welcome to the …!" (light labels on its dark glass card). Screen readers get "Gifts due ‹date›" rather than digits changing every second. Smaller on
+the digits just change. Only members see it: the join box doesn't show it. Screen readers get "Gifts due ‹date›" rather than digits changing every second. Smaller on
 phones, so the longest (366 days) fits at 320px. The kit shows days left, under an hour, finished and a year ahead.
 
 ## Party'o'meter

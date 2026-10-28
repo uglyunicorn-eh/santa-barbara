@@ -128,20 +128,3 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-
-/* On the join box's dark glass card (JoinBox): the labels go light, and the cards need no shadow. */
-.join-due {
-  margin: 4px 0 20px;
-
-  .due-clock {
-    color: var(--color-zinc-300);
-  }
-
-  .due-clock-digits {
-    filter: none;
-  }
-
-  .due-clock-title:focus-visible {
-    outline-color: white;
-  }
-}
