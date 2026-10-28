@@ -6,18 +6,11 @@ import * as v from "valibot";
 import type { Party } from "@/types";
 import { DialogBox } from "@/components/DialogBox";
 import { HaveQuestion } from "@/components/HaveQuestion";
-import { FormField, Input, Submit } from "@/components/forms";
+import { DateTimeInput, FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
 import { useAppClient, useCopyPartyLink } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
 import { MAX_DUE_AHEAD_MS, MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH, MIN_DUE_AHEAD_MS } from "@/limits";
-
-/** A `datetime-local` value ("2026-12-24T18:00"), in this browser's time zone, for a moment `ms` from now. */
-const localInputValue = (ms: number) => {
-  const at = new Date(Date.now() + ms);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}T${pad(at.getHours())}:${pad(at.getMinutes())}`;
-};
 
 /**
  * The due time: roughly when the host means to roll the dice. The API takes it at least an hour ahead and at most 366
@@ -137,7 +130,7 @@ export const NewParty = () => {
               <FormField
                 name="dueAt"
                 label="Party starts"
-                children={<Input type="datetime-local" min={localInputValue(MIN_DUE_AHEAD_MS)} max={localInputValue(MAX_DUE_AHEAD_MS)} />}
+                children={<DateTimeInput min={new Date(Date.now() + MIN_DUE_AHEAD_MS)} max={new Date(Date.now() + MAX_DUE_AHEAD_MS)} placeholder="Optional" />}
                 help="Optional. Roughly when you'll roll the dice: the party page counts down to it, and you get a reminder the day before."
               />
               <HaveQuestion />

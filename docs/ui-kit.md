@@ -112,6 +112,11 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **Email tags** (`EmailTags`, the invite dialog): addresses become teal pills as you type Enter, a comma, a space or
   paste a list; one that doesn't look like an address stays, as a red pill, to fix or remove. Backspace in the empty
   field takes the last one back. At most 10.
+- **Date and time** (`DateTimeInput`, "Party starts"): a field-sized button showing "Sat, Oct 31 · 6:00 PM" (the
+  year only when it isn't this one), with an × to clear. It opens a white popover attached to the field: a month
+  calendar (weeks start on the locale's first day, today ringed, the chosen day in teal, days out of range greyed),
+  chips for the usual times of day (Morning 9, Noon 12, Afternoon 3, Evening 6, Night 8), − / + in 15-minute steps,
+  then "Clear" and "Done". Picking a day alone gives 6 PM. The value is the same as a `datetime-local` input's.
 - Fields at their limit just stop typing.
 
 ## Dialogs, tabs, toasts
@@ -126,7 +131,7 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
-  edges. The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+  edges (on the light party page, 96px from the bottom, above the footer). The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
   the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the

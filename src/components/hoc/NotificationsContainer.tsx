@@ -36,6 +36,9 @@ export const useToastSurface = (next: Surface) => {
   );
 };
 
+/** How far above the bottom toasts sit on the light party page: clear of its footer (three lines and its padding). */
+const LIGHT_PAGE_BOTTOM = 96;
+
 const ERROR_MS = 2500;
 const MESSAGE_MS = 4000;
 
@@ -49,7 +52,8 @@ export const NotificationsContainer = () => {
       position={tabletUp ? "bottom-right" : "top-center"}
       closeButton
       className="app-toaster"
-      offset={16}
+      // On the light party page, from tablet up, above the footer's links and credits (bottom right, like the toasts).
+      offset={current === "light" ? { top: 16, right: 16, left: 16, bottom: LIGHT_PAGE_BOTTOM } : 16}
       // On phones, below the status bar (the page draws under it: viewport-fit=cover).
       mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: 16, right: 16, bottom: 16 }}
       visibleToasts={4}
