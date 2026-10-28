@@ -142,8 +142,9 @@ exactly two lines tall. In the bottom-left corner from tablet up; just above the
 (tickets over the two lines) below 360px. Cream
 (`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and
 that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
-through every digit in between, sharing about 0.9 s. Clicking the counter (a button) sets every ticket back to 0 and flips them up to the count again, as on the first
-load. With reduced motion the digits just change. Nothing shows until
+through every digit in between, sharing about 0.9 s. Clicking the counter (a button) puts on a little show: the tickets flip to random digits, then all to 0, then up to
+the count, each step once the last run of flips is done (about a second each); with reduced motion a click does
+nothing. A run of flips keeps one pace from start to end. With reduced motion the digits just change. Nothing shows until
 the first count arrives. On phones it's smaller, so nine tickets still fit at 320px.
 
 The digits aren't a font: they're SVG strokes drawn in `Odometer.tsx` (`GLYPHS`), condensed and geometric in the

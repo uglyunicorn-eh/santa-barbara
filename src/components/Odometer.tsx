@@ -80,6 +80,8 @@ const FlapDigit = ({ digit }: { digit: number }) => {
   const [shown, setShown] = React.useState(0);
   const [flip, setFlip] = React.useState<Flip | null>(null);
   const flips = React.useRef(0);
+  // A run's pace, set when it starts (from how many flips it takes) and kept to its end, so a run doesn't slow down.
+  const run = React.useRef({ to: digit, ms: FLIP_MS });
 
   React.useEffect(
     () => {
@@ -88,8 +90,11 @@ const FlapDigit = ({ digit }: { digit: number }) => {
         setShown(digit);
         return;
       }
+      if (run.current.to !== digit || !flip) {
+        run.current = { to: digit, ms: flipMs((digit - shown + 10) % 10) };
+      }
       const to = (shown + 1) % 10;
-      const ms = flipMs((digit - shown + 10) % 10);
+      const { ms } = run.current;
       setFlip({ from: shown, to, ms, key: flips.current++ });
       const timer = setTimeout(() => setShown(to), ms);
       return () => clearTimeout(timer);
@@ -113,15 +118,47 @@ const FlapDigit = ({ digit }: { digit: number }) => {
   );
 };
 
-/** A counter showing `value` on at least MIN_DIGITS tickets. Clicking it flips the tickets up from zeros again. */
+/** A click's show: the tickets flip to random digits, then all to 0, then up to the count, each step once the last is done. */
+type Show = "random" | "zeros" | null;
+
+/** How long each step of the show waits: a run of flips takes about RUN_MS. */
+const SHOW_STEP_MS = RUN_MS + 150;
+
+/**
+ * A counter showing `value` on at least MIN_DIGITS tickets. Clicking it puts on a little show: random digits, then
+ * zeros, then the count again. With reduced motion a click does nothing (three jumps would only flash).
+ */
 export const Odometer = ({ value }: { value: number }) => {
+  const reduced = useReducedMotion();
   const digits = String(value).padStart(MIN_DIGITS, "0");
-  // Each click starts the tickets over: back to 0, then flipping up to the count, as on the first load.
-  const [run, setRun] = React.useState(0);
+  const [show, setShow] = React.useState<{ step: Show; random: number[] }>({ step: null, random: [] });
+
+  React.useEffect(
+    () => {
+      if (!show.step) {
+        return;
+      }
+      const next = show.step === "random" ? "zeros" : null;
+      const timer = setTimeout(() => setShow(current => ({ ...current, step: next })), SHOW_STEP_MS);
+      return () => clearTimeout(timer);
+    },
+    [show.step],
+  );
+
+  const start = () => {
+    if (!reduced) {
+      setShow({ step: "random", random: [...digits].map(() => Math.floor(Math.random() * 10)) });
+    }
+  };
+
+  // What each ticket shows now: the show's step, or the count.
+  const shown = [...digits].map((digit, i) =>
+    show.step === "random" ? show.random[i] ?? 0 : show.step === "zeros" ? 0 : Number(digit));
+
   return (
-    <button type="button" className="odometer" aria-label={String(value)} title="Flip again" onClick={() => setRun(n => n + 1)}>
-      {/* Keyed from the right, so a new leading digit doesn't restart the others; a new run restarts them all. */}
-      {[...digits].map((digit, i) => <FlapDigit key={`${run}:${digits.length - i}`} digit={Number(digit)} />)}
+    <button type="button" className="odometer" aria-label={String(value)} title="Flip again" onClick={start}>
+      {/* Keyed from the right, so a new leading digit doesn't restart the others. */}
+      {shown.map((digit, i) => <FlapDigit key={digits.length - i} digit={digit} />)}
     </button>
   );
 };
