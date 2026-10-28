@@ -159,10 +159,10 @@ the new digit, as a clock counts down) in four groups, days unpadded and the res
 "min" and "sec" in small grey letters under them. Over them, "The party starts in about" in red, letter-spaced capitals
 like the meter's own label, with only "in about" underlined with the front door's "Jeez!" pen stroke and the date
 ("Around ‹date›", in the browser's own format) in the same yellow bubble over it on hover, tap or keyboard focus.
-The create form calls the field "Party starts". From desktop up it sits in the page's top-right corner,
-over the gnome; smaller screens have no free corner, so there it sits above the party's name, centred like it
-(`party-details.css`). It ticks on each new second while the tab is
-visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens.
+The create form calls the field "Party starts". It sits above the party's name, centred like it, on every screen
+(`party-details.css`): the page's top-right corner is the gnome's, whose bubble grows up into it once the dice are
+rolled. It ticks on each new second while the tab is
+visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens. Once the dice are rolled it stays at `0:00:00:00`, and its bubble says "Rolled ‹date›": the day they were rolled.
 With reduced motion the digits just change. Only members see it: the join box doesn't show it. Screen readers get
 "The party starts around ‹date›" rather than digits changing every second. Smaller on phones, so the longest (366 days) fits at
 320px. The kit shows days left, under an hour, finished and a year ahead.
@@ -172,7 +172,7 @@ With reduced motion the digits just change. Only members see it: the join box do
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
 `src/styles/odometer.css`): a row of raffle tickets, at least five, on the closing section's dark background. On the
 front door it's a compact row by the footer (`landing.css`), mirroring the footer's credits: two lines of the footer's
-small text ("Party'o'meter", then the caption) level with "Made with…" and "Photo by…", and the tickets beside them
+small text ("Party'o'meter", then the caption, "parties have rolled the dice since '23", the first season) level with "Made with…" and "Photo by…", and the tickets beside them
 exactly two lines tall. It sits in the footer (Footer's `aside`), between the links and the credits: there on
 phones, centred, stacked (tickets over the two lines) below 360px; in the bottom-left corner from tablet up. Cream
 (`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and

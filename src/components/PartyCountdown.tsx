@@ -74,9 +74,12 @@ const Group = ({ value, pad, unit }: { value: number; pad: number; unit: string 
   );
 };
 
-/** The countdown for a party with a due time (ISO 8601). */
-export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
-  const due = new Date(dueAt).getTime();
+/**
+ * The countdown for a party with a due time (ISO 8601). Once the dice are rolled (`rolledAt`), that's the party's time:
+ * the clock stays at 0:00:00:00 and the hint gives the day they were rolled.
+ */
+export const PartyCountdown = ({ dueAt, rolledAt }: { dueAt: string; rolledAt?: string | null }) => {
+  const due = new Date(rolledAt ?? dueAt).getTime();
   const now = useClock(due);
   const hintId = React.useId();
   if (Number.isNaN(due)) {
@@ -86,13 +89,13 @@ export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
   const date = dueDate.format(due);
   return (
     // Screen readers get the date, not digits changing every second.
-    <div className="due-clock" role="timer" aria-label={`The party starts around ${date}`}>
+    <div className="due-clock" role="timer" aria-label={rolledAt ? `The dice were rolled on ${date}` : `The party starts around ${date}`}>
       <span className="due-clock-title">
         The party starts{" "}
         {/* Focusable, so a tap (or Tab) shows the date too, as hover does; the hint is its description. */}
         <span className="due-clock-when" tabIndex={0} aria-describedby={hintId}>
           in about
-          <span id={hintId} className="due-clock-hint" role="tooltip">Around {date}</span>
+          <span id={hintId} className="due-clock-hint" role="tooltip">{rolledAt ? "Rolled" : "Around"} {date}</span>
         </span>
       </span>
       <span className="due-clock-row" aria-hidden="true">
