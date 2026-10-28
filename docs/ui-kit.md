@@ -143,7 +143,8 @@ the first count arrives. On phones it's smaller, so nine tickets still fit at 32
 
 The digits' typeface is still being chosen between Cuprum and DIN Condensed (`--ticket-font`, Cuprum until then); the
 kit shows both side by side on one count. Fonts leave uneven room above and below their digits, so each sets
-`--ticket-shift` to sit its digits in the ticket's middle (Cuprum 0.03em, DIN Condensed 0.146em, measured).
+`--ticket-shift` to sit its digits a hair (0.04em) above the ticket's middle, which reads as centred (Cuprum -0.01em,
+DIN Condensed 0.106em, measured).
 
 ## Emails
 

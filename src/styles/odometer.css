@@ -26,10 +26,10 @@
   align-items: center;
   gap: 0.14em;
   /* A typeface may set its own weight and size (some faces run small): --ticket-weight, --ticket-scale. Its digits
-     may sit off the middle of the line (fonts leave uneven room above and below): --ticket-shift moves them down to
-     the ticket's middle, measured per font (Cuprum's sit 0.03em high). */
+     may sit off the middle of the line (fonts leave uneven room above and below): --ticket-shift places them,
+     measured per font: a hair above the ticket's middle (0.04em), which reads as centred. */
   font-family: var(--ticket-font, inherit);
-  font-size: calc(3rem * var(--ticket-scale, 1));
+  font-size: calc(2.25rem * var(--ticket-scale, 1));
   font-weight: var(--ticket-weight, 700);
   line-height: var(--cell-h);
   font-variant-numeric: tabular-nums;
@@ -37,7 +37,7 @@
 
   /* Phones: nine digits (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
-    font-size: calc(2rem * var(--ticket-scale, 1));
+    font-size: calc(1.75rem * var(--ticket-scale, 1));
   }
 }
 
@@ -73,7 +73,7 @@
     display: block;
     height: calc(var(--cell-h) + 0.1em);
     text-align: center;
-    transform: translateY(var(--ticket-shift, 0.03em));
+    transform: translateY(var(--ticket-shift, -0.01em));
   }
 }
 
@@ -97,7 +97,7 @@
 
   /* The lower half of the same digit: the full-height digit, lifted to the card's top. */
   > span {
-    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge) + var(--ticket-shift, 0.03em)));
+    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge) + var(--ticket-shift, -0.01em)));
   }
 }
 

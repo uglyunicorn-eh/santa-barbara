@@ -16,12 +16,12 @@ const STATES: { label: string; rolled: number | null; note: string }[] = [
 
 /**
  * The typefaces left to choose between. Cuprum is the site's own; DIN Condensed is this Mac's, for a preview, and would
- * be hosted as the free font named in `hosted` (the site loads fonts from itself only). `shift` centres each one's
- * digits on the ticket (measured: DIN leaves more room below its digits than above).
+ * be hosted as the free font named in `hosted` (the site loads fonts from itself only). `shift` sits each one's
+ * digits a hair above the ticket's middle (measured: DIN leaves more room below its digits than above).
  */
 const FONTS: { name: string; font: string; weight?: number; scale?: number; shift: string; feel: string; hosted: string }[] = [
-  { name: "Cuprum", font: "inherit", shift: "0.03em", feel: "The site's own font", hosted: "already hosted" },
-  { name: "DIN Condensed", font: "'DIN Condensed', sans-serif", scale: 1.15, shift: "0.146em", feel: "A cinema ticket stub", hosted: "Oswald or Barlow Condensed" },
+  { name: "Cuprum", font: "inherit", shift: "-0.01em", feel: "The site's own font", hosted: "already hosted" },
+  { name: "DIN Condensed", font: "'DIN Condensed', sans-serif", scale: 1.15, shift: "0.106em", feel: "A cinema ticket stub", hosted: "Oswald or Barlow Condensed" },
 ];
 
 const panel = "kit-meter rounded-card px-3 py-6 text-center tablet:px-6";
