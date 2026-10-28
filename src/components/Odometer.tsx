@@ -173,8 +173,8 @@ export const PartyOMeterView = ({ rolled, nowAndThenMs }: { rolled: number | nul
     <div className="party-o-meter">
       <p className="landing-eyebrow">Party'o'meter</p>
       <Odometer value={rolled} nowAndThenMs={nowAndThenMs} />
-      {/* Since the first season, in December 2023. */}
-      <p className="party-o-meter-caption">{rolled === 1 ? "party has" : "parties have"} rolled the dice since '23</p>
+      {/* Since the first season, in 2019. */}
+      <p className="party-o-meter-caption">{rolled === 1 ? "party has" : "parties have"} rolled the dice since '19</p>
     </div>
   );
 };

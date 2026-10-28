@@ -51,6 +51,13 @@
       --bubble-headroom: 10rem;
       /* From the gnome's feet up to the tail's tip, beside the middle of the hat. */
       --bubble-anchor: calc(var(--gnome-height) - 13rem);
+      /*
+       * With room to spare on the right (from 1216px), he stands further out from the text, more so on wider screens.
+       * His bubble follows him only as far as it keeps clear of the page's edge (from 1440px, half of every extra
+       * pixel): on a laptop it stays put and covers a little of his hat instead.
+       */
+      --gnome-shift: clamp(0px, (100vw - 1216px) * 0.2, 7rem);
+      --bubble-shift: min(var(--gnome-shift), max(0px, (100vw - 1440px) / 2));
 
       display: flex;
       flex-direction: column;
@@ -61,7 +68,7 @@
       min-height: 0;
       margin-inline: auto;
       padding-bottom: var(--bubble-anchor);
-      background-position: 1em bottom !important;
+      background-position: calc(1em + var(--gnome-shift)) bottom !important;
       background-size: auto var(--gnome-height) !important;
 
       /* With room to spare on the right, he stands further out from the text. */
@@ -72,7 +79,8 @@
 
       .message-body {
         max-width: calc(100% - 180px);
-        margin: 0 0 0 160px;
+        /* Moved right, it reaches past the box by as much (the box is transparent), so it keeps its width. */
+        margin: 0 calc(-1 * var(--bubble-shift)) 0 calc(160px + var(--bubble-shift));
         text-align: left;
       }
     }
