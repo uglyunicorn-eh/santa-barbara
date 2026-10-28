@@ -2,9 +2,10 @@ import React from "react";
 
 import { FlapDigit } from "@/components/FlapDigit";
 
-// The party page's countdown to the party's due time (due-clock.css), in the Party'o'meter's look: its flip tickets in
-// four groups (days, hours, minutes, seconds) with a small label under each, under a red, letter-spaced "Gifts due in"
-// like the meter's own label. The date itself is a hint on that label, underlined like the front door's "Jeez!". A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
+// The party page's countdown to the party's due time, which is roughly when the host means to roll the dice
+// (due-clock.css). In the Party'o'meter's look: its flip tickets in four groups (days, hours, minutes, seconds) with a
+// small label under each, under a red, letter-spaced "The party starts in about" like the meter's own label. The date
+// itself is a hint on "in about", underlined like the front door's "Jeez!". A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
 // once the time is up it shows 0:00:00:00 and nothing else happens.
 
 const SECOND = 1000;
@@ -85,11 +86,14 @@ export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
   const date = dueDate.format(due);
   return (
     // Screen readers get the date, not digits changing every second.
-    <div className="due-clock" role="timer" aria-label={`Gifts due ${date}`}>
-      {/* Focusable, so a tap (or Tab) shows the date too, as hover does; the hint is the label's description. */}
-      <span className="due-clock-title" tabIndex={0} aria-describedby={hintId}>
-        Gifts due in
-        <span id={hintId} className="due-clock-hint" role="tooltip">{date}</span>
+    <div className="due-clock" role="timer" aria-label={`The party starts around ${date}`}>
+      <span className="due-clock-title">
+        The party starts{" "}
+        {/* Focusable, so a tap (or Tab) shows the date too, as hover does; the hint is its description. */}
+        <span className="due-clock-when" tabIndex={0} aria-describedby={hintId}>
+          in about
+          <span id={hintId} className="due-clock-hint" role="tooltip">Around {date}</span>
+        </span>
       </span>
       <span className="due-clock-row" aria-hidden="true">
         <Group value={days} pad={1} unit={days === 1 ? "day" : "days"} />

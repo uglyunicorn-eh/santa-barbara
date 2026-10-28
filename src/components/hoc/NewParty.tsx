@@ -19,12 +19,15 @@ const localInputValue = (ms: number) => {
   return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}T${pad(at.getHours())}:${pad(at.getMinutes())}`;
 };
 
-/** The due time the API takes: at least an hour ahead, at most 366 days. An empty field is no due time. */
+/**
+ * The due time: roughly when the host means to roll the dice. The API takes it at least an hour ahead and at most 366
+ * days. An empty field is none.
+ */
 const dueAtField = v.pipe(
   v.string(),
-  v.check(value => !value || !Number.isNaN(new Date(value).getTime()), "Due must be a date and time"),
-  v.check(value => !value || new Date(value).getTime() >= Date.now() + MIN_DUE_AHEAD_MS, "Due must be at least an hour from now"),
-  v.check(value => !value || new Date(value).getTime() <= Date.now() + MAX_DUE_AHEAD_MS, "Due must be within a year"),
+  v.check(value => !value || !Number.isNaN(new Date(value).getTime()), "Party start must be a date and time"),
+  v.check(value => !value || new Date(value).getTime() >= Date.now() + MIN_DUE_AHEAD_MS, "Party start must be at least an hour from now"),
+  v.check(value => !value || new Date(value).getTime() <= Date.now() + MAX_DUE_AHEAD_MS, "Party start must be within a year"),
 );
 
 const schema = v.object({
@@ -133,9 +136,9 @@ export const NewParty = () => {
 
               <FormField
                 name="dueAt"
-                label="Due"
+                label="Party starts"
                 children={<Input type="datetime-local" min={localInputValue(MIN_DUE_AHEAD_MS)} max={localInputValue(MAX_DUE_AHEAD_MS)} />}
-                help="Optional. When the gifts are exchanged: the party page counts down to it, and you get a reminder the day before."
+                help="Optional. Roughly when you'll roll the dice: the party page counts down to it, and you get a reminder the day before."
               />
               <HaveQuestion />
             </>

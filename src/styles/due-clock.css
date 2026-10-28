@@ -1,7 +1,7 @@
-/* The party countdown (src/components/PartyCountdown.tsx), in the Party'o'meter's look: its flip tickets (odometer.css)
-   in four groups with a small grey label under each, under a red, letter-spaced "Gifts due in" like the meter's own
-   label, underlined like the front door's "Jeez!" (landing.css), with the date in a bubble under it on hover, tap or
-   focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
+/* The party countdown (src/components/PartyCountdown.tsx), to roughly when the dice get rolled, in the Party'o'meter's
+   look: its flip tickets (odometer.css) in four groups with a small grey label under each, under a red, letter-spaced
+   "The party starts in about" like the meter's own label, "in about" underlined like the front door's "Jeez!"
+   (landing.css), with the date in a bubble under it on hover, tap or focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
    (366 days) fits at 320px. */
 
 .due-clock {
@@ -21,17 +21,20 @@
 
 /* Like the Party'o'meter's label, in the red that reads on the light page. */
 .due-clock-title {
-  position: relative;
-  padding-bottom: 0.25em;
   color: var(--color-red-700);
   font-size: 0.5em;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* "in about": the "Jeez!" pen stroke under it, and the date's hint on it. */
+.due-clock-when {
+  position: relative;
+  padding-bottom: 0.25em;
   cursor: help;
   outline: none;
-  /* The pen stroke under "Jeez!". */
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C18 4 30 12 46 7 S78 3 97 8 M8 12 C30 9 60 11 88 10' fill='none' stroke='%23ef4444' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
     left bottom / 100% 0.5em no-repeat;
 
@@ -84,8 +87,8 @@
   }
 }
 
-.due-clock-title:hover .due-clock-hint,
-.due-clock-title:focus .due-clock-hint {
+.due-clock-when:hover .due-clock-hint,
+.due-clock-when:focus .due-clock-hint {
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) rotate(-3deg) scale(1);
