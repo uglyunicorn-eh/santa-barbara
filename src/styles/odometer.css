@@ -1,63 +1,45 @@
 /* The Party'o'meter (src/components/Odometer.tsx): an odometer of digit wheels, each a strip of digits sliding up
-   behind a window one digit tall. */
+   behind a window one digit tall. Flat: monospace digits in the colour of the text around it, so white on a dark
+   section and black on a light one; only the window's top and bottom edges fade, so the digits slide in and out. */
 
 .party-o-meter {
   margin: 36px auto 0;
 
   .landing-eyebrow {
-    margin-bottom: 10px;
+    margin-bottom: 4px;
   }
 }
 
 .party-o-meter-caption {
-  margin-top: 10px;
+  margin-top: 4px;
   font-size: 1.05rem !important;
-  color: #a1a1aa;
+  opacity: 0.7;
 }
 
 .odometer {
-  --digit: 1.25em;
+  --digit: 1.2em;
 
   display: inline-flex;
-  gap: 4px;
-  padding: 6px;
-  border-radius: 10px;
-  background: linear-gradient(#2a2a30, #0c0c0f);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 8px 24px rgb(0 0 0 / 0.45);
-  font-size: 2.5rem;
-  font-weight: 600;
+  gap: 0.06em;
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  font-size: 3rem;
+  font-weight: 500;
   line-height: var(--digit);
   font-variant-numeric: tabular-nums;
-  color: white;
+  color: inherit;
 
   /* Phones: nine wheels (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 2.25rem;
   }
 }
 
 .odometer-wheel {
-  position: relative;
   height: var(--digit);
-  width: 0.85em;
+  width: 1ch;
   overflow: hidden;
-  border-radius: 4px;
-  background: linear-gradient(#18181b, #3f3f46 50%, #18181b);
   text-align: center;
-
-  /* The drum's curve: darker towards the top and bottom edges of the window. */
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgb(0 0 0 / 0.55), transparent 30%, transparent 70%, rgb(0 0 0 / 0.55));
-    pointer-events: none;
-  }
-
-  /* The last wheel, like the tenths on a car's odometer. */
-  &:last-child {
-    background: linear-gradient(#7f1d1d, #b91c1c 50%, #7f1d1d);
-  }
+  mask-image: linear-gradient(transparent, black 14%, black 86%, transparent);
 }
 
 .odometer-strip {

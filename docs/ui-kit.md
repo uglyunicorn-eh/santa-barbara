@@ -135,10 +135,12 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
-`src/styles/odometer.css`): an odometer on the closing section, one wheel per digit and at least six, the last wheel
-red like a car's tenths. A changed digit rolls forward to its new value through the digits in between (1.4 s, easing
-out); with reduced motion it just shows it. Nothing shows until the first count arrives. On phones it's smaller, so
-nine digits still fit at 320px. The kit shows each state and a control to change the count.
+`src/styles/odometer.css`): flat monospace digits (the system's: SF Mono, Cascadia Mono, Menlo…) in the text colour
+around it, so white on dark and black on light, one wheel per digit and at least six. No drums or shadows: only each
+digit's window fades at its top and bottom edges. A changed digit slides forward to its new value through the digits in
+between (1.4 s, easing out); with reduced motion it just shows it. Nothing shows until the first count arrives. On
+phones it's smaller, so nine digits still fit at 320px. The kit shows each state on dark and light, and a control to
+change the count.
 
 ## Emails
 

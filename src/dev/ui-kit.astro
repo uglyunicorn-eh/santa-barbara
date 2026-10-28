@@ -408,16 +408,22 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
     <section id="party-o-meter" class="landing bg-night px-4 py-8 tablet:px-8">
       <h2 class={`${sectionTitle} text-white`}>Party'o'meter</h2>
       <p class="mt-1 max-w-200 text-sm text-zinc-300">
-        The front door's count of parties that rolled the dice: one wheel per digit, at least six. A changed digit rolls
-        forward to its new value, through the digits in between; with reduced motion it just shows it. The samples
-        roll up from 000000 on load, like the real one when its first count arrives.
+        The front door's count of parties that rolled the dice: flat monospace digits, one wheel per digit and at least
+        six, in the text colour around it (white on dark, black on light). A changed digit slides forward to its new
+        value, through the digits in between; with reduced motion it just shows it. The samples roll up from 000000 on
+        load, like the real one when its first count arrives.
       </p>
-      <div class="mt-6">
-        <OdometerStates client:load />
+      <h3 class="mt-6 text-xl font-semibold text-white">On dark (the front door)</h3>
+      <div class="mt-3">
+        <OdometerStates client:load tone="dark" />
+      </div>
+      <h3 class="mt-8 text-xl font-semibold text-white">On light</h3>
+      <div class="mt-3">
+        <OdometerStates client:load tone="light" />
       </div>
       <h3 class="mt-10 text-xl font-semibold text-white">Try it</h3>
       <p class="mt-1 text-sm text-zinc-300">Change the count and watch the wheels: one step, a few, a jump, a new digit, and back down (which rolls forward round to the lower digits, as an odometer would).</p>
-      <div class="mt-4 max-w-200">
+      <div class="mt-4">
         <OdometerDemo client:load />
       </div>
     </section>

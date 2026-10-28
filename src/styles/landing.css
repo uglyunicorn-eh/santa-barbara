@@ -568,6 +568,11 @@
   to { translate: 0 0; clip-path: inset(0 -100vw -100vh); }
 }
 
+/* The Party'o'meter (odometer.css) takes the text colour: white here. */
+.landing-final .party-o-meter {
+  color: white;
+}
+
 .landing-section.landing-final {
   background:
     radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),

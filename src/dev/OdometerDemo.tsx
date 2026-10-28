@@ -3,8 +3,9 @@ import React from "react";
 import { PartyOMeterView } from "@/components/Odometer";
 import { Button } from "@/components/ui/button";
 
-// The kit's Party'o'meter: the app's odometer with counts set here instead of the API's. Each sample rolls up from
-// 000000 when the page loads, as the front door's does when its first count arrives.
+// The kit's Party'o'meter: the app's odometer with counts set here instead of the API's, on a dark background (the
+// front door's closing section) and a light one. It takes the text colour: white on dark, black on light. Each sample
+// rolls up from 000000 when the page loads, as the front door's does when its first count arrives.
 
 const STATES: { label: string; rolled: number | null; note: string }[] = [
   { label: "No count yet", rolled: null, note: "null: nothing shows until the first count arrives" },
@@ -13,14 +14,18 @@ const STATES: { label: string; rolled: number | null; note: string }[] = [
   { label: "Longer", rolled: 123456789, note: "past six digits, the odometer grows" },
 ];
 
-/** Every state side by side, on the front door's closing section. */
-export const OdometerStates = () => (
+type Tone = "dark" | "light";
+
+const panel = (tone: Tone) => `kit-meter kit-meter-${tone} rounded-card p-6 text-center`;
+
+/** Every state side by side, on one background. */
+export const OdometerStates = ({ tone }: { tone: Tone }) => (
   <div className="grid gap-6 tablet:grid-cols-2">
     {STATES.map(({ label, rolled, note }) => (
-      <figure key={label} className="kit-meter rounded-card p-6 text-center">
-        <figcaption className="mb-2 text-sm text-zinc-400">{label} · {note}</figcaption>
+      <figure key={label} className={panel(tone)}>
+        <figcaption className="kit-meter-note mb-2 text-sm">{label} · {note}</figcaption>
         {rolled === null
-          ? <p className="py-10 text-zinc-500">(renders nothing)</p>
+          ? <p className="kit-meter-note py-10">(renders nothing)</p>
           : <PartyOMeterView rolled={rolled} />}
       </figure>
     ))}
@@ -29,15 +34,18 @@ export const OdometerStates = () => (
 
 const START = 29;
 
-/** One odometer and buttons that change its count, to watch the wheels roll (still with reduced motion). */
+/** One count on both backgrounds, and buttons that change it, to watch the wheels slide (still with reduced motion). */
 export const OdometerDemo = () => {
   const [rolled, setRolled] = React.useState(START);
   const add = (n: number) => () => setRolled(current => current + n);
 
   return (
-    <div className="kit-meter rounded-card p-6 text-center">
-      <PartyOMeterView rolled={rolled} />
-      <div className="mt-6 flex flex-wrap justify-center gap-2">
+    <div className="space-y-4">
+      <div className="grid gap-4 tablet:grid-cols-2">
+        <div className={panel("dark")}><PartyOMeterView rolled={rolled} /></div>
+        <div className={panel("light")}><PartyOMeterView rolled={rolled} /></div>
+      </div>
+      <div className="flex flex-wrap justify-center gap-2">
         <Button variant="secondary" surface="dark" onClick={add(1)}>+1</Button>
         <Button variant="secondary" surface="dark" onClick={add(7)}>+7</Button>
         <Button variant="secondary" surface="dark" onClick={add(1234)}>+1,234</Button>
