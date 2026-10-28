@@ -1,13 +1,11 @@
 import React from "react";
-import { Columns, Content } from "@/components/layout";
 import { useNavigate } from "react-router";
 
 import { DialogBox } from "@/components/DialogBox";
+import { DialogCharacter } from "@/components/DialogCharacter";
 import { Submit } from "@/components/forms";
 import { usePartyContext } from "@/components/hoc/PartyContext";
 import { useAppClient } from "@/components/hooks";
-
-import SantaImg from "@/images/santa.png";
 
 const defaultValues = {};
 
@@ -46,29 +44,21 @@ export const ConfirmPartyLeave = () => {
       }}
       size="md"
     >
-      <Columns>
-        <Columns.Column narrow mobile={{ display: 'hidden' }} className="tablet:flex">
-          <img src={SantaImg.src} alt="Santa" width={200} />
-        </Columns.Column>
-        <Columns.Column>
-          <Content>
+      {/* Santa raises a glass: cheers, see ya. */}
+      <DialogCharacter image={{ src: "/santa-1.webp", srcSet: "/santa-1-256.webp 256w, /santa-1.webp 400w", sizes: "200px", width: 200, height: 200 }}>
+        <p>
+          Sorry to see you're leaving...
+        </p>
 
-            <p>
-              Sorry to see you're leaving...
-            </p>
+        <p>
+          But we understand; fun is not for everyone. If you change your mind again (it happened to me once), feel
+          free to join the party again while it's still open.
+        </p>
 
-            <p>
-              But we understand; fun is not for everyone. If you change your mind again (it happened to me once), feel
-              free to join the party again while it's still open.
-            </p>
-
-            <p>
-              <strong>Enjoy your holidays! Bye!</strong>
-            </p>
-
-          </Content>
-        </Columns.Column>
-      </Columns>
+        <p>
+          <strong>Enjoy your holidays! Bye!</strong>
+        </p>
+      </DialogCharacter>
     </DialogBox>
   )
 };

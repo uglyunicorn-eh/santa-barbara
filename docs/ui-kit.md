@@ -121,13 +121,27 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 
 ## Dialogs, tabs, toasts
 
-- **Dialogs:** white card, 16px corners, `shadow-lg`, on a dark backdrop (or a picture: the rolled letter's envelopes).
-  Widths 600 / 700 / 800px from tablet up. On phones a bottom sheet (Base UI Drawer): full width, rounded top, a grip,
-  an X in its header, and a swipe down closes it. Focus moves in and Tab stays inside; Esc and a click on the backdrop
-  close it, the page behind doesn't scroll. The footer has the dismiss action, then the main one, with room on the
-  left for a ghost action ("Show more parties", "How this works?"); a dialog with one big action centres it
-  (`footerAlign="center"`, the congratulations). On phones they stack, main action first and full width. The profile
-  dialog keeps one height on both tabs (nearly the whole screen on phones), its tabs pinned to the top edge.
+- **Dialogs:** white card (light red in the danger tone), 16px corners, `shadow-lg`, on a dark backdrop (or a picture: the rolled letter's envelopes).
+  Widths 600 / 700 / 800px from tablet up, with an X in the page's top-right corner. On phones a bottom sheet (Base UI
+  Drawer): full width, rounded top, a grip, and no X: a swipe down, a tap outside or the dismiss button closes it.
+  Focus moves in and Tab stays inside; Esc and a click on the backdrop close it, the page behind doesn't scroll. The
+  footer has the dismiss action, then the main one, with room on the left for a ghost action ("Show more parties",
+  "How this works?"); a dialog with one big action centres it (`footerAlign="center"`, the congratulations). On phones
+  they stack, main action first and full width. A confirmation asked from inside a dialog (the profile's "Delete
+  account") is a second dialog on top of it (a second sheet on phones), opened by a button rather than a route
+  (`onDismiss`); Esc, the backdrop or a swipe close only the top one.
+- **Titles** sit on the left, always, with no emoji (emoji go on the main action).
+- **Tones:** a dialog's art says what kind of moment it is.
+  - *Celebrate* (new party, join, invite, roll the dice): the bunting (`party-box`) hangs from the header's top-right
+    corner. From tablet up it's half the width and the title wraps before it, so the flags never cover it. On a
+    phone's sheet it's 60% of the width and the title keeps its one line, under the flags' tips if need be.
+  - *Farewell* (leave the party): the bunting, and Santa raising a glass beside the text.
+  - *Danger* (delete the party, delete the account): `tone="danger"`, a light red card (`red-50`) with a dark red
+    title (`red-800`); no bunting, the Grinch beside the text, and the filled red final confirm.
+  Characters beside the text (`DialogCharacter`) hide on phones. All the art comes from the same sticker set.
+- **The profile** keeps one height on both tabs (nearly the whole screen on phones). On top, the "Hi Santa" sticker
+  and "Hey, <name>!", with Sign out beside it from tablet up; then the tabs, which stick to the top while the history
+  scrolls. On a phone's sheet Sign out is a small ghost button above Okie Dokie, the footer set apart by a rule.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the

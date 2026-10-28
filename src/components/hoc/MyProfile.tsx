@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Calendar, ChevronRight, Gift, Lock, Star, X } from 'react-feather';
+import { Calendar, ChevronRight, Gift, Lock, LogOut, Star, X } from 'react-feather';
 import * as v from "valibot";
 
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
+import { DialogCharacter } from "@/components/DialogCharacter";
 import { Tab, Tabs } from "@/components/Tab";
 import { Form, FormFieldContext, Input, Submit } from "@/components/forms";
 import { maxLen, required, validEmail } from "@/components/forms/messages";
@@ -19,6 +20,9 @@ import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hook
 import type { Party } from "@/types";
 import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { pageTitle } from "@/site";
+
+import GrinchImg from "@/images/grinch.png";
+import HiImg from "@/images/hi.png";
 
 /** The latest parties shown when the history opens. */
 const HISTORY_FIRST_PAGE_SIZE = 5;
@@ -105,28 +109,71 @@ const emailSchema = (currentEmail: string) => v.object({
  * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
  * party page (closing it goes back to `dismissLocation`).
  */
-export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?: string; dismissLocation?: string }) => (
-  <DialogBox
-    className={"profile-box"}
-    noHeader
-    dismissLabel={"Okie Dokie!"}
-    dismissLocation={dismissLocation}
-    size="lg"
-  >
-    {/* Pinned to the dialog's very top edge (not inside the body's padding, where rows would show above it) while the
-        history scrolls under it. On a phone's sheet it leaves room for the grip and the X. */}
-    <Tabs label="Profile" className="sticky -top-5 z-20 -mx-5 -mt-5 mb-4 rounded-t-card bg-white max-tablet:pt-4 max-tablet:pr-12">
-      <Tab to={base}>Profile</Tab>
-      <Tab to={`${base}history/`}>Latest history</Tab>
-    </Tabs>
-    <Content>
-      <Routes>
-        <Route path="" Component={Profile} />
-        <Route path="history/" Component={History} />
-      </Routes>
-    </Content>
-  </DialogBox>
-);
+export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?: string; dismissLocation?: string }) => {
+  const tabletUp = useTabletUp();
+
+  return (
+    <DialogBox
+      className={"profile-box"}
+      noHeader
+      dismissLabel={"Okie Dokie!"}
+      dismissLocation={dismissLocation}
+      size="lg"
+      // On a phone's sheet a rule sets the footer apart, with Sign out small above Okie Dokie.
+      footerClassName={tabletUp ? undefined : "mx-5 gap-3 border-t border-border px-0 pt-3"}
+    >
+      {/* From tablet up the greeting and the tabs stay at the top while the rest scrolls under them; on a phone's
+          sheet the greeting scrolls away and only the tabs stick, to leave the small screen to the content. */}
+      {/* (On phones the wrapper is `contents`, so the tabs stick to the sheet's body, not to this box.) */}
+      <div className="max-tablet:contents tablet:sticky tablet:-top-2.5 tablet:z-20 tablet:-mx-5 tablet:bg-white tablet:px-5">
+        <Greeting />
+        <Tabs label="Profile" className="sticky -top-2.5 z-20 -mx-5 mb-4 bg-white">
+          <Tab to={base}>Profile</Tab>
+          <Tab to={`${base}history/`}>Latest history</Tab>
+        </Tabs>
+      </div>
+      <Content>
+        <Routes>
+          <Route path="" Component={Profile} />
+          <Route path="history/" Component={History} />
+        </Routes>
+      </Content>
+    </DialogBox>
+  );
+};
+
+/**
+ * The profile's header, on both tabs: a sticker, "Hey, <name>!" and Sign out, in the header from tablet up and above
+ * Okie Dokie on a phone's sheet (in the footer's left slot, which stacks below the buttons; `order` lifts it above).
+ */
+const Greeting = () => {
+  const { profile, signOut } = useCurrentUser();
+  const tabletUp = useTabletUp();
+  const name = profile?.name?.trim();
+
+  return (
+    <div className="-mt-1 mb-2 flex items-center gap-3 max-tablet:pt-5 tablet:gap-4">
+      <img src={HiImg.src} alt="" width={76} height={76} className="size-15 shrink-0 -rotate-6 tablet:size-19" />
+      {/* One line: a long name truncates, in full in `title`. */}
+      <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:text-2xl" title={name}>
+        {name ? `Hey, ${name}!` : "Hey there!"}
+      </h2>
+      {tabletUp
+        ? (
+          <Button type="button" variant="ghost" onClick={signOut}>
+            <LogOut size={18} aria-hidden="true" /> Sign out
+          </Button>
+        )
+        : (
+          <DialogFooterStart>
+            <Button type="button" variant="ghost" size="sm" className="order-1 self-center text-zinc-600" onClick={signOut}>
+              <LogOut size={15} aria-hidden="true" /> Sign out
+            </Button>
+          </DialogFooterStart>
+        )}
+    </div>
+  );
+};
 
 const Profile = () => {
   const { profile, updateProfile, signOut } = useCurrentUser();
@@ -191,10 +238,6 @@ const Profile = () => {
       <EmailSetting email={profile?.email ?? ""} />
 
       <DeleteAccount email={profile?.email ?? ""} />
-
-      <DialogFooterStart>
-        <Button type="button" variant="ghost" onClick={signOut}>Sign Out</Button>
-      </DialogFooterStart>
     </div>
   );
 };
@@ -300,10 +343,15 @@ const EmailSetting = ({ email }: { email: string }) => {
   );
 };
 
-/** Deleting the account takes two steps: confirm here, then click the emailed link (handled by ConfirmAccountDeletion). */
+const noValues = {};
+
+/**
+ * Deleting the account takes two steps: confirm in a danger sheet on top of the profile, then click the emailed link
+ * (handled by ConfirmAccountDeletion). The sheet isn't a route: /profile/delete is that link's page.
+ */
 const DeleteAccount = ({ email }: { email: string }) => {
   const { requestAccountDeletion } = useAppClient();
-  const [stage, setStage] = React.useState<"idle" | "confirming" | "sending" | "sent">("idle");
+  const [stage, setStage] = React.useState<"idle" | "confirming" | "sent">("idle");
   // One id per confirmation: retrying it after a failure is fine, it never emails twice.
   const requestId = React.useRef("");
 
@@ -315,10 +363,14 @@ const DeleteAccount = ({ email }: { email: string }) => {
     [],
   );
 
+  const keep = React.useCallback(() => setStage("idle"), []);
+
+  // A failure keeps the sheet open (the toast says what went wrong), to try again.
   const onConfirm = React.useCallback(
     async () => {
-      setStage("sending");
-      setStage(await requestAccountDeletion(requestId.current) ? "sent" : "confirming");
+      if (await requestAccountDeletion(requestId.current)) {
+        setStage("sent");
+      }
     },
     [
       requestAccountDeletion,
@@ -337,28 +389,33 @@ const DeleteAccount = ({ email }: { email: string }) => {
             }
           </p>
         </div>
-        {stage === "idle" && (
+        {stage !== "sent" && (
           <Button type="button" variant="ghost-destructive" onClick={startConfirming}>
             Delete account
           </Button>
         )}
       </div>
 
-      {(stage === "confirming" || stage === "sending") && (
-        <div className="danger-confirm">
-          <p>
-            Sure? Parties that already rolled the dice keep your name, so whoever drew you still knows who to buy a
-            gift for. We'll email you a link to finish.
-          </p>
-          <div className="setting-control">
-            <Button type="button" variant="destructive" onClick={onConfirm} loading={stage === "sending"}>
-              Yes, email me the link
-            </Button>
-            <Button type="button" variant="ghost" onClick={() => setStage("idle")} disabled={stage === "sending"}>
-              Keep my account
-            </Button>
-          </div>
-        </div>
+      {stage === "confirming" && (
+        <DialogBox
+          title="Delete your account?"
+          tone="danger"
+          size="sm"
+          onDismiss={keep}
+          dismissLabel="Keep my account"
+          action={<Submit variant="destructive">&#x1F4A5; Yes, email me the link</Submit>}
+          form={{ defaultValues: noValues, onSubmit: onConfirm }}
+        >
+          <DialogCharacter image={{ src: GrinchImg.src, width: 150, height: 150 }}>
+            <p>
+              Your account goes, and so do the parties you host that haven't rolled the dice yet.
+            </p>
+            <p>
+              Parties that already rolled keep your name, so whoever drew you still knows who to buy a gift for. We'll
+              email <strong className="wrap-anywhere">{email}</strong> a link to finish.
+            </p>
+          </DialogCharacter>
+        </DialogBox>
       )}
     </div>
   );

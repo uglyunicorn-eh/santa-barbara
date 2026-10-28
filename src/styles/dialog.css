@@ -1,12 +1,17 @@
+/* The party dialogs' bunting hangs from the header's top-right corner. From tablet up the title stays on the left and
+   wraps before it reaches the flags, so they never cover it (DialogBox reads --dialog-head-pr: a utility's padding
+   would win over a padding set here). */
 .party-box .dialog-card .dialog-head {
+  --dialog-head-pr: 50%;
   background: transparent url("/flags.png") top right no-repeat;
   background-size: 50%;
 }
 
-/* On a phone's sheet, as from tablet up, the flags hang from the top-right corner, touching both edges; the title and
-   its X keep their places. */
+/* On a phone's sheet the flags hang beside the grip, and the title keeps its one line, under the flags' tips if need
+   be (its white text shadow keeps it readable). */
 .party-box.is-sheet .dialog-card .dialog-head {
-  background-size: 68%;
+  --dialog-head-pr: initial;
+  background-size: 60%;
 }
 
 .confirm-party-close {
@@ -17,10 +22,6 @@
     @media (max-width: 768px) {
       background-size: 80%;
     }
-  }
-
-  .dialog-head {
-    justify-content: center;
   }
 
   .dialog-body {
@@ -45,10 +46,6 @@
 }
 
 .confirm-party-leave {
-  .dialog-head {
-    justify-content: center;
-  }
-
   .content {
     margin: 1em 2em 2em 1em;
   }
@@ -61,10 +58,6 @@
     height: 550px;
     text-shadow: 0 -1px 0 white, -1px 0px 0 white, 0 1px 0 white, 0 0 3px white;
     position: relative;
-  }
-
-  .dialog-head {
-    justify-content: center;
   }
 
   .dialog-body {

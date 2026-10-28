@@ -14,7 +14,9 @@ import { useTabletUp } from "@/components/hooks/useTabletUp";
 // The app's dialogs (docs/ui-kit.md, "Dialogs"): from tablet up a centred card on Base UI's Dialog, on phones a bottom
 // sheet on Base UI's Drawer that a swipe down closes. Either way focus moves in and Tab stays there, Esc and a click on
 // the backdrop close it (going to `dismissLocation`, as the buttons do), the page behind doesn't scroll, and focus goes
-// back where it was. Dialogs are routes: open while rendered, closed by navigating away.
+// back where it was. Dialogs are routes: open while rendered, closed by navigating away (or, with `onDismiss`, one
+// opened from a button on top of another, which Base UI stacks: Esc and the backdrop close the top one). From tablet up an X sits in
+// the page's corner; a phone's sheet has none (its grip, a tap outside and the dismiss button close it).
 //
 // The parts carry `dialog-card`, `dialog-head`, `dialog-body` and `dialog-foot`, which each dialog's own artwork styles
 // (src/styles/dialog.css) use.
@@ -22,6 +24,11 @@ import { useTabletUp } from "@/components/hooks/useTabletUp";
 type Props<Values extends FieldValues> = {
   title?: string;
   dismissLocation?: string;
+  /**
+   * Closes a dialog that isn't a route: one opened from a button on top of another (the profile's "Delete account").
+   * Given, dismissing calls it instead of going to `dismissLocation`; the opener stops rendering the dialog.
+   */
+  onDismiss?: () => void;
   dismissLabel?: string;
   noDismiss?: boolean;
   action?: React.ReactNode,
@@ -30,7 +37,7 @@ type Props<Values extends FieldValues> = {
   form?: FormProps<Values>;
   /** The width from tablet up: sm 600px, md 700px (the default), lg 800px. On phones, a full-width bottom sheet. */
   size?: "sm" | "md" | "lg";
-  /** No title row (the profile, whose tabs take its place). It still has an X, as long as it can be dismissed. */
+  /** No title row (the profile draws its own). From tablet up it still has an X, as long as it can be dismissed. */
   noHeader?: boolean;
   /** "center": the footer's buttons centred (a dialog with one big action). Default: at the end. */
   footerAlign?: "end" | "center";
@@ -38,6 +45,8 @@ type Props<Values extends FieldValues> = {
   footerClassName?: string;
   /** Extra classes for the backdrop behind the card, e.g. a picture instead of the plain dimmed page. */
   backdropClassName?: string;
+  /** "danger": a light red card and a dark red title, for the deletes (docs/ui-kit.md, "Tones"). */
+  tone?: "danger";
 };
 
 const WIDTHS = { sm: 600, md: 700, lg: 800 };
@@ -55,7 +64,9 @@ const TABBABLE = 'a[href], button:not([disabled]), input:not([disabled]), select
 
 /** Keeps Tab and Shift+Tab inside the dialog: from the last control back to the first, and the other way round. */
 const trapTab = (e: React.KeyboardEvent<HTMLElement>) => {
-  if (e.key !== "Tab") {
+  // A dialog opened on top of this one is portalled elsewhere in the page, but its keys still bubble here through
+  // React: that one keeps its own Tab.
+  if (e.key !== "Tab" || !e.currentTarget.contains(e.target as Node)) {
     return;
   }
   const items = [...e.currentTarget.querySelectorAll<HTMLElement>(TABBABLE)]
@@ -101,6 +112,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
   title,
   dismissLabel,
   dismissLocation = "/",
+  onDismiss,
   noDismiss,
   className,
   action,
@@ -111,7 +123,9 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
   backdropClassName,
   footerAlign = "end",
   footerClassName,
+  tone,
 }: Props<Values>) => {
+  const danger = tone === "danger";
   const navigate = useNavigate();
   const submitting = React.useRef(false);
   const onSubmittingChange = React.useCallback((value: boolean) => { submitting.current = value; }, []);
@@ -119,7 +133,10 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
   // Focus starts on the dialog itself, not its first control (a tab, a link); fields marked `autofocus` take it next.
   const popupRef = React.useRef<HTMLDivElement>(null);
 
-  const dismiss = React.useCallback(() => navigate(dismissLocation), [navigate, dismissLocation]);
+  const dismiss = React.useCallback(
+    () => onDismiss ? onDismiss() : navigate(dismissLocation),
+    [onDismiss, navigate, dismissLocation],
+  );
 
   // Without a header and without a dismiss button, nothing closes the dialog but its own action, so it has no X.
   const dismissible = !noHeader || !noDismiss;
@@ -141,33 +158,13 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
       <SubmittingWatcher onChange={onSubmittingChange} />
       {/* The sheet's grip, a hint that it swipes away (only when it can be dismissed). */}
       {!tabletUp && dismissible && (
-        <div aria-hidden="true" className="dialog-grip absolute top-2 left-1/2 z-30 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-300" />
+        <div aria-hidden="true" className={cn("dialog-grip absolute top-2 left-1/2 z-30 h-1.5 w-10 -translate-x-1/2 rounded-full bg-zinc-300", danger && "bg-red-200")} />
       )}
-      {/* A sheet without a header still gets its X, in the card's top-right corner. */}
-      {!tabletUp && noHeader && dismissible && (
-        <Button
-          variant="ghost"
-          className="absolute top-5.5 right-2 z-30 size-10 px-0 text-zinc-700"
-          aria-label="Close"
-          onClick={dismiss}
-        >
-          <X size={24} aria-hidden="true" />
-        </Button>
-      )}
+      {/* The title on the left, always. A sheet has no X: a swipe down, a tap outside or the dismiss button closes it. */}
       {!noHeader && (
-        <header className="dialog-head flex shrink-0 items-center p-5 text-xl text-black [text-shadow:0_1px_2px_white] max-tablet:pt-7 tablet:text-2xl">
+        // Artwork in the header (the bunting) reserves room on the right through --dialog-head-pr (src/styles/dialog.css).
+        <header className={cn("dialog-head flex shrink-0 items-center p-5 pr-[var(--dialog-head-pr,1.25rem)] text-xl text-black [text-shadow:0_1px_2px_white] max-tablet:pt-7 tablet:text-2xl", danger && "text-red-800 [text-shadow:none]")}>
           <Title render={<span />}>{title}</Title>
-          {/* On a phone's sheet the X sits in the header; from tablet up it's in the page's corner (below). */}
-          {!tabletUp && (
-            <Button
-              variant="ghost"
-              className="-my-2 -mr-2 ml-auto size-10 shrink-0 px-0 text-zinc-700"
-              aria-label="Close"
-              onClick={dismiss}
-            >
-              <X size={24} aria-hidden="true" />
-            </Button>
-          )}
         </header>
       )}
       <div className="dialog-body min-h-0 grow overflow-auto p-5 text-lg">
@@ -197,7 +194,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
         ? (
           <Dialog.Root open modal onOpenChange={onOpenChange} disablePointerDismissal={!dismissible}>
             <Dialog.Portal>
-              <Dialog.Backdrop className={cn("fixed inset-0 z-40 bg-black/60 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0", backdropClassName)} />
+              <Dialog.Backdrop forceRender={Boolean(onDismiss)} className={cn("fixed inset-0 z-40 bg-black/60 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0", backdropClassName)} />
               <Dialog.Viewport
                 className={cn("dialog fixed inset-0 z-40 flex items-center justify-center overflow-hidden", className)}
                 onKeyDown={trapTab}
@@ -205,7 +202,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
                 <Dialog.Popup
                   ref={popupRef}
                   initialFocus={popupRef}
-                  className="dialog-card relative mx-auto flex max-h-[calc(100vh-40px)] w-160 max-w-[calc(100vw-60px)] flex-col overflow-hidden rounded-card bg-white shadow-lg outline-none transition-[opacity,scale] duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0"
+                  className={cn("dialog-card relative mx-auto flex max-h-[calc(100vh-40px)] w-160 max-w-[calc(100vw-60px)] flex-col overflow-hidden rounded-card bg-white shadow-lg outline-none transition-[opacity,scale] duration-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-starting-style:scale-90 data-starting-style:opacity-0", danger && "bg-red-50")}
                   style={{ width: WIDTHS[size] }}
                 >
                   {/* In the page's top-right corner, but inside the popup so Tab reaches it in order. */}
@@ -230,7 +227,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
           // A bottom sheet: it slides up, and a swipe down closes it like the backdrop does.
           <Drawer.Root open modal swipeDirection="down" onOpenChange={onOpenChange} disablePointerDismissal={!dismissible}>
             <Drawer.Portal>
-              <Drawer.Backdrop className={cn("fixed inset-0 z-40 bg-black/60 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-300 data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0", backdropClassName)} />
+              <Drawer.Backdrop forceRender={Boolean(onDismiss)} className={cn("fixed inset-0 z-40 bg-black/60 opacity-[calc(1-var(--drawer-swipe-progress,0))] transition-opacity duration-300 data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0", backdropClassName)} />
               <Drawer.Viewport
                 className={cn("dialog is-sheet fixed inset-0 z-40 flex items-end justify-center overflow-hidden", className)}
                 onKeyDown={trapTab}
@@ -238,7 +235,7 @@ export const DialogBox = <Values extends FieldValues = FieldValues>({
                 <Drawer.Popup
                   ref={popupRef}
                   initialFocus={popupRef}
-                  className="dialog-card relative flex max-h-[calc(100dvh-24px-env(safe-area-inset-top,0px))] w-full flex-col overflow-hidden rounded-t-card bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-lg outline-none [transform:translateY(var(--drawer-swipe-movement-y,0px))] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:select-none data-swiping:duration-0 data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]"
+                  className={cn("dialog-card relative flex max-h-[calc(100dvh-24px-env(safe-area-inset-top,0px))] w-full flex-col overflow-hidden rounded-t-card bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-lg outline-none [transform:translateY(var(--drawer-swipe-movement-y,0px))] transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:select-none data-swiping:duration-0 data-starting-style:[transform:translateY(100%)] data-ending-style:[transform:translateY(100%)]", danger && "bg-red-50")}
                 >
                   {content}
                 </Drawer.Popup>

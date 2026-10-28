@@ -1,14 +1,20 @@
 import React from "react";
-import { Content } from "@/components/layout";
 import { useNavigate } from "react-router-dom";
 
 import { DialogBox } from "@/components/DialogBox";
+import { DialogCharacter } from "@/components/DialogCharacter";
 import { Submit } from "@/components/forms";
 import { usePartyContext } from "@/components/hoc/PartyContext";
 import { useAppClient, useSignals } from "@/components/hooks";
 
+import GrinchImg from "@/images/grinch.png";
+
 const defaultValues = {};
 
+/**
+ * The danger tone (docs/ui-kit.md, "Tones"): a light red card, no bunting, the Grinch beside the warning, and the
+ * filled red final confirm.
+ */
 export const ConfirmPartyDelete = () => {
   const { party } = usePartyContext();
   const { deleteParty } = useAppClient();
@@ -35,8 +41,8 @@ export const ConfirmPartyDelete = () => {
 
   return (
     <DialogBox
-      className="party-box confirm-party-delete"
-      title="Delete this party? 😱"
+      className="confirm-party-delete"
+      title="Delete this party?"
       action={<Submit variant="destructive">&#x1F4A5; Yes, delete it</Submit>}
       dismissLabel="Keep it"
       dismissLocation={`/p/${party?.code}`}
@@ -45,16 +51,17 @@ export const ConfirmPartyDelete = () => {
         onSubmit,
       }}
       size="sm"
+      tone="danger"
     >
-      <Content>
+      <DialogCharacter image={{ src: GrinchImg.src, width: 150, height: 150 }}>
         <p>
-          <strong>{party?.name.replace(/!+$/, '')}</strong> will disappear for everyone who joined, and its link
-          will stop working.
+          <strong className="wrap-anywhere">{party?.name.replace(/!+$/, '')}</strong> will disappear for everyone who
+          joined, and its link will stop working.
         </p>
         <p>
           Changed your mind? You can restore it from this page within 24 hours. After that it's gone for good.
         </p>
-      </Content>
+      </DialogCharacter>
     </DialogBox>
   );
 };
