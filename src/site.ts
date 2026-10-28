@@ -2,9 +2,6 @@
 
 export const SITE_NAME = "Anonymous Santa Clauses";
 
-/** The home page's title, before " | SITE_NAME": the words people search for. */
-export const HOME_TITLE = "Free Secret Santa Generator";
-
 /** The home page, in search results. */
 export const HOME_DESCRIPTION =
   "Draw names for Secret Santa with friends, family or the office. Free, no ads, no passwords: sign in with a magic link, share a code, roll the dice.";

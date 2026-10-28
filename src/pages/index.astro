@@ -7,7 +7,7 @@ import { ELF_SIZES, ELF_SRCSET, Landing } from "@/components/Landing";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { AppContainer } from "@/components/hoc/AppContainer";
 import { AstroFooter } from "@/components/hoc/AstroFooter";
-import { HOME_DESCRIPTION, HOME_TITLE, SITE_NAME } from "@/site";
+import { HOME_DESCRIPTION, SITE_NAME } from "@/site";
 
 const enterClass = buttonVariants({ variant: "brand", size: "lg", surface: "dark", pill: true });
 
@@ -26,7 +26,7 @@ const webApplication = {
 };
 ---
 
-<Layout title={HOME_TITLE} description={HOME_DESCRIPTION} pageClassNames={["index-page"]}>
+<Layout description={HOME_DESCRIPTION} pageClassNames={["index-page"]}>
   <Fragment slot="head">
     {/* The elf is the largest thing on the first screen: fetched first, before the inlined styles have been read. */}
     <link rel="preload" as="image" href="/elf-2.webp" imagesrcset={ELF_SRCSET} imagesizes={ELF_SIZES} fetchpriority="high" />
