@@ -12,6 +12,11 @@ const MoreMenu = React.lazy(() => import("@/components/hoc/FooterMoreMenu").then
 
 type Props = {
   children?: React.ReactNode;
+  /**
+   * Something to show between the links and the credits (the front door's Party'o'meter). On phones it sits there, in
+   * line; a page's styles may place it elsewhere on wider screens.
+   */
+  aside?: React.ReactNode;
   noUser?: boolean;
   noHome?: boolean;
   profileAsLink?: boolean;
@@ -33,7 +38,7 @@ export type MenuItem = {
   asLink?: boolean;
 };
 
-export const Footer = ({ children, noUser, noHome, profileAsLink, profileBase = "/profile/", compactKeys = COMPACT_KEYS }: Props) => {
+export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profileBase = "/profile/", compactKeys = COMPACT_KEYS }: Props) => {
   const { profile } = useCurrentUser();
   // Rolled parties whose name the user hasn't heard yet: a dot on "My Profile", which then opens on the history.
   const { parties: unrevealed } = useUnrevealed();
@@ -84,6 +89,7 @@ export const Footer = ({ children, noUser, noHome, profileAsLink, profileBase = 
           <MoreMenu items={more} dot={toReveal > 0 && more.some(({ key }) => key === "profile")} />
         </React.Suspense>
       </div>
+      {aside}
       <div className="footer-copy text-xs">
         Made with ❤ in Canada by <a href="https://uglyunicorn.ca" target="_blank">Ugly Unicorn</a>
       </div>

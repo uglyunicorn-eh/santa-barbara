@@ -138,8 +138,8 @@ The front door's count of parties that rolled the dice (`src/components/Odometer
 `src/styles/odometer.css`): a row of raffle tickets, at least five, on the closing section's dark background. On the
 front door it's a compact row by the footer (`landing.css`), mirroring the footer's credits: two lines of the footer's
 small text ("Party'o'meter", then the caption) level with "Made with…" and "Photo by…", and the tickets beside them
-exactly two lines tall. In the bottom-left corner from tablet up; just above the centred footer on phones, stacked
-(tickets over the two lines) below 360px. Cream
+exactly two lines tall. It sits in the footer (Footer's `aside`), between the links and the credits: there on
+phones, centred, stacked (tickets over the two lines) below 360px; in the bottom-left corner from tablet up. Cream
 (`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and
 that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
 through every digit in between, sharing about 0.9 s. Clicking the counter (a button) puts on a little show: the tickets flip to random digits, then all to 0, then up to

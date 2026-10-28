@@ -38,14 +38,17 @@ export const LoginBox = () => {
         </>
       }
       enterAgain={<EnterActions label="Let's get this party started!" />}
-      meter={<PartyOMeter />}
-      footer={<DoorFooter />}
+      footer={<DoorFooter meter />}
     />
   );
 };
 
-const DoorFooter = () => (
-  <Footer noUser noHome profileAsLink>
+/**
+ * The front door's footer. With `meter`, the Party'o'meter sits between its links and its credits (on phones; from
+ * tablet up landing.css puts it in the bottom-left corner).
+ */
+const DoorFooter = ({ meter }: { meter?: boolean }) => (
+  <Footer noUser noHome profileAsLink aside={meter && <div className="landing-meter"><PartyOMeter /></div>}>
     <UnsplashCredit id="k0nfntv2Dgs" name="Call Me Fred" username="callmefred" />
   </Footer>
 );

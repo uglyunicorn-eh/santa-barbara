@@ -568,10 +568,11 @@
   to { translate: 0 0; clip-path: inset(0 -100vw -100vh); }
 }
 
-/* The Party'o'meter (odometer.css), by the footer, mirroring its credits on the right: two lines of the footer's small
-   text ("Party'o'meter", then the caption), level with "Made with…" and "Photo by…", and the tickets beside them
-   exactly as tall as those two lines. From tablet up it sits in the bottom-left corner, under nothing (the footer's
-   links row is above the credits); on phones, where the footer is centred, it sits just above it. */
+/* The Party'o'meter (odometer.css), in the footer between its links and its credits (Footer's `aside`), mirroring the
+   credits: two lines of the footer's small text ("Party'o'meter", then the caption) and the tickets beside them exactly
+   as tall as those two lines. On phones it stays there, centred, in the footer's order: links, meter, credits. From
+   tablet up it moves to the bottom-left corner, level with "Made with…" and "Photo by…" on the right (the links row
+   is above them, so nothing shares its lines). */
 .landing-reveal {
   position: relative;
 }
@@ -579,10 +580,7 @@
 .landing-meter {
   --line: 18px;
 
-  position: relative;
-  z-index: 1;
-  padding: 0 16px 8px;
-  background: var(--landing-ember);
+  margin-bottom: 16px;
 
   .party-o-meter {
     display: grid;
@@ -637,11 +635,11 @@
 
   @media (min-width: 769px) {
     position: absolute;
+    z-index: 1;
     left: 24px;
-    /* Level with the footer's last line: the footer's own bottom padding (landing.css, .page-footer above). */
+    /* Level with the footer's last line: the footer's own bottom padding (.landing-reveal > .page-footer above). */
     bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    padding: 0;
-    background: none;
+    margin: 0;
 
     .party-o-meter {
       justify-content: start;
