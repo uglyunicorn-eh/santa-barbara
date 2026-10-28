@@ -218,6 +218,32 @@
       radial-gradient(circle at calc(100% - var(--stub)) 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) bottom / 100% 51% no-repeat;
   }
 
+  /* A revealed party's ticket (the user has heard whom they give a gift to): the stub torn off along the perforation. It ends just past the red line, which stays,
+     in a ragged edge 6px deep (an irregular line, stretched to the ticket's height), and the notches' halves stay at
+     its corners. The mask: the paper up to the tear plus the tear's edge, then each notch
+     cut out of that. */
+  .welcome-ticket.is-torn {
+    --tear: 6px;
+
+    margin-right: calc(var(--stub) - var(--tear));
+    mask:
+      radial-gradient(circle at calc(100% - var(--tear)) 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)),
+      radial-gradient(circle at calc(100% - var(--tear)) 0, transparent var(--notch), black calc(var(--notch) + 0.5px)),
+      linear-gradient(#000 0 0) left / calc(100% - var(--tear) + 0.5px) 100% no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4L6 3L3 6L5 9L2 12L6 15L4 18L6 21L2 24L5 27L3 30L6 33L4 36L1 39L5 42L3 45L6 48L4 51L2 54L6 57L3 60L5 63L2 66L6 69L4 72L6 75L3 78L5 81L2 84L6 87L4 90L1 93L5 96L4 100H0Z'/%3E%3C/svg%3E") right / var(--tear) 100% no-repeat;
+    mask-composite: intersect, intersect, add, add;
+
+    /* What's left of the perforation: the same red dashes as the stub's edge, on the line the tear follows. */
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: calc(var(--tear) - 2px);
+      border-right: 2px dashed rgb(198 42 48 / 0.35);
+    }
+  }
+
   .welcome-ticket-main {
     flex: 1;
     min-width: 0;
@@ -252,13 +278,22 @@
     line-height: 1;
   }
 
+  /* The label on the left, the party's code on the right, like a ticket's number on both halves. */
   .welcome-latest-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75em;
     margin: 0 0 0.35rem;
     font-size: 0.75em;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ticket-red);
+  }
+
+  .welcome-latest-number {
+    letter-spacing: 0.1em;
+    opacity: 0.75;
   }
 
   .welcome-latest-party {

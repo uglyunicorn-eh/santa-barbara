@@ -2,7 +2,7 @@ import React from "react";
 import { ChevronRight, Gift, Star } from "react-feather";
 import { Link } from "react-router-dom";
 
-import { useAppClient, useSignals } from "@/components/hooks";
+import { useAppClient, useSignals, useUnrevealed } from "@/components/hooks";
 import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
 import { tiltHandlers } from "@/lib/tilt";
 import type { Party } from "@/types";
@@ -86,12 +86,14 @@ const formatDate = (iso?: string | null) => {
 };
 
 /**
- * One ticket stub, like the Party'o'meter's raffle tickets: cream paper, the party on the main part, and a stub torn
- * off along a perforation (notches at both ends) with the party's code in red. The whole ticket opens the party (its
- * link stretches over it). Under the mouse it tilts toward the pointer and comes up a little, like the landing's
- * step cards (without their jiggle: it only moves when the mouse does). `children` go under a perforated rule (the phone's links).
+ * One ticket stub, like the Party'o'meter's raffle tickets: cream paper, the party on the main part (its code at the
+ * top right), and a stub past a perforation (notches at both ends) with the code again, in red. The whole ticket opens
+ * the party (its link stretches over it). `torn` (the user has heard whom they give a gift to): the stub is torn off
+ * along the perforation, leaving a ragged edge, the red line and the notches' halves. Under the mouse it tilts toward
+ * the pointer and comes up a little, like the landing's step cards (without their jiggle: it only moves when the mouse
+ * does). `children` go under a perforated rule (the phone's links).
  */
-const Ticket = ({ party, label, children }: { party: Party; label: string; children?: React.ReactNode }) => {
+const Ticket = ({ party, label, torn, children }: { party: Party; label: string; torn: boolean; children?: React.ReactNode }) => {
   const { code, name, isHost, isClosed, createdAt, rolledAt } = party;
   const rolled = formatDate(rolledAt);
   const started = formatDate(createdAt);
@@ -100,9 +102,12 @@ const Ticket = ({ party, label, children }: { party: Party; label: string; child
     : (started ? `Open since ${started}` : "Open");
 
   return (
-    <div className="welcome-ticket" {...ticketTilt}>
+    <div className={torn ? "welcome-ticket is-torn" : "welcome-ticket"} {...ticketTilt}>
       <div className="welcome-ticket-main">
-        <div className="welcome-latest-title" aria-hidden="true">{label}</div>
+        <div className="welcome-latest-title" aria-hidden="true">
+          <span>{label}</span>
+          <span className="welcome-latest-number">{code}</span>
+        </div>
         <Link to={`/p/${code}/`} className="welcome-latest-party">
           <span className={`welcome-latest-icon ${isHost ? "is-host" : "is-guest"}`} aria-hidden="true">
             {isHost ? <Star size={18} /> : <Gift size={18} />}
@@ -116,10 +121,12 @@ const Ticket = ({ party, label, children }: { party: Party; label: string; child
         </Link>
         {children}
       </div>
-      <div className="welcome-ticket-stub" aria-hidden="true">
-        <span className="welcome-ticket-code">{code}</span>
-        <ChevronRight size={16} className="welcome-latest-chevron" />
-      </div>
+      {!torn && (
+        <div className="welcome-ticket-stub" aria-hidden="true">
+          <span className="welcome-ticket-code">{code}</span>
+          <ChevronRight size={16} className="welcome-latest-chevron" />
+        </div>
+      )}
     </div>
   );
 };
@@ -138,11 +145,17 @@ type Props = {
  * focus so each can be opened, shuffled a little differently each time. The page places it (StartPage).
  */
 export const LatestParty = ({ parties, links = false, className }: Props) => {
+  // Revealed: rolled, and no longer among the rolled parties the user hasn't heard their name in (kept live). Until
+  // that list has loaded, nothing counts as revealed, so no ticket shows torn and then mends.
+  const { parties: unrevealed } = useUnrevealed();
+  const isRevealed = (party: Party) =>
+    party.isClosed && unrevealed !== null && !unrevealed.some(({ code }) => code === party.code);
+
   if (links) {
     return (
       <section className={`welcome-latest ${className ?? ""}`} aria-label="Your latest party">
         <div className="welcome-ticket-wrap">
-          <Ticket party={parties[0]} label="Your latest party">
+          <Ticket party={parties[0]} label="Your latest party" torn={isRevealed(parties[0])}>
             <div className="welcome-latest-foot">
               <Link to="/profile/history/">All my parties</Link>
               <span aria-hidden="true">&middot;</span>
@@ -164,7 +177,7 @@ export const LatestParty = ({ parties, links = false, className }: Props) => {
     >
       {parties.map((party, index) => (
         <div key={party.code} className="welcome-ticket-wrap" style={{ "--i": index } as React.CSSProperties}>
-          <Ticket party={party} label={index ? "Before that" : "Your latest party"} />
+          <Ticket party={party} label={index ? "Before that" : "Your latest party"} torn={isRevealed(party)} />
         </div>
       ))}
     </section>
