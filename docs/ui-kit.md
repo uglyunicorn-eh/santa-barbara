@@ -144,7 +144,10 @@ phones, centred, stacked (tickets over the two lines) below 360px; in the bottom
 that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
 through every digit in between, sharing about 0.9 s. Clicking the counter (a button) puts on a little show: the tickets flip to random digits, then all to 0, then up to
 the count, each step once the last run of flips is done (about a second each); with reduced motion a click does
-nothing. A run of flips keeps one pace from start to end. With reduced motion the digits just change. Nothing shows until the first count arrives, and the tickets stay at zeros until the counter is first uncovered on screen, then flip up to the count, so the flip-up is seen rather than spent off screen. On phones it's smaller, so nine tickets still fit at 320px.
+nothing. A run of flips keeps one pace from start to end. Now and then it plays the same show on its own: after
+a random 1 to 3 minutes (`NOW_AND_THEN_MS`), only while it's in view in a visible tab, not within 4 s of its digits
+changing, never over a show already playing, and not at all with reduced motion. No requests: it's only the
+animation. With reduced motion the digits just change. Nothing shows until the first count arrives, and the tickets stay at zeros until the counter is first uncovered on screen, then flip up to the count, so the flip-up is seen rather than spent off screen. On phones it's smaller, so nine tickets still fit at 320px.
 
 The digits aren't a font: they're SVG strokes drawn in `Odometer.tsx` (`GLYPHS`), condensed and geometric in the
 spirit of DIN (straight stems, round bowls, one even stroke) but our own shapes, so there's no font file to host. They

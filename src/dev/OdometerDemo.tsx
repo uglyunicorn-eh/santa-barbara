@@ -32,6 +32,16 @@ export const OdometerStates = () => (
 
 const START = 29;
 
+/** The kit's "now and then", much more often than the front door's (1 to 3 minutes), to see it. */
+const KIT_NOW_AND_THEN_MS: [number, number] = [3000, 6000];
+
+/** A counter that plays the click's show on its own, every few seconds here. */
+export const OdometerNowAndThen = () => (
+  <div className={panel}>
+    <PartyOMeterView rolled={START} nowAndThenMs={KIT_NOW_AND_THEN_MS} />
+  </div>
+);
+
 /** One counter and buttons that change it, to watch the tickets flip (or just change, with reduced motion). */
 export const OdometerDemo = () => {
   const [rolled, setRolled] = React.useState(START);
