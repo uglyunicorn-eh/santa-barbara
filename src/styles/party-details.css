@@ -18,28 +18,16 @@
       font-size: 2rem;
     }
 
-    /* The countdown to the party's due time (PartyCountdown), centred under its name. */
-    .party-countdown {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0.25em 0 1em;
-      line-height: 1.15;
-      text-align: center;
+    /* The countdown (due-clock.css), just above the party's button: in line with the text from desktop up,
+       centred like the button below it on smaller screens. */
+    .party-due {
+      margin: 1.5em 0 0;
+
+      @media (max-width: 1023px) {
+        text-align: center;
+      }
     }
 
-    .party-countdown-label,
-    .party-countdown-date {
-      font-size: 0.65em;
-      color: var(--color-zinc-600);
-    }
-
-    .party-countdown-time {
-      font-size: 1.6em;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.02em;
-    }
 
     @media (max-width: 768px) {
       text-align: left;

@@ -1,11 +1,14 @@
+import type React from 'react';
 import type { Party, User } from '@/types';
 
 type Props = {
   party: Party;
   user: User;
+  /** The countdown to the party's due time, if it has one: shown after the text. */
+  due?: React.ReactNode;
 }
 
-export const PartyIsClosedContent = ({ party, user }: Props) => {
+export const PartyIsClosedContent = ({ party, user, due }: Props) => {
   return (
     <>
       <p>
@@ -22,6 +25,8 @@ export const PartyIsClosedContent = ({ party, user }: Props) => {
       <p>
         Have fun! And Happy Holidays!
       </p>
+
+      {due}
     </>
   );
 }

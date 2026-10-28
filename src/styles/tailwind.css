@@ -27,6 +27,7 @@
 @import "./login.css" layer(app);
 @import "./landing.css" layer(app);
 @import "./odometer.css" layer(app);
+@import "./due-clock.css" layer(app);
 @import "./profile.css" layer(app);
 @import "./404.css" layer(app);
 @import "./garage.css" layer(app);

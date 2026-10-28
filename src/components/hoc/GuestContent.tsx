@@ -8,9 +8,11 @@ import type { Party, User } from '@/types';
 type Props = {
   party: Party;
   user: User;
+  /** The countdown to the party's due time, if it has one: shown just above the button. */
+  due?: React.ReactNode;
 }
 
-export const GuestContent = ({ party, user }: Props) => {
+export const GuestContent = ({ party, user, due }: Props) => {
   const navigate = useNavigate();
 
   const onConfirm = React.useCallback(
@@ -66,6 +68,8 @@ export const GuestContent = ({ party, user }: Props) => {
         Don't worry, it shouldn't take long. Last year, we had a whole two days to find and buy the gifts.
         Everything's under control; he knows what he's doing!
       </p>
+
+      {due}
 
       {!party.isClosed && (
         <>

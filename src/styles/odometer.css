@@ -17,7 +17,9 @@
   opacity: 0.75;
 }
 
-.odometer {
+/* The flip cards' measures and colours (FlapDigit), for the meter and the party countdown (due-clock.css) alike. */
+.odometer,
+.due-clock-digits {
   --cell-h: 1.2em;
   --hinge: 0.5px;
   --ticket: #fff6d6;
@@ -25,12 +27,15 @@
   /* The digits a hair above the ticket's middle, which reads as centred. */
   --glyph-lift: 0.04em;
 
+  line-height: var(--cell-h);
+  color: #c62a30;
+}
+
+.odometer {
   display: inline-flex;
   align-items: center;
   gap: 0.14em;
   font-size: 2.25rem;
-  line-height: var(--cell-h);
-  color: #c62a30;
 
   /* A button (a click flips it up again from zeros), drawn as nothing but its tickets. */
   margin: 0;

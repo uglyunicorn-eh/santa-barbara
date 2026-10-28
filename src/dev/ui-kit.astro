@@ -384,9 +384,11 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
     <section id="countdown" class="bg-zinc-100 px-4 py-8 tablet:px-8">
       <h2 class={sectionTitle}>Countdown</h2>
       <p class="mt-1 max-w-200 text-muted-foreground">
-        The party page counts down to the party's due time, if the host set one: "Due in", then days, hours, minutes
-        and seconds (D:HH:MM:SS), then the date. It ticks every second while the tab is visible. When the time is up it
-        shows 0:00:00:00 and nothing else happens.
+        The party page counts down to the party's due time, if the host set one: light and simple, above the party's
+        button: the Party'o'meter's flip cards in four groups (days, hours, minutes, seconds), a label under each,
+        "Gifts due in" over them and the date under them. A digit flips straight to its new value when it changes. It
+        ticks every second while the tab is visible. When the time is up it shows 0:00:00:00 and nothing else happens.
+        With reduced motion the digits just change.
       </p>
       <div class="mt-4">
         <CountdownDemo client:load />

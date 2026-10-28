@@ -39,6 +39,11 @@ export const PartyDetails = ({ party }: Props) => {
     [revealed, markRevealed, party.code],
   );
   const partyPath = `/p/${party.code}/`;
+  // Counting down to the due time the host set, if any (a deleted party has none to show). Each content puts it just
+  // above its button, or after its text.
+  const due = party.dueAt && !party.deletedAt
+    ? <div className="party-due"><PartyCountdown dueAt={party.dueAt} /></div>
+    : null;
 
   // A guest watching the page as the host rolls the dice gets the news right away: the letter, with stars falling.
   const navigate = useNavigate();
@@ -71,16 +76,14 @@ export const PartyDetails = ({ party }: Props) => {
               <Columns.Column>
                 <Content className="party-details-content">
                   <h1 className="text-center">{party.name}</h1>
-                  {/* Counting down to the due time the host set, if any (not for a deleted party). */}
-                  {party.dueAt && !party.deletedAt && <PartyCountdown dueAt={party.dueAt} />}
                   {profile && (
                     party.deletedAt
                       ? <DeletedPartyContent {...{ party, user: profile }} />
                       : party.isClosed
-                      ? <PartyIsClosedContent {...{ party, user: profile }} />
+                      ? <PartyIsClosedContent {...{ party, user: profile, due }} />
                       : party.isHost
-                        ? <HostContent {...{ party, user: profile }} />
-                        : <GuestContent {...{ party, user: profile }} />
+                        ? <HostContent {...{ party, user: profile, due }} />
+                        : <GuestContent {...{ party, user: profile, due }} />
                   )}
                 </Content>
               </Columns.Column>
