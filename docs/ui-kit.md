@@ -149,7 +149,7 @@ the first count arrives. On phones it's smaller, so nine tickets still fit at 32
 
 The digits aren't a font: they're SVG strokes drawn in `Odometer.tsx` (`GLYPHS`), condensed and geometric in the
 spirit of DIN (straight stems, round bowls, one even stroke) but our own shapes, so there's no font file to host. They
-take the text colour, are 0.8em tall, and sit a hair (0.04em) above the ticket's middle, which reads as centred.
+take the text colour, are 0.92em tall (on a 1.3em ticket), and sit a hair (0.04em) above the ticket's middle, which reads as centred.
 
 ## Emails
 
