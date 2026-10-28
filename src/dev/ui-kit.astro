@@ -409,16 +409,14 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
       <h2 class={`${sectionTitle} text-white`}>Party'o'meter</h2>
       <p class="mt-1 max-w-200 text-sm text-zinc-300">
         The front door's count of parties that rolled the dice: a row of raffle tickets, at least six, cream with red
-        digits and notched sides, leaning a little. To change, a ticket's top half folds down onto the next digit; a
-        jump flips through every digit in between. With reduced motion the digits just change. The samples flip up from
-        000000 on load, like the real one when its first count arrives.
+        digits and notched sides, leaning a little. The digits are drawn as SVG, condensed and geometric in the spirit of
+        DIN. To change, a ticket's top half folds down onto the next digit; a jump flips through every digit in between.
+        With reduced motion the digits just change. The samples flip up from 000000 on load, like the real one when its
+        first count arrives.
       </p>
-      <h3 class="mt-6 text-xl font-semibold text-white">Cuprum or DIN Condensed</h3>
-      <p class="mt-1 max-w-200 text-sm text-zinc-300">
-        One count in each. Cuprum is the site's own; DIN Condensed is this Mac's font, for a preview, and would be hosted
-        as the free font named under it. Change the count to watch them flip.
-      </p>
-      <div class="mt-4">
+      <h3 class="mt-6 text-xl font-semibold text-white">Try it</h3>
+      <p class="mt-1 text-sm text-zinc-300">Change the count and watch the tickets: one flip, a few, a run of fast flips, a new digit, and back down (which flips forward round to the lower digits, as a counter would).</p>
+      <div class="mt-4 max-w-200">
         <OdometerDemo client:load />
       </div>
       <h3 class="mt-10 text-xl font-semibold text-white">States</h3>

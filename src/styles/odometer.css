@@ -1,6 +1,7 @@
 /* The Party'o'meter (src/components/Odometer.tsx): a row of raffle tickets, cream with red digits and notched sides,
    leaning a little this way and that. Each is split across the middle; to change, its top half folds down onto the
-   next digit, like a split-flap card. The digits' typeface is --ticket-font (the site's Cuprum unless set). */
+   next digit, like a split-flap card. The digits are SVG strokes (Odometer.tsx), in the text colour, sized by the
+   font size. */
 
 .party-o-meter {
   margin: 36px auto 0;
@@ -21,30 +22,36 @@
   --hinge: 0.5px;
   --ticket: #fff6d6;
   --notch: 0.055em;
+  /* The digits a hair above the ticket's middle, which reads as centred. */
+  --glyph-lift: 0.04em;
 
   display: inline-flex;
   align-items: center;
   gap: 0.14em;
-  /* A typeface may set its own weight and size (some faces run small): --ticket-weight, --ticket-scale. Its digits
-     may sit off the middle of the line (fonts leave uneven room above and below): --ticket-shift places them,
-     measured per font: a hair above the ticket's middle (0.04em), which reads as centred. */
-  font-family: var(--ticket-font, inherit);
-  font-size: calc(2.25rem * var(--ticket-scale, 1));
-  font-weight: var(--ticket-weight, 700);
+  font-size: 2.25rem;
   line-height: var(--cell-h);
-  font-variant-numeric: tabular-nums;
   color: #c62a30;
 
   /* Phones: nine digits (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
-    font-size: calc(1.75rem * var(--ticket-scale, 1));
+    font-size: 1.75rem;
   }
+}
+
+.ticket-glyph {
+  display: block;
+  height: 0.8em;
+  width: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-linejoin: miter;
 }
 
 .flap-digit {
   position: relative;
   display: block;
-  width: 0.78em;
+  width: 0.7em;
   height: calc(var(--cell-h) + 0.1em);
   line-height: calc(var(--cell-h) + 0.1em);
 
@@ -69,11 +76,13 @@
   background: var(--ticket);
   backface-visibility: hidden;
 
+  /* The whole digit, centred on the whole ticket; each half shows its part. */
   > span {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: calc(var(--cell-h) + 0.1em);
-    text-align: center;
-    transform: translateY(var(--ticket-shift, -0.01em));
+    transform: translateY(calc(-1 * var(--glyph-lift)));
   }
 }
 
@@ -97,7 +106,7 @@
 
   /* The lower half of the same digit: the full-height digit, lifted to the card's top. */
   > span {
-    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge) + var(--ticket-shift, -0.01em)));
+    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge) - var(--glyph-lift)));
   }
 }
 

@@ -141,10 +141,9 @@ that. To change, a ticket's top half folds down onto the next digit, like a spli
 through every digit in between, sharing about 0.9 s. With reduced motion the digits just change. Nothing shows until
 the first count arrives. On phones it's smaller, so nine tickets still fit at 320px.
 
-The digits' typeface is still being chosen between Cuprum and DIN Condensed (`--ticket-font`, Cuprum until then); the
-kit shows both side by side on one count. Fonts leave uneven room above and below their digits, so each sets
-`--ticket-shift` to sit its digits a hair (0.04em) above the ticket's middle, which reads as centred (Cuprum -0.01em,
-DIN Condensed 0.106em, measured).
+The digits aren't a font: they're SVG strokes drawn in `Odometer.tsx` (`GLYPHS`), condensed and geometric in the
+spirit of DIN (straight stems, round bowls, one even stroke) but our own shapes, so there's no font file to host. They
+take the text colour, are 0.8em tall, and sit a hair (0.04em) above the ticket's middle, which reads as centred.
 
 ## Emails
 

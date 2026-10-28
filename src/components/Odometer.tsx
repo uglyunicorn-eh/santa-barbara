@@ -4,6 +4,10 @@ import React from "react";
 // notched sides. Each ticket is split across the middle; to change, its top half folds down onto the next digit, like a
 // split-flap card, and a jump flips through every digit in between. The app's PartyOMeter feeds it the live count; the
 // UI kit (/ui-kit in dev) feeds it its own.
+//
+// The digits are drawn here as SVG strokes, not set in a font: condensed and geometric, in the spirit of DIN (straight
+// stems, round bowls, one even stroke), but our own shapes. So there's no font file to host, and they stay sharp at
+// any size.
 
 /** The counter shows at least this many digits, with leading zeros. */
 const MIN_DIGITS = 6;
@@ -36,9 +40,33 @@ const flipMs = (steps: number) => (steps === 1 ? FLIP_MS : Math.max(FASTEST_MS, 
 /** A flip under way: from one digit to the next, how long it takes, and a key that restarts its animation. */
 type Flip = { from: number; to: number; ms: number; key: number };
 
+/**
+ * Each digit's centre line, on a 36 × 64 grid, stroked 8 wide (odometer.css): stems and bars 3.5 in from the edges,
+ * bowls of radius 14.5, the middle at 32.
+ */
+const GLYPHS = [
+  "M3.5 18A14.5 14.5 0 0 1 32.5 18V46A14.5 14.5 0 0 1 3.5 46Z",
+  "M9 13.5L21.5 3.5V60.5",
+  "M3.5 18A14.5 14.5 0 1 1 29.9 26.3L3.5 57V60.5H33",
+  "M3.5 3.5H31L17.5 29.5A14.5 14.5 0 1 1 4.2 51.5",
+  "M25 60.5V3.5L3.5 45H33",
+  "M31 3.5H7L6 28.5C9 26.5 13 25.5 18 25.5C27 25.5 32.5 32 32.5 43C32.5 53.5 27 60.5 18 60.5C11.5 60.5 6.5 57.5 3.5 52",
+  "M26.5 3.5L6.1 37.7M3.5 46A14.5 14.5 0 1 0 32.5 46A14.5 14.5 0 1 0 3.5 46Z",
+  "M3 3.5H32.5L13 60.5",
+  "M5 16.5A13 13 0 1 0 31 16.5A13 13 0 1 0 5 16.5ZM2.5 45A15.5 15.5 0 1 0 33.5 45A15.5 15.5 0 1 0 2.5 45Z",
+  "M9.5 60.5L29.9 26.3M32.5 18A14.5 14.5 0 1 0 3.5 18A14.5 14.5 0 1 0 32.5 18Z",
+];
+
+/** A digit as SVG, in the text colour. The view box leaves room for the stroke past the grid's edges. */
+const Glyph = ({ digit }: { digit: number }) => (
+  <svg className="ticket-glyph" viewBox="-0.5 -0.5 37 65" aria-hidden="true">
+    <path d={GLYPHS[digit]} />
+  </svg>
+);
+
 const Half = ({ half, digit, flipping }: { half: "top" | "bottom"; digit: number; flipping?: boolean }) => (
   <span className={`flap flap-${half}${flipping ? " is-flipping" : ""}`}>
-    <span>{digit}</span>
+    <span><Glyph digit={digit} /></span>
   </span>
 );
 
