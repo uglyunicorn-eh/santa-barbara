@@ -18,7 +18,7 @@
   }
 
   .profile-settings {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
   }
 
   .setting {
@@ -26,7 +26,7 @@
     grid-template-columns: 6em 1fr;
     gap: 0.25em 1.5em;
     padding: 1em 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-zinc-200);
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -63,36 +63,25 @@
 
   .setting-hint {
     margin: 0.35em 0 0;
-    font-size: 0.9rem;
-    color: #71717a; /* zinc-500 */
+    font-size: 0.9375rem;
+    color: var(--color-zinc-500);
   }
 
   .danger-zone {
     margin-top: 1.5em;
     padding: 0.75em 1em;
-    border: 1px solid #f5c2c4;
-    border-radius: 10px;
-    background: #fff8f8;
+    border: 1px solid var(--color-red-200);
+    border-radius: var(--radius-lg);
+    background: var(--color-red-50);
 
     .danger-text {
       flex: 1 1 16em;
 
       p {
         margin: 0;
-        font-size: 0.9rem;
-        color: #52525b; /* zinc-600 */
+        font-size: 0.9375rem;
+        color: var(--color-zinc-600);
       }
-    }
-  }
-
-  .danger-confirm {
-    margin-top: 0.75em;
-    padding-top: 0.75em;
-    border-top: 1px solid #f5c2c4;
-
-    p {
-      margin-bottom: 0.5em;
-      font-size: 0.95rem;
     }
   }
 
@@ -110,7 +99,7 @@
       align-items: center;
       gap: 0.85em;
       padding: 0.6em 0.75em;
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       color: inherit;
 
       @media (max-width: 768px) {
@@ -120,7 +109,7 @@
       transition: background-color 0.15s ease-in-out;
 
       &:hover {
-        background-color: #f5f5f7;
+        background-color: var(--color-zinc-100);
 
         .history-chevron {
           opacity: 1;
@@ -130,12 +119,12 @@
     }
 
     .is-closed .history-name {
-      color: #52525b; /* zinc-600 */
+      color: var(--color-zinc-600);
     }
 
     /* Deleted parties stay in the host's history until they can no longer be restored. */
     .is-deleted .history-name {
-      color: #71717a; /* zinc-500 */
+      color: var(--color-zinc-500);
       text-decoration: line-through;
     }
   }
@@ -150,13 +139,13 @@
     border-radius: 50%;
 
     &.is-host {
-      color: #c99700;
-      background: #fff6d6;
+      color: var(--color-gold);
+      background: var(--color-cream-50);
     }
 
     &.is-guest {
-      color: #d92f33;
-      background: #fdeaea;
+      color: var(--color-red-600);
+      background: var(--color-red-100);
     }
   }
 
@@ -169,7 +158,7 @@
   }
 
   .history-name {
-    color: #18181b; /* zinc-900 */
+    color: var(--color-zinc-900);
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -177,14 +166,14 @@
   }
 
   .history-meta {
-    font-size: 0.85rem;
-    color: #52525b; /* zinc-600 */
+    font-size: 0.8125rem;
+    color: var(--color-zinc-600);
 
     code {
       padding: 0;
       background: none;
       color: inherit;
-      font-size: 0.85rem;
+      font-size: inherit;
       letter-spacing: 0.08em;
     }
 
@@ -194,8 +183,8 @@
   }
 
   .history-dates {
-    font-size: 0.8rem;
-    color: #71717a; /* zinc-500 */
+    font-size: 0.8125rem;
+    color: var(--color-zinc-500);
 
     svg {
       vertical-align: -1px;
@@ -206,22 +195,22 @@
     flex: none;
     padding: 0.15em 0.7em;
     border-radius: 999px;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     font-weight: 500;
 
     &.is-open {
-      color: #257942;
-      background: #effaf3;
+      color: var(--color-green-700);
+      background: var(--color-green-50);
     }
 
     &.is-closed {
-      color: #52525b; /* zinc-600 */
-      background: #f4f4f5; /* zinc-100 */
+      color: var(--color-zinc-600);
+      background: var(--color-zinc-100);
     }
 
     &.is-deleted {
-      color: #b02a2d;
-      background: #fdeaea;
+      color: var(--color-red-700);
+      background: var(--color-red-100);
     }
 
     @media (max-width: 768px) {
@@ -240,7 +229,7 @@
 
   .history-chevron {
     flex: none;
-    color: #a1a1aa; /* zinc-400 */
+    color: var(--color-zinc-400);
     opacity: 0.8;
     transition: all 0.15s ease-in-out;
 
@@ -255,7 +244,7 @@
     align-items: center;
     gap: 0.5em;
     padding: 2em 1em;
-    color: #52525b; /* zinc-600 */
+    color: var(--color-zinc-600);
     text-align: center;
   }
 

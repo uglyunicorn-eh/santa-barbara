@@ -90,6 +90,7 @@ const SCREENS = [
   { name: "dialog-leave-party", path: `/p/${CODES.guestOpen}/leave`, signedIn: true },
   { name: "profile", path: "/profile/", signedIn: true },
   { name: "profile-email-change", path: "/profile/", signedIn: true, act: clickButton("Change") },
+  { name: "profile-delete-confirm", path: "/profile/", signedIn: true, act: clickButton("Delete account") },
   { name: "profile-history", path: "/profile/history/", signedIn: true },
   { name: "party-host-menu", path: `/p/${CODES.hostOpen}/`, signedIn: true, act: openMenu("More actions") },
   { name: "footer-menu", path: "/", act: openMenu("More links") },
