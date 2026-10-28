@@ -136,8 +136,8 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
 `src/styles/odometer.css`): flat monospace digits (the system's: SF Mono, Cascadia Mono, Menlo…) in the text colour
-around it, so white on dark and black on light, one wheel per digit and at least six. Each digit has a thin 1px
-frame and the counter a thicker 3px one (2px on phones), in the same colour. No drums or shadows: only each digit's
+around it, so white on dark and black on light, one wheel per digit and at least six. One 3px frame goes round
+the counter (2px on phones), with a thin 1px line between digits, in the same colour. No drums or shadows: only each digit's
 window fades at its top and bottom edges. A changed digit slides forward to its new value through the digits in
 between (1.4 s, easing out); with reduced motion it just shows it. Nothing shows until the first count arrives. On
 phones it's smaller, so nine digits still fit at 320px. The kit shows each state on dark and light, and a control to

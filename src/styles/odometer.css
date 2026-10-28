@@ -21,9 +21,7 @@
   --digit: 1.2em;
 
   display: inline-flex;
-  gap: 0.1em;
-  padding: 0.1em;
-  /* A thicker frame round the whole counter, a thin one round each digit, both in the text colour. */
+  /* One frame round the whole counter, and a thin line between digits, both in the text colour. */
   border: 3px solid currentColor;
   border-radius: 10px;
   font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
@@ -42,9 +40,11 @@
 }
 
 .odometer-wheel {
-  padding: 0 0.12em;
-  border: 1px solid currentColor;
-  border-radius: 5px;
+  padding: 0.05em 0.14em;
+
+  & + & {
+    border-left: 1px solid currentColor;
+  }
 }
 
 .odometer-window {
