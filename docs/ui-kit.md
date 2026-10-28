@@ -135,18 +135,14 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
-`src/styles/odometer.css`), at least six digits, in Cuprum, on the closing section's dark background. It has three
-looks, still being chosen (`DEFAULT_LOOK` is the front door's):
+`src/styles/odometer.css`): a row of raffle tickets, at least six, on the closing section's dark background. Cream
+(`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and
+that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
+through every digit in between, sharing about 0.9 s. With reduced motion the digits just change. Nothing shows until
+the first count arrives. On phones it's smaller, so nine tickets still fit at 320px.
 
-- **Neon sign:** pink glowing digits in a glowing frame, like the neon signs on the front door's photo. Digits slide
-  to their new value and flicker as they go.
-- **Brass tally counter:** cream wheels in a brass frame, the last one red. Digits roll.
-- **Raffle tickets:** cream tickets with notched sides and red digits, leaning a little. Each flips like a split-flap
-  card.
-
-A jump goes through every digit in between (about a second). With reduced motion the digits just change. Nothing
-shows until the first count arrives. On phones it's smaller, so nine digits still fit at 320px. The kit shows the
-looks side by side on one count, with a control to change it, and each state in the front door's look.
+The digits' typeface is still being chosen (`--ticket-font`, Cuprum until then): the kit shows the candidates side by
+side on one count.
 
 ## Emails
 

@@ -408,16 +408,20 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
     <section id="party-o-meter" class="landing bg-night px-4 py-8 tablet:px-8">
       <h2 class={`${sectionTitle} text-white`}>Party'o'meter</h2>
       <p class="mt-1 max-w-200 text-sm text-zinc-300">
-        The front door's count of parties that rolled the dice: at least six digits, in the site's own font, on the
-        closing section's dark background. A jump goes through every digit in between; with reduced motion the digits
-        just change. The samples count up from 000000 on load, like the real one when its first count arrives.
+        The front door's count of parties that rolled the dice: a row of raffle tickets, at least six, cream with red
+        digits and notched sides, leaning a little. To change, a ticket's top half folds down onto the next digit; a
+        jump flips through every digit in between. With reduced motion the digits just change. The samples flip up from
+        000000 on load, like the real one when its first count arrives.
       </p>
-      <h3 class="mt-6 text-xl font-semibold text-white">Looks to choose from</h3>
-      <p class="mt-1 text-sm text-zinc-300">One count, three looks. Change it and watch each move: one step, a few, a run, a new digit, and back down (which goes forward round to the lower digits, as a counter would).</p>
+      <h3 class="mt-6 text-xl font-semibold text-white">Typefaces to choose from</h3>
+      <p class="mt-1 max-w-200 text-sm text-zinc-300">
+        One count in each. Only Cuprum is the site's own: the others are this Mac's fonts, for a preview, and the one
+        chosen gets hosted as the free font named under it. Change the count to watch them flip.
+      </p>
       <div class="mt-4">
         <OdometerDemo client:load />
       </div>
-      <h3 class="mt-10 text-xl font-semibold text-white">States, in the front door's look</h3>
+      <h3 class="mt-10 text-xl font-semibold text-white">States</h3>
       <div class="mt-3">
         <OdometerStates client:load />
       </div>
