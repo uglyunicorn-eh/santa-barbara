@@ -132,6 +132,22 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
   surface: dark on night, light on the party page.
 
+## Countdown
+
+The party page counts down to the party's due time, if its host set one: roughly when they'll roll the dice
+(`src/components/PartyCountdown.tsx`, styled in `due-clock.css`). It's in the Party'o'meter's look: its flip tickets (`FlapDigit` in "jump" mode: one flip straight to
+the new digit, as a clock counts down) in four groups, days unpadded and the rest two digits, with "days", "hours",
+"min" and "sec" in small grey letters under them. Over them, "The party starts in about" in red, letter-spaced capitals
+like the meter's own label, with only "in about" underlined with the front door's "Jeez!" pen stroke and the date
+("Around ‹date›", in the browser's own format) in the same yellow bubble over it on hover, tap or keyboard focus.
+The create form calls the field "Party starts". From desktop up it sits in the page's top-right corner,
+over the gnome; smaller screens have no free corner, so there it sits above the party's name, centred like it
+(`party-details.css`). It ticks on each new second while the tab is
+visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens.
+With reduced motion the digits just change. Only members see it: the join box doesn't show it. Screen readers get
+"The party starts around ‹date›" rather than digits changing every second. Smaller on phones, so the longest (366 days) fits at
+320px. The kit shows days left, under an hour, finished and a year ahead.
+
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in

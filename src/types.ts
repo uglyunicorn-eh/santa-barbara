@@ -26,6 +26,8 @@ export type Party = {
   /** Only for members. */
   participantCount?: number | null;
   participants?: string[] | null;
+  /** When the party is due (ISO 8601), if the host set one: the party page counts down to it. */
+  dueAt?: string | null;
   /** Who this person gives a gift to, once the dice are rolled: just a name. */
   target?: { name: string } | null;
 };

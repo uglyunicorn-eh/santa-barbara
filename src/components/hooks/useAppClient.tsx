@@ -17,6 +17,8 @@ export type EnterRequestInput = {
 export type NewPartyInput = {
   name: string;
   password?: string;
+  /** When the party is due, ISO 8601 (optional). */
+  dueAt?: string;
   /** Lets the API treat a repeated request as the same one, so a retry never makes a second party. */
   requestId?: string;
 }
@@ -214,8 +216,13 @@ export const useAppClient = () => {
   );
 
   const createParty = React.useCallback(
-    async ({ name, password, requestId }: NewPartyInput): Promise<Party | undefined> =>
-      partyAction("/parties", { method: "POST", body: { name, ...(password ? { password } : {}) }, key: requestId, retry: Boolean(requestId) }),
+    async ({ name, password, dueAt, requestId }: NewPartyInput): Promise<Party | undefined> =>
+      partyAction("/parties", {
+        method: "POST",
+        body: { name, ...(password ? { password } : {}), ...(dueAt ? { dueAt } : {}) },
+        key: requestId,
+        retry: Boolean(requestId),
+      }),
     [
       partyAction,
     ],

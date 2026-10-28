@@ -4,6 +4,7 @@ import { Columns, Container, Content, Hero } from "@/components/layout";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "@/components/Confetti";
+import { PartyCountdown } from "@/components/PartyCountdown";
 import { GnomeSays } from "@/components/GnomeSays";
 import { SecretText } from "@/components/SecretText";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
@@ -69,6 +70,9 @@ export const PartyDetails = ({ party }: Props) => {
               </Columns.Column>
               <Columns.Column>
                 <Content className="party-details-content">
+                  {/* The countdown, when the host set a due time (not for a deleted party): in the page's top-right corner
+                      from desktop up, above the party's name on smaller screens (party-details.css). */}
+                  {party.dueAt && !party.deletedAt && <div className="party-due"><PartyCountdown dueAt={party.dueAt} /></div>}
                   <h1 className="text-center">{party.name}</h1>
                   {profile && (
                     party.deletedAt

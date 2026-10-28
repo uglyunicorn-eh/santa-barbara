@@ -10,11 +10,30 @@ import { FormField, Input, Submit } from "@/components/forms";
 import { maxLen, required } from "@/components/forms/messages";
 import { useAppClient, useCopyPartyLink } from "@/components/hooks";
 import { useNavigate } from "react-router-dom";
-import { MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH } from "@/limits";
+import { MAX_DUE_AHEAD_MS, MAX_PARTY_NAME_LENGTH, MAX_PHRASE_LENGTH, MIN_DUE_AHEAD_MS } from "@/limits";
+
+/** A `datetime-local` value ("2026-12-24T18:00"), in this browser's time zone, for a moment `ms` from now. */
+const localInputValue = (ms: number) => {
+  const at = new Date(Date.now() + ms);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}T${pad(at.getHours())}:${pad(at.getMinutes())}`;
+};
+
+/**
+ * The due time: roughly when the host means to roll the dice. The API takes it at least an hour ahead and at most 366
+ * days. An empty field is none.
+ */
+const dueAtField = v.pipe(
+  v.string(),
+  v.check(value => !value || !Number.isNaN(new Date(value).getTime()), "Party start must be a date and time"),
+  v.check(value => !value || new Date(value).getTime() >= Date.now() + MIN_DUE_AHEAD_MS, "Party start must be at least an hour from now"),
+  v.check(value => !value || new Date(value).getTime() <= Date.now() + MAX_DUE_AHEAD_MS, "Party start must be within a year"),
+);
 
 const schema = v.object({
   name: v.pipe(v.string(), v.nonEmpty(required("Party name")), v.maxLength(MAX_PARTY_NAME_LENGTH, maxLen("Party name", MAX_PARTY_NAME_LENGTH))),
   password: v.pipe(v.string(), v.maxLength(MAX_PHRASE_LENGTH, maxLen("Secret phrase", MAX_PHRASE_LENGTH))),
+  dueAt: dueAtField,
 });
 
 type FormValues = v.InferOutput<typeof schema>;
@@ -22,6 +41,7 @@ type FormValues = v.InferOutput<typeof schema>;
 const defaultValues: FormValues = {
   name: "Very funny secret party!",
   password: "",
+  dueAt: "",
 };
 
 export const NewParty = () => {
@@ -42,7 +62,9 @@ export const NewParty = () => {
       }
       submitting.current = true;
       try {
-        const party = await createParty({ ...values, requestId: requestId.current });
+        // The field is a local date and time; the API takes an exact moment.
+        const dueAt = values.dueAt ? new Date(values.dueAt).toISOString() : undefined;
+        const party = await createParty({ name: values.name, password: values.password, dueAt, requestId: requestId.current });
         if (!party) {
           return;
         }
@@ -110,6 +132,13 @@ export const NewParty = () => {
                 label="Secret phrase"
                 children={<Input placeholder="Optional" maxLength={MAX_PHRASE_LENGTH} />}
                 help="Everyone must know this phrase for entry. Leave it blank to allow access via a shared link."
+              />
+
+              <FormField
+                name="dueAt"
+                label="Party starts"
+                children={<Input type="datetime-local" min={localInputValue(MIN_DUE_AHEAD_MS)} max={localInputValue(MAX_DUE_AHEAD_MS)} />}
+                help="Optional. Roughly when you'll roll the dice: the party page counts down to it, and you get a reminder the day before."
               />
               <HaveQuestion />
             </>

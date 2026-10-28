@@ -26,7 +26,7 @@ const email = (n, domain = "example.com") => `${fill("santa.helper.", n - domain
 
 const iso = (daysAgo) => new Date(Date.UTC(2026, 9, 25) - daysAgo * 86_400_000).toISOString();
 
-function makeSet({ userName, userEmail, partyName, participantName, participantCount, historyCount, rolled }) {
+function makeSet({ userName, userEmail, partyName, participantName, participantCount, historyCount, rolled, dueAheadMs }) {
   const participants = Array.from({ length: participantCount }, (_, i) => participantName(i));
   const base = {
     name: partyName,
@@ -45,7 +45,8 @@ function makeSet({ userName, userEmail, partyName, participantName, participantC
   };
 
   const parties = {
-    [CODES.hostOpen]: { ...base, code: CODES.hostOpen, isHost: true, isProtected: true, password: "mistletoe and wine" },
+    // A due time to count down to: a few days off, or (worst) as far ahead as the API allows.
+    [CODES.hostOpen]: { ...base, code: CODES.hostOpen, isHost: true, isProtected: true, password: "mistletoe and wine", dueAt: new Date(Date.now() + dueAheadMs).toISOString() },
     [CODES.guestOpen]: { ...base, code: CODES.guestOpen },
     [CODES.closed]: { ...base, code: CODES.closed, isClosed: true, rolledAt: iso(1), target: { name: participantName(1) } },
     [CODES.deleted]: { ...base, code: CODES.deleted, isHost: true, deletedAt: iso(0), restorableUntil: new Date(Date.UTC(2026, 9, 26)).toISOString() },
@@ -84,6 +85,7 @@ export const SETS = {
     participantCount: 6,
     historyCount: 3,
     rolled: 29,
+    dueAheadMs: ((3 * 24 + 4) * 60 + 5) * 60_000,
   }),
   worst: makeSet({
     // The longest person name (32 characters) with ordinary words; every participant has one too.
@@ -96,6 +98,8 @@ export const SETS = {
     historyCount: 25,
     // More digits than the odometer's six.
     rolled: 123456789,
+    // The furthest due time the API takes: 366 days.
+    dueAheadMs: 366 * 24 * 60 * 60_000 - 60_000,
   }),
 };
 

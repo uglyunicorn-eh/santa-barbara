@@ -21,3 +21,11 @@
     color: var(--color-zinc-400);
   }
 }
+
+/* The countdowns (CountdownDemo): above the name, as on smaller screens, at every width (the page's own top-right
+   corner from desktop up would be each card's corner here). */
+.kit-due .party-due {
+  position: static;
+  margin: 0 0 4px;
+  text-align: center;
+}
