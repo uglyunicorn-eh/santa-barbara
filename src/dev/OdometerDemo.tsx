@@ -15,18 +15,13 @@ const STATES: { label: string; rolled: number | null; note: string }[] = [
 ];
 
 /**
- * Typefaces to try on the tickets. Only Cuprum is the site's own; the others are this Mac's, for a preview. The one
- * chosen gets hosted as the free font named in `hosted` (the site loads fonts from itself only).
+ * The typefaces left to choose between. Cuprum is the site's own; DIN Condensed is this Mac's, for a preview, and would
+ * be hosted as the free font named in `hosted` (the site loads fonts from itself only). `shift` centres each one's
+ * digits on the ticket (measured: DIN leaves more room below its digits than above).
  */
-const FONTS: { name: string; font: string; weight?: number; scale?: number; feel: string; hosted: string }[] = [
-  { name: "Cuprum", font: "inherit", feel: "The site's own font", hosted: "already hosted" },
-  { name: "Rockwell", font: "Rockwell, serif", feel: "Slab serif, an old fairground ticket", hosted: "Zilla Slab or Arvo" },
-  { name: "American Typewriter", font: "'American Typewriter', serif", weight: 600, feel: "A numbering stamp", hosted: "Special Elite or Courier Prime" },
-  { name: "DIN Condensed", font: "'DIN Condensed', sans-serif", scale: 1.15, feel: "A cinema ticket stub", hosted: "Oswald or Barlow Condensed" },
-  { name: "Copperplate", font: "Copperplate, serif", weight: 700, feel: "Engraved, like a banknote", hosted: "Cormorant SC or Cinzel" },
-  { name: "Bodoni 72", font: "'Bodoni 72', Didot, serif", feel: "A fancy ball's invitation", hosted: "Bodoni Moda or Playfair Display" },
-  { name: "Futura", font: "Futura, sans-serif", feel: "Geometric, mid-century", hosted: "Jost or League Spartan" },
-  { name: "Phosphate", font: "Phosphate, fantasy", weight: 400, scale: 1.05, feel: "Circus poster, inline", hosted: "Bungee Inline or Rye" },
+const FONTS: { name: string; font: string; weight?: number; scale?: number; shift: string; feel: string; hosted: string }[] = [
+  { name: "Cuprum", font: "inherit", shift: "0.03em", feel: "The site's own font", hosted: "already hosted" },
+  { name: "DIN Condensed", font: "'DIN Condensed', sans-serif", scale: 1.15, shift: "0.146em", feel: "A cinema ticket stub", hosted: "Oswald or Barlow Condensed" },
 ];
 
 const panel = "kit-meter rounded-card px-3 py-6 text-center tablet:px-6";
@@ -47,7 +42,7 @@ export const OdometerStates = () => (
 
 const START = 29;
 
-/** The typefaces side by side, on one count, and buttons that change it, to compare them and watch the flips. */
+/** The two typefaces side by side, on one count, and buttons that change it, to compare them and watch the flips. */
 export const OdometerDemo = () => {
   const [rolled, setRolled] = React.useState(START);
   const add = (n: number) => () => setRolled(current => current + n);
@@ -63,11 +58,11 @@ export const OdometerDemo = () => {
         <Button variant="ghost" surface="dark" onClick={() => setRolled(START)}>Reset</Button>
       </div>
       <div className="grid gap-4 tablet:grid-cols-2">
-        {FONTS.map(({ name, font, weight, scale, feel, hosted }) => (
+        {FONTS.map(({ name, font, weight, scale, shift, feel, hosted }) => (
           <figure
             key={name}
             className={panel}
-            style={{ "--ticket-font": font, "--ticket-weight": weight, "--ticket-scale": scale } as React.CSSProperties}
+            style={{ "--ticket-font": font, "--ticket-weight": weight, "--ticket-scale": scale, "--ticket-shift": shift } as React.CSSProperties}
           >
             <figcaption className="mb-3">
               <span className="block font-semibold text-white">{name}</span>

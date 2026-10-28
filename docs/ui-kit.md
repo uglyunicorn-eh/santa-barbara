@@ -141,8 +141,9 @@ that. To change, a ticket's top half folds down onto the next digit, like a spli
 through every digit in between, sharing about 0.9 s. With reduced motion the digits just change. Nothing shows until
 the first count arrives. On phones it's smaller, so nine tickets still fit at 320px.
 
-The digits' typeface is still being chosen (`--ticket-font`, Cuprum until then): the kit shows the candidates side by
-side on one count.
+The digits' typeface is still being chosen between Cuprum and DIN Condensed (`--ticket-font`, Cuprum until then); the
+kit shows both side by side on one count. Fonts leave uneven room above and below their digits, so each sets
+`--ticket-shift` to sit its digits in the ticket's middle (Cuprum 0.03em, DIN Condensed 0.146em, measured).
 
 ## Emails
 
