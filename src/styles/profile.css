@@ -22,7 +22,11 @@
     grid-template-columns: 6em 1fr;
     gap: 0.25em 1.5em;
     padding: 1em 0;
-    border-bottom: 1px solid var(--color-zinc-200);
+
+    /* A rule only between two settings: none under the last one, so it never doubles the phone footer's rule. */
+    & + .setting {
+      border-top: 1px solid var(--color-zinc-200);
+    }
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;

@@ -16,7 +16,7 @@ const lastActive = (party: Party) => Math.max(Date.parse(party.rolledAt ?? "") |
  * The party the user was last busy with, hosting or as a guest: the one most recently started or rolled, deleted ones
  * left out. `undefined` while loading, `null` when there's none. Loads again when their parties change.
  */
-const useLatestParty = () => {
+export const useLatestParty = () => {
   const { getPartyHistory } = useAppClient();
   const { subscribe } = useSignals();
   const [party, setParty] = React.useState<Party | null>();
@@ -59,16 +59,12 @@ const formatDate = (iso?: string | null) => {
 };
 
 /**
- * The home screen's "Your latest party": a dark glass card under the two choices, with the party (a link to its page)
- * and links to the profile. Nothing until it has loaded, and nothing for someone with no parties yet.
+ * The home screen's "Your latest party": a dark glass card with the party, a link to its page, and with `links`, a
+ * rule and "All my parties · My profile" under it (in the page's flow on phones and tablets; the desktop corner card
+ * goes without, the footer has My Profile). The page places it (StartPage) and only shows it once there is one
+ * (useLatestParty).
  */
-export const LatestParty = () => {
-  const party = useLatestParty();
-
-  if (!party) {
-    return null;
-  }
-
+export const LatestParty = ({ party, links = false, className }: { party: Party; links?: boolean; className?: string }) => {
   const { code, name, isHost, isClosed, createdAt, rolledAt } = party;
   const rolled = formatDate(rolledAt);
   const started = formatDate(createdAt);
@@ -77,8 +73,8 @@ export const LatestParty = () => {
     : (started ? `Open since ${started}` : "Open");
 
   return (
-    <section className="welcome-latest" aria-labelledby="welcome-latest-title">
-      <h2 id="welcome-latest-title" className="welcome-latest-title">Your latest party</h2>
+    <section className={`welcome-latest ${className ?? ""}`} aria-label="Your latest party">
+      <h2 className="welcome-latest-title" aria-hidden="true">Your latest party</h2>
       <Link to={`/p/${code}/`} className="welcome-latest-party">
         <span className={`welcome-latest-icon ${isHost ? "is-host" : "is-guest"}`} aria-hidden="true">
           {isHost ? <Star size={18} /> : <Gift size={18} />}
@@ -91,11 +87,13 @@ export const LatestParty = () => {
         </span>
         <ChevronRight size={20} className="welcome-latest-chevron" aria-hidden="true" />
       </Link>
-      <div className="welcome-latest-foot">
-        <Link to="/profile/history/">All my parties</Link>
-        <span aria-hidden="true">&middot;</span>
-        <Link to="/profile/">My profile</Link>
-      </div>
+      {links && (
+        <div className="welcome-latest-foot">
+          <Link to="/profile/history/">All my parties</Link>
+          <span aria-hidden="true">&middot;</span>
+          <Link to="/profile/">My profile</Link>
+        </div>
+      )}
     </section>
   );
 };

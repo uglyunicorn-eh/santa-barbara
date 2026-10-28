@@ -25,8 +25,13 @@
       padding-bottom: 300px;
       font-size: 1.5em;
 
+      /* Below desktop a strip of the stars and ribbon between the choices (and the card) and the footer, not a
+         screenful, so the page fits without scrolling. */
+      @media (max-width: 1023px) {
+        padding-bottom: 80px;
+      }
+
       @media (max-width: 768px) {
-        padding-bottom: 200px;
         font-size: 1.2em;
       }
 
@@ -80,10 +85,11 @@
     }
   }
 
-  /* "Your latest party", under the two choices: a dark glass card like the choices on phones. */
+  /* "Your latest party": a dark glass card like the choices on phones. From desktop up in the header's empty
+     top-left corner, opposite the title and the Grinch (is-corner); on a tablet under the choices (is-below); on
+     phones under the heading, with its links (is-inline). */
   .welcome-latest {
     max-width: 30rem;
-    margin: 2.5rem auto 0;
     padding: 0.75rem 0.75rem 0.6rem;
     border: 1px solid rgb(255 255 255 / 0.18);
     border-radius: 1rem;
@@ -92,10 +98,22 @@
     box-shadow: 0 4px 20px rgb(0 0 0 / 0.35);
     font-size: 1.125rem;
 
-    /* On phones, as wide as the two choices above it (buttons there), up to their 34rem. */
+    &.is-corner {
+      max-width: 24rem;
+      margin: 0;
+    }
+
+    &.is-inline {
+      margin: 0 auto 2rem;
+    }
+
+    &.is-below {
+      margin: 2.5rem auto 0;
+    }
+
+    /* On phones, as wide as the two choices below it (buttons there), up to their 34rem. */
     @media (max-width: 768px) {
       max-width: 34rem;
-      margin-top: 2rem;
       font-size: 1rem;
     }
   }
