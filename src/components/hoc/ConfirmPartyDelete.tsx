@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { DialogBox } from "@/components/DialogBox";
 import { DialogCharacter } from "@/components/DialogCharacter";
-import { Submit } from "@/components/forms";
+import { Submit } from "@/components/forms/Submit";
 import { usePartyContext } from "@/components/hoc/PartyContext";
 import { useAppClient, useSignals } from "@/components/hooks";
 

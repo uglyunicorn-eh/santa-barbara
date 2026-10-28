@@ -1,5 +1,4 @@
 import { Dialog } from '@base-ui/react/dialog';
-import { motion } from 'framer-motion';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X } from 'react-feather';
@@ -19,12 +18,8 @@ type Props = {
 
 export const GrinchBox = ({ closeTo, inDialog = false, children }: Props) => (
   <Container textAlign="centered" className="grinch-box">
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      // In step with the backdrop and the page stepping back behind a dialog (src/styles/garage.css).
-      transition={{ duration: 0.25, ease: "easeOut" }}
-    >
+    {/* Fades and grows in, in step with the backdrop and the page stepping back behind a dialog (src/styles/garage.css). */}
+    <div className="animate-in fade-in zoom-in-95 duration-250 ease-out motion-reduce:animate-none">
       <Card>
         {closeTo && <CloseX to={closeTo} onEscape={!inDialog} />}
         <Card.Content>
@@ -35,7 +30,7 @@ export const GrinchBox = ({ closeTo, inDialog = false, children }: Props) => (
           </Content>
         </Card.Content>
       </Card>
-    </motion.div>
+    </div>
   </Container>
 );
 

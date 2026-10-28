@@ -12,6 +12,12 @@
   /* The door is the page while it's shut: content taller than the window scrolls inside it. */
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Up on sign-in, down on sign-out (GarageDoor sets `top`; DOOR_MS there is this duration). */
+  transition: top 750ms ease-in-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 /* The page steps back behind the sign-in dialog (useSteppedBack in src/components/GrinchBox.tsx): on desktop it
@@ -24,7 +30,7 @@
 
   html[data-behind] .garage-door {
     clip-path: inset(0 0 round 0);
-    transition: transform 250ms ease-out, clip-path 250ms ease-out;
+    transition: top 750ms ease-in-out, transform 250ms ease-out, clip-path 250ms ease-out;
 
     @media (prefers-reduced-motion: reduce) {
       transition: none;

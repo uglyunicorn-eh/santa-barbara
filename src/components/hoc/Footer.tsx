@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 import { COMPACT_KEYS, moreTriggerClass } from "@/components/hoc/footerMenu";
 import { useCurrentUser, useUnrevealed } from "@/components/hooks";
 
-// The phone footer's ☰ menu brings Base UI's menu and its positioning: loaded on demand, with a look-alike button in
-// its place until then.
-const MoreMenu = React.lazy(() => import("@/components/hoc/FooterMoreMenu").then(m => ({ default: m.MoreMenu })));
+// The phone footer's ☰ menu brings Base UI's menu and its positioning: a look-alike button stands in until someone
+// reaches for it (hover, focus or a touch starts the download), and the click opens the real menu.
+const loadMoreMenu = () => import("@/components/hoc/FooterMoreMenu");
+const MoreMenu = React.lazy(() => loadMoreMenu().then(m => ({ default: m.MoreMenu })));
 
 type Props = {
   children?: React.ReactNode;
@@ -85,9 +86,7 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
       <div className="footer-menu tablet:hidden">
         <FooterLinks items={inline} />
         <span> | </span>
-        <React.Suspense fallback={<MoreMenuPlaceholder />}>
-          <MoreMenu items={more} dot={toReveal > 0 && more.some(({ key }) => key === "profile")} />
-        </React.Suspense>
+        <DeferredMoreMenu items={more} dot={toReveal > 0 && more.some(({ key }) => key === "profile")} />
       </div>
       {aside}
       <div className="footer-copy text-xs">
@@ -122,8 +121,35 @@ const FooterLinks = ({ items }: { items: MenuItem[] }) => (
 );
 
 /** The ☰ button as it looks, for the moment before its menu has loaded. */
-const MoreMenuPlaceholder = () => (
-  <button type="button" className={`${moreTriggerClass} relative`} aria-label="More links" title="More links" disabled>
-    <MenuIcon size={18} aria-hidden="true" />
-  </button>
-);
+/** The ☰ button before the menu's code is loaded: it looks the same, and its click opens the real menu. */
+const DeferredMoreMenu = ({ items, dot }: { items: MenuItem[]; dot: boolean }) => {
+  const [wanted, setWanted] = React.useState(false);
+  const prefetch = React.useCallback(() => void loadMoreMenu(), []);
+
+  const button = (
+    <button
+      type="button"
+      className={`${moreTriggerClass} relative`}
+      aria-label={dot ? "More links, with parties to reveal" : "More links"}
+      title="More links"
+      aria-haspopup="menu"
+      disabled={wanted}
+      onPointerEnter={prefetch}
+      onPointerDown={prefetch}
+      onFocus={prefetch}
+      onClick={() => setWanted(true)}
+    >
+      <MenuIcon size={18} aria-hidden="true" />
+      {dot && <span aria-hidden="true" className="absolute -top-0.5 -right-1 size-2 rounded-full bg-red-500" />}
+    </button>
+  );
+
+  if (!wanted) {
+    return button;
+  }
+  return (
+    <React.Suspense fallback={button}>
+      <MoreMenu items={items} dot={dot} defaultOpen />
+    </React.Suspense>
+  );
+};

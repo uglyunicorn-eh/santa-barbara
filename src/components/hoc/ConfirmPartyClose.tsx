@@ -3,7 +3,7 @@ import { Content } from "@/components/layout";
 import { useParams } from "react-router-dom";
 
 import { DialogBox } from "@/components/DialogBox";
-import { Submit } from "@/components/forms";
+import { Submit } from "@/components/forms/Submit";
 import { useAppClient, useSignals } from "@/components/hooks";
 import { usePartyContext } from "@/components/hoc/PartyContext";
 

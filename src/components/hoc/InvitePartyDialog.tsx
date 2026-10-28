@@ -3,7 +3,9 @@ import * as v from "valibot";
 import { useNavigate } from "react-router-dom";
 
 import { DialogBox } from "@/components/DialogBox";
-import { EmailTags, FormField, Submit, looksLikeEmail } from "@/components/forms";
+import { EmailTags, looksLikeEmail } from "@/components/forms/EmailTags";
+import { FormField } from "@/components/forms/FormField";
+import { Submit } from "@/components/forms/Submit";
 import { usePartyContext } from "@/components/hoc/PartyContext";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
 import { useAppClient } from "@/components/hooks";

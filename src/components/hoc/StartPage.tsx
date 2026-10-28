@@ -1,4 +1,3 @@
-import { AnimatePresence } from "framer-motion";
 import { Columns, Container, Content, Hero } from "@/components/layout";
 import { Link, Route, Routes } from "react-router-dom";
 
@@ -75,14 +74,12 @@ export const StartPage = () => {
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
           </Columns>
 
-          <AnimatePresence>
-            <Routes>
-              <Route path="/new/" Component={NewParty} />
-              <Route path="/join/" Component={JoinParty} />
-              <Route path="/profile/*" Component={MyProfile} />
-              <Route path="/rolled/:code" Component={RolledDialog} />
-            </Routes>
-          </AnimatePresence>
+          <Routes>
+            <Route path="/new/" Component={NewParty} />
+            <Route path="/join/" Component={JoinParty} />
+            <Route path="/profile/*" Component={MyProfile} />
+            <Route path="/rolled/:code" Component={RolledDialog} />
+          </Routes>
 
         </Container>
       </Hero.Body>
