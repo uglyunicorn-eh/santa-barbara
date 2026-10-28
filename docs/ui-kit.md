@@ -12,7 +12,7 @@ the `uiKit` integration in `astro.config.mjs`); builds leave it out.
 
 The components: buttons (`src/components/ui/button.tsx`), inputs (`src/components/ui/input.tsx`), form fields
 (`src/components/forms/`), dialogs (`src/components/DialogBox.tsx`, on Base UI's Dialog), tabs (`src/components/Tab.tsx`),
-menus (`src/components/ui/menu.ts`) and the page layout pieces (`src/components/layout.tsx`, styled in
+menus (`src/components/ui/menu.ts`), the Party'o'meter (`src/components/Odometer.tsx`) and the page layout pieces (`src/components/layout.tsx`, styled in
 `src/styles/layout.css`). The kit shows the real buttons, inputs and toaster; its dialog and tab samples are drawn to match.
 
 ## Surfaces
@@ -131,6 +131,19 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
   surface: dark on night, light on the party page.
+
+## Party'o'meter
+
+The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
+`src/styles/odometer.css`): a row of raffle tickets, at least six, on the closing section's dark background. Cream
+(`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and
+that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
+through every digit in between, sharing about 0.9 s. With reduced motion the digits just change. Nothing shows until
+the first count arrives. On phones it's smaller, so nine tickets still fit at 320px.
+
+The digits aren't a font: they're SVG strokes drawn in `Odometer.tsx` (`GLYPHS`), condensed and geometric in the
+spirit of DIN (straight stems, round bowls, one even stroke) but our own shapes, so there's no font file to host. They
+take the text colour, are 0.8em tall, and sit a hair (0.04em) above the ticket's middle, which reads as centred.
 
 ## Emails
 

@@ -4,6 +4,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { Container, Hero } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Landing } from "@/components/Landing";
+import { PartyOMeter } from "@/components/PartyOMeter";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Footer } from "@/components/hoc/Footer";
 import { TINTS, usePageTint } from "@/components/hooks";
@@ -37,6 +38,7 @@ export const LoginBox = () => {
         </>
       }
       enterAgain={<EnterActions label="Let's get this party started!" />}
+      meter={<PartyOMeter />}
       footer={<DoorFooter />}
     />
   );

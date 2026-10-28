@@ -26,7 +26,7 @@ const email = (n, domain = "example.com") => `${fill("santa.helper.", n - domain
 
 const iso = (daysAgo) => new Date(Date.UTC(2026, 9, 25) - daysAgo * 86_400_000).toISOString();
 
-function makeSet({ userName, userEmail, partyName, participantName, participantCount, historyCount }) {
+function makeSet({ userName, userEmail, partyName, participantName, participantCount, historyCount, rolled }) {
   const participants = Array.from({ length: participantCount }, (_, i) => participantName(i));
   const base = {
     name: partyName,
@@ -71,6 +71,7 @@ function makeSet({ userName, userEmail, partyName, participantName, participantC
     user: { id: "User:shots-user", name: userName, email: userEmail },
     parties,
     history,
+    rolled,
   };
 }
 
@@ -82,6 +83,7 @@ export const SETS = {
     participantName: (i) => ["Alice", "Bob", "Carol", "Dave", "Erin", "Frank"][i],
     participantCount: 6,
     historyCount: 3,
+    rolled: 29,
   }),
   worst: makeSet({
     // The longest person name (32 characters) with ordinary words; every participant has one too.
@@ -92,6 +94,8 @@ export const SETS = {
     participantName: (i) => `${fill("Wolfeschlegelsteinhausenbergerdorff ", PERSON_NAME_MAX - 4).trim()} ${String(i + 1).padStart(3, "0")}`.slice(0, PERSON_NAME_MAX),
     participantCount: 100,
     historyCount: 25,
+    // More digits than the odometer's six.
+    rolled: 123456789,
   }),
 };
 

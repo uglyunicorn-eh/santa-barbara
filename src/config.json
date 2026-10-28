@@ -1,5 +1,3 @@
 {
-  "issuer": "api.gnomik.me",
-  "apiEndpoint": "https://api.gnomik.me",
-  "publicKey": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDqUTbk1sIkOVE8jWyj+g5C9d07a3\nApQMAFXJJPjNe42jDS1ScBOdOK6Nu0ldqMTWaGfrA6grI69e9ot65Pf7yg==\n-----END PUBLIC KEY-----"
+  "apiEndpoint": "https://api.gnomik.me"
 }

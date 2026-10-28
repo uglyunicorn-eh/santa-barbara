@@ -33,8 +33,11 @@ This repository is the website. The API lives in [santa-monica](https://github.c
   follow (colours, which button where, focus, forms) are in [`docs/ui-kit.md`](docs/ui-kit.md).
 - **The API client** (`src/api/client.ts`) talks to the API's JSON routes. Every write is safe to repeat: each action
   sends an `Idempotency-Key`, and failed requests are retried once.
-- **Sign-in tokens** are JWTs signed by the API (ES256) and checked in the browser against the public key in
-  `src/config.json`.
+- **Sessions.** Tokens are encrypted by the API, so the app keeps them as opaque strings: signed in means it has
+  one, and a 401 signs out. Each session is bound to a key pair the browser can't export (DPoP, `src/api/dpop.ts`),
+  made at sign-in and kept in IndexedDB; every request carries a proof signed with it.
+- **Live updates** come over WebSockets (`useLiveSocket`): a party's and the account's open with a 5-minute ticket,
+  kept for the tab in `sessionStorage`; the Party'o'meter's is public.
 - **Hosting:** Cloudflare Pages, with a Content-Security-Policy in `public/_headers` that the build completes.
 
 ```text
@@ -77,12 +80,14 @@ reports anything that overflows. `npm run shots:compare -- <before> <after>` dif
 
 ### Against an API preview
 
-Point the app at a preview of the API and give it that preview's public key (previews sign tokens with their own).
-Emailed links then open `http://localhost:4321`:
+Point the app at a preview of the API, or at one running locally (`npx wrangler dev --env preview` in santa-monica,
+on `http://localhost:8787`). Emailed links then open `http://localhost:4321`:
 
 ```bash
-PUBLIC_API_ENDPOINT=https://<preview>.workers.dev PUBLIC_JWT_PUBLIC_KEY="$(cat preview-public-key.pem)" npm run dev
+PUBLIC_API_ENDPOINT=https://<preview>.workers.dev npm run dev
 ```
+
+Tokens are encrypted, so the app needs no key of the API's: it keeps them as opaque strings.
 
 ## License
 

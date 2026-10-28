@@ -16,6 +16,9 @@ type Unrevealed = {
   revealed: (code: string) => void;
 };
 
+/** The account's own live updates, opened with the account's ticket. */
+const ME_LIVE = { path: "/v1/me/live", ticket: "me" } as const;
+
 const UnrevealedContext = React.createContext<Unrevealed>({ parties: null, revealed: () => undefined });
 
 export const UnrevealedProvider = ({ children }: { children: React.ReactNode }) => {
@@ -45,7 +48,7 @@ export const UnrevealedProvider = ({ children }: { children: React.ReactNode }) 
     [],
   );
 
-  useLiveSocket("/v1/me/live", signedIn, {
+  useLiveSocket(ME_LIVE, signedIn, {
     onEvent: event => {
       if (event.type === "party.rolled" && typeof event.code === "string" && typeof event.name === "string") {
         const party = { code: event.code, name: event.name, closedAt: new Date().toISOString() };

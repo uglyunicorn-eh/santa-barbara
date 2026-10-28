@@ -14,7 +14,8 @@ export const useLiveParty = (code: string | undefined, enabled: boolean) => {
   const { signal } = useSignals();
   const refresh = () => signal("party:updated");
 
-  useLiveSocket(code ? `/v1/parties/live?code=${encodeURIComponent(code)}` : null, enabled, {
+  // The party's code travels inside its ticket, never in the socket's URL.
+  useLiveSocket(code ? { path: "/v1/parties/live", ticket: { code } } : null, enabled, {
     onEvent: event => event.type === "party.changed" && refresh(),
     onReconnect: refresh,
     endCodes: [LEFT, GONE],

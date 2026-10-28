@@ -35,9 +35,10 @@ faded copy. It exits with 1 when anything changed.
 
 - **No backend.** The site is built into `.shots/build` with `PUBLIC_API_ENDPOINT` pointing at an address that
   doesn't exist; Playwright answers every request to it from `fixtures.mjs` (`answer()` in `shots.mjs`).
-- **Signed in without signing in.** Signed-in screens get a `profile` and a `userToken` in `localStorage`; nothing on
-  screen checks the token. The sign-in link page (`/enter/:token`) does check its token's signature, so the build
-  gets a throwaway key pair (`PUBLIC_JWT_PUBLIC_KEY`) and the script signs those links itself.
+- **Signed in without signing in.** Signed-in screens get a `profile` and a `userToken` in `localStorage`, and a
+  session key in IndexedDB where the app keeps it (`src/api/dpop.ts`), so their requests carry proofs instead of
+  signing out for a lost key. The fake API checks neither. Sign-in links are opaque to the app, so their screens just
+  set what `POST /auth/session` answers (`api: { fail, status, code }`).
 - **Served like Cloudflare Pages:** a file, a folder's `index.html`, or else the app's `index.html`.
 - **Browser:** Playwright's own Chromium if it's installed (`npx playwright install chromium`), otherwise the
   installed Google Chrome.

@@ -1,0 +1,136 @@
+/* The Party'o'meter (src/components/Odometer.tsx): a row of raffle tickets, cream with red digits and notched sides,
+   leaning a little this way and that. Each is split across the middle; to change, its top half folds down onto the
+   next digit, like a split-flap card. The digits are SVG strokes (Odometer.tsx), in the text colour, sized by the
+   font size. */
+
+.party-o-meter {
+  margin: 36px auto 0;
+
+  .landing-eyebrow {
+    margin-bottom: 12px;
+  }
+}
+
+.party-o-meter-caption {
+  margin-top: 12px;
+  font-size: 1.05rem !important;
+  opacity: 0.75;
+}
+
+.odometer {
+  --cell-h: 1.2em;
+  --hinge: 0.5px;
+  --ticket: #fff6d6;
+  --notch: 0.055em;
+  /* The digits a hair above the ticket's middle, which reads as centred. */
+  --glyph-lift: 0.04em;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.14em;
+  font-size: 2.25rem;
+  line-height: var(--cell-h);
+  color: #c62a30;
+
+  /* Phones: nine digits (a count past 99,999,999) still fit at 320px. */
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+  }
+}
+
+.ticket-glyph {
+  display: block;
+  height: 0.8em;
+  width: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 8;
+  stroke-linejoin: miter;
+}
+
+.flap-digit {
+  position: relative;
+  display: block;
+  width: 0.7em;
+  height: calc(var(--cell-h) + 0.1em);
+  line-height: calc(var(--cell-h) + 0.1em);
+
+  /* Tickets lean a little this way and that. */
+  &:nth-child(odd) { rotate: -2deg; }
+  &:nth-child(even) { rotate: 1.5deg; }
+}
+
+.flap-motion {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  perspective: 3em;
+}
+
+.flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(50% - var(--hinge));
+  overflow: hidden;
+  background: var(--ticket);
+  backface-visibility: hidden;
+
+  /* The whole digit, centred on the whole ticket; each half shows its part. */
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--cell-h) + 0.1em);
+    transform: translateY(calc(-1 * var(--glyph-lift)));
+  }
+}
+
+/* A ticket's notches: half-circles cut out of both sides at the hinge. */
+.flap-top {
+  top: 0;
+  border-radius: 0.08em 0.08em 0 0;
+  transform-origin: 50% calc(100% + var(--hinge));
+  mask:
+    radial-gradient(circle at 0 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+}
+
+.flap-bottom {
+  bottom: 0;
+  border-radius: 0 0 0.08em 0.08em;
+  transform-origin: 50% calc(-1 * var(--hinge));
+  mask:
+    radial-gradient(circle at 0 0, transparent var(--notch), black calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 0, transparent var(--notch), black calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+
+  /* The lower half of the same digit: the full-height digit, lifted to the card's top. */
+  > span {
+    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge) - var(--glyph-lift)));
+  }
+}
+
+.flap-top.is-flipping {
+  animation: flap-fall var(--flip-ms) ease-in forwards;
+}
+
+.flap-bottom.is-flipping {
+  transform: rotateX(90deg);
+  animation: flap-land var(--flip-ms) ease-out forwards;
+}
+
+@keyframes flap-fall {
+  0% { transform: rotateX(0); filter: brightness(1); }
+  50%, 100% { transform: rotateX(-90deg); filter: brightness(0.75); }
+}
+
+@keyframes flap-land {
+  0%, 50% { transform: rotateX(90deg); filter: brightness(0.75); }
+  100% { transform: rotateX(0); filter: brightness(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flap-motion {
+    display: none;
+  }
+}

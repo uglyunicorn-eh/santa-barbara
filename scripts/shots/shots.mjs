@@ -6,23 +6,21 @@
 //   npm run shots -- --sets worst --widths 320
 //   npm run shots -- --label before --no-build
 //
-// The site is built into .shots/build with a throwaway signing key (so sign-in links can be signed here) and an API
-// address the browser never reaches: every request to it is answered by `answer()` below.
+// The site is built into .shots/build with an API address the browser never reaches: every request to it is answered
+// by `answer()` below.
 
 import { execFileSync, spawnSync } from "node:child_process";
-import { createReadStream, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { createReadStream, existsSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, resolve } from "node:path";
 import { parseArgs } from "node:util";
 
-import * as jose from "jose";
 import { chromium } from "playwright";
 
 import { CODES, SETS } from "./fixtures.mjs";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const API = "http://api.shots.test";
-const ISSUER = "api.gnomik.me";
 
 const { values: args } = parseArgs({
   options: {
@@ -42,16 +40,17 @@ const sets = args.sets.split(",");
 const only = args.only?.split(",");
 
 // ---------------------------------------------------------------------------------------------------------------
-// Screens. `signedIn` puts a profile in localStorage; `path` may be a function of the signing helpers; `act` runs
-// after the page settles (to open a state that needs a click); `api` overrides answers for this screen.
+// Screens. `signedIn` puts a session (profile, token and key) in the browser; `act` runs after the page settles (to
+// open a state that needs a click); `api` overrides answers for this screen (`fail`: this path answers `code`, with
+// `status`).
 
 const SCREENS = [
   // Signed out
   { name: "login", path: "/" },
   { name: "login-email-form", path: "/enter/" },
   { name: "login-closed-again", path: "/", act: openAndCloseSignIn },
-  { name: "enter-link-expired", path: async ({ token }) => `/enter/link#${await token({ email: "$email" }, -3600)}` },
-  { name: "enter-link-invalid", path: "/enter/not-a-real-link" },
+  { name: "enter-link-expired", path: "/enter/link#an-expired-link", api: { fail: "/auth/session", status: 400, code: "link_expired" } },
+  { name: "enter-link-invalid", path: "/enter/not-a-real-link", api: { fail: "/auth/session", status: 400, code: "invalid_link" } },
   { name: "party-signed-out", path: `/p/${CODES.guestOpen}/`, signedIn: false, api: { partyFor: CODES.notJoined } },
   { name: "link-delete", path: "/profile/delete#some-token" },
   { name: "link-delete-used", path: "/profile/delete#some-token", api: { fail: "/me/deletion/check" } },
@@ -168,16 +167,16 @@ function answer(set, screen, method, url, body) {
   const failure = (status, code, message, field) => ({ status, body: { error: { code, message, ...(field ? { field } : {}) } } });
 
   if (screen.api?.fail === path) {
-    return failure(409, "link_used", "This link has already been used. Please ask for a new one.");
+    return failure(screen.api.status ?? 409, screen.api.code ?? "link_used", "This link has already been used. Please ask for a new one.");
   }
-  const session = { user: set.user, userToken: "shots-session-token" };
+  const session = { user: set.user, userToken: "shots-session-token", expiresAt: new Date(Date.now() + 30 * 86_400_000).toISOString(), party: null };
 
   switch (`${method} ${path}`) {
     case "GET /me":
     case "PATCH /me":
       return ok(set.user);
-    case "GET /parties": {
-      const code = screen.api?.partyFor ?? url.searchParams.get("code");
+    case "POST /parties/lookup": {
+      const code = screen.api?.partyFor ?? body?.code;
       if (code === CODES.slow) {
         return null; // never answers: the loading spinner stays up
       }
@@ -202,6 +201,7 @@ function answer(set, screen, method, url, body) {
     case "POST /parties/invite":
       return ok({ invited: body?.emails ?? [], alreadyInvited: [], alreadyJoined: [], invitesLeft: 40 });
     case "POST /auth/magic-link":
+    case "POST /auth/magic-link/again":
     case "POST /me/deletion":
     case "POST /me/email-change":
     case "GET /me/parties/unrevealed":
@@ -218,6 +218,8 @@ function answer(set, screen, method, url, body) {
     case "POST /auth/session":
     case "POST /me/email-change/confirm":
       return ok(session);
+    case "GET /stats":
+      return ok({ rolled: set.rolled });
     default:
       return failure(404, "not_found", `The fake API has no answer for ${method} ${path}.`);
   }
@@ -277,27 +279,43 @@ function findOverflow() {
 
 // ---------------------------------------------------------------------------------------------------------------
 
-async function main() {
-  const { publicKey, privateKey } = await jose.generateKeyPair("ES256", { extractable: true });
-  const publicPem = await jose.exportSPKI(publicKey);
+/**
+ * Runs in the page: keeps a session key where the app looks for it (src/api/dpop.ts), so a signed-in screen's
+ * requests carry proofs instead of signing out for a lost key. The fake API doesn't check them.
+ */
+async function keepSessionKey() {
+  const keys = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, false, ["sign", "verify"]);
+  const db = await new Promise((ok, fail) => {
+    const request = indexedDB.open("gnomik", 1);
+    request.onupgradeneeded = () => request.result.createObjectStore("keys");
+    request.onsuccess = () => ok(request.result);
+    request.onerror = () => fail(request.error);
+  });
+  await new Promise((ok, fail) => {
+    const tx = db.transaction("keys", "readwrite");
+    tx.objectStore("keys").put(keys, "session");
+    tx.oncomplete = ok;
+    tx.onerror = () => fail(tx.error);
+  });
+  db.close();
+}
 
+async function main() {
   if (!args["no-build"]) {
-    console.log("Building the site with a test signing key…");
+    console.log("Building the site…");
     rmSync(buildDir, { recursive: true, force: true });
     const built = spawnSync("npx", ["astro", "build", "--outDir", buildDir], {
       cwd: ROOT,
       encoding: "utf8",
-      env: { ...process.env, PUBLIC_API_ENDPOINT: API, PUBLIC_JWT_PUBLIC_KEY: publicPem },
+      env: { ...process.env, PUBLIC_API_ENDPOINT: API },
     });
     if (built.status !== 0) {
       console.error(built.stdout, built.stderr);
       throw new Error("astro build failed");
     }
-    writeFileSync(join(buildDir, ".key.json"), JSON.stringify(await jose.exportJWK(privateKey)));
-  } else if (!existsSync(join(buildDir, ".key.json"))) {
+  } else if (!existsSync(join(buildDir, "index.html"))) {
     throw new Error("--no-build needs an earlier build in .shots/build");
   }
-  const signingKey = await jose.importJWK(JSON.parse(readFileSync(join(buildDir, ".key.json"), "utf8")), "ES256");
 
   const server = await serve(buildDir);
   const site = `http://127.0.0.1:${server.address().port}`;
@@ -309,17 +327,10 @@ async function main() {
     for (const setName of sets) {
       const set = SETS[setName];
       if (!set) throw new Error(`Unknown set "${setName}"`);
-      // A sign-in link token as the API would sign it; "$email" stands for this set's address.
-      const token = (payload, expiresIn = 3600) => {
-        const now = Math.floor(Date.now() / 1000);
-        const claims = Object.fromEntries(Object.entries(payload).map(([k, v]) => [k, v === "$email" ? set.user.email : v]));
-        return new jose.SignJWT(claims).setProtectedHeader({ alg: "ES256", typ: "JWT", t: "EnterRequest" }).setIssuer(ISSUER)
-          .setIssuedAt(now - 7200).setExpirationTime(now + expiresIn).sign(signingKey);
-      };
 
       for (const screen of SCREENS) {
         if (only && !only.some(o => screen.name.includes(o))) continue;
-        const path = typeof screen.path === "function" ? await screen.path({ token }) : screen.path;
+        const { path } = screen;
 
         for (const width of widths) {
           const context = await browser.newContext({ viewport: { width, height: width < 768 ? 740 : 900 }, deviceScaleFactor: 1 });
@@ -344,9 +355,14 @@ async function main() {
           });
 
           // Live-updates sockets connect and stay quiet, unless the screen plays a server (`live`).
-          await context.routeWebSocket(/\/v1\/(parties|me)\/live/, ws => screen.live?.(ws));
+          await context.routeWebSocket(/\/v1\/(parties|me|stats)\/live/, ws => screen.live?.(ws));
 
           const page = await context.newPage();
+          if (screen.signedIn) {
+            // A page of the site first, for its origin's IndexedDB.
+            await page.goto(`${site}/404.html`, { waitUntil: "domcontentloaded" });
+            await page.evaluate(keepSessionKey);
+          }
           await page.goto(site + path, { waitUntil: screen.settle ? "domcontentloaded" : "networkidle" });
           await page.waitForTimeout(screen.settle ?? 1300); // garage door and dialog animations
           if (screen.act) await screen.act(page);
