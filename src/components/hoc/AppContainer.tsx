@@ -4,7 +4,7 @@ import { Route, RouterProvider, Routes, createBrowserRouter } from "react-router
 import { NotificationsContainer } from "@/components/hoc/NotificationsContainer";
 import { WelcomeBox } from "@/components/hoc/WelcomeBox";
 import { UnrevealedProvider } from "@/components/hooks/useUnrevealed";
-import { HOME_TITLE, pageTitle } from "@/site";
+import { pageTitle } from "@/site";
 
 // Loaded when their page first shows, so the front door (most visitors' first page) doesn't download them.
 const PartyContainer = React.lazy(() => import("@/components/hoc/PartyContainer").then(m => ({ default: m.PartyContainer })));
@@ -29,7 +29,7 @@ export const AppContainer = () => {
 function Root() {
   return (
     <UnrevealedProvider>
-      <title>{pageTitle(HOME_TITLE)}</title>
+      <title>{pageTitle()}</title>
       <NotificationsContainer />
 
       <React.Suspense fallback={null}>
