@@ -135,13 +135,18 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
-`src/styles/odometer.css`): flat monospace digits (the system's: SF Mono, Cascadia Mono, Menlo…) in the text colour
-around it, so white on dark and black on light, one wheel per digit and at least six. One 3px frame goes round
-the counter (2px on phones), with a thin 1px line between digits, in the same colour. No drums or shadows: only each digit's
-window fades at its top and bottom edges. A changed digit slides forward to its new value through the digits in
-between (1.4 s, easing out); with reduced motion it just shows it. Nothing shows until the first count arrives. On
-phones it's smaller, so nine digits still fit at 320px. The kit shows each state on dark and light, and a control to
-change the count.
+`src/styles/odometer.css`), at least six digits, in Cuprum, on the closing section's dark background. It has three
+looks, still being chosen (`DEFAULT_LOOK` is the front door's):
+
+- **Neon sign:** pink glowing digits in a glowing frame, like the neon signs on the front door's photo. Digits slide
+  to their new value and flicker as they go.
+- **Brass tally counter:** cream wheels in a brass frame, the last one red. Digits roll.
+- **Raffle tickets:** cream tickets with notched sides and red digits, leaning a little. Each flips like a split-flap
+  card.
+
+A jump goes through every digit in between (about a second). With reduced motion the digits just change. Nothing
+shows until the first count arrives. On phones it's smaller, so nine digits still fit at 320px. The kit shows the
+looks side by side on one count, with a control to change it, and each state in the front door's look.
 
 ## Emails
 

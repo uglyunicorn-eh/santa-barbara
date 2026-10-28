@@ -1,77 +1,205 @@
-/* The Party'o'meter (src/components/Odometer.tsx): an odometer of digit wheels, each a strip of digits sliding up
-   behind a window one digit tall. Flat: monospace digits and their frames in the colour of the text around it, so white
-   on a dark section and black on a light one; only each window's top and bottom edges fade, so the digits slide in and
-   out. */
+/* The Party'o'meter (src/components/Odometer.tsx): a counter in one of a few looks, each in the site's own font. */
 
 .party-o-meter {
   margin: 36px auto 0;
 
   .landing-eyebrow {
-    margin-bottom: 4px;
+    margin-bottom: 12px;
   }
 }
 
 .party-o-meter-caption {
-  margin-top: 4px;
+  margin-top: 12px;
   font-size: 1.05rem !important;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .odometer {
-  --digit: 1.2em;
+  --cell-h: 1.2em;
 
   display: inline-flex;
-  /* One frame round the whole counter, and a thin line between digits, both in the text colour. */
-  border: 3px solid currentColor;
-  border-radius: 10px;
-  font-family: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+  align-items: center;
   font-size: 3rem;
-  font-weight: 500;
-  line-height: var(--digit);
+  font-weight: 700;
+  line-height: var(--cell-h);
   font-variant-numeric: tabular-nums;
-  color: inherit;
 
-  /* Phones: nine wheels (a count past 99,999,999) still fit at 320px. */
+  /* Phones: nine digits (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
-    font-size: 1.75rem;
-    border-width: 2px;
-    border-radius: 8px;
+    font-size: 2rem;
   }
 }
 
-.odometer-wheel {
-  padding: 0.05em 0.14em;
-
-  & + & {
-    border-left: 1px solid currentColor;
-  }
-}
+/* Sliding wheels (neon, brass): a strip of digits behind a window one digit tall. ------------------------------- */
 
 .odometer-window {
   display: block;
-  height: var(--digit);
-  width: 1ch;
+  height: var(--cell-h);
+  width: 0.62em;
   overflow: hidden;
   text-align: center;
-  mask-image: linear-gradient(transparent, black 14%, black 86%, transparent);
 }
 
 .odometer-strip {
   display: flex;
   flex-direction: column;
-  transform: translateY(calc(var(--at) * -1 * var(--digit)));
+  transform: translateY(calc(var(--at) * -1 * var(--cell-h)));
 
   &.is-rolling {
-    transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   > span {
-    height: var(--digit);
+    height: var(--cell-h);
   }
+}
+
+/* Neon: pink tubes on a dark wall, like the signs on the front door's photo, in a glowing frame. The glow is a
+   filter on the whole counter, so the windows don't clip it. A digit flickers as it slides. */
+.odometer.is-neon {
+  --neon: #ff4f7b;
+
+  gap: 0.02em;
+  padding: 0.08em 0.3em;
+  border: 0.05em solid var(--neon);
+  border-radius: 0.35em;
+  color: #ffe4ec;
+  font-weight: 600;
+  filter: drop-shadow(0 0 0.04em var(--neon)) drop-shadow(0 0 0.14em var(--neon)) drop-shadow(0 0 0.4em rgb(255 79 123 / 0.6));
+
+  .odometer-window {
+    mask-image: linear-gradient(transparent, black 18%, black 82%, transparent);
+  }
+
+  .odometer-strip.is-rolling {
+    animation: neon-flicker 1.2s steps(1, end);
+  }
+}
+
+@keyframes neon-flicker {
+  0%, 12%, 20%, 100% { opacity: 1; }
+  8%, 16% { opacity: 0.35; }
+}
+
+/* Brass: a tally counter, cream wheels in a polished brass frame; the last wheel red, like the tenths. */
+.odometer.is-brass {
+  gap: 0.07em;
+  padding: 0.12em;
+  border-radius: 0.22em;
+  background: linear-gradient(#f6dc8a, #c99700 48%, #9a7100 52%, #d8b04a);
+  box-shadow: inset 0 0.03em 0 rgb(255 255 255 / 0.6), inset 0 -0.03em 0 rgb(0 0 0 / 0.25), 0 0.12em 0.4em rgb(0 0 0 / 0.45);
+  color: #3a1c12;
+
+  .odometer-wheel {
+    padding: 0 0.1em;
+    border-radius: 0.08em;
+    /* A drum: lighter in the middle, shaded towards the top and bottom. */
+    background: linear-gradient(#b9ae86, #fff6d6 32%, #fff6d6 68%, #b9ae86);
+    box-shadow: inset 0 0 0 0.02em rgb(58 28 18 / 0.35);
+
+    &:last-child {
+      background: linear-gradient(#7a1a1f, #c62a30 32%, #c62a30 68%, #7a1a1f);
+      color: #fff6d6;
+    }
+  }
+}
+
+/* Flipping cards (ticket): each digit a card split across the middle; the top half folds down onto the next. ----- */
+
+.odometer.is-ticket {
+  gap: 0.14em;
+  --hinge: 0.5px;
+  --ticket: #fff6d6;
+  --notch: 0.055em;
+
+  color: #c62a30;
+}
+
+.flap-digit {
+  position: relative;
+  display: block;
+  width: 0.78em;
+  height: calc(var(--cell-h) + 0.1em);
+  line-height: calc(var(--cell-h) + 0.1em);
+
+  /* Tickets lean a little this way and that. */
+  &:nth-child(odd) { rotate: -2deg; }
+  &:nth-child(even) { rotate: 1.5deg; }
+}
+
+.flap-motion {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  perspective: 3em;
+}
+
+.flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(50% - var(--hinge));
+  overflow: hidden;
+  background: var(--ticket);
+  backface-visibility: hidden;
+
+  > span {
+    display: block;
+    height: calc(var(--cell-h) + 0.1em);
+    text-align: center;
+  }
+}
+
+/* A ticket's notches: half-circles cut out of both sides at the hinge. */
+.flap-top {
+  top: 0;
+  border-radius: 0.08em 0.08em 0 0;
+  transform-origin: 50% calc(100% + var(--hinge));
+  mask:
+    radial-gradient(circle at 0 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+}
+
+.flap-bottom {
+  bottom: 0;
+  border-radius: 0 0 0.08em 0.08em;
+  transform-origin: 50% calc(-1 * var(--hinge));
+  mask:
+    radial-gradient(circle at 0 0, transparent var(--notch), black calc(var(--notch) + 0.5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 0, transparent var(--notch), black calc(var(--notch) + 0.5px)) right / 51% 100% no-repeat;
+
+  /* The lower half of the same digit: the full-height digit, lifted to the card's top. */
+  > span {
+    transform: translateY(calc((var(--cell-h) + 0.1em) / -2 - var(--hinge)));
+  }
+}
+
+.flap-top.is-flipping {
+  animation: flap-fall var(--flip-ms) ease-in forwards;
+}
+
+.flap-bottom.is-flipping {
+  transform: rotateX(90deg);
+  animation: flap-land var(--flip-ms) ease-out forwards;
+}
+
+@keyframes flap-fall {
+  0% { transform: rotateX(0); filter: brightness(1); }
+  50%, 100% { transform: rotateX(-90deg); filter: brightness(0.75); }
+}
+
+@keyframes flap-land {
+  0%, 50% { transform: rotateX(90deg); filter: brightness(0.75); }
+  100% { transform: rotateX(0); filter: brightness(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .odometer-strip.is-rolling {
     transition: none;
+    animation: none;
+  }
+
+  .flap-motion {
+    display: none;
   }
 }

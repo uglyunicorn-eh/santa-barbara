@@ -6,33 +6,18 @@
 
 @source "./";
 
-/* The Party'o'meter samples: on the front door's closing section (landing.css), and on paper. The odometer takes the
-   text colour of each. */
-.kit-meter .party-o-meter {
-  margin-top: 0;
-}
-
-.kit-meter-dark {
+/* The Party'o'meter samples, on the front door's closing section (landing.css). */
+.kit-meter {
   background:
     radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),
     var(--landing-ember);
   color: white;
 
+  .party-o-meter {
+    margin-top: 0;
+  }
+
   .kit-meter-note {
     color: var(--color-zinc-400);
-  }
-}
-
-.kit-meter-light {
-  background: white;
-  color: var(--color-zinc-900);
-
-  .kit-meter-note {
-    color: var(--color-zinc-500);
-  }
-
-  /* The eyebrow's red, dark enough for white paper. */
-  .landing-eyebrow {
-    color: var(--color-red-700);
   }
 }
