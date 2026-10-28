@@ -27,13 +27,15 @@
       padding-bottom: clamp(80px, 100dvh - 640px, 300px);
       font-size: 1.5em;
 
-      /* Below desktop a strip of the stars and ribbon between the choices (and the card) and the footer, not a
-         screenful, so the page fits without scrolling. */
+      /* Below desktop a strip of the stars and ribbon between the choices (and the card) and the footer, 80px at
+         most, down to 8px on a shorter window so the page still fits it (the rest is about 740px tall on a tablet,
+         800px on a phone with its ticket). */
       @media (max-width: 1023px) {
-        padding-bottom: 80px;
+        padding-bottom: clamp(8px, 100dvh - 740px, 80px);
       }
 
       @media (max-width: 768px) {
+        padding-bottom: clamp(8px, 100dvh - 800px, 80px);
         font-size: 1.2em;
       }
 
@@ -87,17 +89,17 @@
     }
   }
 
-  /* "Your latest party": a dark glass card like the choices on phones. From desktop up in the header's empty
-     top-left corner, opposite the title and the Grinch (is-corner); on a tablet under the choices (is-below); on
-     phones under the heading, with its links (is-inline). */
+  /* "Your latest party" (LatestParty.tsx): ticket stubs like the Party'o'meter's raffle tickets. From desktop up in
+     the header's empty top-left corner, opposite the title and the Grinch (is-corner); on a tablet under the choices
+     (is-below); both a pile of the last three (is-pile). On phones one ticket under the heading, with its links
+     (is-inline). */
   .welcome-latest {
+    --ticket-red: #c62a30;
+    --stub: 3.25em;
+    --notch: 0.55em;
+
+    position: relative;
     max-width: 30rem;
-    padding: 0.75rem 0.75rem 0.6rem;
-    border: 1px solid rgb(255 255 255 / 0.18);
-    border-radius: 1rem;
-    background: rgb(17 18 23 / 0.6);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 4px 20px rgb(0 0 0 / 0.35);
     font-size: 1.125rem;
 
     &.is-corner {
@@ -110,7 +112,7 @@
     }
 
     &.is-below {
-      margin: 2.5rem auto 0;
+      margin: 1.5rem auto 0;
     }
 
     /* On phones, as wide as the two choices below it (buttons there), up to their 34rem. */
@@ -120,36 +122,167 @@
     }
   }
 
+  /* A ticket's tilt and shadow (on the wrapper: the paper's notches, a mask, would cut a shadow off). */
+  .welcome-ticket-wrap {
+    filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.45));
+    rotate: -1.5deg;
+    transition: rotate 0.25s ease, translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  /* A ticket under the mouse acts like the landing's step cards (landing.css), without their jiggle: it tilts as if
+     pressed where the pointer is (LatestParty.tsx sets --tilt-x and --tilt-y), so it only moves when the mouse does,
+     and comes up a little with a deeper shadow; heavy, following with a little lag and settling back slowly. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .welcome-ticket {
+      transform: perspective(700px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      transition: transform 700ms ease-out, scale 500ms ease-out;
+
+      &:hover {
+        scale: 1.03;
+        transition-duration: 250ms;
+      }
+    }
+
+    .welcome-ticket-wrap:has(.welcome-ticket:hover) {
+      filter: drop-shadow(0 16px 24px rgb(0 0 0 / 0.55));
+      transition-duration: 0.25s, 0.3s, 0.25s;
+    }
+  }
+
+  /* The pile: the latest on top, the two before it peeking out underneath at other angles. On hover (or when a
+     ticket has keyboard focus) they line up in a column, 0.6rem apart, each its own link: downwards in the corner,
+     upwards on a tablet (the footer is close below), the latest on top either way. Each wrapper carries the gap as
+     padding, so the pointer never falls between tickets and folds the column away. */
+  .welcome-latest.is-pile {
+    --fan: 1;
+    z-index: 5;
+
+    &.is-below {
+      --fan: -1;
+    }
+
+    .welcome-ticket-wrap {
+      padding-bottom: 0.6rem;
+      margin-bottom: -0.6rem;
+
+      &:nth-child(1) {
+        position: relative;
+        z-index: 3;
+      }
+
+      &:nth-child(n + 2) {
+        position: absolute;
+        inset: 0 0 auto;
+      }
+
+      &:nth-child(2) {
+        z-index: 2;
+        translate: 0.4rem 0.45rem;
+        rotate: 1.5deg;
+      }
+
+      &:nth-child(3) {
+        z-index: 1;
+        translate: -0.35rem 0.8rem;
+        rotate: -4deg;
+      }
+    }
+
+    /* Open, each ticket leans and sits a little off the line its own way, new each time (--lean and --nudge,
+       LatestParty.tsx). */
+    &:is(:hover, :focus-within) .welcome-ticket-wrap {
+      translate: var(--nudge, 0px) calc(var(--i) * 100%);
+      rotate: var(--lean, -1deg);
+    }
+
+    /* Upwards: the latest goes to the top, the oldest stays where the pile was. */
+    &.is-below:is(:hover, :focus-within) .welcome-ticket-wrap {
+      translate: var(--nudge, 0px) calc((var(--i) - var(--n) + 1) * 100%);
+    }
+  }
+
+  /* The paper: cream, with half-circle notches at both ends of the stub's perforation. */
+  .welcome-ticket {
+    position: relative;
+    display: flex;
+    border-radius: 10px;
+    background: linear-gradient(160deg, #fffef5 0%, #fff6d6 55%, #f7ebb4 100%);
+    color: #18181b;
+    text-align: left;
+    mask:
+      radial-gradient(circle at calc(100% - var(--stub)) 0, transparent var(--notch), black calc(var(--notch) + 0.5px)) top / 100% 51% no-repeat,
+      radial-gradient(circle at calc(100% - var(--stub)) 100%, transparent var(--notch), black calc(var(--notch) + 0.5px)) bottom / 100% 51% no-repeat;
+  }
+
+  .welcome-ticket-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0.85rem 0.9rem 0.85rem 1rem;
+  }
+
+  /* The stub, past a perforation: the party's code, read bottom to top in the meter's red, and an arrow. */
+  .welcome-ticket-stub {
+    flex: none;
+    width: var(--stub);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25em;
+    padding: 0.3rem 0;
+    border-left: 2px dashed rgb(198 42 48 / 0.35);
+    color: var(--ticket-red);
+    /* The turned code would sit above the ticket's link: clicks go through to it. */
+    pointer-events: none;
+    /* The ticket's height comes from the main part, never from the code's length: every ticket in the pile is the
+       same height, so they line up evenly. */
+    contain: size;
+  }
+
+  .welcome-ticket-code {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
   .welcome-latest-title {
-    margin: 0 0 0.35rem 0.5rem;
+    margin: 0 0 0.35rem;
     font-size: 0.75em;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #b4b3b4;
+    color: var(--ticket-red);
   }
 
   .welcome-latest-party {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem;
-    border-radius: 0.75rem;
-    color: white;
-    transition: background-color 0.15s ease-in-out;
+    color: inherit;
+    outline: none;
 
-    &:hover {
-      background: rgb(255 255 255 / 0.08);
-
-      .welcome-latest-chevron {
-        transform: translateX(2px);
-        color: white;
-      }
+    /* The link stretches over the whole ticket, stub included. */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
     }
 
-    &:focus-visible {
-      outline: 2px solid white;
-      outline-offset: 2px;
+    &:hover {
+      color: inherit;
+    }
+
+    &:focus-visible::after {
+      outline: 2px solid var(--ticket-red);
+      outline-offset: -4px;
     }
   }
 
@@ -161,14 +294,14 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    background: rgb(255 255 255 / 0.1);
+    background: rgb(198 42 48 / 0.08);
 
     &.is-host {
-      color: #f2c94c;
+      color: #b07f00;
     }
 
     &.is-guest {
-      color: #ff8a8f;
+      color: var(--ticket-red);
     }
   }
 
@@ -178,7 +311,6 @@
     display: flex;
     flex-direction: column;
     line-height: 1.3;
-    text-align: left;
   }
 
   .welcome-latest-name {
@@ -186,35 +318,42 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 1.2em;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .welcome-latest-meta {
     font-size: 0.85em;
-    color: #b4b3b4;
+    color: #52525b;
   }
 
   .welcome-latest-chevron {
     flex: none;
-    color: #b4b3b4;
-    transition: all 0.15s ease-in-out;
+    transition: translate 0.15s ease-in-out;
   }
 
+  .welcome-ticket-wrap:hover .welcome-latest-chevron {
+    translate: 0 2px;
+  }
+
+  /* Phones: the links under a perforated rule, above the stretched link so they stay their own. */
   .welcome-latest-foot {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 0.35rem;
+    margin-top: 0.6rem;
     padding-top: 0.5rem;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
+    border-top: 2px dashed rgb(198 42 48 / 0.2);
     font-size: 0.9em;
-    color: #8e8d8e;
+    color: #a1a1aa;
 
     a {
-      color: #e2e1e0;
+      color: #3f3f46;
+      font-weight: 500;
 
       &:hover {
-        color: white;
+        color: var(--ticket-red);
         text-decoration: underline;
       }
     }
