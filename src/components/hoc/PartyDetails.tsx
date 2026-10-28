@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Columns, Container, Content, Hero } from "@/components/layout";
-import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "@/components/Confetti";
 import { GnomeSays } from "@/components/GnomeSays";
+import { GnomeZen } from "@/components/GnomeZen";
 import { SecretText } from "@/components/SecretText";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Footer } from "@/components/hoc/Footer";
@@ -110,7 +110,8 @@ export const PartyDetails = ({ party }: Props) => {
                         </div>
                       )
                       : (
-                        <SyncLoader size={10} />
+                        // Thinking: "•••", which says a little something when clicked (an easter egg).
+                        <GnomeZen />
                       )
                     }
                   </Content>

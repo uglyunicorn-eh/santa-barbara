@@ -117,6 +117,37 @@
     }
   }
 
+  /* The easter egg (GnomeZen): the thinking dots, and the line the gnome says when they're clicked. The whole of the
+     bubble's content is the button, drawn as nothing but what it says. */
+  .message-body .gnome-zen {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      border: 0;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-ring);
+      outline-offset: 6px;
+      border-radius: 6px;
+    }
+  }
+
+  .gnome-zen-line {
+    display: block;
+    animation: gnome-zen-in 300ms ease-out;
+  }
+
   .message-body::after {
     content: "";
     position: absolute;
@@ -129,5 +160,16 @@
     border-bottom: 0;
     border-left: 0;
     margin-bottom: calc(-1em + 1px);
+  }
+}
+
+@keyframes gnome-zen-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnome-zen-line {
+    animation: none;
   }
 }
