@@ -32,6 +32,20 @@
   line-height: var(--cell-h);
   color: #c62a30;
 
+  /* A button (a click flips it up again from zeros), drawn as nothing but its tickets. */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
   /* Phones: nine digits (a count past 99,999,999) still fit at 320px. */
   @media (max-width: 768px) {
     font-size: 1.75rem;

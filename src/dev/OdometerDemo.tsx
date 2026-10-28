@@ -4,14 +4,14 @@ import { PartyOMeterView } from "@/components/Odometer";
 import { Button } from "@/components/ui/button";
 
 // The kit's Party'o'meter: the app's raffle-ticket counter with counts set here instead of the API's, on the front
-// door's closing section. Each sample flips up from 000000 when the page loads, as the front door's does when its
+// door's closing section. Each sample flips up from 00000 when the page loads, as the front door's does when its
 // first count arrives.
 
 const STATES: { label: string; rolled: number | null; note: string }[] = [
   { label: "No count yet", rolled: null, note: "null: nothing shows until the first count arrives" },
   { label: "Small", rolled: 13, note: "13, with leading zeros" },
-  { label: "Six digits", rolled: 654321, note: "the minimum width, all tickets used" },
-  { label: "Every digit", rolled: 1234567890, note: "past six digits, the row grows" },
+  { label: "Five digits", rolled: 54321, note: "the minimum width, all tickets used" },
+  { label: "Every digit", rolled: 1234567890, note: "past five digits, the row grows" },
 ];
 
 const panel = "kit-meter rounded-card px-3 py-6 text-center tablet:px-6";

@@ -11,8 +11,6 @@ type Props = {
   enter?: React.ReactNode;
   /** The Enter button again, at the end of the page, with a livelier label. */
   enterAgain?: React.ReactNode;
-  /** The Party'o'meter, in the app only: it needs the API (the static page has none). */
-  meter?: React.ReactNode;
   footer?: React.ReactNode;
 };
 
@@ -97,7 +95,7 @@ const howItWorksClass = buttonVariants({ variant: "secondary", size: "lg", surfa
  * No hooks, so the home page can also render it as static HTML for search engines (index.astro), and the app shows the
  * same page once it loads (LoginBox).
  */
-export const Landing = ({ enter, enterAgain, meter, footer }: Props) => (
+export const Landing = ({ enter, enterAgain, footer }: Props) => (
   <div className="landing">
     <div className="landing-main">
       {/* The HO HO HO photo, holding still while the hero scrolls off it and the sections slide over it. */}
@@ -199,7 +197,6 @@ export const Landing = ({ enter, enterAgain, meter, footer }: Props) => (
         <Container textAlign="centered">
           <h2>Ready, weirdo?</h2>
           <p>Gather your gang, roll the dice and keep the secret. It takes a minute.</p>
-          {meter}
           <div className="landing-actions">
             <div className="landing-party-bezel">{enterAgain}</div>
           </div>
