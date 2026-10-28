@@ -1,6 +1,6 @@
 /* The party countdown (src/components/PartyCountdown.tsx): light and simple, right on the party page. The
-   Party'o'meter's flip cards (odometer.css) in four groups with a small label under each, "Gifts due in" over them and
-   the date under them. Sized by its font size: smaller on phones, so the longest (366 days) fits at 320px. */
+   Party'o'meter's flip cards (odometer.css) in four groups with a small label under each, and "Gifts due in" over them,
+   underlined like the front door's "Jeez!" (landing.css), with the date in a bubble over it on hover, tap or focus. Sized by its font size: smaller on phones, so the longest (366 days) fits at 320px. */
 
 .due-clock {
   display: inline-flex;
@@ -17,10 +17,83 @@
 }
 
 .due-clock-title {
+  position: relative;
+  padding-bottom: 0.25em;
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  white-space: nowrap;
+  cursor: help;
+  outline: none;
+  /* The pen stroke under "Jeez!". */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C18 4 30 12 46 7 S78 3 97 8 M8 12 C30 9 60 11 88 10' fill='none' stroke='%23ef4444' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E")
+    left bottom / 100% 0.5em no-repeat;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* The date, in the "Jeez!" bubble: over the label, tilting into place. */
+.due-clock-hint {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  width: max-content;
+  max-width: min(260px, 80vw);
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: #fef08a;
+  color: #1c1917;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.3);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: none;
+  white-space: normal;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-50%) rotate(-6deg) scale(0.6);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s 250ms;
+
+  /* The bubble's tail, pointing at the label. */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 8px solid transparent;
+    border-top-color: #fef08a;
+    transform: translateX(-50%);
+  }
+}
+
+.due-clock-title:hover .due-clock-hint,
+.due-clock-title:focus .due-clock-hint {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) rotate(-3deg) scale(1);
+  transition:
+    opacity 150ms ease-out,
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .due-clock-hint {
+    transition: opacity 150ms, visibility 0s 150ms;
+  }
 }
 
 .due-clock-row {
@@ -56,6 +129,19 @@
   text-transform: uppercase;
 }
 
-.due-clock-date {
-  font-size: 0.85rem;
+/* On the join box's dark glass card (JoinBox): the labels go light, and the cards need no shadow. */
+.join-due {
+  margin: 4px 0 20px;
+
+  .due-clock {
+    color: var(--color-zinc-300);
+  }
+
+  .due-clock-digits {
+    filter: none;
+  }
+
+  .due-clock-title:focus-visible {
+    outline-color: white;
+  }
 }

@@ -3,7 +3,8 @@ import React from "react";
 import { FlapDigit } from "@/components/FlapDigit";
 
 // The party page's countdown to the party's due time (due-clock.css): light and simple, the Party'o'meter's flip
-// cards in four groups (days, hours, minutes, seconds) with a label under each. A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
+// cards in four groups (days, hours, minutes, seconds) with a label under each. The date itself is a hint on
+// "Gifts due in", underlined like the front door's "Jeez!". A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
 // once the time is up it shows 0:00:00:00 and nothing else happens.
 
 const SECOND = 1000;
@@ -83,6 +84,7 @@ const Group = ({ value, pad, unit }: { value: number; pad: number; unit: string 
 export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
   const due = new Date(dueAt).getTime();
   const now = useClock(due);
+  const hintId = React.useId();
   if (Number.isNaN(due)) {
     return null;
   }
@@ -91,7 +93,11 @@ export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
   return (
     // Screen readers get the date, not digits changing every second; the text form shows on hover.
     <div className="due-clock" role="timer" aria-label={`Gifts due ${date}`} title={formatCountdown(due - now)}>
-      <span className="due-clock-title">Gifts due in</span>
+      {/* Focusable, so a tap (or Tab) shows the date too, as hover does; the hint is the label's description. */}
+      <span className="due-clock-title" tabIndex={0} aria-describedby={hintId}>
+        Gifts due in
+        <span id={hintId} className="due-clock-hint" role="tooltip">{date}</span>
+      </span>
       <span className="due-clock-row" aria-hidden="true">
         <Group value={days} pad={1} unit={days === 1 ? "day" : "days"} />
         <span className="due-clock-colon">:</span>
@@ -101,7 +107,6 @@ export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
         <span className="due-clock-colon">:</span>
         <Group value={seconds} pad={2} unit="sec" />
       </span>
-      <span className="due-clock-date">{date}</span>
     </div>
   );
 };

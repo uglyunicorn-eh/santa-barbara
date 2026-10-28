@@ -138,10 +138,11 @@ The party page counts down to the party's due time, if its host set one (`src/co
 in `due-clock.css`): light and simple, right on the page, just above the party's button (after
 the text on a rolled party; in line with the text from desktop up, centred below that). It shows the Party'o'meter's
 flip cards (with a soft shadow on the light page) (`FlapDigit`, in "jump" mode: one flip straight to the new digit, as a clock counts down) in four groups,
-days unpadded and the rest two digits, with "days", "hours", "min" and "sec" under them, "Gifts due in" over them and
-the date in the browser's own format under them. It ticks on each new second while the tab is visible and catches up
+days unpadded and the rest two digits, with "days", "hours", "min" and "sec" under them, and "Gifts due in" over them,
+underlined with the front door's "Jeez!" pen stroke, with the date (in the browser's own format) in the same yellow
+bubble over it on hover, tap or keyboard focus. It ticks on each new second while the tab is visible and catches up
 when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens. With reduced motion
-the digits just change. Screen readers get "Gifts due ‹date›" rather than digits changing every second. Smaller on
+the digits just change. Visitors who haven't joined see it too, in the join box under "Welcome to the …!" (light labels on its dark glass card). Screen readers get "Gifts due ‹date›" rather than digits changing every second. Smaller on
 phones, so the longest (366 days) fits at 320px. The kit shows days left, under an hour, finished and a year ahead.
 
 ## Party'o'meter
