@@ -5,7 +5,7 @@ import { Divider } from "@/components/Divider";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Footer } from "@/components/hoc/Footer";
 import { JoinParty } from "@/components/hoc/JoinParty";
-import { LatestParty } from "@/components/hoc/LatestParty";
+import { LatestParty, useLatestParties } from "@/components/hoc/LatestParty";
 import { MyProfile } from "@/components/hoc/MyProfile";
 import { NewParty } from "@/components/hoc/NewParty";
 import { RolledDialog } from "@/components/hoc/RolledDialog";
@@ -17,6 +17,9 @@ export const StartPage = () => {
   // Rolled parties waiting for the user to reveal whom they give a gift to (live, too).
   useRevealReminders();
   usePageTint(TINTS.night);
+  // The parties they were last busy with: a pile of the last three top left from desktop up, and under the choices on
+  // a tablet; on phones the latest under the heading, with "All my parties · My profile".
+  const latest = useLatestParties();
 
   return (
     <Hero size={"fullheight"} className="welcome-page">
@@ -28,7 +31,9 @@ export const StartPage = () => {
             <img src={grinchImg.src} alt="Grinch" width={112} height={112} className="shrink-0" />
           </div>
           <Columns vCentered className="max-tablet:hidden">
-            <Columns.Column mobile={{ display: "hidden" }}>&nbsp;</Columns.Column>
+            <Columns.Column mobile={{ display: "hidden" }}>
+              {latest?.length ? <LatestParty parties={latest} className="is-corner max-desktop:hidden" /> : <>&nbsp;</>}
+            </Columns.Column>
             <Columns.Column size="one-third" className="tablet:text-right max-tablet:text-center">
               <h1>
                 Welcome to Anonymous Santa Clauses!
@@ -44,6 +49,8 @@ export const StartPage = () => {
 
       <Hero.Body>
         <Container>
+
+          {latest?.length ? <LatestParty parties={latest} links className="is-inline tablet:hidden" /> : null}
 
           <Content textAlign="centered">
             &mdash; So, what are you up to today, my friend?
@@ -75,7 +82,7 @@ export const StartPage = () => {
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
           </Columns>
 
-          <LatestParty />
+          {latest?.length ? <LatestParty parties={latest} className="is-below max-tablet:hidden desktop:hidden" /> : null}
 
           <Routes>
             <Route path="/new/" Component={NewParty} />

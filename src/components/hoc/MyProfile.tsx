@@ -3,7 +3,7 @@ import React from "react";
 import { Content } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useMatch } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
 import { Calendar, ChevronRight, Gift, Lock, Mail, Star, Trash2, X } from 'react-feather';
 import * as v from "valibot";
@@ -23,6 +23,7 @@ import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hook
 import type { Party } from "@/types";
 import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { pageTitle } from "@/site";
+import { cn } from "@/lib/utils";
 
 import GrinchImg from "@/images/grinch.png";
 import HiImg from "@/images/hi.png";
@@ -114,6 +115,10 @@ const emailSchema = (currentEmail: string) => v.object({
  */
 export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?: string; dismissLocation?: string }) => {
   const tabletUp = useTabletUp();
+  // The history scrolls under the footer: a rule sets the footer apart there (full width like the tabs' from tablet
+  // up, inset on a phone's sheet). The Profile tab has none.
+  const onHistory = !!useMatch(`${base}history/`);
+  const footerRule = onHistory ? (tabletUp ? "border-t border-border" : "mx-5 border-t border-border px-0") : "";
 
   return (
     <DialogBox
@@ -122,8 +127,8 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
       dismissLabel={"Okie Dokie!"}
       dismissLocation={dismissLocation}
       size="lg"
-      // On a phone's sheet a rule sets the footer apart, with Delete account small above Okie Dokie.
-      footerClassName={tabletUp ? undefined : "mx-5 gap-3 border-t border-border px-0 pt-3"}
+      // On a phone's sheet Delete account sits small above Okie Dokie, closer together than the stacked buttons.
+      footerClassName={cn(!tabletUp && "gap-3 pt-3", footerRule)}
     >
       {/* From tablet up the greeting and the tabs stay at the top while the rest scrolls under them; on a phone's
           sheet the greeting scrolls away and only the tabs stick, to leave the small screen to the content. */}
@@ -150,9 +155,9 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
 };
 
 /**
- * The profile's header, on both tabs: a sticker, "Hey, <name>!" and Delete account, in the header from tablet up and
- * above Okie Dokie on a phone's sheet (in the footer's left slot, which stacks below the buttons; `order` lifts it
- * above). Signing out is in the page's footer.
+ * The profile's header, on both tabs: a sticker and "Hey, <name>!". Delete account goes in the footer's left slot: in
+ * the bottom-left corner from tablet up, opposite Okie Dokie; above it on a phone's sheet (the slot stacks below the
+ * buttons there; `order` lifts it above). Signing out is in the page's footer.
  */
 const Greeting = () => {
   const { profile } = useCurrentUser();
@@ -166,13 +171,11 @@ const Greeting = () => {
       <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:text-2xl" title={name}>
         {name ? `Hey, ${name}!` : "Hey there!"}
       </h2>
-      {tabletUp
-        ? <DeleteAccount email={profile?.email ?? ""} />
-        : (
-          <DialogFooterStart>
-            <DeleteAccount email={profile?.email ?? ""} size="sm" className="order-1 self-center" />
-          </DialogFooterStart>
-        )}
+      <DialogFooterStart>
+        {tabletUp
+          ? <DeleteAccount email={profile?.email ?? ""} />
+          : <DeleteAccount email={profile?.email ?? ""} size="sm" className="order-1 self-center" />}
+      </DialogFooterStart>
     </div>
   );
 };
@@ -464,7 +467,6 @@ const History = () => {
       loadMore,
     ],
   );
-  const tabletUp = useTabletUp();
 
   React.useEffect(
     () => {
@@ -532,11 +534,9 @@ const History = () => {
           {loadingMore && <ClipLoader size={20} />}
         </div>
       )}
-      {/* From tablet up on the footer's left; on a phone's sheet right under the list, above the stacked footer. */}
-      {/* Once pressed, reaching the end loads the rest (with the spinner above), so the button goes away. */}
-      {hasMore && !autoLoad && (tabletUp
-        ? <DialogFooterStart>{showMore}</DialogFooterStart>
-        : <div className="mt-1 flex justify-center">{showMore}</div>)}
+      {/* Right under the list (the footer's left corner is Delete account's). Once pressed, reaching the end loads the
+          rest (with the spinner above), so the button goes away. */}
+      {hasMore && !autoLoad && <div className="mt-1 flex justify-center">{showMore}</div>}
     </div>
   );
 };

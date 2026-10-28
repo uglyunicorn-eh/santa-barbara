@@ -140,16 +140,27 @@ and, after a divider, Delete this party in red; items have a 16px icon.
     title (`red-800`); no bunting, the Grinch beside the text, and the filled red final confirm.
   Characters beside the text (`DialogCharacter`) hide on phones. All the art comes from the same sticker set.
 - **The profile** keeps one height on both tabs (nearly the whole screen on phones). On top, the "Hi Santa" sticker
-  and "Hey, <name>!", with Delete account (a red ghost button with a bin) beside it from tablet up; then the tabs,
-  which stick flush to the top while the history scrolls, nothing showing above them. On a phone's sheet Delete
-  account is a small red ghost button above Okie Dokie, the footer set apart by a rule. It opens the danger sheet;
-  once the link is sent it reads "Check your email" (disabled) and a toast names the address. Sign out is in the
-  page's footer, after My Profile (under ☰ on phones).
-- **The home screen** (signed in): under the two choices, "Your latest party", a dark glass card like the choices on
-  phones: the party last started or rolled (hosting or joined, deleted ones left out) as a link to its page, then
-  "All my parties" and "My profile". No card without parties. From 481px to 768px the title and Grinch, the choices and
-  the card share one centred 34rem column, the choices' text in two balanced lines (the title's lines are balanced
-  too).
+  and "Hey, <name>!", then the tabs, which stick flush to the top while the history scrolls, nothing showing above
+  them. Delete account (a red ghost button with a bin) is in the footer's bottom-left corner from tablet up, opposite
+  Okie Dokie; on a phone's sheet it's small, above Okie Dokie. It opens the danger sheet; once the link is sent it
+  reads "Check your email" (disabled) and a toast names the address. "Show more parties" sits under the history list.
+  On the Profile tab the only rule is between Name and Email; on Latest history a rule sets the footer apart from the
+  list scrolling under it (full width from tablet up, inset on phones). Sign out is in the page's footer, after My Profile (under ☰
+  on phones).
+- **The home screen** (signed in): "Your latest party", a ticket stub like the Party'o'meter's tickets (cream, tilted a
+  little, notches at both ends of a red perforation, the party's code read upwards on the stub in red) with the party
+  last started or rolled (hosting or joined, deleted ones left out); the whole ticket opens it. From desktop up it sits in
+  the header's top-left corner, level with the title, opposite the Grinch, and on a tablet under the two choices: there
+  the last three as a little pile, the latest on top ("Your latest party", the others "Before that"), which lines up
+  in a column on hover or keyboard focus (downwards in the corner, upwards on a tablet), each ticket its own link,
+  leaning and nudged a little differently each time it opens. A ticket under the mouse acts like the landing's step
+  cards: it tilts toward the pointer and comes up a little with a deeper shadow, moving only
+  when the mouse does (no jiggle). On phones one ticket under the heading, above the question, with a perforated rule and "All my parties · My
+  profile" on it. No
+  card without parties. From 481px to 768px the title and Grinch, the choices and the card share one centred 34rem
+  column, the choices' text in two balanced lines (the title's lines are balanced too). The stars and ribbon under the
+  choices take up to 300px from desktop up, less on a shorter window (never under 80px) so the page fits it without
+  scrolling; below desktop a strip of 80px at most, down to 8px on a shorter window.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
