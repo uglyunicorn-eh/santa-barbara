@@ -7,6 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ToastDemo } from "./ToastDemo";
 import { OdometerDemo, OdometerNowAndThen, OdometerStates } from "./OdometerDemo";
+import { CountdownDemo } from "./CountdownDemo";
 import { cn } from "@/lib/utils";
 import "./ui-kit.css";
 
@@ -79,6 +80,7 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
         {SURFACES.map(s => <a class="text-link underline underline-offset-4" href={`#${s.id}`}>{s.name}</a>)}
         <a class="text-link underline underline-offset-4" href="#dialogs">Dialogs</a>
         <a class="text-link underline underline-offset-4" href="#tabs">Tabs</a>
+        <a class="text-link underline underline-offset-4" href="#countdown">Countdown</a>
         <a class="text-link underline underline-offset-4" href="#toasts">Toasts</a>
         <a class="text-link underline underline-offset-4" href="#party-o-meter">Party'o'meter</a>
         <a class="text-link underline underline-offset-4" href="#long-values">Long values</a>
@@ -375,6 +377,19 @@ const photo = (s: Surface) => `background-image: url(${surfacePhoto[s]})`;
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Countdown -->
+    <section id="countdown" class="bg-zinc-100 px-4 py-8 tablet:px-8">
+      <h2 class={sectionTitle}>Countdown</h2>
+      <p class="mt-1 max-w-200 text-muted-foreground">
+        The party page counts down to the party's due time, if the host set one: "Due in", then days, hours, minutes
+        and seconds (D:HH:MM:SS), then the date. It ticks every second while the tab is visible. When the time is up it
+        shows 0:00:00:00 and nothing else happens.
+      </p>
+      <div class="mt-4">
+        <CountdownDemo client:load />
       </div>
     </section>
 

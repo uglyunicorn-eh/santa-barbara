@@ -132,6 +132,14 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
   surface: dark on night, light on the party page.
 
+## Countdown
+
+The party page counts down to the party's due time, if its host set one (`src/components/PartyCountdown.tsx`, styled
+in `party-details.css`): centred under the party's name, "Due in", then the time left as `D:HH:MM:SS` (days unpadded,
+the rest two digits, tabular figures), then the date in the browser's own format. It ticks on each new second while
+the tab is visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing
+else happens. The kit shows days left, under an hour, finished and a year ahead.
+
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in

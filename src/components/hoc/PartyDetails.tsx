@@ -4,6 +4,7 @@ import { Columns, Container, Content, Hero } from "@/components/layout";
 import { SyncLoader } from 'react-spinners';
 
 import { Confetti } from "@/components/Confetti";
+import { PartyCountdown } from "@/components/PartyCountdown";
 import { GnomeSays } from "@/components/GnomeSays";
 import { SecretText } from "@/components/SecretText";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
@@ -70,6 +71,8 @@ export const PartyDetails = ({ party }: Props) => {
               <Columns.Column>
                 <Content className="party-details-content">
                   <h1 className="text-center">{party.name}</h1>
+                  {/* Counting down to the due time the host set, if any (not for a deleted party). */}
+                  {party.dueAt && !party.deletedAt && <PartyCountdown dueAt={party.dueAt} />}
                   {profile && (
                     party.deletedAt
                       ? <DeletedPartyContent {...{ party, user: profile }} />
