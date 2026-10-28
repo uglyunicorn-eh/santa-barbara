@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { COMPACT_KEYS, moreTriggerClass } from "@/components/hoc/footerMenu";
 import { useCurrentUser, useUnrevealed } from "@/components/hooks";
+import { useToastsAboveFooter } from "@/components/hoc/NotificationsContainer";
 
 // The phone footer's ☰ menu brings Base UI's menu and its positioning: a look-alike button stands in until someone
 // reaches for it (hover, focus or a touch starts the download), and the click opens the real menu.
@@ -44,6 +45,8 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
   // Rolled parties whose name the user hasn't heard yet: a dot on "My Profile", which then opens on the history.
   const { parties: unrevealed } = useUnrevealed();
   const toReveal = unrevealed?.length ?? 0;
+  // Signed in, the footer sits at the bottom of the screen: toasts go above it rather than over its links.
+  useToastsAboveFooter(!!profile);
 
   const items = React.useMemo(
     () => [
@@ -99,9 +102,10 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
 
 /** "My Profile" with a red dot: there are rolled parties to see whom you give a gift to. */
 const ProfileWithDot = ({ count }: { count: number }) => (
-  <span className="relative">
+  // The dot after the words, at the top of the line like a footnote mark: clear of the " | " that follows.
+  <span className="inline-flex items-start gap-0.5">
     My Profile
-    <span aria-hidden="true" className="absolute -top-0.5 -right-2 size-2 rounded-full bg-red-500" />
+    <span aria-hidden="true" className="mt-0.5 size-2 shrink-0 rounded-full bg-red-500" />
     <span className="sr-only">{` (${count} ${count === 1 ? "party" : "parties"} to reveal)`}</span>
   </span>
 );

@@ -118,6 +118,36 @@ table {
     font-size: 1.125rem;
   }
 
+  /* Reminders (`remind`) are a little card in one row: the picture on the left (the reveal's stamp, stuck on a little
+     askew, as on a real letter), the title and description in the middle, and the action on the right, all centred
+     on one line. Sonner's own styles aren't in a layer, so what they set (display, gap, padding, sizes, margins)
+     needs !important here. */
+  &.reminder-toast {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 16px !important;
+    align-items: center !important;
+    padding: 14px 16px 14px 14px !important;
+
+    &[data-styled="true"] [data-icon] {
+      width: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+      align-self: center;
+      transform: rotate(-6deg);
+      /* Lifts the stamp's cream edge off a white toast too. */
+      filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.3));
+    }
+
+    [data-content] {
+      gap: 2px;
+    }
+
+    [data-button] {
+      margin: 0 !important;
+    }
+  }
+
   /* Errors, info and success are solid colour: their text, icon and dismiss button are white on it. */
   &:is([data-type="error"], [data-type="info"], [data-type="success"]) {
     [data-description],

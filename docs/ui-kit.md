@@ -145,11 +145,12 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
-  edges (on the light party page, 96px from the bottom, above the footer). The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+  edges (96px from the bottom on the signed-in pages, above their footer). The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
   the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
-  have an icon (the 🎲), a title, a description and an action ("Open"), stay until dismissed or opened, and follow the
-  surface: dark on night, light on the party page.
+  are a little card in one row: a picture on the left (the reveal's stamp with a postmark over it, a little askew),
+  the title and description in the middle, and the action on the right ("Open"). They stay until dismissed or opened,
+  and follow the surface: dark on night, light on the party page.
 
 ## Countdown
 

@@ -9,7 +9,8 @@ import { useTabletUp } from "@/components/hooks/useTabletUp";
 // after 4 s; reminders (`remind`) stay until dismissed or opened.
 //
 // Errors are red, info blue, success green, on any page. Reminders follow the surface: dark on the night pages, light
-// on the party page (which asks with useToastSurface). The look is in src/styles/base.css ("Toasts").
+// on the party page (which asks with useToastSurface). From tablet up they clear the signed-in pages' footer
+// (useToastsAboveFooter). The look is in src/styles/base.css ("Toasts").
 
 type Surface = "dark" | "light";
 
@@ -36,14 +37,36 @@ export const useToastSurface = (next: Surface) => {
   );
 };
 
-/** How far above the bottom toasts sit on the light party page: clear of its footer (three lines and its padding). */
-const LIGHT_PAGE_BOTTOM = 96;
+/** Footers on screen that toasts should clear (useToastsAboveFooter). */
+let footers = 0;
+const changeFooters = (by: number) => {
+  footers += by;
+  listeners.forEach(listener => listener());
+};
+
+/** While `active`, toasts sit above the footer (the signed-in pages' footer, at the bottom of the screen). */
+export const useToastsAboveFooter = (active: boolean) => {
+  React.useEffect(
+    () => {
+      if (!active) {
+        return;
+      }
+      changeFooters(1);
+      return () => changeFooters(-1);
+    },
+    [active],
+  );
+};
+
+/** How far above the bottom toasts sit over a footer: clear of its links and credits (three lines and its padding). */
+const ABOVE_FOOTER = 96;
 
 const ERROR_MS = 2500;
 const MESSAGE_MS = 4000;
 
 export const NotificationsContainer = () => {
   const current = React.useSyncExternalStore(subscribe, () => surface, () => surface);
+  const overFooter = React.useSyncExternalStore(subscribe, () => footers > 0, () => false);
   const tabletUp = useTabletUp();
 
   return (
@@ -52,8 +75,8 @@ export const NotificationsContainer = () => {
       position={tabletUp ? "bottom-right" : "top-center"}
       closeButton
       className="app-toaster"
-      // On the light party page, from tablet up, above the footer's links and credits (bottom right, like the toasts).
-      offset={current === "light" ? { top: 16, right: 16, left: 16, bottom: LIGHT_PAGE_BOTTOM } : 16}
+      // From tablet up, above the footer's links and credits when one is on screen (bottom right, like the toasts).
+      offset={overFooter ? { top: 16, right: 16, left: 16, bottom: ABOVE_FOOTER } : 16}
       // On phones, below the status bar (the page draws under it: viewport-fit=cover).
       mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: 16, right: 16, bottom: 16 }}
       visibleToasts={4}
@@ -76,8 +99,8 @@ export const NotificationsContainer = () => {
 export type Reminder = {
   /** Stable id: showing the same reminder again doesn't add another. */
   id: string;
-  /** An emoji shown beside the title, where the other toasts have their icon. */
-  icon?: string;
+  /** Beside the text, where the other toasts have their icon: an emoji, or a picture (the reveal's postmark). */
+  icon?: React.ReactNode;
   title: string;
   description?: React.ReactNode;
   action: { label: string; onClick: () => void };
@@ -88,12 +111,17 @@ export type Reminder = {
 /** Reminders taken away by the app (not by the user), so their `onDismiss` isn't called. */
 const forgotten = new Set<string>();
 
-/** A reminder toast: rich (title, description, action), and it stays until the user dismisses or opens it. */
+/**
+ * A reminder toast: rich (title, description, action), and it stays until the user dismisses or opens it. Laid out as
+ * a little card (src/styles/base.css, ".reminder-toast"): the icon on the left, the text beside it, the action under
+ * the text.
+ */
 export const remind = ({ id, icon, title, description, action, onDismiss }: Reminder) => {
   forgotten.delete(id);
   toast(title, {
     id,
-    icon: icon && <span className="toast-emoji">{icon}</span>,
+    className: "reminder-toast",
+    icon: typeof icon === "string" ? <span className="toast-emoji">{icon}</span> : icon,
     description,
     action,
     duration: Infinity,
