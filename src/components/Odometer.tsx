@@ -125,11 +125,60 @@ type Show = "random" | "zeros" | null;
 const SHOW_STEP_MS = RUN_MS + 150;
 
 /**
- * A counter showing `value` on at least MIN_DIGITS tickets. Clicking it puts on a little show: random digits, then
- * zeros, then the count again. With reduced motion a click does nothing (three jumps would only flash).
+ * Whether `ref`'s element has been seen: its middle on screen and not covered by anything. Stays true once it has.
+ * "Not covered" matters on the front door, whose closing section is pinned under the page and only uncovered as the
+ * page scrolls off it, so being inside the window isn't enough. Checked on every scroll (any scroller) and resize,
+ * and once at the start.
+ */
+const useSeen = (ref: React.RefObject<HTMLElement | null>) => {
+  const [seen, setSeen] = React.useState(false);
+  React.useEffect(
+    () => {
+      const element = ref.current;
+      if (!element) {
+        return;
+      }
+      const uncovered = () => {
+        const box = element.getBoundingClientRect();
+        const x = box.left + box.width / 2;
+        const y = box.top + box.height / 2;
+        if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
+          return false;
+        }
+        const top = document.elementFromPoint(x, y);
+        return Boolean(top && element.contains(top));
+      };
+      const check = () => {
+        if (uncovered()) {
+          setSeen(true);
+          stop();
+        }
+      };
+      const stop = () => {
+        document.removeEventListener("scroll", check, true);
+        window.removeEventListener("resize", check);
+        clearTimeout(first);
+      };
+      document.addEventListener("scroll", check, { capture: true, passive: true });
+      window.addEventListener("resize", check, { passive: true });
+      // After the page's first layout (and the garage door's opening), for a counter already in view.
+      const first = setTimeout(check, 300);
+      return stop;
+    },
+    [ref],
+  );
+  return seen;
+};
+
+/**
+ * A counter showing `value` on at least MIN_DIGITS tickets. It shows zeros until it's first on screen, then flips up
+ * to the count, so the flip-up is seen rather than spent off screen. Clicking it puts on a little show: random digits,
+ * then zeros, then the count again. With reduced motion a click does nothing (three jumps would only flash).
  */
 export const Odometer = ({ value }: { value: number }) => {
   const reduced = useReducedMotion();
+  const ref = React.useRef<HTMLButtonElement>(null);
+  const seen = useSeen(ref);
   const digits = String(value).padStart(MIN_DIGITS, "0");
   const [show, setShow] = React.useState<{ step: Show; random: number[] }>({ step: null, random: [] });
 
@@ -151,12 +200,12 @@ export const Odometer = ({ value }: { value: number }) => {
     }
   };
 
-  // What each ticket shows now: the show's step, or the count.
+  // What each ticket shows now: zeros until first seen, then the show's step, or the count.
   const shown = [...digits].map((digit, i) =>
-    show.step === "random" ? show.random[i] ?? 0 : show.step === "zeros" ? 0 : Number(digit));
+    !seen ? 0 : show.step === "random" ? show.random[i] ?? 0 : show.step === "zeros" ? 0 : Number(digit));
 
   return (
-    <button type="button" className="odometer" aria-label={String(value)} title="Flip again" onClick={start}>
+    <button ref={ref} type="button" className="odometer" aria-label={String(value)} title="Flip again" onClick={start}>
       {/* Keyed from the right, so a new leading digit doesn't restart the others. */}
       {shown.map((digit, i) => <FlapDigit key={digits.length - i} digit={digit} />)}
     </button>
