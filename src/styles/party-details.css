@@ -111,6 +111,18 @@
     margin-top: 3rem;
   }
 
+  /* A message in place of a form (JoinBox's Notice): a readable measure, no lone last word, and room under its button. */
+  .join-notice {
+    max-width: 32rem;
+    margin-inline: auto;
+    padding-bottom: 1rem;
+    text-wrap: balance;
+
+    .actions {
+      margin-top: 2rem;
+    }
+  }
+
   .grinch-box {
     .card {
       background-color: rgb(20 20 20 / 0.9);

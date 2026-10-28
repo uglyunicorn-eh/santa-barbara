@@ -1,6 +1,7 @@
 import React from "react";
 
 import { newKey } from "@/api/client";
+import { NO_KEY_MESSAGE, newSessionKey } from "@/api/dpop";
 import { Hero } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,8 @@ import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH, MAX_PARTY_CODE_LENGTH, MAX_PH
 
 type Props = {
   party: Party;
+  /** An emailed invite's token, when the visitor came with one (useLinkToken): signed out, they join with just a name. */
+  inviteToken?: string | null;
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -51,7 +54,7 @@ const signInSchema = v.object({
 });
 
 
-export const JoinBox = ({ party }: Props) => {
+export const JoinBox = ({ party, inviteToken }: Props) => {
   const navigate = useNavigate();
   usePageTint(TINTS.partyDoor);
 
@@ -87,7 +90,11 @@ export const JoinBox = ({ party }: Props) => {
                 <>
                   <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
 
-                  {profile ? <SubmitRequestForm party={party} profile={profile} /> : <SignInControls party={party} />}
+                  {profile
+                    ? <SubmitRequestForm party={party} profile={profile} />
+                    : inviteToken && !party.isClosed
+                      ? <InviteForm party={party} token={inviteToken} />
+                      : <SignInControls party={party} />}
                 </>
               )
             }
@@ -163,14 +170,11 @@ const SignInControls = ({ party }: SignInControlsProps) => {
 
   if (sentTo) {
     return (
-      <>
+      <Notice action={<Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>}>
         <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
         <p>If you didn't receive anything from us, refresh this page and try again.</p>
-
-        <Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>
-
         <SnowConfetti />
-      </>
+      </Notice>
     );
   }
 
@@ -215,30 +219,39 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   )
 };
 
+/**
+ * A message in place of a form (a link is on its way, you're already in, the invite expired): kept to a readable
+ * width, its lines balanced, and its one button below with the same gap as a form's.
+ */
+const Notice = ({ action, children }: { action: React.ReactNode; children: React.ReactNode }) => (
+  <div className="join-notice">
+    {children}
+    <div className="actions">{action}</div>
+  </div>
+);
+
 type SubmitRequestFormProps = {
   profile: User;
   party: Party;
 }
 
+/** Joining when signed in: the profile name is filled in. */
 const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   const { joinParty } = useAppClient();
   const { updateProfile } = useCurrentUser();
   const { signal } = useSignals();
-  const [busy, setBusy] = React.useState(false);
 
   const onSubmit = React.useCallback(
     async (input: JoinPartyInput) => {
-      setBusy(true);
-      if (await joinParty(input)) {
-        // The first party joined gives an empty profile its name; mirror that so the cached profile is current.
-        if (!profile.name) {
-          updateProfile({ ...profile, name: input.name });
-        }
-        signal('party:updated');
+      if (!await joinParty(input)) {
+        return false;
       }
-      else {
-        setBusy(false);
+      // The first party joined gives an empty profile its name; mirror that so the cached profile is current.
+      if (!profile.name) {
+        updateProfile({ ...profile, name: input.name });
       }
+      signal('party:updated');
+      return true;
     },
     [
       joinParty,
@@ -249,23 +262,191 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
   );
 
   return (
+    <JoinForm
+      party={party}
+      name={profile.name}
+      nameLabel={profile.name ? "Your name for this party" : "Let us know your name"}
+      nameHelp={profile.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
+      onSubmit={onSubmit}
+    />
+  );
+};
+
+const INVALID_INVITE = "This invite link isn't working. Please sign in with your email to join.";
+
+/** Where taking up an invite stands: the form, or why it gave way to something else. */
+type InviteStep = "form" | "member" | "expired" | "resent" | "unusable";
+
+type InviteFormProps = {
+  party: Party;
+  /** The emailed invite's token (useLinkToken). */
+  token: string;
+};
+
+/**
+ * Joining from an emailed invite, signed out: the invite signs the person in, so all it asks is a name (and the
+ * secret phrase). A member gets a magic link by email instead; an expired invite can ask for one; a used or broken
+ * one falls back to signing in with the email address.
+ */
+const InviteForm = ({ party, token }: InviteFormProps) => {
+  const { acceptInvite, enterAgain } = useAppClient();
+  const { signIn } = useCurrentUser();
+  const { error } = useNotifications();
+  const navigate = useNavigate();
+  // One key for the "send a fresh link" button, so a double click sends one email.
+  const resendKey = React.useRef(newKey());
+  const [step, setStep] = React.useState<InviteStep>("form");
+  const [resending, setResending] = React.useState(false);
+
+  const onSubmit = React.useCallback(
+    async ({ name, password }: JoinPartyInput) => {
+      // The session is bound to a key this browser keeps (src/api/dpop.ts).
+      let key;
+      try {
+        key = await newSessionKey();
+      } catch {
+        error(NO_KEY_MESSAGE);
+        return false;
+      }
+      const result = await acceptInvite(token, key, { name, password });
+      if (!result.ok) {
+        if (result.code === "link_expired") {
+          setStep("expired");
+          return false;
+        }
+        // Anything else keeps the form (a wrong phrase, say), unless the invite itself is no good.
+        const unusable = result.code === "link_used" || result.code === "invalid_link";
+        error(result.code === "invalid_link" ? INVALID_INVITE : result.message);
+        if (unusable) {
+          setStep("unusable");
+        }
+        return false;
+      }
+      if (!result.session) {
+        setStep("member");
+        return true;
+      }
+      // As with any first join, the name joined with becomes an empty profile's name (the API does it right after).
+      // Signing in changes the session, so the party loads again, now as a member.
+      const { user, userToken } = result.session;
+      signIn({ profile: { ...user, name: user.name || name }, userToken });
+      return true;
+    },
+    [
+      acceptInvite,
+      error,
+      signIn,
+      token,
+    ],
+  );
+
+  const resend = React.useCallback(
+    async () => {
+      setResending(true);
+      try {
+        // The API reads the address and party from the expired invite, and emails a magic link for that party.
+        if (await enterAgain(token, resendKey.current)) {
+          setStep("resent");
+        }
+      } finally {
+        setResending(false);
+      }
+    },
+    [
+      enterAgain,
+      token,
+    ],
+  );
+
+  const goHome = React.useCallback(() => navigate('/'), [navigate]);
+
+  if (step === "unusable") {
+    return <SignInControls party={party} />;
+  }
+
+  const homeButton = <Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>;
+
+  if (step === "member") {
+    return (
+      <Notice action={homeButton}>
+        <p>Good news: you're already in this party! Our elves have emailed you a magic link, so you can sign in and see it.</p>
+        <SnowConfetti />
+      </Notice>
+    );
+  }
+
+  if (step === "expired") {
+    return (
+      <Notice
+        action={
+          <Button variant="brand" size="lg" surface="dark" pill loading={resending} onClick={resend}>
+            &#x2728;&nbsp;Send me a fresh link!
+          </Button>
+        }
+      >
+        <p>This invite has expired. No worries: we can email you a fresh magic link to sign in and join.</p>
+      </Notice>
+    );
+  }
+
+  if (step === "resent") {
+    return (
+      <Notice action={homeButton}>
+        <p>A fresh magic link is on its way! Please check your inbox and follow it to join the party.</p>
+      </Notice>
+    );
+  }
+
+  return (
+    <>
+      <p>You're invited! Your invite signs you in, so just tell us your name.</p>
+      <JoinForm party={party} nameLabel="Let us know your name" onSubmit={onSubmit} />
+    </>
+  );
+};
+
+type JoinFormProps = {
+  party: Party;
+  /** The name to start with. */
+  name?: string;
+  nameLabel: string;
+  nameHelp?: string;
+  /** Joins; true when it worked, so the button stays busy while the party opens. */
+  onSubmit: (input: JoinPartyInput) => Promise<boolean>;
+};
+
+/** The name to join with, and the secret phrase for a protected party. */
+const JoinForm = ({ party, name = "", nameLabel, nameHelp, onSubmit }: JoinFormProps) => {
+  const [busy, setBusy] = React.useState(false);
+
+  const submit = React.useCallback(
+    async (input: JoinPartyInput) => {
+      setBusy(true);
+      if (!await onSubmit(input)) {
+        setBusy(false);
+      }
+    },
+    [onSubmit],
+  );
+
+  return (
     <Form
       defaultValues={{
         party: party.code,
-        name: profile?.name ?? "",
+        name,
         password: "",
       }}
       schema={joinSchema}
-      onSubmit={onSubmit}
+      onSubmit={submit}
     >
       <FormField
         name="name"
-        label={profile?.name ? "Your name for this party" : "Let us know your name"}
+        label={nameLabel}
         horizontal={false}
-          surface="dark"
-          size="lg"
+        surface="dark"
+        size="lg"
         children={<Input maxLength={MAX_PERSON_NAME_LENGTH} />}
-        help={profile?.name ? "We filled in your profile name. Change it if your friends know you by another one." : undefined}
+        help={nameHelp}
       />
 
       {party.isProtected &&
@@ -279,8 +460,8 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
               name="password"
               label="Secret phrase"
               horizontal={false}
-          surface="dark"
-          size="lg"
+              surface="dark"
+              size="lg"
               children={<Input maxLength={MAX_PHRASE_LENGTH} />}
               help="We beleave your friend didn't forget to tell it to you..."
             />
@@ -290,7 +471,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
 
       <div className="actions">
         <Submit variant="brand" size="lg" surface="dark" pill loading={busy}>
-          &#x1F973;&nbsp;{profile ? "Join the party!" : "Sign in & Join the party!"}
+          &#x1F973;&nbsp;Join the party!
         </Submit>
       </div>
 

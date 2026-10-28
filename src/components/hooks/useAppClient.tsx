@@ -203,6 +203,28 @@ export const useAppClient = () => {
     [],
   );
 
+  /**
+   * Takes up an emailed invite: signs in and joins its party with `name` (and the secret phrase), binding the session to
+   * `key`. `session` is null when the invited address is already a member: the API emails them a magic link instead.
+   * Repeating it from this tab signs in again; a wrong phrase leaves the link usable. An expired one fails with the code
+   * `link_expired` (`enterAgain` swaps it for a magic link).
+   */
+  const acceptInvite = React.useCallback(
+    async (token: string, key: PublicJwk, { name, password }: Omit<JoinPartyInput, "party">): Promise<LinkResult<{ session: Session | null }>> => {
+      const result = await apiCall<Session | { ok: true }>("/auth/invite", {
+        method: "POST",
+        body: { token, key, name, ...(password ? { password } : {}) },
+        key: linkKey(token),
+        retry: true,
+      });
+      if (!result.ok) {
+        return { ok: false, message: result.error.message, code: result.error.code };
+      }
+      return { ok: true, session: "userToken" in result.data ? result.data : null };
+    },
+    [],
+  );
+
   /** Emails a fresh link for an expired one: the API reads the address and party from the old link. */
   const enterAgain = React.useCallback(
     async (token: string, key: string): Promise<boolean> => {
@@ -381,6 +403,7 @@ export const useAppClient = () => {
       enterRequest,
       enter,
       enterAgain,
+      acceptInvite,
       getParty,
       getProfile,
       getPartyHistory,
@@ -406,6 +429,7 @@ export const useAppClient = () => {
       enterRequest,
       enter,
       enterAgain,
+      acceptInvite,
       getParty,
       getProfile,
       getPartyHistory,
