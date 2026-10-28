@@ -23,6 +23,11 @@
     .party-due {
       margin: 0 0 4px;
       text-align: center;
+
+      /* Phones: the bigger countdown (due-clock.css) gets more room before the name. */
+      @media (max-width: 768px) {
+        margin-bottom: 16px;
+      }
     }
 
     @media (max-width: 768px) {

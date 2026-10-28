@@ -147,20 +147,21 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   On the Profile tab the only rule is between Name and Email; on Latest history a rule sets the footer apart from the
   list scrolling under it (full width from tablet up, inset on phones). Sign out is in the page's footer, after My Profile (under ☰
   on phones).
-- **The home screen** (signed in): "Your latest party", a ticket stub like the Party'o'meter's tickets (cream, tilted a
-  little, notches at both ends of a red perforation, the party's code read upwards on the stub in red) with the party
-  last started or rolled (hosting or joined, deleted ones left out); the whole ticket opens it. From desktop up it sits in
-  the header's top-left corner, level with the title, opposite the Grinch, and on a tablet under the two choices: there
-  the last three as a little pile, the latest on top ("Your latest party", the others "Before that"), which lines up
-  in a column on hover or keyboard focus (downwards in the corner, upwards on a tablet), each ticket its own link,
-  leaning and nudged a little differently each time it opens. A ticket under the mouse acts like the landing's step
-  cards: it tilts toward the pointer and comes up a little with a deeper shadow, moving only
-  when the mouse does (no jiggle). On phones one ticket under the heading, above the question, with a perforated rule and "All my parties · My
-  profile" on it. No
-  card without parties. From 481px to 768px the title and Grinch, the choices and the card share one centred 34rem
-  column, the choices' text in two balanced lines (the title's lines are balanced too). The stars and ribbon under the
-  choices take up to 300px from desktop up, less on a shorter window (never under 80px) so the page fits it without
-  scrolling; below desktop a strip of 80px at most, down to 8px on a shorter window.
+- **The home screen** (signed in): "Your latest party", a ticket stub like the Party'o'meter's tickets (cream, tilted
+  a little, notches at both ends of a red perforation, the party's code read upwards on the stub in red and again at
+  the main part's top right; once you've revealed whom you give a gift to the stub is torn off along the red line,
+  which stays, with a ragged edge and the notches' halves at its corners) with the party last started or rolled
+  (hosting or joined, deleted ones left out); the whole ticket opens it. From desktop up it sits in the header's
+  top-left corner, level with the title, opposite the Grinch, and on a tablet under the two choices: there the last
+  three as a little pile, the latest on top ("Your latest party", the others "Before that"), which lines up in a
+  column on hover or keyboard focus (downwards in the corner, upwards on a tablet), each ticket its own link, leaning
+  and nudged a little differently each time it opens. A ticket under the mouse acts like the landing's step cards: it
+  tilts toward the pointer and comes up a little with a deeper shadow, moving only when the mouse does (no jiggle). On
+  phones one ticket under the heading, above the question, with a perforated rule and "All my parties · My profile" on
+  it. No card without parties. From 481px to 768px the title and Grinch, the choices and the card share one centred
+  34rem column, the choices' text in two balanced lines (the title's lines are balanced too). The stars and ribbon
+  under the choices take up to 300px from desktop up, less on a shorter window (never under 80px) so the page fits it
+  without scrolling; below desktop a strip of 80px at most, down to 8px on a shorter window.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
@@ -184,8 +185,8 @@ The create form calls the field "Party starts". It sits above the party's name, 
 rolled. It ticks on each new second while the tab is
 visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens. Once the dice are rolled it stays at `0:00:00:00`, and its bubble says "Rolled ‹date›": the day they were rolled.
 With reduced motion the digits just change. Only members see it: the join box doesn't show it. Screen readers get
-"The party starts around ‹date›" rather than digits changing every second. Smaller on phones, so the longest (366 days) fits at
-320px. The kit shows days left, under an hour, finished and a year ahead.
+"The party starts around ‹date›" rather than digits changing every second. On phones it follows the screen's width, up to 2rem
+(29px at 375px), and the longest (366 days) keeps at least 48px clear on each side, down to 320px. The kit shows days left, under an hour, finished and a year ahead.
 
 ## Party'o'meter
 
