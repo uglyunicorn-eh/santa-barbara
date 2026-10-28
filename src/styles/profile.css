@@ -9,10 +9,6 @@
     height: calc(100dvh - 3rem - env(safe-area-inset-top, 0px));
   }
 
-  .dialog-body {
-    padding-top: 10px;
-  }
-
   ul {
     list-style: none;
   }
@@ -65,24 +61,6 @@
     margin: 0.35em 0 0;
     font-size: 0.9375rem;
     color: var(--color-zinc-500);
-  }
-
-  .danger-zone {
-    margin-top: 1.5em;
-    padding: 0.75em 1em;
-    border: 1px solid var(--color-red-200);
-    border-radius: var(--radius-lg);
-    background: var(--color-red-50);
-
-    .danger-text {
-      flex: 1 1 16em;
-
-      p {
-        margin: 0;
-        font-size: 0.9375rem;
-        color: var(--color-zinc-600);
-      }
-    }
   }
 
   .history-list {

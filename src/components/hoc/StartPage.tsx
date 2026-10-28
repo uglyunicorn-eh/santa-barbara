@@ -5,6 +5,7 @@ import { Divider } from "@/components/Divider";
 import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Footer } from "@/components/hoc/Footer";
 import { JoinParty } from "@/components/hoc/JoinParty";
+import { LatestParty } from "@/components/hoc/LatestParty";
 import { MyProfile } from "@/components/hoc/MyProfile";
 import { NewParty } from "@/components/hoc/NewParty";
 import { RolledDialog } from "@/components/hoc/RolledDialog";
@@ -23,14 +24,14 @@ export const StartPage = () => {
         <Container>
           {/* On phones: the title on the left, the Grinch on the right, as on wider screens. */}
           <div className="welcome-head-phone mb-8 flex items-center gap-3 px-4 tablet:hidden">
-            <h1 className="flex-1 text-left">Welcome to the Anonymous Santa Clauses!</h1>
+            <h1 className="flex-1 text-left">Welcome to Anonymous Santa Clauses!</h1>
             <img src={grinchImg.src} alt="Grinch" width={112} height={112} className="shrink-0" />
           </div>
           <Columns vCentered className="max-tablet:hidden">
             <Columns.Column mobile={{ display: "hidden" }}>&nbsp;</Columns.Column>
             <Columns.Column size="one-third" className="tablet:text-right max-tablet:text-center">
               <h1>
-                Welcome to the Anonymous Santa Clauses!
+                Welcome to Anonymous Santa Clauses!
               </h1>
             </Columns.Column>
             <Columns.Column mobile={{ display: "hidden" }} narrow>
@@ -48,7 +49,7 @@ export const StartPage = () => {
             &mdash; So, what are you up to today, my friend?
           </Content>
 
-          <Columns vCentered>
+          <Columns vCentered className="welcome-choices">
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
             <Columns.Column className="tablet:text-right">
               <Link to="/new/">
@@ -73,6 +74,8 @@ export const StartPage = () => {
             </Columns.Column>
             <Columns.Column size={1} touch={{ display: "hidden" }}>&nbsp;</Columns.Column>
           </Columns>
+
+          <LatestParty />
 
           <Routes>
             <Route path="/new/" Component={NewParty} />
