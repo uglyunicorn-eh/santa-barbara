@@ -10,7 +10,7 @@ import React from "react";
 // any size.
 
 /** The counter shows at least this many digits, with leading zeros. */
-const MIN_DIGITS = 6;
+const MIN_DIGITS = 5;
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
