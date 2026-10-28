@@ -7,8 +7,9 @@ import { moreTriggerClass } from "@/components/hoc/footerMenu";
 import { menuItemClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
 
 /** The footer's other links in a small menu that opens upwards. */
-export const MoreMenu = ({ items, dot = false }: { items: MenuItem[]; dot?: boolean }) => (
-  <Menu.Root>
+export const MoreMenu = ({ items, dot = false, defaultOpen = false }: { items: MenuItem[]; dot?: boolean; defaultOpen?: boolean }) => (
+  // `defaultOpen`: mounted by the click on the look-alike button (Footer), so it opens straight away.
+  <Menu.Root defaultOpen={defaultOpen}>
     <Menu.Trigger className={`${moreTriggerClass} relative`} aria-label={dot ? "More links, with parties to reveal" : "More links"} title="More links">
       <MenuIcon size={18} aria-hidden="true" />
       {/* "My Profile" inside has a dot: show it here too. */}

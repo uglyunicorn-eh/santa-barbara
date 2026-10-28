@@ -9,18 +9,14 @@ import { UnsplashCredit } from "@/components/UnsplashCredit";
 import { Footer } from "@/components/hoc/Footer";
 import { TINTS, usePageTint } from "@/components/hooks";
 
-// The sign-in form loads on its own: in the background once the page is idle, or as soon as the Enter button is hovered
-// or focused, so it's there by the click without holding up the front door's first paint.
+// The sign-in form (its dialog and the form libraries) loads only for someone heading for it: from the moment the Enter
+// button is hovered, focused or touched. Most visitors read the front door and leave, so it stays off the page's
+// download; the button shows busy if the code is still on its way at the click.
 const loadEnterForm = () => import("@/components/hoc/EnterForm");
 const EnterForm = React.lazy(() => loadEnterForm().then(m => ({ default: m.EnterForm })));
 
 export const LoginBox = () => {
   usePageTint(TINTS.loginDoor);
-
-  React.useEffect(() => {
-    const idle = window.requestIdleCallback ?? ((load: () => void) => setTimeout(load, 1500));
-    idle(() => void loadEnterForm());
-  }, []);
 
   return (
     <Landing
@@ -91,7 +87,7 @@ const EnterActions = ({ label = "Enter with your email address" }: { label?: str
   }, [navigate]);
 
   return (
-    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick} onPointerEnter={loadEnterForm} onFocus={loadEnterForm}>
+    <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onLoginClick} onPointerEnter={loadEnterForm} onPointerDown={loadEnterForm} onFocus={loadEnterForm}>
       {label}
     </Button>
   );

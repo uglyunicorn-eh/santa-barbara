@@ -3,7 +3,9 @@ import { Content } from "@/components/layout";
 import * as v from "valibot";
 
 import { DialogBox } from "@/components/DialogBox";
-import { FormField, Input, Submit } from "@/components/forms";
+import { FormField } from "@/components/forms/FormField";
+import { Input } from "@/components/forms/Input";
+import { Submit } from "@/components/forms/Submit";
 import { maxLen, required } from "@/components/forms/messages";
 import { HaveQuestion } from "@/components/HaveQuestion";
 import { useAppClient } from "@/components/hooks";

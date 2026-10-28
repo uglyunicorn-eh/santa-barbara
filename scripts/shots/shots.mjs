@@ -91,6 +91,8 @@ const SCREENS = [
   { name: "profile", path: "/profile/", signedIn: true },
   { name: "profile-email-change", path: "/profile/", signedIn: true, act: clickButton("Change") },
   { name: "profile-delete-confirm", path: "/profile/", signedIn: true, act: clickButton("Delete account") },
+  // Signing out brings the garage door down over the home screen (GarageDoor): the front door, once it has shut.
+  { name: "sign-out-door", path: "/profile/", signedIn: true, act: signOut },
   { name: "profile-history", path: "/profile/history/", signedIn: true },
   { name: "party-host-menu", path: `/p/${CODES.hostOpen}/`, signedIn: true, act: openMenu("More actions") },
   { name: "footer-menu", path: "/", act: openMenu("More links") },
@@ -123,6 +125,12 @@ async function typeInvalidCode(page) {
 }
 
 /** Opens the sign-in dialog from the front door and closes it again: the button must be ready, not spinning. */
+async function signOut(page) {
+  await page.getByRole("button", { name: "Sign out" }).first().click();
+  // The door takes 750ms to come down.
+  await page.waitForTimeout(1500);
+}
+
 async function openAndCloseSignIn(page) {
   // The hero's button: the landing page has a second one at its end.
   await page.getByRole("button", { name: "Enter with your email address" }).first().click();
