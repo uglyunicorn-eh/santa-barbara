@@ -1,8 +1,8 @@
 /* The party countdown (src/components/PartyCountdown.tsx), to roughly when the dice get rolled, in the Party'o'meter's
    look: its flip tickets (odometer.css) in four groups with a small grey label under each, under a red, letter-spaced
    "The party starts in about" like the meter's own label, "in about" underlined like the front door's "Jeez!"
-   (landing.css), with the date in a bubble over it on hover, tap or focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
-   (366 days) fits at 320px. */
+   (landing.css), with the date in a bubble over it on hover, tap or focus. The party page puts it above the party's name (party-details.css). On phones it
+   follows the screen's width, up to 2rem, so the longest (366 days) still fits at 320px. */
 
 .due-clock {
   display: inline-flex;
@@ -14,8 +14,10 @@
   text-shadow: none;
   font-size: 1.75rem;
 
+  /* Phones: as big as the screen allows, up to 2rem: the longest (366 days, 9.6em wide) keeps at least 48px clear on
+     each side, never under 1.4rem. */
   @media (max-width: 768px) {
-    font-size: 1.4rem;
+    font-size: clamp(1.4rem, (100vw - 96px) / 9.6, 2rem);
   }
 }
 

@@ -185,8 +185,8 @@ The create form calls the field "Party starts". It sits above the party's name, 
 rolled. It ticks on each new second while the tab is
 visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens. Once the dice are rolled it stays at `0:00:00:00`, and its bubble says "Rolled ‹date›": the day they were rolled.
 With reduced motion the digits just change. Only members see it: the join box doesn't show it. Screen readers get
-"The party starts around ‹date›" rather than digits changing every second. Smaller on phones, so the longest (366 days) fits at
-320px. The kit shows days left, under an hour, finished and a year ahead.
+"The party starts around ‹date›" rather than digits changing every second. On phones it follows the screen's width, up to 2rem
+(29px at 375px), and the longest (366 days) keeps at least 48px clear on each side, down to 320px. The kit shows days left, under an hour, finished and a year ahead.
 
 ## Party'o'meter
 
