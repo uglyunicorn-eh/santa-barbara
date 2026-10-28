@@ -48,7 +48,7 @@ function makeSet({ userName, userEmail, partyName, participantName, participantC
     // A due time to count down to: a few days off, or (worst) as far ahead as the API allows.
     [CODES.hostOpen]: { ...base, code: CODES.hostOpen, isHost: true, isProtected: true, password: "mistletoe and wine", dueAt: new Date(Date.now() + dueAheadMs).toISOString() },
     [CODES.guestOpen]: { ...base, code: CODES.guestOpen },
-    [CODES.closed]: { ...base, code: CODES.closed, isClosed: true, rolledAt: iso(1), target: { name: participantName(1) } },
+    [CODES.closed]: { ...base, code: CODES.closed, isClosed: true, rolledAt: iso(1), dueAt: new Date(Date.now() + dueAheadMs).toISOString(), target: { name: participantName(1) } },
     [CODES.deleted]: { ...base, code: CODES.deleted, isHost: true, deletedAt: iso(0), restorableUntil: new Date(Date.UTC(2026, 9, 26)).toISOString() },
     [CODES.notJoined]: { ...base, code: CODES.notJoined, isJoined: false, participantCount: null, participants: null },
     [CODES.protectedNotJoined]: { ...base, code: CODES.protectedNotJoined, isJoined: false, isProtected: true, participantCount: null, participants: null },

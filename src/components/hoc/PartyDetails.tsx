@@ -70,9 +70,13 @@ export const PartyDetails = ({ party }: Props) => {
               </Columns.Column>
               <Columns.Column>
                 <Content className="party-details-content">
-                  {/* The countdown, when the host set a due time (not for a deleted party): in the page's top-right corner
-                      from desktop up, above the party's name on smaller screens (party-details.css). */}
-                  {party.dueAt && !party.deletedAt && <div className="party-due"><PartyCountdown dueAt={party.dueAt} /></div>}
+                  {/* The countdown, when the host set a due time (not for a deleted party), above the party's name
+                      (party-details.css). Once the dice are rolled it stays at zero, on the day they were rolled. */}
+                  {party.dueAt && !party.deletedAt && (
+                    <div className="party-due">
+                      <PartyCountdown dueAt={party.dueAt} rolledAt={party.isClosed ? party.rolledAt : null} />
+                    </div>
+                  )}
                   <h1 className="text-center">{party.name}</h1>
                   {profile && (
                     party.deletedAt

@@ -3,7 +3,7 @@ import React from "react";
 import { PartyCountdown } from "@/components/PartyCountdown";
 
 // The kit's party countdowns, each due a set while from when the page loads, on the party page's own background, above
-// a party's name as on smaller screens (from desktop up the page puts it in its top-right corner).
+// a party's name, as the party page shows it.
 
 const STATES: { label: string; aheadMs: number }[] = [
   { label: "Days left", aheadMs: ((3 * 24 + 4) * 60 + 5) * 60_000 + 6_000 },
