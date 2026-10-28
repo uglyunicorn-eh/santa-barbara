@@ -1,4 +1,6 @@
 .party-details {
+  /* For the countdown, which sits in its top-right corner from desktop up. */
+  position: relative;
   background: #e2e6e7 url("/party-background.jpg") right top no-repeat;
   background-size: cover;
   color: black;
@@ -18,14 +20,18 @@
       font-size: 2rem;
     }
 
-    /* The countdown (due-clock.css), above the party's name: in line with the text from desktop up, centred on
-       smaller screens, where the name is too. */
+    /* The countdown (due-clock.css): from desktop up in the page's top-right corner, over the gnome; on smaller
+       screens, which have no free corner, above the party's name, centred like it. */
     .party-due {
       margin: 0 0 4px;
       text-align: center;
 
       @media (min-width: 1024px) {
-        text-align: left;
+        position: absolute;
+        z-index: 2;
+        top: 40px;
+        right: 7%;
+        margin: 0;
       }
     }
 

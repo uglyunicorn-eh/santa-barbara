@@ -70,7 +70,8 @@ export const PartyDetails = ({ party }: Props) => {
               </Columns.Column>
               <Columns.Column>
                 <Content className="party-details-content">
-                  {/* The countdown, above the party's name, when the host set a due time (not for a deleted party). */}
+                  {/* The countdown, when the host set a due time (not for a deleted party): in the page's top-right corner
+                      from desktop up, above the party's name on smaller screens (party-details.css). */}
                   {party.dueAt && !party.deletedAt && <div className="party-due"><PartyCountdown dueAt={party.dueAt} /></div>}
                   <h1 className="text-center">{party.name}</h1>
                   {profile && (

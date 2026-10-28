@@ -139,8 +139,9 @@ in `due-clock.css`), in the Party'o'meter's look: its flip tickets (`FlapDigit` 
 the new digit, as a clock counts down) in four groups, days unpadded and the rest two digits, with "days", "hours",
 "min" and "sec" in small grey letters under them. Over them, "Gifts due in" in red, letter-spaced capitals like the
 meter's own label, underlined with the front door's "Jeez!" pen stroke, with the date (in the browser's own format) in
-the same yellow bubble under it on hover, tap or keyboard focus. It sits above the party's name, in line with the text
-from desktop up and centred on smaller screens (`party-details.css`). It ticks on each new second while the tab is
+the same yellow bubble under it on hover, tap or keyboard focus. From desktop up it sits in the page's top-right corner,
+over the gnome; smaller screens have no free corner, so there it sits above the party's name, centred like it
+(`party-details.css`). It ticks on each new second while the tab is
 visible and catches up when the tab is shown again. When the time is up it shows `0:00:00:00` and nothing else happens.
 With reduced motion the digits just change. Only members see it: the join box doesn't show it. Screen readers get
 "Gifts due ‹date›" rather than digits changing every second. Smaller on phones, so the longest (366 days) fits at
