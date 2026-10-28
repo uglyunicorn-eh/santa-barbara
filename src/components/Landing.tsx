@@ -11,7 +11,7 @@ type Props = {
   enter?: React.ReactNode;
   /** The Enter button again, at the end of the page, with a livelier label. */
   enterAgain?: React.ReactNode;
-  /** The Party'o'meter, in the app only: it needs the API (the static page has none). */
+  /** The Party'o'meter, in the app only: it needs the API (the static page has none). Sits by the footer. */
   meter?: React.ReactNode;
   footer?: React.ReactNode;
 };
@@ -199,13 +199,14 @@ export const Landing = ({ enter, enterAgain, meter, footer }: Props) => (
         <Container textAlign="centered">
           <h2>Ready, weirdo?</h2>
           <p>Gather your gang, roll the dice and keep the secret. It takes a minute.</p>
-          {meter}
           <div className="landing-actions">
             <div className="landing-party-bezel">{enterAgain}</div>
           </div>
         </Container>
       </section>
 
+      {/* In the bottom-left corner, level with the footer's links on the right (on phones, just above them). */}
+      {meter && <div className="landing-meter">{meter}</div>}
       {footer}
     </div>
   </div>

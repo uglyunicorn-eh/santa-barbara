@@ -135,7 +135,9 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 ## Party'o'meter
 
 The front door's count of parties that rolled the dice (`src/components/Odometer.tsx`, styled in
-`src/styles/odometer.css`): a row of raffle tickets, at least six, on the closing section's dark background. Cream
+`src/styles/odometer.css`): a row of raffle tickets, at least six, on the closing section's dark background. On the
+front door it's a compact row by the footer: in the bottom-left corner from tablet up, level with the footer's links,
+and just above the centred footer on phones (`landing.css`). Cream
 (`cream-50`) with red (`red-600`) digits and small notches on both sides at the middle, leaning a little this way and
 that. To change, a ticket's top half folds down onto the next digit, like a split-flap card (0.42 s); a jump flips
 through every digit in between, sharing about 0.9 s. With reduced motion the digits just change. Nothing shows until

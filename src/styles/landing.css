@@ -568,6 +568,66 @@
   to { translate: 0 0; clip-path: inset(0 -100vw -100vh); }
 }
 
+/* The Party'o'meter (odometer.css), by the footer: a compact row, the tickets with their label and caption beside them.
+   From tablet up it sits in the bottom-left corner, level with the footer's links on the right; on phones, where the
+   footer is centred, just above it. */
+.landing-reveal {
+  position: relative;
+}
+
+.landing-meter {
+  position: relative;
+  z-index: 1;
+  padding: 0 16px 4px;
+  background: var(--landing-ember);
+
+  .party-o-meter {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas: "tickets label" "tickets caption";
+    justify-content: center;
+    align-items: center;
+    column-gap: 12px;
+    margin: 0;
+    text-align: left;
+    color: white;
+  }
+
+  .odometer {
+    grid-area: tickets;
+    font-size: 1.5rem;
+  }
+
+  .landing-eyebrow {
+    grid-area: label;
+    align-self: end;
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  .party-o-meter-caption {
+    grid-area: caption;
+    align-self: start;
+    margin: 0;
+    font-size: 0.85rem !important;
+    line-height: 1.3;
+    /* Two short lines, so the corner stays clear of the footer's links on narrow screens. */
+    max-width: 9em;
+  }
+
+  @media (min-width: 769px) {
+    position: absolute;
+    left: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    padding: 0;
+    background: none;
+
+    .party-o-meter {
+      justify-content: start;
+    }
+  }
+}
+
 .landing-section.landing-final {
   background:
     radial-gradient(ellipse 70% 90% at 50% 0%, rgb(179 32 44 / 0.35), transparent 70%),
