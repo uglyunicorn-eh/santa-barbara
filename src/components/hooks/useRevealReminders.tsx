@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Postmark } from "@/components/Postmark";
 import { forget, remind } from "@/components/hoc/NotificationsContainer";
 import { useUnrevealed } from "@/components/hooks/useUnrevealed";
 
@@ -52,9 +53,9 @@ export const useRevealReminders = () => {
         shown.current.add(party.code);
         remind({
           id: reminderId(party.code),
-          icon: "🎲",
-          title: "The dice are rolled!",
-          description: <>In <strong className="font-semibold text-current wrap-anywhere">{party.name}</strong>. Find out whom you give a gift to.</>,
+          icon: <Postmark />,
+          title: "A letter for you",
+          description: <>From <strong className="font-semibold text-current wrap-anywhere">{party.name}</strong></>,
           action: { label: "Open", onClick: () => navigate(`/rolled/${party.code}`, { state: { name: party.name } }) },
           onDismiss: () => rememberDismissed(party.code),
         });

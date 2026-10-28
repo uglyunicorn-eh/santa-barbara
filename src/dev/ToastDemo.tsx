@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Postmark } from "@/components/Postmark";
 import { Button } from "@/components/ui/button";
 import { NotificationsContainer, remind, useNotifications, useToastSurface } from "@/components/hoc/NotificationsContainer";
 
@@ -56,9 +57,9 @@ export const ToastDemo = ({ tone, longEmail }: { tone: Tone; longEmail: string }
         surface={tone}
         onClick={() => fire(() => remind({
           id: `kit-reminder-${++reminders}`,
-          icon: "🎲",
-          title: "The dice are rolled!",
-          description: <>In <strong className="font-semibold text-current wrap-anywhere">Office Secret Santa 2026</strong>. Find out whom you give a gift to.</>,
+          icon: <Postmark />,
+          title: "A letter for you",
+          description: <>From <strong className="font-semibold text-current wrap-anywhere">Office Secret Santa 2026</strong></>,
           action: { label: "Open", onClick: () => undefined },
         }))}
       >
