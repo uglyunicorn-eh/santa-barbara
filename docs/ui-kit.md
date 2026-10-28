@@ -152,8 +152,9 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   the header's top-left corner, level with the title, opposite the Grinch; on a tablet under the two choices; on
   phones under the heading, above the question, with a rule and "All my parties · My profile" under the party. No
   card without parties. From 481px to 768px the title and Grinch, the choices and the card share one centred 34rem
-  column, the choices' text in two balanced lines (the title's lines are balanced too). Below desktop only an 80px strip
-  of the stars and ribbon separates the choices (and the card) from the footer, so the page fits without scrolling.
+  column, the choices' text in two balanced lines (the title's lines are balanced too). The stars and ribbon under the
+  choices take up to 300px from desktop up, less on a shorter window (never under 80px) so the page fits it without
+  scrolling; below desktop an 80px strip.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
