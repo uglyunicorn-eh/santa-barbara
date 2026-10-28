@@ -1,7 +1,7 @@
 /* The party countdown (src/components/PartyCountdown.tsx), to roughly when the dice get rolled, in the Party'o'meter's
    look: its flip tickets (odometer.css) in four groups with a small grey label under each, under a red, letter-spaced
    "The party starts in about" like the meter's own label, "in about" underlined like the front door's "Jeez!"
-   (landing.css), with the date in a bubble under it on hover, tap or focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
+   (landing.css), with the date in a bubble over it on hover, tap or focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
    (366 days) fits at 320px. */
 
 .due-clock {
@@ -45,11 +45,11 @@
   }
 }
 
-/* The date, in the "Jeez!" bubble: under the label (the ticket sits near the top of the screen), tilting into place. */
+/* The date, in the "Jeez!" bubble: over the label, tilting into place. */
 .due-clock-hint {
   position: absolute;
   z-index: 5;
-  top: calc(100% + 10px);
+  bottom: calc(100% + 10px);
   left: 50%;
   width: max-content;
   max-width: min(260px, 80vw);
@@ -69,20 +69,20 @@
   visibility: hidden;
   opacity: 0;
   transform: translateX(-50%) rotate(-6deg) scale(0.6);
-  transform-origin: 50% 0;
+  transform-origin: 50% 100%;
   transition:
     opacity 150ms ease-out,
     transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
     visibility 0s 250ms;
 
-  /* The bubble's tail, pointing up at the label. */
+  /* The bubble's tail, pointing down at the label. */
   &::after {
     content: "";
     position: absolute;
-    bottom: 100%;
+    top: 100%;
     left: 50%;
     border: 8px solid transparent;
-    border-bottom-color: #fef08a;
+    border-top-color: #fef08a;
     transform: translateX(-50%);
   }
 }
@@ -117,17 +117,24 @@
   gap: 4px;
 }
 
-/* The meter's tickets, with a soft shadow so they stand out on the light page. */
+/* The meter's tickets, with a little more room around each digit than the meter's (the digits keep their size),
+   and a soft shadow so they stand out on the light page. */
 .due-clock-digits {
+  --cell-h: 1.4em;
+
   display: flex;
   gap: 0.14em;
   filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.25));
+
+  .flap-digit {
+    width: 0.84em;
+  }
 }
 
 /* Between the groups, level with the cards' middle. */
 .due-clock-colon {
-  height: 1.3em;
-  line-height: 1.3em;
+  height: 1.5em;
+  line-height: 1.5em;
   font-weight: 600;
 }
 

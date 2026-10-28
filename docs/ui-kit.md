@@ -139,7 +139,7 @@ The party page counts down to the party's due time, if its host set one: roughly
 the new digit, as a clock counts down) in four groups, days unpadded and the rest two digits, with "days", "hours",
 "min" and "sec" in small grey letters under them. Over them, "The party starts in about" in red, letter-spaced capitals
 like the meter's own label, with only "in about" underlined with the front door's "Jeez!" pen stroke and the date
-("Around ‹date›", in the browser's own format) in the same yellow bubble under it on hover, tap or keyboard focus.
+("Around ‹date›", in the browser's own format) in the same yellow bubble over it on hover, tap or keyboard focus.
 The create form calls the field "Party starts". From desktop up it sits in the page's top-right corner,
 over the gnome; smaller screens have no free corner, so there it sits above the party's name, centred like it
 (`party-details.css`). It ticks on each new second while the tab is
