@@ -18,16 +18,16 @@
       font-size: 2rem;
     }
 
-    /* The countdown (due-clock.css), just above the party's button: in line with the text from desktop up,
-       centred like the button below it on smaller screens. */
+    /* The countdown (due-clock.css), above the party's name: in line with the text from desktop up, centred on
+       smaller screens, where the name is too. */
     .party-due {
-      margin: 1.5em 0 0;
+      margin: 0 0 4px;
+      text-align: center;
 
-      @media (max-width: 1023px) {
-        text-align: center;
+      @media (min-width: 1024px) {
+        text-align: left;
       }
     }
-
 
     @media (max-width: 768px) {
       text-align: left;

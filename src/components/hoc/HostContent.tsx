@@ -9,11 +9,9 @@ import type { Party, User } from '@/types';
 type Props = {
   party: Party;
   user: User;
-  /** The countdown to the party's due time, if it has one: shown just above the roll button. */
-  due?: React.ReactNode;
 }
 
-const HostContent = ({ party, user, due }: Props) => {
+const HostContent = ({ party, user }: Props) => {
   const navigate = useNavigate();
 
   const onConfirm = React.useCallback(
@@ -45,8 +43,6 @@ const HostContent = ({ party, user, due }: Props) => {
       {party.participantCount! > 1 && <p>Here's a full list: {party.participants!.join(', ')}.</p>}
 
       <p>If you feel you're ready to go, then go ahead! Press the button below. Have fun!</p>
-
-      {due}
 
       {!party.isClosed && (
         <>

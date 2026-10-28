@@ -2,8 +2,8 @@ import React from "react";
 
 import { PartyCountdown } from "@/components/PartyCountdown";
 
-// The kit's party countdowns, each due a set while from when the page loads, on the party page's own
-// background, where the page puts them: after the text, above the party's button.
+// The kit's party countdowns, each due a set while from when the page loads, on the party page's own background, above
+// a party's name as on the page.
 
 const STATES: { label: string; aheadMs: number }[] = [
   { label: "Days left", aheadMs: ((3 * 24 + 4) * 60 + 5) * 60_000 + 6_000 },
@@ -21,10 +21,10 @@ export const CountdownDemo = () => {
         <figure key={label} className="party-details overflow-hidden rounded-card p-4 shadow-lg">
           <figcaption className="text-sm text-zinc-700">{label}</figcaption>
           <div className="party-details-content mb-0!">
-            <p className="mt-2">If you feel you're ready to go, then go ahead! Press the button below. Have fun!</p>
             <div className="party-due">
               <PartyCountdown dueAt={new Date(loadedAt + aheadMs).toISOString()} />
             </div>
+            <h1 className="text-center">Office Secret Santa 2026</h1>
           </div>
         </figure>
       ))}

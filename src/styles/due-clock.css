@@ -1,25 +1,30 @@
-/* The party countdown (src/components/PartyCountdown.tsx): light and simple, right on the party page. The
-   Party'o'meter's flip cards (odometer.css) in four groups with a small label under each, and "Gifts due in" over them,
-   underlined like the front door's "Jeez!" (landing.css), with the date in a bubble over it on hover, tap or focus. Sized by its font size: smaller on phones, so the longest (366 days) fits at 320px. */
+/* The party countdown (src/components/PartyCountdown.tsx), in the Party'o'meter's look: its flip tickets (odometer.css)
+   in four groups with a small grey label under each, under a red, letter-spaced "Gifts due in" like the meter's own
+   label, underlined like the front door's "Jeez!" (landing.css), with the date in a bubble under it on hover, tap or
+   focus. The party page puts it above the party's name (party-details.css). Smaller on phones, so the longest
+   (366 days) fits at 320px. */
 
 .due-clock {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  color: var(--color-zinc-600);
+  color: var(--color-zinc-500);
   line-height: 1.2;
-  font-size: 2rem;
+  text-shadow: none;
+  font-size: 1.75rem;
 
   @media (max-width: 768px) {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 }
 
+/* Like the Party'o'meter's label, in the red that reads on the light page. */
 .due-clock-title {
   position: relative;
   padding-bottom: 0.25em;
-  font-size: 0.8rem;
+  color: var(--color-red-700);
+  font-size: 0.5em;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -37,11 +42,11 @@
   }
 }
 
-/* The date, in the "Jeez!" bubble: over the label, tilting into place. */
+/* The date, in the "Jeez!" bubble: under the label (the ticket sits near the top of the screen), tilting into place. */
 .due-clock-hint {
   position: absolute;
   z-index: 5;
-  bottom: calc(100% + 12px);
+  top: calc(100% + 10px);
   left: 50%;
   width: max-content;
   max-width: min(260px, 80vw);
@@ -61,20 +66,20 @@
   visibility: hidden;
   opacity: 0;
   transform: translateX(-50%) rotate(-6deg) scale(0.6);
-  transform-origin: 50% 100%;
+  transform-origin: 50% 0;
   transition:
     opacity 150ms ease-out,
     transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
     visibility 0s 250ms;
 
-  /* The bubble's tail, pointing at the label. */
+  /* The bubble's tail, pointing up at the label. */
   &::after {
     content: "";
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 50%;
     border: 8px solid transparent;
-    border-top-color: #fef08a;
+    border-bottom-color: #fef08a;
     transform: translateX(-50%);
   }
 }
@@ -109,10 +114,10 @@
   gap: 4px;
 }
 
-/* A soft shadow under the cream cards, so they stand out on the light page. */
+/* The meter's tickets, with a soft shadow so they stand out on the light page. */
 .due-clock-digits {
   display: flex;
-  gap: 0.1em;
+  gap: 0.14em;
   filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 0.25));
 }
 
@@ -124,7 +129,7 @@
 }
 
 .due-clock-unit {
-  font-size: 0.75rem;
+  font-size: 0.42em;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }

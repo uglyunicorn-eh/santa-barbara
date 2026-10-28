@@ -2,9 +2,9 @@ import React from "react";
 
 import { FlapDigit } from "@/components/FlapDigit";
 
-// The party page's countdown to the party's due time (due-clock.css): light and simple, the Party'o'meter's flip
-// cards in four groups (days, hours, minutes, seconds) with a label under each. The date itself is a hint on
-// "Gifts due in", underlined like the front door's "Jeez!". A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
+// The party page's countdown to the party's due time (due-clock.css), in the Party'o'meter's look: its flip tickets in
+// four groups (days, hours, minutes, seconds) with a small label under each, under a red, letter-spaced "Gifts due in"
+// like the meter's own label. The date itself is a hint on that label, underlined like the front door's "Jeez!". A digit flips when it changes, straight to its new value. It ticks every second while the tab is visible;
 // once the time is up it shows 0:00:00:00 and nothing else happens.
 
 const SECOND = 1000;
@@ -18,13 +18,6 @@ export const timeLeft = (msLeft: number) => {
     minutes: Math.floor(total / 60) % 60,
     seconds: total % 60,
   };
-};
-
-/** Time left as "D:HH:MM:SS": days unpadded, the rest two digits; never below 0:00:00:00. */
-export const formatCountdown = (msLeft: number) => {
-  const { days, hours, minutes, seconds } = timeLeft(msLeft);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${days}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
 /**
@@ -91,8 +84,8 @@ export const PartyCountdown = ({ dueAt }: { dueAt: string }) => {
   const { days, hours, minutes, seconds } = timeLeft(due - now);
   const date = dueDate.format(due);
   return (
-    // Screen readers get the date, not digits changing every second; the text form shows on hover.
-    <div className="due-clock" role="timer" aria-label={`Gifts due ${date}`} title={formatCountdown(due - now)}>
+    // Screen readers get the date, not digits changing every second.
+    <div className="due-clock" role="timer" aria-label={`Gifts due ${date}`}>
       {/* Focusable, so a tap (or Tab) shows the date too, as hover does; the hint is the label's description. */}
       <span className="due-clock-title" tabIndex={0} aria-describedby={hintId}>
         Gifts due in
