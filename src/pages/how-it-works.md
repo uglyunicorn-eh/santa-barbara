@@ -38,7 +38,7 @@ Gentle warning: pressing it before your friends have joined is how one ends up b
 
 ## 5. Shhh! It's a secret
 
-You'll see **only one name**: the lucky person who will receive your gift. Nobody knows who you got, and nobody will know who got them. You are the Ded Moroz, but an *anonymous* one. Think of yourself as a ninja in a red coat.
+You'll see **only one name**: the lucky person who will receive your gift. Nobody knows who you got, and nobody will know who got them. You are Santa Claus, but an *anonymous* one. Think of yourself as a ninja in a red coat.
 
 Keep the name to yourself. Do not whisper it. Do not hint. Do not "accidentally" buy the exact thing they mentioned last Tuesday. Well, maybe a little.
 
@@ -68,7 +68,7 @@ No. You sign in with your email address and a magic link. Nothing to remember, n
 Of course. Everything happens online: share the party code, and anyone anywhere can join. How the gifts travel is between you and the post office.
 
 **Can the host see who got whom?**
-No. The host is a Ded Moroz like everybody else and sees only their own name. Nobody, host included, can peek at the full list.
+No. The host is a Santa Claus like everybody else and sees only their own name. Nobody, host included, can peek at the full list.
 
 **Can I leave after the dice are rolled?**
 No. Once the dice are rolled, someone is counting on your gift. You can leave any time before that. The host can't leave their own party, but they can delete it before the roll.
@@ -81,4 +81,4 @@ Open *My Profile* and ask to delete it. We'll email you a link to confirm. If yo
 
 > — Houston, we have a gift! I repeat, we have a gift!
 >
-> — Copy that, Ded Moroz. Proceed to eat mandarins.
+> — Copy that, Santa. Proceed to eat mandarins.

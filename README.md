@@ -7,9 +7,9 @@
 
 ![grinch](https://github.com/uglyunicorn-eh/santa-barbara/assets/137888/89dacf13-f6f2-49ea-b609-31572e66c4e7)
 
-# Anonymous Ded Morozes
+# Anonymous Santa Clauses
 
-A Secret Santa gift exchange for friends, families and offices (*Ded Moroz* is the Slavic Santa).
+A Secret Santa gift exchange for friends, families and offices.
 Live at **[gnomik.me](https://gnomik.me)**.
 
 ## How it works
@@ -18,7 +18,7 @@ Live at **[gnomik.me](https://gnomik.me)**.
 2. **Host a party** and share its code with friends, or **join** one with the code a friend gave you.
 3. Everyone who joins shows up on the party page. Until the dice are rolled, people can still leave.
 4. **The host rolls the dice.** Everyone gets one name: the person they give a gift to.
-5. Nobody sees anyone else's name, so everyone stays an anonymous Ded Moroz.
+5. Nobody sees anyone else's name, so everyone stays an anonymous Santa Claus.
 
 No marketing emails, and no sharing your data with anyone.
 

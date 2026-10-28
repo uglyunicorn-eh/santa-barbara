@@ -44,7 +44,7 @@ export const GnomeZen = () => {
   });
 
   return (
-    <button type="button" className="gnome-zen" onClick={speak} aria-label="Ask the gnome" title="Ask the gnome">
+    <button type="button" className="gnome-zen" onClick={speak} aria-label="Ask Gnomik" title="Ask Gnomik">
       {line === null
         ? <SyncLoader size={10} />
         // Read out when it changes, like someone speaking.

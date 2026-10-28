@@ -151,7 +151,7 @@ export const ConfirmAccountDeletion = () => {
     <LinkPage>
       <h2>Delete your account?</h2>
       <br />
-      <p>This deletes the Anonymous Ded Morozes account for <strong className="text-white">{checked.email}</strong>.</p>
+      <p>This deletes the Anonymous Santa Clauses account for <strong className="text-white">{checked.email}</strong>.</p>
       <p>
         Parties you host that haven't rolled the dice are deleted, and you leave the open parties you joined. In parties
         that already rolled, your Secret Santa keeps the name you joined with, and nothing else about you. This can't be
