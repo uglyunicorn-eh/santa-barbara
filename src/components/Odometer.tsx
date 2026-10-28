@@ -113,14 +113,16 @@ const FlapDigit = ({ digit }: { digit: number }) => {
   );
 };
 
-/** A counter showing `value` on at least MIN_DIGITS tickets. */
+/** A counter showing `value` on at least MIN_DIGITS tickets. Clicking it flips the tickets up from zeros again. */
 export const Odometer = ({ value }: { value: number }) => {
   const digits = String(value).padStart(MIN_DIGITS, "0");
+  // Each click starts the tickets over: back to 0, then flipping up to the count, as on the first load.
+  const [run, setRun] = React.useState(0);
   return (
-    <span className="odometer" role="img" aria-label={String(value)}>
-      {/* Keyed from the right, so a new leading digit doesn't restart the others. */}
-      {[...digits].map((digit, i) => <FlapDigit key={digits.length - i} digit={Number(digit)} />)}
-    </span>
+    <button type="button" className="odometer" aria-label={String(value)} title="Flip again" onClick={() => setRun(n => n + 1)}>
+      {/* Keyed from the right, so a new leading digit doesn't restart the others; a new run restarts them all. */}
+      {[...digits].map((digit, i) => <FlapDigit key={`${run}:${digits.length - i}`} digit={Number(digit)} />)}
+    </button>
   );
 };
 
