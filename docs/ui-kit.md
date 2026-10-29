@@ -166,7 +166,8 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   GET /v1/me; without it the card has no rank. Delete account is only on the Profile tab: a red ghost button with a
   bin in the footer's bottom-left corner from tablet up, opposite Okie Dokie; on a phone's sheet under the card. It
   opens the danger sheet; once the link is sent it reads "Check your email" (disabled) and a toast names the address.
-  On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under the list.
+  With no parties yet, Latest history offers "Start a party" (primary, to `/new/`) and "Join with a code" (ghost, to
+  `/join/`) under its empty message. On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under the list.
   On Latest history a rule sets the footer apart from the list scrolling under it (full width from tablet up, inset on
   phones). Sign out is in the page's footer, after My Profile (under ☰ on phones).
 - **The home screen** (signed in): "Your latest party", a ticket stub like the Party'o'meter's tickets (cream, tilted
@@ -187,7 +188,7 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **The Grinch's card** (sign-in) is a dialog too: the dark glass card over the front door, which stays put behind it.
 - **Tabs** (the profile): text tabs, the current one underlined in teal; keyboard focus shows an inset ring.
 - **Toasts** (Sonner, `NotificationsContainer`): top centre on phones; from tablet up, bottom right, 16px from the
-  edges (96px from the bottom on the signed-in pages, above their footer). The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
+  edges (on the signed-in pages, just above the footer while some of it is on screen, rising with it as it scrolls in). The dismiss button shows on hover or keyboard focus; on touch, swipe a toast away. Titles in normal weight,
   the icon beside the first line. Errors are solid red (`red-600`), info blue (`blue-600`), success green
   (`green-700`), with white text, on every page; errors go after 2.5 s, other messages after 4 s. Reminders (`remind`)
   are a little card in one row: a picture on the left (the reveal's stamp with a postmark over it, a little askew),
