@@ -201,37 +201,30 @@
     }
   }
 
-  /* The rank's chevrons, sewn on over the photo's bottom corner at a slant, standing a little off the card. */
+  /* The rank's chevrons on the photo's bottom corner: flat, one colour, the card's red. */
   .np-chevrons {
     position: absolute;
-    right: 0.35em;
-    bottom: 0.35em;
-    width: 2.9em;
-    rotate: -6deg;
-    filter: drop-shadow(0 1.5px 1.2px rgb(0 0 0 / 0.4));
+    right: 0.4em;
+    bottom: 0.4em;
+    width: 2.6em;
 
-    /* The tall stacks (rocker, star) shrink to keep clear of the eyes' bar; the shape scales down inside the box. */
     svg {
       display: block;
       width: 100%;
       height: auto;
-      max-height: 3.3em;
       overflow: visible;
       border-radius: 0;
     }
 
     path,
     polygon {
-      fill: url(#np-thread);
-      stroke: #2f5233;
-      stroke-width: 1.6;
-      stroke-linejoin: round;
+      fill: var(--np-red);
     }
 
     @media (max-width: 768px) {
-      right: 0.2em;
-      bottom: 0.2em;
-      width: 2.2em;
+      right: 0.3em;
+      bottom: 0.3em;
+      width: 1.8em;
     }
   }
 

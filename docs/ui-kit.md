@@ -147,11 +147,11 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   last letters, always three dots), on one line with "…" when it doesn't fit. The Profile tab is a North Pole ID card
   (`NorthPoleId`): cream, tilted a little, all in mono type, a red strip on top ("North Pole · Secret Santa ID", the
   card's number from the account id, and a button that turns the card over). The front: the photo, a silhouette with a
-  black bar over the eyes, with the rank's sleeve chevrons sewn on its bottom corner (gold-thread bands edged in
-  pine: a star for Rookie elf, one to three chevrons, then a rocker under them, then a star on top); the name and the masked email, each with the same red pencil, edited
+  black bar over the eyes, with the rank's chevrons on its bottom corner, flat in the card's red (a star for Rookie
+  Gnomik, one to three chevrons, then a rocker under them, then a star on top); the name and the masked email, each with the same red pencil, edited
   right on the card; days undercover, issue date and "Valid to 25 Dec"; the rank in a dashed box, from how many of the person's
-  parties rolled (Rookie elf, Elf from 1, Senior elf from 3, Director of Elves from 6, VP of Operations from 10, Chief
-  Gnome Officer from 15), with a die per rolled party it takes to reach the next one; and two machine-readable lines
+  parties rolled (Rookie Gnomik, Gnomik from 1, Senior Gnomik from 3, Director of Elves from 6, VP of Operations from 10, Chief
+  Party Officer from 15), with a die per rolled party it takes to reach the next one; and two machine-readable lines
   cut off at the card's edge. On phones the email goes across the card under the photo. Editing never moves anything
   on the card: the field is a white frame as tall as the value's line, flush with its label and note, red around it
   while typing (and on an error), with two small icon buttons inside it: a red ✓ (Save) or paper plane (Send the
