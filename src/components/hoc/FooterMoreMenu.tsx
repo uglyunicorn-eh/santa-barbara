@@ -1,10 +1,11 @@
 import { Menu } from "@base-ui/react/menu";
+import React from "react";
 import { Menu as MenuIcon } from "react-feather";
 import { Link } from "react-router-dom";
 
 import type { MenuItem } from "@/components/hoc/Footer";
-import { moreTriggerClass } from "@/components/hoc/footerMenu";
-import { menuItemClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
+import { menuGroups, moreTriggerClass } from "@/components/hoc/footerMenu";
+import { menuItemClass, menuPopupClass, menuPositionerClass, menuSeparatorClass } from "@/components/ui/menu";
 
 /** The footer's other links in a small menu that opens upwards. */
 export const MoreMenu = ({ items, dot = false, defaultOpen = false }: { items: MenuItem[]; dot?: boolean; defaultOpen?: boolean }) => (
@@ -18,10 +19,15 @@ export const MoreMenu = ({ items, dot = false, defaultOpen = false }: { items: M
     <Menu.Portal>
       <Menu.Positioner side="top" align="center" sideOffset={8} collisionPadding={16} className={menuPositionerClass}>
         <Menu.Popup className={menuPopupClass}>
-          {items.map(({ key, url, label, menuLabel, asLink, onClick, title: _title, ...rest }) => (
-            asLink
-              ? <Menu.LinkItem key={key} className={menuItemClass} closeOnClick render={<Link to={url} />}>{menuLabel ?? label}</Menu.LinkItem>
-              : <Menu.LinkItem key={key} className={menuItemClass} closeOnClick href={url} onClick={onClick} {...rest}>{menuLabel ?? label}</Menu.LinkItem>
+          {menuGroups(items).map((group, index) => (
+            <React.Fragment key={group[0].key}>
+              {index > 0 && <Menu.Separator className={menuSeparatorClass} />}
+              {group.map(({ key, url, label, menuLabel, asLink, onClick, title: _title, ...rest }) => (
+                asLink
+                  ? <Menu.LinkItem key={key} className={menuItemClass} closeOnClick render={<Link to={url} />}>{menuLabel ?? label}</Menu.LinkItem>
+                  : <Menu.LinkItem key={key} className={menuItemClass} closeOnClick href={url} onClick={onClick} {...rest}>{menuLabel ?? label}</Menu.LinkItem>
+              ))}
+            </React.Fragment>
           ))}
         </Menu.Popup>
       </Menu.Positioner>

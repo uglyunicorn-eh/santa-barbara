@@ -3,7 +3,7 @@ import { Link2, Mail, Menu as MenuIcon, Trash2 } from 'react-feather';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button";
-import { menuItemClass, menuItemDestructiveClass, menuPopupClass, menuPositionerClass } from "@/components/ui/menu";
+import { menuItemClass, menuItemDestructiveClass, menuPopupClass, menuPositionerClass, menuSeparatorClass } from "@/components/ui/menu";
 import { cn } from "@/lib/utils";
 import { ConfirmPartyDelete } from '@/components/hoc/ConfirmPartyDelete';
 import { InvitePartyDialog } from '@/components/hoc/InvitePartyDialog';
@@ -34,7 +34,7 @@ export const PartyActionsMenu = () => {
               <Menu.Item className={menuItemClass} onClick={() => navigate('invite')}>
                 <Mail size={16} aria-hidden="true" /> Invite by email…
               </Menu.Item>
-              <Menu.Separator className="my-1 h-px bg-border" />
+              <Menu.Separator className={menuSeparatorClass} />
               <Menu.Item className={cn(menuItemClass, menuItemDestructiveClass)} onClick={() => navigate('delete')}>
                 <Trash2 size={16} aria-hidden="true" /> Delete this party
               </Menu.Item>

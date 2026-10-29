@@ -129,8 +129,7 @@ export const PartyDetails = ({ party }: Props) => {
           </Container>
         </Hero.Body>
         <Hero.Footer>
-          {/* On phones, Home in the line instead of "How this works?" (the way back from a party). */}
-          <Footer profileAsLink profileBase={`${partyPath}profile/`} compactKeys={["home", "buy-me-coffee"]}>
+          <Footer profileAsLink profileBase={`${partyPath}profile/`}>
             <UnsplashCredit id="78uNJt1kPw8" name="Joanna Kosinska" username="joannakosinska" />
           </Footer>
         </Hero.Footer>
