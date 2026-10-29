@@ -1,27 +1,20 @@
-import { useFormContext, useFormState } from "react-hook-form";
 import React from "react";
 import { Content } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes, useMatch } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Calendar, ChevronRight, Gift, Lock, Mail, Star, Trash2, X } from 'react-feather';
-import * as v from "valibot";
+import { Calendar, ChevronRight, Gift, Lock, Mail, Star, Trash2 } from 'react-feather';
 
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
 import { DialogCharacter } from "@/components/DialogCharacter";
 import { Tab, Tabs } from "@/components/Tab";
-import { Form } from "@/components/forms/Form";
-import { FormFieldContext } from "@/components/forms/FormField";
-import { Input } from "@/components/forms/Input";
 import { Submit } from "@/components/forms/Submit";
-import { maxLen, required, validEmail } from "@/components/forms/messages";
 import { useNotifications } from "@/components/hoc/NotificationsContainer";
+import { NorthPoleId, maskEmail } from "@/components/hoc/NorthPoleId";
 import { useAppClient, useCurrentUser, useSignals, useTabletUp } from "@/components/hooks";
 import { PARTIES_CHANGED } from "@/components/hooks/useAppClient";
-import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hooks/useAppClient";
 import type { Party } from "@/types";
-import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { pageTitle } from "@/site";
 
 import GrinchImg from "@/images/grinch.png";
@@ -92,35 +85,6 @@ const usePartyHistory = () => {
   return { loading, page, fetchMore };
 };
 
-const nameSchema = v.object({
-  name: v.pipe(v.string(), v.trim(), v.nonEmpty(required("Name")), v.maxLength(MAX_PERSON_NAME_LENGTH, maxLen("Name", MAX_PERSON_NAME_LENGTH))),
-});
-
-/** Rejects the current address here, so the request (and its emailing rate limit) is never spent on it. */
-const emailSchema = (currentEmail: string) => v.object({
-  email: v.pipe(
-    v.string(),
-    v.trim(),
-    v.nonEmpty(required("New email")),
-    v.maxLength(MAX_EMAIL_LENGTH, maxLen("New email", MAX_EMAIL_LENGTH)),
-    v.email(validEmail("New email")),
-    v.check(value => value.toLowerCase() !== currentEmail.toLowerCase(), "That's already your email."),
-  ),
-});
-
-/**
- * The account's email as the profile shows it, so a shared screen doesn't give it away: the name's first and last
- * letters around three dots (always three, so its length doesn't show either), then the domain. "s•••r@uglyunicorn.ca".
- */
-const maskEmail = (email: string) => {
-  const at = email.lastIndexOf("@");
-  if (at < 1) {
-    return email;
-  }
-  const local = email.slice(0, at);
-  return `${local[0]}•••${local.length > 2 ? local.at(-1) : ""}${email.slice(at)}`;
-};
-
 /**
  * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
  * party page (closing it goes back to `dismissLocation`).
@@ -188,19 +152,18 @@ const Greeting = () => {
 };
 
 /**
- * Name and email. Delete account is only on this tab: from tablet up in the footer's bottom-left corner, opposite Okie
- * Dokie; on a phone's sheet a trash icon beside the email's Change, so the footer keeps just Okie Dokie.
+ * The North Pole ID card, where the name and email are edited. Delete account is only on this tab: from tablet up in
+ * the footer's bottom-left corner, opposite Okie Dokie; on a phone's sheet under the card, so the footer keeps just
+ * Okie Dokie.
  */
 const Profile = ({ deletionSent, onDeletionSent }: { deletionSent: boolean; onDeletionSent: () => void }) => {
   const { profile, updateProfile, signOut } = useCurrentUser();
-  const { getProfile, updateName } = useAppClient();
-  const { success } = useNotifications();
+  const { getProfile } = useAppClient();
   const tabletUp = useTabletUp();
   const email = profile?.email ?? "";
-  // The form follows the profile: when it reloads (or is saved), the field shows the new name.
-  const nameValues = React.useMemo(() => ({ name: profile?.name ?? "" }), [profile?.name]);
 
-  // The cached profile may be stale (e.g. the first party joined set the name), so reload it once.
+  // The cached profile may be stale (e.g. the first party joined set the name), and only this call brings the party
+  // counts behind the rank, so reload it once.
   React.useEffect(
     () => {
       (async function () {
@@ -217,186 +180,16 @@ const Profile = ({ deletionSent, onDeletionSent }: { deletionSent: boolean; onDe
     [],
   );
 
-  const onSubmit = React.useCallback(
-    async ({ name }: UpdateNameInput) => {
-      const user = await updateName({ name: name.trim() });
-      if (user) {
-        updateProfile(user);
-        success("Got it! The elves wrote your new name down.");
-      }
-    },
-    [
-      updateName,
-      updateProfile,
-      success,
-    ],
-  );
+  const deleteAccount = <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} />;
 
   return (
     <div className="profile-settings">
       <title>{pageTitle("My profile")}</title>
-
-      <Setting
-        label="Name"
-        hint="We'll suggest it when you join a new party. Parties you've already joined keep the name you joined with."
-      >
-        <Form
-          defaultValues={{ name: profile?.name ?? "" }}
-          values={nameValues}
-          mode="onSubmit"
-          schema={nameSchema}
-          onSubmit={onSubmit}
-        >
-          <InlineField name="name" action={<SaveButton />}>
-            <Input placeholder="How should your friends call you?" maxLength={MAX_PERSON_NAME_LENGTH} />
-          </InlineField>
-        </Form>
-      </Setting>
-
-      <EmailSetting
-        email={email}
-        extra={!tabletUp && <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} iconOnly />}
-      />
-
-      <AnonymousAge joinedAt={profile?.joinedAt} />
-
-      {tabletUp && (
-        <DialogFooterStart>
-          <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} />
-        </DialogFooterStart>
-      )}
+      <NorthPoleId />
+      {tabletUp
+        ? <DialogFooterStart>{deleteAccount}</DialogFooterStart>
+        : <div className="mt-4 flex justify-center">{deleteAccount}</div>}
     </div>
-  );
-};
-
-const joinedFormat = new Intl.DateTimeFormat(undefined, { day: "numeric", month: "long", year: "numeric" });
-
-/**
- * How many days ago the account was made, counted in calendar days where the person is (joined yesterday evening is 1
- * day, whatever the hour). Hidden if the API didn't say when.
- */
-const AnonymousAge = ({ joinedAt }: { joinedAt?: string }) => {
-  const joined = joinedAt ? new Date(joinedAt) : null;
-  if (!joined || isNaN(joined.getTime())) {
-    return null;
-  }
-  const today = new Date();
-  const days = Math.max(0, Math.round(
-    (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
-      - Date.UTC(joined.getFullYear(), joined.getMonth(), joined.getDate())) / 86_400_000,
-  ));
-
-  return (
-    <Setting label="Anonymous age" hint={days ? `You joined on ${joinedFormat.format(joined)}.` : "You joined today. Welcome!"}>
-      <div className="setting-control">
-        <span className="setting-value">{days === 0 ? "Brand new" : days === 1 ? "1 day" : `${days.toLocaleString()} days`}</span>
-      </div>
-    </Setting>
-  );
-};
-
-/** One row of the profile: a label, its control, and a short hint under the control. */
-const Setting = ({ label, hint, children }: { label: string, hint?: React.ReactNode, children: React.ReactNode }) => (
-  <div className="setting">
-    <div className="setting-label">{label}</div>
-    <div className="setting-body">
-      {children}
-      {hint && <p className="setting-hint">{hint}</p>}
-    </div>
-  </div>
-);
-
-/** An input with its buttons on the same line, all one height, and the field's error (after a submit) underneath. */
-const InlineField = ({ name, action, children }: { name: string, action: React.ReactNode, children: React.ReactNode }) => {
-  const { getFieldState } = useFormContext();
-  const formState = useFormState({ name });
-  const id = React.useId();
-  const error: string | undefined = getFieldState(name, formState).error?.message;
-
-  return (
-    <FormFieldContext.Provider value={{ name, id, messageId: `${id}-error`, invalid: !!error }}>
-      <div className="setting-control">
-        <div className="setting-input">{children}</div>
-        {action}
-      </div>
-      {error && <p id={`${id}-error`} className="mt-1 text-sm text-destructive">{error}</p>}
-    </FormFieldContext.Provider>
-  );
-};
-
-/** Saves the name: shown only once it's been edited. */
-const SaveButton = () => {
-  const { isDirty } = useFormState();
-  return isDirty ? <Submit>Save</Submit> : null;
-};
-
-/**
- * Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). `extra`
- * goes after Change (a phone's Delete account icon), hidden while the new address is typed in.
- */
-const EmailSetting = ({ email, extra }: { email: string; extra?: React.ReactNode }) => {
-  const { requestEmailChange } = useAppClient();
-  const [editing, setEditing] = React.useState(false);
-  const [sentTo, setSentTo] = React.useState<string>();
-  // One id per opened form: sending the same address again from it doesn't email twice; a new address is a new request.
-  const requestId = React.useRef("");
-  const schema = React.useMemo(() => emailSchema(email), [email]);
-
-  const startEditing = React.useCallback(
-    () => {
-      requestId.current = crypto.randomUUID();
-      setEditing(true);
-    },
-    [],
-  );
-
-  const onSubmit = React.useCallback(
-    async (input: RequestEmailChangeInput) => {
-      const newEmail = input.email.trim();
-      if (await requestEmailChange({ email: newEmail, requestId: requestId.current })) {
-        setSentTo(newEmail);
-        setEditing(false);
-      }
-    },
-    [
-      requestEmailChange,
-    ],
-  );
-
-  if (editing) {
-    return (
-      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {maskEmail(email)}.</>}>
-        <Form defaultValues={{ email: "" }} mode="onSubmit" schema={schema} onSubmit={onSubmit}>
-          <InlineField
-            name="email"
-            action={
-              <>
-                <Submit>Send link</Submit>
-                {/* An X, so the field and both buttons fit on one line, phones included. */}
-                <Button type="button" variant="ghost" className="size-10 shrink-0 px-0" aria-label="Cancel" title="Cancel" onClick={() => setEditing(false)}>
-                  <X size={20} aria-hidden="true" />
-                </Button>
-              </>
-            }
-          >
-            <Input type="email" placeholder="Your new email address" autofocus maxLength={MAX_EMAIL_LENGTH} />
-          </InlineField>
-        </Form>
-      </Setting>
-    );
-  }
-
-  return (
-    <Setting
-      label="Email"
-      hint={sentTo && <>Check {sentTo} for a confirmation link. Your email changes once you click it.</>}
-    >
-      <div className="setting-control">
-        <span className="setting-value min-w-0 truncate" title={maskEmail(email)}>{maskEmail(email)}</span>
-        <Button type="button" variant="ghost" onClick={startEditing}>Change</Button>
-        {extra}
-      </div>
-    </Setting>
   );
 };
 
@@ -406,16 +199,13 @@ const noValues = {};
  * Deleting the account takes two steps: this button opens a danger sheet on top of the profile, which asks to confirm,
  * then the emailed link finishes it (handled by ConfirmAccountDeletion). The sheet isn't a route: /profile/delete is
  * that link's page. Once the link is sent (`sent`, kept by the dialog), the button says so (and a toast says where).
- * `iconOnly`: just the trash can (a mail icon once sent), the size of the X beside a field, named in its label.
  */
-const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent: boolean; onSent: () => void; iconOnly?: boolean }) => {
+const DeleteAccount = ({ email, sent, onSent }: { email: string; sent: boolean; onSent: () => void }) => {
   const { requestAccountDeletion } = useAppClient();
   const { success } = useNotifications();
   const [confirming, setConfirming] = React.useState(false);
   // One id per confirmation: retrying it after a failure is fine, it never emails twice.
   const requestId = React.useRef("");
-  const iconSize = iconOnly ? 20 : 18;
-  const iconClass = iconOnly ? "size-10 shrink-0 px-0" : undefined;
 
   const startConfirming = React.useCallback(
     () => {
@@ -448,27 +238,13 @@ const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent:
     <>
       {sent
         ? (
-          <Button
-            type="button"
-            variant="ghost"
-            className={iconClass}
-            disabled
-            aria-label={iconOnly ? "Check your email" : undefined}
-            title={`We've sent a link to ${maskEmail(email)}`}
-          >
-            <Mail size={iconSize} aria-hidden="true" />{!iconOnly && " Check your email"}
+          <Button type="button" variant="ghost" disabled title={`We've sent a link to ${maskEmail(email)}`}>
+            <Mail size={18} aria-hidden="true" /> Check your email
           </Button>
         )
         : (
-          <Button
-            type="button"
-            variant="ghost-destructive"
-            className={iconClass}
-            aria-label={iconOnly ? "Delete account" : undefined}
-            title={iconOnly ? "Delete account" : undefined}
-            onClick={startConfirming}
-          >
-            <Trash2 size={iconSize} aria-hidden="true" />{!iconOnly && " Delete account"}
+          <Button type="button" variant="ghost-destructive" onClick={startConfirming}>
+            <Trash2 size={18} aria-hidden="true" /> Delete account
           </Button>
         )}
 

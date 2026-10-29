@@ -5,6 +5,15 @@ export type User = {
   email?: string | null;
   /** When the account was made (ISO 8601). Only for the signed-in user; older API versions leave it out. */
   joinedAt?: string;
+  /** Parties the user is in, how many rolled, how many they host. Only from the profile (GET and PATCH /v1/me). */
+  parties?: PartyCounts;
+};
+
+/** The profile's party counts: deleted parties don't count. */
+export type PartyCounts = {
+  joined: number;
+  rolled: number;
+  hosted: number;
 };
 
 /** A party as the API returns it. Parties are identified by their code. */
