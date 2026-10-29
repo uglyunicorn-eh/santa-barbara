@@ -2,8 +2,8 @@ import React from "react";
 import { PageFooter } from "@/components/layout";
 import { GitHub, Menu as MenuIcon } from 'react-feather';
 
-import { menuItemClass, menuPopupClass } from "@/components/ui/menu";
-import { COMPACT_KEYS, moreTriggerClass } from "@/components/hoc/footerMenu";
+import { menuItemClass, menuPopupClass, menuSeparatorClass } from "@/components/ui/menu";
+import { COMPACT_KEYS, menuGroups, moreTriggerClass } from "@/components/hoc/footerMenu";
 
 type Props = {
   children?: React.ReactNode;
@@ -46,8 +46,13 @@ export const AstroFooter = ({ children }: Props) => (
           <MenuIcon size={18} aria-hidden="true" />
         </summary>
         <div className={`${menuPopupClass} absolute right-0 bottom-full z-10 mb-2`}>
-          {items.filter(({ key }) => !COMPACT_KEYS.includes(key)).map(({ key, url, label, menuLabel, ...rest }) => (
-            <a key={key} href={url} className={menuItemClass} {...rest}>{menuLabel ?? label}</a>
+          {menuGroups(items.filter(({ key }) => !COMPACT_KEYS.includes(key))).map((group, index) => (
+            <React.Fragment key={group[0].key}>
+              {index > 0 && <div role="separator" className={menuSeparatorClass} />}
+              {group.map(({ key, url, label, menuLabel, ...rest }) => (
+                <a key={key} href={url} className={menuItemClass} {...rest}>{menuLabel ?? label}</a>
+              ))}
+            </React.Fragment>
           ))}
         </div>
       </details>

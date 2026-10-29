@@ -12,6 +12,9 @@ export const menuPopupClass =
 export const menuItemClass =
   "flex w-full cursor-pointer flex-row items-center justify-start gap-2 px-4 py-2 text-zinc-900 no-underline [text-shadow:none] outline-none select-none hover:bg-zinc-100 hover:text-zinc-900 hover:no-underline focus-visible:bg-zinc-100 data-highlighted:bg-zinc-100 data-highlighted:text-zinc-900";
 
+/** A thin rule between groups of items. */
+export const menuSeparatorClass = "my-1 h-px bg-border";
+
 /** A delete item: red, never filled. */
 export const menuItemDestructiveClass =
   "text-destructive hover:bg-red-50 hover:text-destructive data-highlighted:bg-red-50 data-highlighted:text-destructive";

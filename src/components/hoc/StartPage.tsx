@@ -94,7 +94,8 @@ export const StartPage = () => {
         </Container>
       </Hero.Body>
       <Hero.Footer>
-        <Footer noHome profileAsLink>
+        {/* On phones, My Profile in the line where other pages have Home. */}
+        <Footer noHome profileAsLink compactKeys={["profile", "how-it-works"]}>
           <UnsplashCredit id="h2O_jHvjfIM" name="Joanna Kosinska" username="joannakosinska" />
         </Footer>
       </Hero.Footer>

@@ -94,9 +94,11 @@ exist. Components use the roles, not the colours:
 ## Menus
 
 Base UI menus (`@base-ui/react/menu`) with the classes in `src/components/ui/menu.ts`: a white card that opens above
-its ☰ button, above everything else on the page. The footer uses one on phones for all but two of its links (on the
-static pages, a native `<details>` with the same look); when "My Profile" is in it with its red dot (rolled
-parties to reveal), the ☰ shows the dot too. The host's ☰ beside "Roll the dice" has Copy link, Invite by email…
+its ☰ button, above everything else on the page. The footer uses one on phones for all but two of its links:
+"Home | How this works? | ☰", or "My Profile | How this works? | ☰" on the home screen; Buy me a coffee and the rest
+are under ☰ (on the static pages, a native `<details>` with the same look), in three groups split by a rule: GitHub;
+Terms, Privacy Policy, Status, Buy me a coffee; then My Profile (off the home screen) and Sign out. When "My Profile"
+is in it with its red dot (rolled parties to reveal), the ☰ shows the dot too. The host's ☰ beside "Roll the dice" has Copy link, Invite by email…
 and, after a divider, Delete this party in red; items have a 16px icon.
 
 ## Form fields
