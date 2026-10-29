@@ -140,8 +140,10 @@ and, after a divider, Delete this party in red; items have a 16px icon.
     title (`red-800`); no bunting, the Grinch beside the text, and the filled red final confirm.
   Characters beside the text (`DialogCharacter`) hide on phones. All the art comes from the same sticker set.
 - **The profile** keeps one height on both tabs (nearly the whole screen on phones). On top, the "Hi Santa" sticker
-  and "Hey, <name>!", then the tabs, which stick flush to the top while the history scrolls, nothing showing above
-  them. Delete account is only on the Profile tab: a red ghost button with a bin in the footer's bottom-left corner
+  and "Hey, <name>!", with the tabs on the same row from tablet up (on the right, their underline on the row's rule)
+  and under it on phones; they stick flush to the top while the history scrolls, nothing showing above them. The email is masked wherever the profile shows it ("s•••r@uglyunicorn.ca": first and
+  last letters, always three dots), on one line with "…" when it doesn't fit. Under it, "Anonymous age": calendar days since the account was made ("Brand
+  new" on day one), the join date in the hint; hidden if the API doesn't send `joinedAt`. Delete account is only on the Profile tab: a red ghost button with a bin in the footer's bottom-left corner
   from tablet up, opposite Okie Dokie; on a phone's sheet just the bin, beside the email's Change. It opens the danger
   sheet; once the link is sent it reads "Check your email" (disabled; a mail icon on phones) and a toast names the
   address. On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under

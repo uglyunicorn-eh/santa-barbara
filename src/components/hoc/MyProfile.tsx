@@ -109,6 +109,19 @@ const emailSchema = (currentEmail: string) => v.object({
 });
 
 /**
+ * The account's email as the profile shows it, so a shared screen doesn't give it away: the name's first and last
+ * letters around three dots (always three, so its length doesn't show either), then the domain. "s•••r@uglyunicorn.ca".
+ */
+const maskEmail = (email: string) => {
+  const at = email.lastIndexOf("@");
+  if (at < 1) {
+    return email;
+  }
+  const local = email.slice(0, at);
+  return `${local[0]}•••${local.length > 2 ? local.at(-1) : ""}${email.slice(at)}`;
+};
+
+/**
  * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
  * party page (closing it goes back to `dismissLocation`).
  */
@@ -138,9 +151,11 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
           tablet up the box takes the body's top padding in as white padding of its own, so it stays exactly where it
           was when it sticks, the tilted sticker whole. On a phone the tabs stop 8px lower, under the sheet's grip, and a white shadow fills those 8px (over
           the greeting's mb-2 before they stick). */}
-      <div className="max-tablet:contents tablet:sticky tablet:-top-5 tablet:z-20 tablet:-mx-5 tablet:-mt-5 tablet:bg-white tablet:px-5 tablet:pt-5">
+      {/* From tablet up the greeting and the tabs share one row, the tabs on the right: the row's full-width rule is the
+          one the current tab's underline sits on. On a phone the tabs are their own full-width row under the greeting. */}
+      <div className="max-tablet:contents tablet:sticky tablet:-top-5 tablet:z-20 tablet:-mx-5 tablet:-mt-5 tablet:mb-4 tablet:flex tablet:items-end tablet:gap-4 tablet:border-b tablet:border-border tablet:bg-white tablet:px-5 tablet:pt-5">
         <Greeting />
-        <Tabs label="Profile" className="z-20 -mx-5 mb-4 bg-white max-tablet:sticky max-tablet:-top-3 max-tablet:shadow-[0_-8px_0_white]">
+        <Tabs label="Profile" className="z-20 -mx-5 mb-4 bg-white max-tablet:sticky max-tablet:-top-3 max-tablet:shadow-[0_-8px_0_white] tablet:mx-0 tablet:mb-0 tablet:shrink-0 tablet:border-b-0">
           <Tab to={base}>Profile</Tab>
           <Tab to={`${base}history/`}>Latest history</Tab>
         </Tabs>
@@ -161,10 +176,11 @@ const Greeting = () => {
   const name = profile?.name?.trim();
 
   return (
-    <div className="-mt-1 mb-2 flex items-center gap-3 max-tablet:pt-5 tablet:gap-4">
+    // From tablet up it shares the row with the tabs: the name's padding lines it up with the tabs' labels.
+    <div className="-mt-1 mb-2 flex items-center gap-3 max-tablet:pt-5 tablet:mb-0 tablet:min-w-0 tablet:grow tablet:items-end tablet:gap-4 tablet:pb-1">
       <img src={HiImg.src} alt="" width={76} height={76} className="size-15 shrink-0 -rotate-6 tablet:size-19" />
       {/* One line: a long name truncates, in full in `title`. */}
-      <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:text-2xl" title={name}>
+      <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:pb-1.5 tablet:text-2xl" title={name}>
         {name ? `Hey, ${name}!` : "Hey there!"}
       </h2>
     </div>
@@ -242,12 +258,40 @@ const Profile = ({ deletionSent, onDeletionSent }: { deletionSent: boolean; onDe
         extra={!tabletUp && <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} iconOnly />}
       />
 
+      <AnonymousAge joinedAt={profile?.joinedAt} />
+
       {tabletUp && (
         <DialogFooterStart>
           <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} />
         </DialogFooterStart>
       )}
     </div>
+  );
+};
+
+const joinedFormat = new Intl.DateTimeFormat(undefined, { day: "numeric", month: "long", year: "numeric" });
+
+/**
+ * How many days ago the account was made, counted in calendar days where the person is (joined yesterday evening is 1
+ * day, whatever the hour). Hidden if the API didn't say when.
+ */
+const AnonymousAge = ({ joinedAt }: { joinedAt?: string }) => {
+  const joined = joinedAt ? new Date(joinedAt) : null;
+  if (!joined || isNaN(joined.getTime())) {
+    return null;
+  }
+  const today = new Date();
+  const days = Math.max(0, Math.round(
+    (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
+      - Date.UTC(joined.getFullYear(), joined.getMonth(), joined.getDate())) / 86_400_000,
+  ));
+
+  return (
+    <Setting label="Anonymous age" hint={days ? `You joined on ${joinedFormat.format(joined)}.` : "You joined today. Welcome!"}>
+      <div className="setting-control">
+        <span className="setting-value">{days === 0 ? "Brand new" : days === 1 ? "1 day" : `${days.toLocaleString()} days`}</span>
+      </div>
+    </Setting>
   );
 };
 
@@ -321,7 +365,7 @@ const EmailSetting = ({ email, extra }: { email: string; extra?: React.ReactNode
 
   if (editing) {
     return (
-      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {email}.</>}>
+      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {maskEmail(email)}.</>}>
         <Form defaultValues={{ email: "" }} mode="onSubmit" schema={schema} onSubmit={onSubmit}>
           <InlineField
             name="email"
@@ -348,7 +392,7 @@ const EmailSetting = ({ email, extra }: { email: string; extra?: React.ReactNode
       hint={sentTo && <>Check {sentTo} for a confirmation link. Your email changes once you click it.</>}
     >
       <div className="setting-control">
-        <span className="setting-value">{email}</span>
+        <span className="setting-value min-w-0 truncate" title={maskEmail(email)}>{maskEmail(email)}</span>
         <Button type="button" variant="ghost" onClick={startEditing}>Change</Button>
         {extra}
       </div>
@@ -389,7 +433,7 @@ const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent:
       if (await requestAccountDeletion(requestId.current)) {
         setConfirming(false);
         onSent();
-        success(`Check ${email} for the link. Your account is deleted only once you click it.`);
+        success(`Check ${maskEmail(email)} for the link. Your account is deleted only once you click it.`);
       }
     },
     [
@@ -410,7 +454,7 @@ const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent:
             className={iconClass}
             disabled
             aria-label={iconOnly ? "Check your email" : undefined}
-            title={`We've sent a link to ${email}`}
+            title={`We've sent a link to ${maskEmail(email)}`}
           >
             <Mail size={iconSize} aria-hidden="true" />{!iconOnly && " Check your email"}
           </Button>
@@ -444,7 +488,7 @@ const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent:
             </p>
             <p>
               Parties that already rolled keep your name, so whoever drew you still knows who to buy a gift for. We'll
-              email <strong className="wrap-anywhere">{email}</strong> a link to finish.
+              email <strong className="wrap-anywhere">{maskEmail(email)}</strong> a link to finish.
             </p>
           </DialogCharacter>
         </DialogBox>
