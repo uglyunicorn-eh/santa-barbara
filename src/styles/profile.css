@@ -62,8 +62,9 @@
     height: 0;
   }
 
-  /* Both faces in one grid cell, so the card is as tall as the taller one; the back is turned away until flipped. */
+  /* The front sets the card's height; the back is laid over it at the same size, turned away until flipped. */
   .np-flipper {
+    position: relative;
     display: grid;
     transform-style: preserve-3d;
     transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1);
@@ -91,6 +92,8 @@
   }
 
   .np-back {
+    position: absolute;
+    inset: 0;
     transform: rotateY(180deg);
   }
 
@@ -495,16 +498,16 @@
   }
 
   /* The back: passport stamps that overlap, each at its slot (a fraction of the room left beside and under it). */
+  /* The stamps take the room the front leaves them (the back is as tall as the front). */
   .np-stamps {
     position: relative;
     flex: 1;
-    min-height: 16em;
+    min-height: 0;
     margin: 0.5em 0.75em;
     padding: 0;
     list-style: none;
 
     @media (max-width: 768px) {
-      min-height: 18em;
       margin: 0.5em;
     }
   }
@@ -527,7 +530,7 @@
     height: var(--h);
     margin: 0;
     rotate: var(--tilt);
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: var(--ink);
 
     @media (max-width: 768px) {
@@ -788,6 +791,15 @@
     padding: 2em 1em;
     color: var(--color-zinc-600);
     text-align: center;
+  }
+
+  /* Start a party first, Join with a code beside it (under it on a narrow phone). */
+  .history-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
   }
 
   .history-more {

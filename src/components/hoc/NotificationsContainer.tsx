@@ -9,8 +9,8 @@ import { useTabletUp } from "@/components/hooks/useTabletUp";
 // after 4 s; reminders (`remind`) stay until dismissed or opened.
 //
 // Errors are red, info blue, success green, on any page. Reminders follow the surface: dark on the night pages, light
-// on the party page (which asks with useToastSurface). From tablet up they clear the signed-in pages' footer
-// (useToastsAboveFooter). The look is in src/styles/base.css ("Toasts").
+// on the party page (which asks with useToastSurface). From tablet up they clear the signed-in pages' footer while
+// it's on screen (useToastsAboveFooter). The look is in src/styles/base.css ("Toasts").
 
 type Surface = "dark" | "light";
 
@@ -37,36 +37,62 @@ export const useToastSurface = (next: Surface) => {
   );
 };
 
-/** Footers on screen that toasts should clear (useToastsAboveFooter). */
-let footers = 0;
-const changeFooters = (by: number) => {
-  footers += by;
-  listeners.forEach(listener => listener());
+/** How much of the footer is on screen, from the bottom, in px (useToastsAboveFooter): toasts sit just above it. */
+let footerLift = 0;
+const setFooterLift = (px: number) => {
+  if (px !== footerLift) {
+    footerLift = px;
+    listeners.forEach(listener => listener());
+  }
 };
 
-/** While `active`, toasts sit above the footer (the signed-in pages' footer, at the bottom of the screen). */
-export const useToastsAboveFooter = (active: boolean) => {
+/**
+ * While `active`, toasts clear `footer` (the signed-in pages' footer) by however much of it is on screen: at the very
+ * bottom while it's scrolled away, rising with it as it scrolls in. Measured on scroll (any scroller), resize, and when
+ * the footer or the page changes size, once a frame at most.
+ */
+export const useToastsAboveFooter = (active: boolean, footer: React.RefObject<HTMLElement | null>) => {
   React.useEffect(
     () => {
-      if (!active) {
+      const element = footer.current;
+      if (!active || !element) {
         return;
       }
-      changeFooters(1);
-      return () => changeFooters(-1);
+      let frame = 0;
+      const measure = () => {
+        frame = 0;
+        setFooterLift(Math.max(0, Math.round(window.innerHeight - element.getBoundingClientRect().top)));
+      };
+      const schedule = () => {
+        frame ||= requestAnimationFrame(measure);
+      };
+      measure();
+      const resizes = new ResizeObserver(schedule);
+      resizes.observe(element);
+      resizes.observe(document.body);
+      window.addEventListener("scroll", schedule, { capture: true, passive: true });
+      window.addEventListener("resize", schedule);
+      return () => {
+        cancelAnimationFrame(frame);
+        resizes.disconnect();
+        window.removeEventListener("scroll", schedule, { capture: true });
+        window.removeEventListener("resize", schedule);
+        setFooterLift(0);
+      };
     },
-    [active],
+    [active, footer],
   );
 };
 
-/** How far above the bottom toasts sit over a footer: clear of its links and credits (three lines and its padding). */
-const ABOVE_FOOTER = 96;
+/** Toasts' gap to the screen's edges, and to the footer when one is showing. */
+const EDGE = 16;
 
 const ERROR_MS = 2500;
 const MESSAGE_MS = 4000;
 
 export const NotificationsContainer = () => {
   const current = React.useSyncExternalStore(subscribe, () => surface, () => surface);
-  const overFooter = React.useSyncExternalStore(subscribe, () => footers > 0, () => false);
+  const lift = React.useSyncExternalStore(subscribe, () => footerLift, () => 0);
   const tabletUp = useTabletUp();
 
   return (
@@ -75,8 +101,8 @@ export const NotificationsContainer = () => {
       position={tabletUp ? "bottom-right" : "top-center"}
       closeButton
       className="app-toaster"
-      // From tablet up, above the footer's links and credits when one is on screen (bottom right, like the toasts).
-      offset={overFooter ? { top: 16, right: 16, left: 16, bottom: ABOVE_FOOTER } : 16}
+      // From tablet up, at the bottom right: just above the footer when some of it is on screen, else at the edge.
+      offset={{ top: EDGE, right: EDGE, left: EDGE, bottom: EDGE + lift }}
       // On phones, below the status bar (the page draws under it: viewport-fit=cover).
       mobileOffset={{ top: "calc(env(safe-area-inset-top, 0px) + 16px)", left: 16, right: 16, bottom: 16 }}
       visibleToasts={4}

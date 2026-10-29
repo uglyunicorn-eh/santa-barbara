@@ -121,6 +121,6 @@ export const Image = ({ src, alt, className }: { src: string; alt: string; class
   <figure className={cn("image", className)}><img src={src} alt={alt} /></figure>
 );
 
-export const PageFooter = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
+export const PageFooter = ({ className, ...props }: React.ComponentProps<"footer">) => (
   <footer className={cn("footer", className)} {...props} />
 );

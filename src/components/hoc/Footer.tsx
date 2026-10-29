@@ -45,8 +45,9 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
   // Rolled parties whose name the user hasn't heard yet: a dot on "My Profile", which then opens on the history.
   const { parties: unrevealed } = useUnrevealed();
   const toReveal = unrevealed?.length ?? 0;
-  // Signed in, the footer sits at the bottom of the screen: toasts go above it rather than over its links.
-  useToastsAboveFooter(!!profile);
+  // Signed in, toasts go above the footer (while it's on screen) rather than over its links.
+  const footer = React.useRef<HTMLElement>(null);
+  useToastsAboveFooter(!!profile, footer);
 
   const items = React.useMemo(
     () => [
@@ -95,7 +96,7 @@ export const Footer = ({ children, aside, noUser, noHome, profileAsLink, profile
   const more = items.filter(({ key }) => !compactKeys.includes(key));
 
   return (
-    <PageFooter className="page-footer">
+    <PageFooter ref={footer} className="page-footer">
       <div className="footer-menu max-tablet:hidden">
         <FooterLinks items={items} />
       </div>

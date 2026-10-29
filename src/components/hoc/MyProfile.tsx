@@ -1,10 +1,10 @@
 import React from "react";
 import { Content } from "@/components/layout";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Route, Routes, useMatch } from "react-router-dom";
 import { ClipLoader } from 'react-spinners';
-import { Calendar, ChevronRight, Gift, Lock, Mail, Star, Trash2 } from 'react-feather';
+import { Calendar, ChevronRight, Gift, Lock, Mail, Plus, Star, Trash2 } from 'react-feather';
 
 import { DialogBox, DialogFooterStart } from "@/components/DialogBox";
 import { DialogCharacter } from "@/components/DialogCharacter";
@@ -364,6 +364,11 @@ const History = () => {
         {title}
         <Gift size={32} />
         <p>No parties yet. Host one or join a friend's, and it will show up here.</p>
+        {/* The start page's own forms: a new party, or a friend's secret code. */}
+        <div className="history-empty-actions">
+          <Link to="/new/" className={buttonVariants({ variant: "primary" })}><Plus size={18} aria-hidden="true" /> Start a party</Link>
+          <Link to="/join/" className={buttonVariants({ variant: "ghost" })}>Join with a code</Link>
+        </div>
       </div>
     );
   }
