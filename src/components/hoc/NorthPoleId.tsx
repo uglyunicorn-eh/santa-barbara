@@ -31,12 +31,12 @@ export const maskEmail = (email: string) => {
 
 /** The ranks, by how many of the person's parties rolled their dice: each takes one more party than the one before. */
 const RANKS = [
-  { least: 0, name: "Rookie elf" },
-  { least: 1, name: "Elf" },
-  { least: 3, name: "Senior elf" },
+  { least: 0, name: "Rookie Gnomik" },
+  { least: 1, name: "Gnomik" },
+  { least: 3, name: "Senior Gnomik" },
   { least: 6, name: "Director of Elves" },
   { least: 10, name: "VP of Operations" },
-  { least: 15, name: "Chief Gnome Officer" },
+  { least: 15, name: "Chief Party Officer" },
 ];
 
 const rankFor = (rolled: number) => {
@@ -133,11 +133,6 @@ export const NorthPoleId = () => {
     <section className="np-id" aria-label="Your Secret Santa ID">
       {/* The stamps' worn ink: specks of paper showing through. */}
       <svg className="np-defs" aria-hidden="true" focusable="false">
-        {/* The rank chevrons' gold thread. */}
-        <pattern id="np-thread" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <rect width="3" height="3" fill="#e6b84f" />
-          <rect width="1" height="3" fill="#b8892b" />
-        </pattern>
         <filter id="np-ink">
           <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="noise" />
           <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.05" result="specks" />
@@ -244,41 +239,44 @@ const star = (x: number, y: number, r: number) => Array.from({ length: 10 }, (_,
   return `${(x + d * Math.cos(a)).toFixed(1)},${(y + d * Math.sin(a)).toFixed(1)}`;
 }).join(" ");
 
-/** A chevron's band, its top at `y`: 7 thick, its point 16 below its ends. */
+/** A chevron's band, its top at `y`: 7 thick, its point 16 below its ends (23 tall in all). */
 const chevron = (y: number) => `M4 ${y}L32 ${y + 16}L60 ${y}v7L32 ${y + 23}L4 ${y + 7}z`;
-/** A rocker's band, its ends at `y`: an arc under the chevrons, 7 thick. */
+/** A rocker's band, its ends at `y`: an arc under the chevrons, 7 thick (16 tall at its middle). */
 const rocker = (y: number) => `M4 ${y}Q32 ${y + 18} 60 ${y}v7Q32 ${y + 25} 4 ${y + 7}z`;
 
+/** The insignia's box: room for the tallest stack (star, three chevrons, rocker), everything standing on its floor. */
+const INSIGNIA_HEIGHT = 92;
+
 /**
- * The rank as sleeve chevrons sewn on the photo's corner: gold-thread bands with a pine edge, stacked down from an
- * optional star, a rocker under them for the top ranks. Rookie elf wears just a star.
+ * The rank as chevrons on the photo's corner, flat in the card's red, all drawn to one scale and standing on the
+ * box's floor: a rocker at the bottom for the top ranks, chevrons over it, a star over them for the last. Rookie
+ * Gnomik wears just a star.
  */
 const RankChevrons = ({ level, name }: { level: number; name: string }) => {
   const insignia = INSIGNIA[level];
   const shapes: React.ReactNode[] = [];
-  let y = 2;
+  // Built from the floor up.
+  let y = INSIGNIA_HEIGHT - 2;
   if (insignia.star === "big") {
-    shapes.push(<polygon key="star" points={star(32, 17, 15)} />);
-    y = 34;
-  }
-  if (insignia.star === "small") {
-    shapes.push(<polygon key="star" points={star(32, 10, 8.5)} />);
-    y = 22;
-  }
-  for (let i = 0; i < insignia.chevrons; i++) {
-    shapes.push(<path key={`c${i}`} d={chevron(y + i * 11)} />);
-  }
-  if (insignia.chevrons) {
-    y += (insignia.chevrons - 1) * 11 + 23 + 3;
+    shapes.push(<polygon key="star" points={star(32, y - 15, 16)} />);
   }
   if (insignia.rocker) {
-    shapes.push(<path key="rocker" d={rocker(y)} />);
-    y += 25;
+    shapes.push(<path key="rocker" d={rocker(y - 16)} />);
+    y -= 16 + 4;
+  }
+  for (let i = 0; i < insignia.chevrons; i++) {
+    shapes.push(<path key={`c${i}`} d={chevron(y - 23 - i * 11)} />);
+  }
+  if (insignia.chevrons) {
+    y -= 23 + (insignia.chevrons - 1) * 11 + 4;
+  }
+  if (insignia.star === "small") {
+    shapes.push(<polygon key="star" points={star(32, y - 8, 9)} />);
   }
 
   return (
     <span className="np-chevrons" role="img" aria-label={`Rank: ${name}`}>
-      <svg viewBox={`0 0 64 ${y + 2}`} aria-hidden="true" focusable="false">{shapes}</svg>
+      <svg viewBox={`0 0 64 ${INSIGNIA_HEIGHT}`} aria-hidden="true" focusable="false">{shapes}</svg>
     </span>
   );
 };
