@@ -17,54 +17,621 @@
     font-size: 1.125rem;
   }
 
-  .setting {
+  /* On the Profile tab the ID card sits in the middle of the room between the tabs and the footer: the body is a
+     column, the tab's content takes the height left, and the card (with Delete account under it on phones) centres in
+     it. When the card is taller than the room, it starts at the top and the body scrolls as before. */
+  .dialog-body:has(.profile-settings) {
+    display: flex;
+    flex-direction: column;
+
+    > .content {
+      display: flex;
+      flex: 1 0 auto;
+      flex-direction: column;
+    }
+
+    .profile-settings {
+      margin-block: auto;
+    }
+  }
+
+  /* The North Pole ID (NorthPoleId.tsx): a cream card in mono type, tilted a little, that turns over to its back. */
+  .np-id {
+    --np-red: #c62a30;
+    --np-paper: #fff8de;
+    --np-rule: #d8c98d;
+    --np-ink-muted: #8a7f5c;
+
+    margin: 0.25rem 0.25rem 0.5rem;
+    perspective: 1600px;
+    rotate: -0.6deg;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: #18181b;
+
+    @media (max-width: 768px) {
+      margin: 0;
+      rotate: none;
+      font-size: 0.875rem;
+    }
+  }
+
+  .np-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  /* Both faces in one grid cell, so the card is as tall as the taller one; the back is turned away until flipped. */
+  .np-flipper {
     display: grid;
-    grid-template-columns: 8em 1fr;
-    gap: 0.25em 1.5em;
-    padding: 1em 0;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1);
 
-    /* A rule only between two settings: none under the last one, so it never doubles the phone footer's rule. */
-    & + .setting {
-      border-top: 1px solid var(--color-zinc-200);
+    &.is-flipped {
+      transform: rotateY(180deg);
     }
 
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
     }
   }
 
-  .setting-label {
-    font-weight: 600;
-    line-height: 2.5em;
-
-    @media (max-width: 768px) {
-      line-height: 1.5em;
-    }
+  .np-face {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 0.5px solid #e9dca6;
+    border-radius: 12px;
+    background: var(--np-paper);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
-  .setting-control {
+  .np-back {
+    transform: rotateY(180deg);
+  }
+
+  .np-strip {
     display: flex;
     align-items: center;
-    gap: 0.5em;
-    min-height: 2.5em;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75em;
+    padding: 0.3em 0.5em 0.3em 1em;
+    background: var(--np-red);
+    color: #fff;
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
-  .setting-input {
-    /* Narrow enough that the input and its buttons share one line on a phone. */
-    flex: 1 1 8em;
+  .np-strip-long {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .np-strip-end {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
     min-width: 0;
   }
 
-  .setting-value {
-    flex: 1;
-    overflow-wrap: anywhere;
+  .np-counts {
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
-  .setting-hint {
-    margin: 0.35em 0 0;
-    font-size: 0.9375rem;
-    color: var(--color-zinc-500);
+  .np-counts-row {
+    display: none;
+    margin: 0.6em 0.85em 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--np-ink-muted);
+
+    @media (max-width: 768px) {
+      display: block;
+    }
+  }
+
+  .np-flip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: -0.3rem 0;
+    border-radius: 9999px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: rgb(255 255 255 / 0.18);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: -4px;
+    }
+  }
+
+  /* The photo beside the fields; on a phone the email goes under them both, across the card. */
+  .np-main {
+    display: grid;
+    grid-template-areas: "photo name" "photo email" "photo facts";
+    grid-template-columns: 7.25rem minmax(0, 1fr);
+    gap: 0.65em 1.1em;
+    align-content: start;
+    padding: 1em;
+
+    @media (max-width: 768px) {
+      grid-template-areas: "photo name" "photo facts" "email email";
+      grid-template-columns: 4.75rem minmax(0, 1fr);
+      gap: 0.6em 0.85em;
+      padding: 0.85em;
+    }
+  }
+
+  .np-photo {
+    grid-area: photo;
+    position: relative;
+    z-index: 1;
+    align-self: start;
+    aspect-ratio: 100 / 122;
+    border-radius: 6px;
+    background: #efe3b4;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 6px;
+    }
+  }
+
+  /* The rank's chevrons, sewn on over the photo's bottom corner at a slant, standing a little off the card. */
+  .np-chevrons {
+    position: absolute;
+    right: 0.35em;
+    bottom: 0.35em;
+    width: 2.9em;
+    rotate: -6deg;
+    filter: drop-shadow(0 1.5px 1.2px rgb(0 0 0 / 0.4));
+
+    /* The tall stacks (rocker, star) shrink to keep clear of the eyes' bar; the shape scales down inside the box. */
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 3.3em;
+      overflow: visible;
+      border-radius: 0;
+    }
+
+    path,
+    polygon {
+      fill: url(#np-thread);
+      stroke: #2f5233;
+      stroke-width: 1.6;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 768px) {
+      right: 0.2em;
+      bottom: 0.2em;
+      width: 2.2em;
+    }
+  }
+
+  .np-name {
+    grid-area: name;
+  }
+
+  .np-email {
+    grid-area: email;
+  }
+
+  .np-label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--np-ink-muted);
+  }
+
+  .np-value {
+    font-size: 0.9375em;
+    line-height: 1.4;
+  }
+
+  .np-truncate {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .np-control {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+    min-height: 2.25rem;
+
+    .np-value {
+      flex: 0 1 auto;
+    }
+
+  }
+
+  .np-input {
+    flex: 1 1 6em;
+    min-width: 0;
+  }
+
+  /* The pencil: small, red, right after the value. */
+  .np-edit {
+    flex: none;
+  }
+
+  /* A field being edited: a white frame on the paper, as tall as the value's line and flush with its label and the
+     note under it; red around it while typing. */
+  .np-box {
+    gap: 2px;
+    height: 2.25rem;
+    padding: 2px;
+    border: 1px solid var(--np-rule);
+    border-radius: 8px;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus-within {
+      border-color: var(--np-red);
+      box-shadow: 0 0 0 3px rgb(198 42 48 / 0.15);
+    }
+
+    &.is-invalid {
+      border-color: var(--np-red);
+    }
+  }
+
+  /* While editing: the field's hint (and error) in a note over the card, so the card's layout stays put. */
+  .np-editing {
+    position: relative;
+  }
+
+  .np-note {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    left: 0;
+    z-index: 3;
+    border: 1px solid #e9dca6;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgb(60 40 0 / 0.14), 0 1px 3px rgb(60 40 0 / 0.08);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    animation: np-note-in 0.16s ease-out;
+
+    /* The arrow up to the field, over its first letters. */
+    &::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 1.1rem;
+      width: 10px;
+      height: 10px;
+      border-top: 1px solid #e9dca6;
+      border-left: 1px solid #e9dca6;
+      background: #fff;
+      rotate: 45deg;
+    }
+
+    p {
+      display: flex;
+      gap: 0.5em;
+      align-items: flex-start;
+      margin: 0;
+      padding: 0.55em 0.75em;
+
+      svg {
+        flex: none;
+        margin-top: 0.2em;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  @keyframes np-note-in {
+    from {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+  }
+
+  .np-hint {
+    color: var(--color-zinc-600);
+
+    svg {
+      color: var(--np-ink-muted);
+    }
+  }
+
+  /* The error, in a red strip over the hint (its arrow turns red with it). */
+  .np-error {
+    position: relative;
+    border-radius: 7px 7px 0 0;
+    border-bottom: 1px solid #f6d3d3;
+    background: #fdf0f0;
+    color: #a3242a;
+    font-weight: 500;
+  }
+
+  .np-note:has(.np-error)::before {
+    border-color: #f1c4c4;
+    background: #fdf0f0;
+  }
+
+  .np-sent {
+    flex: none;
+    padding: 0.1em 0.45em;
+    border: 1px solid #3b6d11;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #3b6d11;
+  }
+
+  .np-facts {
+    grid-area: facts;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 1.5em;
+    margin: 0;
+
+    dd {
+      margin: 0;
+    }
+
+    /* A phone keeps the two that matter beside the photo. */
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .np-valid {
+        display: none;
+      }
+    }
+  }
+
+  /* The rank and the dice toward the next one, in a dashed box. */
+  .np-rank {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75em;
+    margin: 0 1em 0.85em;
+    padding: 0.55em 0.75em;
+    border: 1px dashed var(--np-rule);
+    border-radius: 8px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+      margin: 0 0.85em 0.75em;
+    }
+  }
+
+  .np-next {
+    color: var(--np-ink-muted);
+  }
+
+  .np-track {
+    flex: none;
+    text-align: right;
+
+    @media (max-width: 768px) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+  }
+
+  .np-dice {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+
+  .np-die {
+    width: 1.75rem;
+    height: 1.75rem;
+
+    rect {
+      fill: none;
+      stroke: var(--np-rule);
+      stroke-width: 1.5;
+      stroke-dasharray: 3 2;
+    }
+
+    &.is-rolled {
+      rect {
+        fill: #fff;
+        stroke: var(--np-red);
+        stroke-dasharray: none;
+      }
+
+      circle {
+        fill: var(--np-red);
+      }
+    }
+  }
+
+  /* The machine-readable zone, cut off at the card's edge like a real one. */
+  .np-mrz {
+    margin: auto 0 0;
+    padding: 0.5em 1em 0.75em;
+    overflow: hidden;
+    border-top: 1px dashed var(--np-rule);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: #6b6243;
+
+    @media (max-width: 768px) {
+      padding: 0.45em 0.85em 0.65em;
+    }
+  }
+
+  /* The back: passport stamps that overlap, each at its slot (a fraction of the room left beside and under it). */
+  .np-stamps {
+    position: relative;
+    flex: 1;
+    min-height: 16em;
+    margin: 0.5em 0.75em;
+    padding: 0;
+    list-style: none;
+
+    @media (max-width: 768px) {
+      min-height: 18em;
+      margin: 0.5em;
+    }
+  }
+
+  .np-stamps-empty {
+    position: absolute;
+    right: 0;
+    bottom: 1em;
+    left: 0;
+    font-size: 0.8125rem;
+    text-align: center;
+    color: var(--np-ink-muted);
+  }
+
+  .np-stamp {
+    position: absolute;
+    left: calc(var(--x) * (100% - var(--w)));
+    top: calc(var(--y) * (100% - var(--h)));
+    width: var(--w);
+    height: var(--h);
+    margin: 0;
+    rotate: var(--tilt);
+    font-size: 0.8125rem;
+    color: var(--ink);
+
+    @media (max-width: 768px) {
+      font-size: 0.6875rem;
+    }
+    opacity: 0.88;
+    mix-blend-mode: multiply;
+    filter: url(#np-ink);
+
+    > svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      fill: none;
+      stroke: var(--ink);
+    }
+  }
+
+  .np-stamp-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1em;
+    padding: 0 1.4em;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .np-stamp-icon svg {
+    display: block;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .np-stamp-label {
+    font-size: 0.9em;
+  }
+
+  .np-stamp-title {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .np-rim {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    fill: var(--ink);
+    stroke: none;
+  }
+
+  .np-snowflake {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .np-more {
+    margin: 0 1em 0.5em;
+    font-size: 0.75rem;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--np-ink-muted);
+  }
+
+  .np-back-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 0.5em 1em 0.75em;
+    border-top: 1px dashed var(--np-rule);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #6b6243;
+  }
+
+  .np-barcode {
+    flex: none;
+    width: 7em;
+    height: 2.2em;
+    background: repeating-linear-gradient(90deg, #18181b 0 2px, transparent 2px 4px, #18181b 4px 5px, transparent 5px 8px, #18181b 8px 11px, transparent 11px 13px, #18181b 13px 14px, transparent 14px 17px);
   }
 
   .history-list {

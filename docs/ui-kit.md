@@ -108,8 +108,8 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **Help and errors:** `text-sm` under the input. An error takes the help text's place, in a slot as tall as the
   taller of the two (a field with no help keeps one blank line), so an error appearing or going away never resizes
   the form or its dialog.
-- **Inline fields** (the profile's name and email): input and buttons on one line, all 40px; the error below. "Save"
-  appears only once the name has changed.
+- **Inline fields** (the profile's name and email, on its ID card): a white frame, 36px, as tall as the value it
+  replaces, with its icon buttons inside; the hint and the error float under it in a callout, so nothing moves.
 - **On glass** (the sign-in card): labels and help in `zinc-300`, white focus, errors in light red.
 - **Email tags** (`EmailTags`, the invite dialog): addresses become teal pills as you type Enter, a comma, a space or
   paste a list; one that doesn't look like an address stays, as a red pill, to fix or remove. Backspace in the empty
@@ -144,15 +144,31 @@ and, after a divider, Delete this party in red; items have a 16px icon.
 - **The profile** keeps one height on both tabs (nearly the whole screen on phones). On top, the "Hi Santa" sticker
   and "Hey, <name>!", with the tabs on the same row from tablet up (on the right, their underline on the row's rule)
   and under it on phones; they stick flush to the top while the history scrolls, nothing showing above them. The email is masked wherever the profile shows it ("s•••r@uglyunicorn.ca": first and
-  last letters, always three dots), on one line with "…" when it doesn't fit. Under it, "Anonymous age": calendar days since the account was made ("Brand
-  new" on day one), the join date in the hint; hidden if the API doesn't send `joinedAt`. Delete account is only on the Profile tab: a red ghost button with a bin in the footer's bottom-left corner
-  from tablet up, opposite Okie Dokie; on a phone's sheet just the bin, beside the email's Change. It opens the danger
-  sheet; once the link is sent it reads "Check your email" (disabled; a mail icon on phones) and a toast names the
-  address. On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under
-  the list.
-  On the Profile tab the only rule is between Name and Email; on Latest history a rule sets the footer apart from the
-  list scrolling under it (full width from tablet up, inset on phones). Sign out is in the page's footer, after My Profile (under ☰
-  on phones).
+  last letters, always three dots), on one line with "…" when it doesn't fit. The Profile tab is a North Pole ID card
+  (`NorthPoleId`): cream, tilted a little, all in mono type, a red strip on top ("North Pole · Secret Santa ID", the
+  card's number from the account id, and a button that turns the card over). The front: the photo, a silhouette with a
+  black bar over the eyes, with the rank's sleeve chevrons sewn on its bottom corner (gold-thread bands edged in
+  pine: a star for Rookie elf, one to three chevrons, then a rocker under them, then a star on top); the name and the masked email, each with the same red pencil, edited
+  right on the card; days undercover, issue date and "Valid to 25 Dec"; the rank in a dashed box, from how many of the person's
+  parties rolled (Rookie elf, Elf from 1, Senior elf from 3, Director of Elves from 6, VP of Operations from 10, Chief
+  Gnome Officer from 15), with a die per rolled party it takes to reach the next one; and two machine-readable lines
+  cut off at the card's edge. On phones the email goes across the card under the photo. Editing never moves anything
+  on the card: the field is a white frame as tall as the value's line, flush with its label and note, red around it
+  while typing (and on an error), with two small icon buttons inside it: a red ✓ (Save) or paper plane (Send the
+  link), and an X; its hint floats under it in a white callout with an arrow up to the field and an info icon
+  (fading in), an error in a red strip with an alert icon above the hint. Esc cancels the edit (focus back on
+  the pencil) without closing the dialog; the next Esc closes it. A sent
+  email link shows a green "Link sent" tag on the email's line (a toast says where). The back is the "Santa record":
+  parties, rolled and hosted in the strip (their own line on phones), and passport stamps that overlap: "Arrived ·
+  North Pole" on the day joined, then one per latest party (six, four on phones; deleted ones get none), each with a
+  shape, ink and tilt from its code, worn ink edges, a star when hosted, a gift once rolled, a clock while open, then
+  "+N more stamps" and "If found, return to the North Pole" with a barcode. The rank and counts come from `parties` on
+  GET /v1/me; without it the card has no rank. Delete account is only on the Profile tab: a red ghost button with a
+  bin in the footer's bottom-left corner from tablet up, opposite Okie Dokie; on a phone's sheet under the card. It
+  opens the danger sheet; once the link is sent it reads "Check your email" (disabled) and a toast names the address.
+  On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under the list.
+  On Latest history a rule sets the footer apart from the list scrolling under it (full width from tablet up, inset on
+  phones). Sign out is in the page's footer, after My Profile (under ☰ on phones).
 - **The home screen** (signed in): "Your latest party", a ticket stub like the Party'o'meter's tickets (cream, tilted
   a little, notches at both ends of a red perforation, the party's code read upwards on the stub in red and again at
   the main part's top right; once you've revealed whom you give a gift to the stub is torn off along the red line,
