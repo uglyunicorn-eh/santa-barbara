@@ -22,7 +22,7 @@ export const Tab = ({ children, to }: Props) => {
       to={to}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "-mb-px flex-1 border-b-2 px-4 py-3 text-center text-xl font-medium transition-colors duration-150",
+        "-mb-px flex-1 border-b-2 px-4 py-3 text-center text-xl font-medium whitespace-nowrap transition-colors duration-150",
         "rounded-t-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
         active ? "border-link text-link" : "border-transparent text-zinc-600 hover:border-zinc-300 hover:text-zinc-900",
       )}

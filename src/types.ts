@@ -3,6 +3,8 @@ export type User = {
   name: string;
   /** Only for the signed-in user. */
   email?: string | null;
+  /** When the account was made (ISO 8601). Only for the signed-in user; older API versions leave it out. */
+  joinedAt?: string;
 };
 
 /** A party as the API returns it. Parties are identified by their code. */

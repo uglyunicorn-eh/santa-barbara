@@ -23,7 +23,6 @@ import type { RequestEmailChangeInput, UpdateNameInput } from "@/components/hook
 import type { Party } from "@/types";
 import { MAX_EMAIL_LENGTH, MAX_PERSON_NAME_LENGTH } from "@/limits";
 import { pageTitle } from "@/site";
-import { cn } from "@/lib/utils";
 
 import GrinchImg from "@/images/grinch.png";
 import HiImg from "@/images/hi.png";
@@ -110,6 +109,19 @@ const emailSchema = (currentEmail: string) => v.object({
 });
 
 /**
+ * The account's email as the profile shows it, so a shared screen doesn't give it away: the name's first and last
+ * letters around three dots (always three, so its length doesn't show either), then the domain. "s•••r@uglyunicorn.ca".
+ */
+const maskEmail = (email: string) => {
+  const at = email.lastIndexOf("@");
+  if (at < 1) {
+    return email;
+  }
+  const local = email.slice(0, at);
+  return `${local[0]}•••${local.length > 2 ? local.at(-1) : ""}${email.slice(at)}`;
+};
+
+/**
  * The profile dialog, with its two tabs as routes under `base`: "/profile/" from the home screen, under the party on a
  * party page (closing it goes back to `dismissLocation`).
  */
@@ -118,7 +130,10 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
   // The history scrolls under the footer: a rule sets the footer apart there (full width like the tabs' from tablet
   // up, inset on a phone's sheet). The Profile tab has none.
   const onHistory = !!useMatch(`${base}history/`);
-  const footerRule = onHistory ? (tabletUp ? "border-t border-border" : "mx-5 border-t border-border px-0") : "";
+  const footerRule = onHistory ? (tabletUp ? "border-t border-border" : "mx-5 border-t border-border px-0") : undefined;
+  // Kept here, not in the Profile tab, so "Check your email" is still there after a look at the history.
+  const [deletionSent, setDeletionSent] = React.useState(false);
+  const onDeletionSent = React.useCallback(() => setDeletionSent(true), []);
 
   return (
     <DialogBox
@@ -127,8 +142,7 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
       dismissLabel={"Okie Dokie!"}
       dismissLocation={dismissLocation}
       size="lg"
-      // On a phone's sheet Delete account sits small above Okie Dokie, closer together than the stacked buttons.
-      footerClassName={cn(!tabletUp && "gap-3 pt-3", footerRule)}
+      footerClassName={footerRule}
     >
       {/* From tablet up the greeting and the tabs stay at the top while the rest scrolls under them; on a phone's
           sheet the greeting scrolls away and only the tabs stick, to leave the small screen to the content. */}
@@ -137,16 +151,18 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
           tablet up the box takes the body's top padding in as white padding of its own, so it stays exactly where it
           was when it sticks, the tilted sticker whole. On a phone the tabs stop 8px lower, under the sheet's grip, and a white shadow fills those 8px (over
           the greeting's mb-2 before they stick). */}
-      <div className="max-tablet:contents tablet:sticky tablet:-top-5 tablet:z-20 tablet:-mx-5 tablet:-mt-5 tablet:bg-white tablet:px-5 tablet:pt-5">
+      {/* From tablet up the greeting and the tabs share one row, the tabs on the right: the row's full-width rule is the
+          one the current tab's underline sits on. On a phone the tabs are their own full-width row under the greeting. */}
+      <div className="max-tablet:contents tablet:sticky tablet:-top-5 tablet:z-20 tablet:-mx-5 tablet:-mt-5 tablet:mb-4 tablet:flex tablet:items-end tablet:gap-4 tablet:border-b tablet:border-border tablet:bg-white tablet:px-5 tablet:pt-5">
         <Greeting />
-        <Tabs label="Profile" className="z-20 -mx-5 mb-4 bg-white max-tablet:sticky max-tablet:-top-3 max-tablet:shadow-[0_-8px_0_white]">
+        <Tabs label="Profile" className="z-20 -mx-5 mb-4 bg-white max-tablet:sticky max-tablet:-top-3 max-tablet:shadow-[0_-8px_0_white] tablet:mx-0 tablet:mb-0 tablet:shrink-0 tablet:border-b-0">
           <Tab to={base}>Profile</Tab>
           <Tab to={`${base}history/`}>Latest history</Tab>
         </Tabs>
       </div>
       <Content>
         <Routes>
-          <Route path="" Component={Profile} />
+          <Route path="" element={<Profile deletionSent={deletionSent} onDeletionSent={onDeletionSent} />} />
           <Route path="history/" Component={History} />
         </Routes>
       </Content>
@@ -154,36 +170,33 @@ export const MyProfile = ({ base = "/profile/", dismissLocation = "/" }: { base?
   );
 };
 
-/**
- * The profile's header, on both tabs: a sticker and "Hey, <name>!". Delete account goes in the footer's left slot: in
- * the bottom-left corner from tablet up, opposite Okie Dokie; above it on a phone's sheet (the slot stacks below the
- * buttons there; `order` lifts it above). Signing out is in the page's footer.
- */
+/** The profile's header, on both tabs: a sticker and "Hey, <name>!". Signing out is in the page's footer. */
 const Greeting = () => {
   const { profile } = useCurrentUser();
-  const tabletUp = useTabletUp();
   const name = profile?.name?.trim();
 
   return (
-    <div className="-mt-1 mb-2 flex items-center gap-3 max-tablet:pt-5 tablet:gap-4">
+    // From tablet up it shares the row with the tabs: the name's padding lines it up with the tabs' labels.
+    <div className="-mt-1 mb-2 flex items-center gap-3 max-tablet:pt-5 tablet:mb-0 tablet:min-w-0 tablet:grow tablet:items-end tablet:gap-4 tablet:pb-1">
       <img src={HiImg.src} alt="" width={76} height={76} className="size-15 shrink-0 -rotate-6 tablet:size-19" />
       {/* One line: a long name truncates, in full in `title`. */}
-      <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:text-2xl" title={name}>
+      <h2 className="m-0 min-w-0 grow truncate text-xl font-semibold text-zinc-900 tablet:pb-1.5 tablet:text-2xl" title={name}>
         {name ? `Hey, ${name}!` : "Hey there!"}
       </h2>
-      <DialogFooterStart>
-        {tabletUp
-          ? <DeleteAccount email={profile?.email ?? ""} />
-          : <DeleteAccount email={profile?.email ?? ""} size="sm" className="order-1 self-center" />}
-      </DialogFooterStart>
     </div>
   );
 };
 
-const Profile = () => {
+/**
+ * Name and email. Delete account is only on this tab: from tablet up in the footer's bottom-left corner, opposite Okie
+ * Dokie; on a phone's sheet a trash icon beside the email's Change, so the footer keeps just Okie Dokie.
+ */
+const Profile = ({ deletionSent, onDeletionSent }: { deletionSent: boolean; onDeletionSent: () => void }) => {
   const { profile, updateProfile, signOut } = useCurrentUser();
   const { getProfile, updateName } = useAppClient();
   const { success } = useNotifications();
+  const tabletUp = useTabletUp();
+  const email = profile?.email ?? "";
   // The form follows the profile: when it reloads (or is saved), the field shows the new name.
   const nameValues = React.useMemo(() => ({ name: profile?.name ?? "" }), [profile?.name]);
 
@@ -240,8 +253,45 @@ const Profile = () => {
         </Form>
       </Setting>
 
-      <EmailSetting email={profile?.email ?? ""} />
+      <EmailSetting
+        email={email}
+        extra={!tabletUp && <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} iconOnly />}
+      />
+
+      <AnonymousAge joinedAt={profile?.joinedAt} />
+
+      {tabletUp && (
+        <DialogFooterStart>
+          <DeleteAccount email={email} sent={deletionSent} onSent={onDeletionSent} />
+        </DialogFooterStart>
+      )}
     </div>
+  );
+};
+
+const joinedFormat = new Intl.DateTimeFormat(undefined, { day: "numeric", month: "long", year: "numeric" });
+
+/**
+ * How many days ago the account was made, counted in calendar days where the person is (joined yesterday evening is 1
+ * day, whatever the hour). Hidden if the API didn't say when.
+ */
+const AnonymousAge = ({ joinedAt }: { joinedAt?: string }) => {
+  const joined = joinedAt ? new Date(joinedAt) : null;
+  if (!joined || isNaN(joined.getTime())) {
+    return null;
+  }
+  const today = new Date();
+  const days = Math.max(0, Math.round(
+    (Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())
+      - Date.UTC(joined.getFullYear(), joined.getMonth(), joined.getDate())) / 86_400_000,
+  ));
+
+  return (
+    <Setting label="Anonymous age" hint={days ? `You joined on ${joinedFormat.format(joined)}.` : "You joined today. Welcome!"}>
+      <div className="setting-control">
+        <span className="setting-value">{days === 0 ? "Brand new" : days === 1 ? "1 day" : `${days.toLocaleString()} days`}</span>
+      </div>
+    </Setting>
   );
 };
 
@@ -280,8 +330,11 @@ const SaveButton = () => {
   return isDirty ? <Submit>Save</Submit> : null;
 };
 
-/** Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). */
-const EmailSetting = ({ email }: { email: string }) => {
+/**
+ * Shows the email; changing it sends a confirmation link to the new address (handled by ConfirmEmailChange). `extra`
+ * goes after Change (a phone's Delete account icon), hidden while the new address is typed in.
+ */
+const EmailSetting = ({ email, extra }: { email: string; extra?: React.ReactNode }) => {
   const { requestEmailChange } = useAppClient();
   const [editing, setEditing] = React.useState(false);
   const [sentTo, setSentTo] = React.useState<string>();
@@ -312,7 +365,7 @@ const EmailSetting = ({ email }: { email: string }) => {
 
   if (editing) {
     return (
-      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {email}.</>}>
+      <Setting label="Email" hint={<>We'll email a confirmation link to the new address. Until you click it, you stay {maskEmail(email)}.</>}>
         <Form defaultValues={{ email: "" }} mode="onSubmit" schema={schema} onSubmit={onSubmit}>
           <InlineField
             name="email"
@@ -339,8 +392,9 @@ const EmailSetting = ({ email }: { email: string }) => {
       hint={sentTo && <>Check {sentTo} for a confirmation link. Your email changes once you click it.</>}
     >
       <div className="setting-control">
-        <span className="setting-value">{email}</span>
+        <span className="setting-value min-w-0 truncate" title={maskEmail(email)}>{maskEmail(email)}</span>
         <Button type="button" variant="ghost" onClick={startEditing}>Change</Button>
+        {extra}
       </div>
     </Setting>
   );
@@ -351,36 +405,40 @@ const noValues = {};
 /**
  * Deleting the account takes two steps: this button opens a danger sheet on top of the profile, which asks to confirm,
  * then the emailed link finishes it (handled by ConfirmAccountDeletion). The sheet isn't a route: /profile/delete is
- * that link's page. Once the link is sent, the button says so (and a toast says where).
+ * that link's page. Once the link is sent (`sent`, kept by the dialog), the button says so (and a toast says where).
+ * `iconOnly`: just the trash can (a mail icon once sent), the size of the X beside a field, named in its label.
  */
-const DeleteAccount = ({ email, size, className }: { email: string; size?: "sm"; className?: string }) => {
+const DeleteAccount = ({ email, sent, onSent, iconOnly }: { email: string; sent: boolean; onSent: () => void; iconOnly?: boolean }) => {
   const { requestAccountDeletion } = useAppClient();
   const { success } = useNotifications();
-  const [stage, setStage] = React.useState<"idle" | "confirming" | "sent">("idle");
+  const [confirming, setConfirming] = React.useState(false);
   // One id per confirmation: retrying it after a failure is fine, it never emails twice.
   const requestId = React.useRef("");
-  const iconSize = size === "sm" ? 15 : 18;
+  const iconSize = iconOnly ? 20 : 18;
+  const iconClass = iconOnly ? "size-10 shrink-0 px-0" : undefined;
 
   const startConfirming = React.useCallback(
     () => {
       requestId.current = crypto.randomUUID();
-      setStage("confirming");
+      setConfirming(true);
     },
     [],
   );
 
-  const keep = React.useCallback(() => setStage("idle"), []);
+  const keep = React.useCallback(() => setConfirming(false), []);
 
   // A failure keeps the sheet open (the toast says what went wrong), to try again.
   const onConfirm = React.useCallback(
     async () => {
       if (await requestAccountDeletion(requestId.current)) {
-        setStage("sent");
-        success(`Check ${email} for the link. Your account is deleted only once you click it.`);
+        setConfirming(false);
+        onSent();
+        success(`Check ${maskEmail(email)} for the link. Your account is deleted only once you click it.`);
       }
     },
     [
       requestAccountDeletion,
+      onSent,
       success,
       email,
     ],
@@ -388,19 +446,33 @@ const DeleteAccount = ({ email, size, className }: { email: string; size?: "sm";
 
   return (
     <>
-      {stage === "sent"
+      {sent
         ? (
-          <Button type="button" variant="ghost" size={size} className={className} disabled title={`We've sent a link to ${email}`}>
-            <Mail size={iconSize} aria-hidden="true" /> Check your email
+          <Button
+            type="button"
+            variant="ghost"
+            className={iconClass}
+            disabled
+            aria-label={iconOnly ? "Check your email" : undefined}
+            title={`We've sent a link to ${maskEmail(email)}`}
+          >
+            <Mail size={iconSize} aria-hidden="true" />{!iconOnly && " Check your email"}
           </Button>
         )
         : (
-          <Button type="button" variant="ghost-destructive" size={size} className={className} onClick={startConfirming}>
-            <Trash2 size={iconSize} aria-hidden="true" /> Delete account
+          <Button
+            type="button"
+            variant="ghost-destructive"
+            className={iconClass}
+            aria-label={iconOnly ? "Delete account" : undefined}
+            title={iconOnly ? "Delete account" : undefined}
+            onClick={startConfirming}
+          >
+            <Trash2 size={iconSize} aria-hidden="true" />{!iconOnly && " Delete account"}
           </Button>
         )}
 
-      {stage === "confirming" && (
+      {confirming && !sent && (
         <DialogBox
           title="Delete your account?"
           tone="danger"
@@ -416,7 +488,7 @@ const DeleteAccount = ({ email, size, className }: { email: string; size?: "sm";
             </p>
             <p>
               Parties that already rolled keep your name, so whoever drew you still knows who to buy a gift for. We'll
-              email <strong className="wrap-anywhere">{email}</strong> a link to finish.
+              email <strong className="wrap-anywhere">{maskEmail(email)}</strong> a link to finish.
             </p>
           </DialogCharacter>
         </DialogBox>
@@ -427,6 +499,7 @@ const DeleteAccount = ({ email, size, className }: { email: string; size?: "sm";
 
 const History = () => {
   const { loading, page, fetchMore } = usePartyHistory();
+  const tabletUp = useTabletUp();
 
   const [loadingMore, setLoadingMore] = React.useState(false);
   // State updates land a render late, so a ref keeps a second request from starting while one is on its way.
@@ -534,9 +607,12 @@ const History = () => {
           {loadingMore && <ClipLoader size={20} />}
         </div>
       )}
-      {/* Right under the list (the footer's left corner is Delete account's). Once pressed, reaching the end loads the
-          rest (with the spinner above), so the button goes away. */}
-      {hasMore && !autoLoad && <div className="mt-1 flex justify-center">{showMore}</div>}
+      {/* From tablet up in the footer's bottom-left corner (Delete account's on the Profile tab); on a phone's sheet
+          right under the list, above the stacked footer. Once pressed, reaching the end loads the rest (with the
+          spinner above), so the button goes away. */}
+      {hasMore && !autoLoad && (tabletUp
+        ? <DialogFooterStart>{showMore}</DialogFooterStart>
+        : <div className="mt-1 flex justify-center">{showMore}</div>)}
     </div>
   );
 };
