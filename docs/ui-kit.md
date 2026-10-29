@@ -141,9 +141,11 @@ and, after a divider, Delete this party in red; items have a 16px icon.
   Characters beside the text (`DialogCharacter`) hide on phones. All the art comes from the same sticker set.
 - **The profile** keeps one height on both tabs (nearly the whole screen on phones). On top, the "Hi Santa" sticker
   and "Hey, <name>!", then the tabs, which stick flush to the top while the history scrolls, nothing showing above
-  them. Delete account (a red ghost button with a bin) is in the footer's bottom-left corner from tablet up, opposite
-  Okie Dokie; on a phone's sheet it's small, above Okie Dokie. It opens the danger sheet; once the link is sent it
-  reads "Check your email" (disabled) and a toast names the address. "Show more parties" sits under the history list.
+  them. Delete account is only on the Profile tab: a red ghost button with a bin in the footer's bottom-left corner
+  from tablet up, opposite Okie Dokie; on a phone's sheet just the bin, beside the email's Change. It opens the danger
+  sheet; once the link is sent it reads "Check your email" (disabled; a mail icon on phones) and a toast names the
+  address. On Latest history the bottom-left corner holds "Show more parties" from tablet up; on phones it sits under
+  the list.
   On the Profile tab the only rule is between Name and Email; on Latest history a rule sets the footer apart from the
   list scrolling under it (full width from tablet up, inset on phones). Sign out is in the page's footer, after My Profile (under ☰
   on phones).
