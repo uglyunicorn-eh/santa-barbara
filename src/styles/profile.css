@@ -78,6 +78,13 @@
     }
   }
 
+  /* The side turned away is also hidden once it's edge-on, so nothing on it can show through: Safari draws a layer of
+     its own (a photo, a stamp's blend) even on a side whose back is hidden. */
+  .np-flipper:not(.is-flipped) .np-back,
+  .np-flipper.is-flipped .np-front {
+    visibility: hidden;
+  }
+
   .np-face {
     grid-area: 1 / 1;
     display: flex;
@@ -89,6 +96,12 @@
     box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    /* The swap happens when the card is edge-on: 0.11s into the 0.6s turn, with its easing. */
+    transition: visibility 0s 0.11s;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   .np-back {
@@ -189,7 +202,6 @@
   .np-photo {
     grid-area: photo;
     position: relative;
-    z-index: 1;
     align-self: start;
     aspect-ratio: 100 / 122;
     border-radius: 6px;
