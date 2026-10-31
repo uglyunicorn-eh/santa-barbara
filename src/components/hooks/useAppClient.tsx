@@ -225,6 +225,20 @@ export const useAppClient = () => {
     [],
   );
 
+  /**
+   * Signs a member in with the link in a party's reminder or "dice are rolled" email, binding the session to `key`.
+   * Each link works once; repeating it from this tab signs in again. Fails with `not_member` (leaving the link unused)
+   * when the address is no longer that party's member or no longer that account, and with `link_expired` when it's old
+   * (`enterAgain` swaps it for a magic link).
+   */
+  const partySignIn = React.useCallback(
+    async (token: string, key: PublicJwk): Promise<LinkResult<Session>> => {
+      const result = await apiCall<Session>("/auth/party-link", { method: "POST", body: { token, key }, key: linkKey(token), retry: true });
+      return result.ok ? { ok: true, ...result.data } : { ok: false, message: result.error.message, code: result.error.code };
+    },
+    [],
+  );
+
   /** Emails a fresh link for an expired one: the API reads the address and party from the old link. */
   const enterAgain = React.useCallback(
     async (token: string, key: string): Promise<boolean> => {
@@ -404,6 +418,7 @@ export const useAppClient = () => {
       enter,
       enterAgain,
       acceptInvite,
+      partySignIn,
       getParty,
       getProfile,
       getPartyHistory,
@@ -430,6 +445,7 @@ export const useAppClient = () => {
       enter,
       enterAgain,
       acceptInvite,
+      partySignIn,
       getParty,
       getProfile,
       getPartyHistory,

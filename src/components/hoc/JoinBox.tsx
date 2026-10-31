@@ -26,6 +26,8 @@ type Props = {
   party: Party;
   /** An emailed invite's token, when the visitor came with one (useLinkToken): signed out, they join with just a name. */
   inviteToken?: string | null;
+  /** A member's sign-in link's token, from the reminder or "dice are rolled" email (usePartyLink). */
+  memberToken?: string | null;
 };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -54,13 +56,19 @@ const signInSchema = v.object({
 });
 
 
-export const JoinBox = ({ party, inviteToken }: Props) => {
+export const JoinBox = ({ party, inviteToken, memberToken }: Props) => {
   const navigate = useNavigate();
   usePageTint(TINTS.partyDoor);
 
   const { profile } = useCurrentUser();
 
-  const deadEnd = profile?.id && party?.isClosed && !party?.isJoined;
+  // A member's link is offered until it turns out unusable (or they'd rather stay as they are); the door is then as if
+  // it never came. A signed-in member never sees this door, so their link stays unused for another device.
+  const [memberLinkGone, setMemberLinkGone] = React.useState(false);
+  const memberLink = memberToken && !memberLinkGone ? memberToken : null;
+  const onMemberLinkGone = React.useCallback(() => setMemberLinkGone(true), []);
+
+  const deadEnd = profile?.id && party?.isClosed && !party?.isJoined && !memberLink;
 
   const onGoHomeClick = React.useCallback(() => navigate('/'), [navigate]);
 
@@ -90,11 +98,13 @@ export const JoinBox = ({ party, inviteToken }: Props) => {
                 <>
                   <h3>Welcome to the {party.name.replace(/!+$/, '')}!</h3>
 
-                  {profile
-                    ? <SubmitRequestForm party={party} profile={profile} />
-                    : inviteToken && !party.isClosed
-                      ? <InviteForm party={party} token={inviteToken} />
-                      : <SignInControls party={party} />}
+                  {memberLink
+                    ? <MemberLinkSignIn party={party} token={memberLink} signedInAs={profile} onGone={onMemberLinkGone} />
+                    : profile
+                      ? <SubmitRequestForm party={party} profile={profile} />
+                      : inviteToken && !party.isClosed
+                        ? <InviteForm party={party} token={inviteToken} />
+                        : <SignInControls party={party} />}
                 </>
               )
             }
@@ -119,7 +129,6 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   const { error } = useNotifications();
   const { enterRequest } = useAppClient();
   const requestKey = React.useRef(newKey());
-  const navigate = useNavigate();
 
   const [busy, setBusy] = React.useState(false);
   const [displayForm, setDisplayForm] = React.useState(false);
@@ -166,11 +175,9 @@ const SignInControls = ({ party }: SignInControlsProps) => {
     ],
   );
 
-  const goHome = React.useCallback(() => navigate('/'), [navigate]);
-
   if (sentTo) {
     return (
-      <Notice action={<Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>}>
+      <Notice action={<HomeButton />}>
         <p>Our team of elves has just sent you a magic link to {sentTo}. Please check your inbox and follow the instructions.</p>
         <p>If you didn't receive anything from us, refresh this page and try again.</p>
         <SnowConfetti />
@@ -208,11 +215,12 @@ const SignInControls = ({ party }: SignInControlsProps) => {
   return (
     <>
       <p style={{ textAlign: "justify" }}>
-        To join the party, please sign in with your email address. We promise not to send you any marketing materials or share your personal data with third parties.
+        {/* Nobody joins a rolled party: its members sign in to see it. */}
+        To {party.isClosed ? "see" : "join"} the party, please sign in with your email address. We promise not to send you any marketing materials or share your personal data with third parties.
       </p >
       <div className="actions">
         <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onActionClick}>
-          &#x1F973;&nbsp;Sign in to join the party!
+          &#x1F973;&nbsp;Sign in to {party.isClosed ? "see" : "join"} the party!
         </Button>
       </div >
     </>
@@ -229,6 +237,67 @@ const Notice = ({ action, children }: { action: React.ReactNode; children: React
     <div className="actions">{action}</div>
   </div>
 );
+
+/** Back to the start page, under a message that ends the visit here. */
+const HomeButton = () => {
+  const navigate = useNavigate();
+  return <Button variant="secondary" surface="dark" pill onClick={() => navigate('/')}>Return back to home</Button>;
+};
+
+type ExpiredLinkProps = {
+  /** The expired link's token. */
+  token: string;
+  /** What expired, and that a magic link can replace it. */
+  expired: string;
+  /** Where the magic link takes them, once it's sent. */
+  resent: string;
+};
+
+/**
+ * An emailed link (an invite, or a member's sign-in link) that expired: one tap emails a magic link to the same
+ * address, for the same party. The API reads both from the old link.
+ */
+const ExpiredLink = ({ token, expired, resent }: ExpiredLinkProps) => {
+  const { enterAgain } = useAppClient();
+  // One key for the button, so a double click sends one email.
+  const resendKey = React.useRef(newKey());
+  const [resending, setResending] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+
+  const resend = React.useCallback(
+    async () => {
+      setResending(true);
+      try {
+        setSent(await enterAgain(token, resendKey.current));
+      } finally {
+        setResending(false);
+      }
+    },
+    [
+      enterAgain,
+      token,
+    ],
+  );
+
+  if (sent) {
+    return (
+      <Notice action={<HomeButton />}>
+        <p>{resent}</p>
+      </Notice>
+    );
+  }
+  return (
+    <Notice
+      action={
+        <Button variant="brand" size="lg" surface="dark" pill loading={resending} onClick={resend}>
+          &#x2728;&nbsp;Send me a fresh link!
+        </Button>
+      }
+    >
+      <p>{expired}</p>
+    </Notice>
+  );
+};
 
 type SubmitRequestFormProps = {
   profile: User;
@@ -275,7 +344,7 @@ const SubmitRequestForm = ({ profile, party }: SubmitRequestFormProps) => {
 const INVALID_INVITE = "This invite link isn't working. Please sign in with your email to join.";
 
 /** Where taking up an invite stands: the form, or why it gave way to something else. */
-type InviteStep = "form" | "member" | "expired" | "resent" | "unusable";
+type InviteStep = "form" | "member" | "expired" | "unusable";
 
 type InviteFormProps = {
   party: Party;
@@ -289,14 +358,10 @@ type InviteFormProps = {
  * one falls back to signing in with the email address.
  */
 const InviteForm = ({ party, token }: InviteFormProps) => {
-  const { acceptInvite, enterAgain } = useAppClient();
+  const { acceptInvite } = useAppClient();
   const { signIn } = useCurrentUser();
   const { error } = useNotifications();
-  const navigate = useNavigate();
-  // One key for the "send a fresh link" button, so a double click sends one email.
-  const resendKey = React.useRef(newKey());
   const [step, setStep] = React.useState<InviteStep>("form");
-  const [resending, setResending] = React.useState(false);
 
   const onSubmit = React.useCallback(
     async ({ name, password }: JoinPartyInput) => {
@@ -340,35 +405,13 @@ const InviteForm = ({ party, token }: InviteFormProps) => {
     ],
   );
 
-  const resend = React.useCallback(
-    async () => {
-      setResending(true);
-      try {
-        // The API reads the address and party from the expired invite, and emails a magic link for that party.
-        if (await enterAgain(token, resendKey.current)) {
-          setStep("resent");
-        }
-      } finally {
-        setResending(false);
-      }
-    },
-    [
-      enterAgain,
-      token,
-    ],
-  );
-
-  const goHome = React.useCallback(() => navigate('/'), [navigate]);
-
   if (step === "unusable") {
     return <SignInControls party={party} />;
   }
 
-  const homeButton = <Button variant="secondary" surface="dark" pill onClick={goHome}>Return back to home</Button>;
-
   if (step === "member") {
     return (
-      <Notice action={homeButton}>
+      <Notice action={<HomeButton />}>
         <p>Good news: you're already in this party! Our elves have emailed you a magic link, so you can sign in and see it.</p>
         <SnowConfetti />
       </Notice>
@@ -377,23 +420,11 @@ const InviteForm = ({ party, token }: InviteFormProps) => {
 
   if (step === "expired") {
     return (
-      <Notice
-        action={
-          <Button variant="brand" size="lg" surface="dark" pill loading={resending} onClick={resend}>
-            &#x2728;&nbsp;Send me a fresh link!
-          </Button>
-        }
-      >
-        <p>This invite has expired. No worries: we can email you a fresh magic link to sign in and join.</p>
-      </Notice>
-    );
-  }
-
-  if (step === "resent") {
-    return (
-      <Notice action={homeButton}>
-        <p>A fresh magic link is on its way! Please check your inbox and follow it to join the party.</p>
-      </Notice>
+      <ExpiredLink
+        token={token}
+        expired="This invite has expired. No worries: we can email you a fresh magic link to sign in and join."
+        resent="A fresh magic link is on its way! Please check your inbox and follow it to join the party."
+      />
     );
   }
 
@@ -402,6 +433,116 @@ const InviteForm = ({ party, token }: InviteFormProps) => {
       <p>You're invited! Your invite signs you in, so just tell us your name.</p>
       <JoinForm party={party} nameLabel="Let us know your name" onSubmit={onSubmit} />
     </>
+  );
+};
+
+const INVALID_MEMBER_LINK = "This sign-in link isn't working. Please sign in with your email.";
+
+type MemberLinkSignInProps = {
+  party: Party;
+  /** The link's token (usePartyLink). */
+  token: string;
+  /** Who is signed in here already, when it's someone who isn't in this party: the link offers to switch. */
+  signedInAs?: User;
+  /** The link won't be used: it's no good, or the person would rather stay as they are. */
+  onGone: () => void;
+};
+
+/**
+ * Signing a member in with the link in a party's reminder or "dice are rolled" email. It takes a tap, never just
+ * opening the page, so a mail scanner that opens links doesn't use it up. Signed in as someone outside the party, it
+ * offers to switch to the link's account. An expired link can ask for a magic link; a used or broken one, or one for
+ * someone no longer in the party, gives way to the usual door.
+ */
+const MemberLinkSignIn = ({ party, token, signedInAs, onGone }: MemberLinkSignInProps) => {
+  const { partySignIn } = useAppClient();
+  const { signIn } = useCurrentUser();
+  const { error } = useNotifications();
+  const [expired, setExpired] = React.useState(false);
+  const [busy, setBusy] = React.useState(false);
+
+  const onSignIn = React.useCallback(
+    async () => {
+      setBusy(true);
+      // The session is bound to a key this browser keeps (src/api/dpop.ts).
+      let key;
+      try {
+        key = await newSessionKey();
+      } catch {
+        error(NO_KEY_MESSAGE);
+        setBusy(false);
+        return;
+      }
+      const result = await partySignIn(token, key);
+      if (!result.ok) {
+        setBusy(false);
+        if (result.code === "link_expired") {
+          setExpired(true);
+          return;
+        }
+        error(result.code === "invalid_link" ? INVALID_MEMBER_LINK : result.message);
+        // A link that will never work gives way to the usual door; anything else (a dropped connection, say) keeps
+        // the button, to try again.
+        if (["invalid_link", "link_used", "not_member"].includes(result.code ?? "")) {
+          onGone();
+        }
+        return;
+      }
+      // Signing in changes the session, so the party loads again, now as a member; the button stays busy until then.
+      signIn({ profile: result.user, userToken: result.userToken });
+    },
+    [
+      error,
+      onGone,
+      partySignIn,
+      signIn,
+      token,
+    ],
+  );
+
+  if (expired) {
+    return (
+      <ExpiredLink
+        token={token}
+        expired="This sign-in link has expired. No worries: we can email you a fresh magic link to sign in."
+        resent="A fresh magic link is on its way! Please check your inbox and follow it to see the party."
+      />
+    );
+  }
+
+  if (signedInAs) {
+    return (
+      <Notice
+        action={
+          <div className="join-choices">
+            <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onSignIn}>
+              Switch account
+            </Button>
+            <Button variant="secondary" size="lg" surface="dark" pill disabled={busy} onClick={onGone}>
+              Stay as I am
+            </Button>
+          </div>
+        }
+      >
+        <p>The link you followed is for another account, not the one signed in here. Switch to that account?</p>
+      </Notice>
+    );
+  }
+
+  return (
+    <Notice
+      action={
+        <Button variant="brand" size="lg" surface="dark" pill loading={busy} onClick={onSignIn}>
+          &#x2728;&nbsp;Sign me in!
+        </Button>
+      }
+    >
+      <p>
+        {party.isClosed
+          ? "The dice are rolled! The link from your email signs you in: one tap, and Gnomik tells you whom you're surprising."
+          : "The link from your email signs you in: one tap, and you're back at your party."}
+      </p>
+    </Notice>
   );
 };
 

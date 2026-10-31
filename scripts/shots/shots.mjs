@@ -52,6 +52,11 @@ const SCREENS = [
   { name: "enter-link-expired", path: "/enter/link#an-expired-link", api: { fail: "/auth/session", status: 400, code: "link_expired" } },
   { name: "enter-link-invalid", path: "/enter/not-a-real-link", api: { fail: "/auth/session", status: 400, code: "invalid_link" } },
   { name: "party-signed-out", path: `/p/${CODES.guestOpen}/`, signedIn: false, api: { partyFor: CODES.notJoined } },
+  { name: "party-member-link", path: `/p/${CODES.closedNotJoined}/sign-in#a-member-link` },
+  { name: "party-member-link-open", path: `/p/${CODES.notJoined}/sign-in#a-member-link` },
+  { name: "party-member-link-expired", path: `/p/${CODES.closedNotJoined}/sign-in#a-member-link`, api: { fail: "/auth/party-link", status: 400, code: "link_expired" }, act: clickButton("Sign me in") },
+  { name: "party-member-link-resent", path: `/p/${CODES.closedNotJoined}/sign-in#a-member-link`, api: { fail: "/auth/party-link", status: 400, code: "link_expired" }, act: clickButtons("Sign me in", "Send me a fresh link") },
+  { name: "party-member-link-unusable", path: `/p/${CODES.closedNotJoined}/sign-in#a-member-link`, api: { fail: "/auth/party-link", status: 409, code: "not_member" }, act: clickButton("Sign me in") },
   { name: "link-delete", path: "/profile/delete#some-token" },
   { name: "link-delete-used", path: "/profile/delete#some-token", api: { fail: "/me/deletion/check" } },
   { name: "link-delete-ok", path: "/profile/delete#some-token", act: confirmDeletion },
@@ -82,6 +87,7 @@ const SCREENS = [
   { name: "party-deleted", path: `/p/${CODES.deleted}/`, signedIn: true },
   { name: "party-join", path: `/p/${CODES.notJoined}/`, signedIn: true },
   { name: "party-join-protected", path: `/p/${CODES.protectedNotJoined}/`, signedIn: true },
+  { name: "party-member-link-switch", path: `/p/${CODES.closedNotJoined}/sign-in#a-member-link`, signedIn: true },
   { name: "party-not-found", path: `/p/${CODES.missing}/`, signedIn: true },
   { name: "party-loading", path: `/p/${CODES.slow}/`, signedIn: true, settle: 400 },
   { name: "dialog-close-party", path: `/p/${CODES.hostOpen}/confirm`, signedIn: true },
@@ -144,6 +150,15 @@ function clickButton(label) {
   return async (page) => {
     await page.getByRole("button", { name: label }).first().click();
     await page.waitForTimeout(600);
+  };
+}
+
+/** Clicks buttons one after another, each in the state the one before left. */
+function clickButtons(...labels) {
+  return async (page) => {
+    for (const label of labels) {
+      await clickButton(label)(page);
+    }
   };
 }
 
@@ -225,6 +240,7 @@ function answer(set, screen, method, url, body) {
     case "POST /me/email-change/cancel":
       return ok({});
     case "POST /auth/session":
+    case "POST /auth/party-link":
     case "POST /me/email-change/confirm":
       return ok(session);
     case "GET /stats":
