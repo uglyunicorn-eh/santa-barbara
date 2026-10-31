@@ -126,6 +126,14 @@
     .actions {
       margin-top: 2rem;
     }
+
+    /* Two answers side by side, the main one first; stacked when they don't fit. */
+    .join-choices {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
   }
 
   .grinch-box {

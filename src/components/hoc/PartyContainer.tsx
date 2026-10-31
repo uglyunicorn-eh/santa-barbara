@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { AppSpinner } from "@/components/AppSpinner";
 import { GarageDoor } from "@/components/GarageDoor";
@@ -8,14 +8,15 @@ import { PartyContext } from "@/components/hoc/PartyContext";
 import { PartyDetails } from "@/components/hoc/PartyDetails";
 import { PartyNotFound } from "@/components/hoc/PartyNotFound";
 import { useCurrentUser, useLiveParty, useParty } from "@/components/hooks";
-import { useLinkToken } from "@/components/hooks/useLinkToken";
+import { usePartyLink } from "@/components/hooks/useLinkToken";
 
 export const PartyContainer = () => {
   const { profile } = useCurrentUser();
   const { code } = useParams();
   const { party } = useParty(code!);
-  // An emailed invite's token (after "#"), moved off the address bar: it lets a signed-out visitor join with a name.
-  const inviteToken = useLinkToken(useLocation().pathname);
+  // An emailed link's token (after "#"), moved off the address bar: an invite lets a signed-out visitor join with a
+  // name, and a member's link (reminder and "dice are rolled" emails) signs a member in.
+  const { inviteToken, memberToken } = usePartyLink();
 
   const locked = React.useMemo(
     () => !profile || !party?.isJoined,
@@ -29,8 +30,8 @@ export const PartyContainer = () => {
   useLiveParty(code, Boolean(profile && party && (party.isJoined || party.isHost)));
 
   const renderLoginContainer = React.useCallback(
-    () => (party && <JoinBox party={party} inviteToken={inviteToken} />),
-    [party, inviteToken],
+    () => (party && <JoinBox party={party} inviteToken={inviteToken} memberToken={memberToken} />),
+    [party, inviteToken, memberToken],
   );
 
   if (party === undefined) {

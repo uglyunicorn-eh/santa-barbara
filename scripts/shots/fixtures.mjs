@@ -9,6 +9,7 @@ export const CODES = {
   deleted: "DELETEDP",
   notJoined: "JOINMEPL",
   protectedNotJoined: "SECRETPA",
+  closedNotJoined: "ROLLEDNJ",
   missing: "NOPARTYS",
   slow: "SLOWPART",
 };
@@ -52,6 +53,8 @@ function makeSet({ userName, userEmail, partyName, participantName, participantC
     [CODES.deleted]: { ...base, code: CODES.deleted, isHost: true, deletedAt: iso(0), restorableUntil: new Date(Date.UTC(2026, 9, 26)).toISOString() },
     [CODES.notJoined]: { ...base, code: CODES.notJoined, isJoined: false, participantCount: null, participants: null },
     [CODES.protectedNotJoined]: { ...base, code: CODES.protectedNotJoined, isJoined: false, isProtected: true, participantCount: null, participants: null },
+    // A rolled party seen from outside: signed out, or signed in to another account.
+    [CODES.closedNotJoined]: { ...base, code: CODES.closedNotJoined, isClosed: true, rolledAt: iso(1), isJoined: false, participantCount: null, participants: null },
   };
 
   const history = Array.from({ length: historyCount }, (_, i) => ({
